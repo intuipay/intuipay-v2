@@ -1,42 +1,50 @@
 import Image from "next/image"
-import { X } from "lucide-react"
 import PaymentCalculator from "@/components/payment-calculator"
 import WaitlistForm from "@/components/waitlist-form"
 import StructuredData from "@/components/structured-data"
+import Link from "next/link";
 
 export default function Home() {
   return (
     <>
       <StructuredData />
       <div className="min-h-screen flex flex-col">
-        <header className="container mx-auto px-4 py-4 flex justify-between items-center">
+        <header className="container mx-auto px-4 py-4 sm:py-7.5 flex justify-between items-center border-b">
           <div className="flex items-center">
             <Image
-              src="/images/intuipay-logo.png"
+              src="/images/intuipay-logo.svg"
               alt="Intuipay"
-              width={130}
-              height={40}
-              className="h-10 w-auto"
+              width={142}
+              height={29}
+              className="h-7 w-auto"
               priority
             />
           </div>
-          <button className="text-black" aria-label="Close">
-            <X size={20} />
-          </button>
+          <Link
+            className="text-black" aria-label="Close"
+            href="https://x.com/intuipay"
+          >
+            <Image
+              src="/images/x.svg"
+              alt="X logo"
+              width={20}
+              height={20}
+              className="size-5 block"
+            />
+          </Link>
         </header>
 
-        <main className="flex-1 container mx-auto px-4 py-6 md:py-12">
-          <section className="md:flex md:items-start md:gap-12 lg:gap-24">
-            <div className="md:flex-1 mb-12 md:mb-0">
-              <h1 className="text-4xl md:text-5xl font-bold mb-4">
+        <main className="flex-1 container mx-auto md:p-8">
+          <section className="md:flex md:items-center">
+            <div className="md:w-1/2 flex-none p-8 md:p-0 md:pe-15 mb-5 md:mb-0">
+              <h1 className="text-4xl md:text-6xl font-medium mb-6">
                 Where{" "}
-                <span className="inline-flex items-center mx-1" aria-label="Flags">
-                  <span className="flex space-x-1">
-                    <span className="w-5 h-3 bg-red-500 rounded-sm"></span>
-                    <span className="w-5 h-3 bg-green-600 rounded-sm"></span>
-                    <span className="w-5 h-3 bg-red-600 rounded-sm"></span>
-                    <span className="w-5 h-3 bg-blue-600 rounded-sm"></span>
-                  </span>
+                <span className="inline-flex items-center align-top w-25 relative me-1 md:me-3" aria-label="Flags">
+                  <span className="size-7 md:size-11 text-base md:text-2xl border rounded-full flex justify-center items-center rotate-12 absolute z-50 top-2 left-0 bg-white">🇸🇬</span>
+                  <span className="size-7 md:size-11 text-base md:text-2xl border rounded-full flex justify-center items-center rotate-12 absolute z-40 top-2 left-5 bg-white">🇺🇸</span>
+                  <span className="size-7 md:size-11 text-base md:text-2xl border rounded-full flex justify-center items-center rotate-12 absolute z-30 top-2 left-10 bg-white">🇸🇦</span>
+                  <span className="size-7 md:size-11 text-base md:text-2xl border rounded-full flex justify-center items-center rotate-12 absolute z-20 top-2 left-15 bg-white">🇵🇱</span>
+                  <span className="size-7 md:size-11 text-base md:text-2xl border rounded-full flex justify-center items-center rotate-12 absolute z-10 top-2 left-20 bg-white">🇦🇺</span>
                 </span>{" "}
                 Global
                 <br />
@@ -48,7 +56,7 @@ export default function Home() {
                 <span className="text-blue-500">Next-Gen Payments.</span>
               </h1>
 
-              <p className="text-lg mb-8">
+              <p className="text-xl mb-16">
                 Support global universities and pay tuition & make donation across borders — with speed, trust, and
                 simplicity.
               </p>
@@ -56,13 +64,15 @@ export default function Home() {
               <WaitlistForm />
             </div>
 
-            <div className="md:flex-1 bg-slate-50 p-4 md:p-8 rounded-3xl">
-              <PaymentCalculator />
+            <div className="md:flex-1 bg-slate-50 px-8 py-13  md:py-20 md:px-28 md:rounded-2xl">
+              <div className="p-8 bg-white rounded-2xl shadow-md">
+                <PaymentCalculator />
+              </div>
             </div>
           </section>
         </main>
 
-        <footer className="container mx-auto px-4 py-6 text-center text-gray-500 text-sm">
+        <footer className="container mx-auto px-4 py-6 text-gray-500 text-sm border-t">
           © 2025 IntuiPay. All rights reserved.
         </footer>
       </div>

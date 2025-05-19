@@ -5,7 +5,7 @@ import type React from "react"
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { AlertCircle } from "lucide-react"
+import { TriangleAlert } from "lucide-react"
 import ConfirmationDialog from "./confirmation-dialog"
 
 export default function WaitlistForm() {
@@ -79,7 +79,7 @@ export default function WaitlistForm() {
 
   return (
     <>
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-8">
         <div>
           <div className="relative">
             <Input
@@ -89,7 +89,7 @@ export default function WaitlistForm() {
               value={name}
               onChange={(e) => setName(e.target.value)}
               onBlur={() => setTouched((prev) => ({ ...prev, name: true }))}
-              className={`w-full bg-gray-50 py-6 px-4 rounded-lg ${
+              className={`w-full bg-gray-50 py-5 px-8 rounded-lg ${
                 errors.name ? "border-red-500 text-red-500 placeholder-red-300" : ""
               }`}
               aria-invalid={!!errors.name}
@@ -98,8 +98,8 @@ export default function WaitlistForm() {
             />
           </div>
           {errors.name && (
-            <p id="name-error" className="mt-1 text-red-500 text-sm flex items-center">
-              <AlertCircle className="h-4 w-4 mr-1" />
+            <p id="name-error" className="mt-3 text-red-500 text-sm flex items-center">
+              <TriangleAlert className="h-4 w-4 mr-2.5" />
               {errors.name}
             </p>
           )}
@@ -123,8 +123,8 @@ export default function WaitlistForm() {
             />
           </div>
           {errors.email && (
-            <p id="email-error" className="mt-1 text-red-500 text-sm flex items-center">
-              <AlertCircle className="h-4 w-4 mr-1" />
+            <p id="email-error" className="mt-3 text-red-500 text-sm flex items-center">
+              <TriangleAlert className="h-4 w-4 mr-2.5" />
               {errors.email}
             </p>
           )}
@@ -132,7 +132,7 @@ export default function WaitlistForm() {
 
         <Button
           type="submit"
-          className="w-full bg-blue-500 hover:bg-blue-600 text-white py-6 rounded-full text-lg"
+          className="w-full h-16 bg-blue-500 hover:bg-blue-600 text-white py-6 rounded-full text-xl font-semibold"
           disabled={isSubmitting}
           aria-label="Join Waitlist"
         >

@@ -99,6 +99,12 @@ const config: Config = {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
       },
+      spacing: {
+        '7.5': '1.875rem',
+        13: '3.25rem',
+        15: '3.75rem',
+        25: '6.25rem',
+      },
     },
   },
   plugins: [],
