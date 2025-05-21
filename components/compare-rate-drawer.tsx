@@ -104,20 +104,20 @@ export default function CompareRateDrawer() {
           Compare Rate
         </Button>
       </SheetTrigger>
-      <SheetContent className="p-0 overflow-y-auto">
-        <div className="sticky top-0 bg-white z-10 p-4 border-b">
-          <div className="flex justify-between items-center">
-            <h2 className="text-xl font-semibold">Compare Rate</h2>
+      <SheetContent className="p-0 overflow-y-auto rounded-l-xl px-12">
+        <div className="sticky top-0 bg-white z-10">
+          <div className="flex justify-between items-center py-7">
+            <h2 className="text-xl">Compare Rate</h2>
           </div>
         </div>
 
-        <div className="p-4">
-          <div className="text-center text-gray-500 text-sm mb-4 relative">
+        <div>
+          <div className="text-center text-gray-500 mb-6 relative">
             <div className="absolute left-0 right-0 top-1/2 h-px bg-gray-200"></div>
             <span className="relative bg-white px-4">Methods offered by Intuipay</span>
           </div>
 
-          <div className="space-y-4">
+          <div className="space-y-6">
             {featuredMethods.map((method) => (
               <div
                 key={method.id}
@@ -127,7 +127,7 @@ export default function CompareRateDrawer() {
               >
                 {method.label && (
                   <div
-                    className={`text-xs font-bold text-white px-4 py-2 ${
+                    className={`text-xs font-semibold text-white px-4 pt-2.5 pb-1 ${
                       method.color === 'blue'
                         ? 'bg-blue-500'
                         : method.color === 'green'
@@ -138,19 +138,19 @@ export default function CompareRateDrawer() {
                     {method.label}
                   </div>
                 )}
-                <div className="bg-white m-1 rounded-lg p-4">
-                  <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 flex-shrink-0">
+                <div className="bg-white m-1.5 rounded-lg px-7 py-8">
+                  <div className="flex items-start gap-6">
+                    <div className="w-10 h-10 flex-shrink-0">
                       <Image
                         src={method.icon || '/placeholder.svg'}
                         alt={method.name}
-                        width={48}
-                        height={48}
+                        width={80}
+                        height={80}
                         className="w-full h-full object-contain"
                       />
                     </div>
-                    <div>
-                      <p className="text-sm text-gray-600">{method.name}</p>
+                    <div className="space-y-2">
+                      <p className="font-medium text-gray-600">{method.name}</p>
                       {method.amountRange ? (
                         <p className="text-2xl font-bold">
                           {method.amountRange} {method.currency}
@@ -161,7 +161,7 @@ export default function CompareRateDrawer() {
                         </p>
                       )}
                       {method.additionalFees && <p className="text-sm text-orange-500">{method.additionalFees}</p>}
-                      <p className="text-sm">Will take only {method.timeframe}</p>
+                      <p>Will take only <strong>{method.timeframe}</strong></p>
                     </div>
                   </div>
                 </div>
@@ -169,36 +169,36 @@ export default function CompareRateDrawer() {
             ))}
           </div>
 
-          <div className="text-center text-gray-500 text-sm my-4 relative">
+          <div className="text-center text-gray-500 my-4 relative">
             <div className="absolute left-0 right-0 top-1/2 h-px bg-gray-200"></div>
             <span className="relative bg-white px-4">Other methods</span>
           </div>
 
-          <div className="space-y-4">
+          <div className="space-y-6">
             {otherMethods.map((method) => (
-              <div key={method.id} className="bg-gray-50 rounded-lg p-4">
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 flex-shrink-0">
+              <div key={method.id} className="bg-gray-50 rounded-2xl px-7 pt-8 pb-4">
+                <div className="flex items-start gap-4">
+                  <div className="w-10 h-10 flex-shrink-0">
                     <Image
                       src={method.icon || '/placeholder.svg'}
                       alt={method.name}
-                      width={48}
-                      height={48}
+                      width={80}
+                      height={80}
                       className="w-full h-full object-contain"
                     />
                   </div>
-                  <div>
-                    <p className="text-sm text-gray-600">
+                  <div className="space-y-2">
+                    <p className="text-gray-600">
                       {method.name}
                       {method.requiresNotice && (
                         <span> -A Payment notice / bill / invoice from institution is required</span>
                       )}
                     </p>
-                    <p className="text-xl font-bold">
+                    <p className="text-2xl font-bold">
                       {method.amountRange} {method.currency}
                     </p>
-                    {method.additionalFees && <p className="text-sm text-orange-500">{method.additionalFees}</p>}
-                    <p className="text-sm">Will take {method.timeframe}</p>
+                    {method.additionalFees && <p className="font-medium text-orange-500">{method.additionalFees}</p>}
+                    <p>Will take <strong>{method.timeframe}</strong></p>
                   </div>
                 </div>
               </div>
