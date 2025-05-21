@@ -1,9 +1,9 @@
-"use client"
+'use client'
 
-import { useState } from "react"
-import Image from "next/image"
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
-import { Button } from "@/components/ui/button"
+import { useState } from 'react'
+import Image from 'next/image'
+import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
+import { Button } from '@/components/ui/button'
 
 interface PaymentMethod {
   id: string
@@ -24,70 +24,70 @@ export default function CompareRateDrawer() {
 
   const paymentMethods: PaymentMethod[] = [
     {
-      id: "edu-chain-cny",
-      name: "Edu Chain in Chinese Yuan",
-      currency: "CNY",
-      amount: "175,432.18",
-      timeframe: "~20-60 mins",
-      icon: "/images/edu-chain-icon.png",
-      color: "blue",
-      label: "FAST & MOST POPULAR",
+      id: 'edu-chain-cny',
+      name: 'Edu Chain in Chinese Yuan',
+      currency: 'CNY',
+      amount: '175,432.18',
+      timeframe: '~20-60 mins',
+      icon: '/images/edu-chain-icon.png',
+      color: 'blue',
+      label: 'FAST & MOST POPULAR',
     },
     {
-      id: "edu-chain-usdc",
-      name: "Edu Chain in USD Coin",
-      currency: "USDC",
-      amount: "24,000.00",
-      timeframe: "10 mins",
-      icon: "/images/usdc-icon.png",
-      color: "green",
-      label: "FASTEST & CHEAPEST, IF YOU ALREADY OWN ENOUGH USDC",
+      id: 'edu-chain-usdc',
+      name: 'Edu Chain in USD Coin',
+      currency: 'USDC',
+      amount: '24,000.00',
+      timeframe: '10 mins',
+      icon: '/images/usdc-icon.png',
+      color: 'green',
+      label: 'FASTEST & CHEAPEST, IF YOU ALREADY OWN ENOUGH USDC',
     },
     {
-      id: "alipay",
-      name: "Alipay pay in Chinese Yuan",
-      currency: "CNY",
-      amountRange: "180,643.03 - 180,888.88",
-      additionalFees: "+ 5,210.85 - 5,444.44 CNY",
-      timeframe: "1-2 days",
-      icon: "/images/alipay-icon.png",
+      id: 'alipay',
+      name: 'Alipay pay in Chinese Yuan',
+      currency: 'CNY',
+      amountRange: '180,643.03 - 180,888.88',
+      additionalFees: '+ 5,210.85 - 5,444.44 CNY',
+      timeframe: '1-2 days',
+      icon: '/images/alipay-icon.png',
     },
     {
-      id: "rmb-transfer",
-      name: "RMB transfer in Chinese Yuan",
-      currency: "CNY",
-      amountRange: "181,222.02 - 180,888.88",
-      additionalFees: "+ 5,210.85 - 5,444.44 CNY",
-      timeframe: "3-7 days",
-      icon: "/images/bank-icon.png",
+      id: 'rmb-transfer',
+      name: 'RMB transfer in Chinese Yuan',
+      currency: 'CNY',
+      amountRange: '181,222.02 - 180,888.88',
+      additionalFees: '+ 5,210.85 - 5,444.44 CNY',
+      timeframe: '3-7 days',
+      icon: '/images/bank-icon.png',
       requiresNotice: true,
     },
     {
-      id: "unionpay",
-      name: "UnionPay Debit / Credit card in Chinese Yuan",
-      currency: "CNY",
-      amountRange: "181,222.02 - 180,888.88",
-      additionalFees: "+ 5,210.85 - 5,444.44 CNY",
-      timeframe: "3-7 days",
-      icon: "/images/unionpay-icon.png",
+      id: 'unionpay',
+      name: 'UnionPay Debit / Credit card in Chinese Yuan',
+      currency: 'CNY',
+      amountRange: '181,222.02 - 180,888.88',
+      additionalFees: '+ 5,210.85 - 5,444.44 CNY',
+      timeframe: '3-7 days',
+      icon: '/images/unionpay-icon.png',
     },
     {
-      id: "mastercard",
-      name: "Mastercard Debit / Credit card in Chinese Yuan",
-      currency: "CNY",
-      amountRange: "181,222.02 - 180,888.88",
-      additionalFees: "+ 5,210.85 - 5,444.44 CNY",
-      timeframe: "3-7 days",
-      icon: "/images/mastercard-icon.png",
+      id: 'mastercard',
+      name: 'Mastercard Debit / Credit card in Chinese Yuan',
+      currency: 'CNY',
+      amountRange: '181,222.02 - 180,888.88',
+      additionalFees: '+ 5,210.85 - 5,444.44 CNY',
+      timeframe: '3-7 days',
+      icon: '/images/mastercard-icon.png',
     },
     {
-      id: "visa",
-      name: "Visa Debit / Credit card in Chinese Yuan",
-      currency: "CNY",
-      amountRange: "181,222.02 - 180,888.88",
-      additionalFees: "+ 5,210.85 - 5,444.44 CNY",
-      timeframe: "3-7 days",
-      icon: "/images/visa-icon.png",
+      id: 'visa',
+      name: 'Visa Debit / Credit card in Chinese Yuan',
+      currency: 'CNY',
+      amountRange: '181,222.02 - 180,888.88',
+      additionalFees: '+ 5,210.85 - 5,444.44 CNY',
+      timeframe: '3-7 days',
+      icon: '/images/visa-icon.png',
     },
   ]
 
@@ -98,7 +98,7 @@ export default function CompareRateDrawer() {
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
         <Button
-          className="w-full bg-white border border-blue-500 text-blue-500 hover:bg-blue-50 rounded-full py-5"
+          className="w-full bg-blue-50 border border-blue-500 text-blue-500 hover:bg-blue-100 rounded-full h-16 text-xl font-semibold"
           onClick={() => setOpen(true)}
         >
           Compare Rate
@@ -122,17 +122,17 @@ export default function CompareRateDrawer() {
               <div
                 key={method.id}
                 className={`rounded-xl overflow-hidden ${
-                  method.color === "blue" ? "bg-blue-500" : method.color === "green" ? "bg-green-500" : "bg-gray-100"
+                  method.color === 'blue' ? 'bg-blue-500' : method.color === 'green' ? 'bg-green-500' : 'bg-gray-100'
                 }`}
               >
                 {method.label && (
                   <div
                     className={`text-xs font-bold text-white px-4 py-2 ${
-                      method.color === "blue"
-                        ? "bg-blue-500"
-                        : method.color === "green"
-                          ? "bg-green-500"
-                          : "bg-gray-500"
+                      method.color === 'blue'
+                        ? 'bg-blue-500'
+                        : method.color === 'green'
+                          ? 'bg-green-500'
+                          : 'bg-gray-500'
                     }`}
                   >
                     {method.label}
@@ -142,7 +142,7 @@ export default function CompareRateDrawer() {
                   <div className="flex items-center gap-4">
                     <div className="w-12 h-12 flex-shrink-0">
                       <Image
-                        src={method.icon || "/placeholder.svg"}
+                        src={method.icon || '/placeholder.svg'}
                         alt={method.name}
                         width={48}
                         height={48}
@@ -180,7 +180,7 @@ export default function CompareRateDrawer() {
                 <div className="flex items-center gap-4">
                   <div className="w-12 h-12 flex-shrink-0">
                     <Image
-                      src={method.icon || "/placeholder.svg"}
+                      src={method.icon || '/placeholder.svg'}
                       alt={method.name}
                       width={48}
                       height={48}

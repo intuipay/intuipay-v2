@@ -130,3 +130,7 @@ input.border-red-500:focus {
   border-color: #ef4444; /* red-500 */
   box-shadow: 0 0 0 1px #ef4444; /* red-500 */
 }
+
+.w-\(--input-width\) {
+  width: var(--input-width);
+}

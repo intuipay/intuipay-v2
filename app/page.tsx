@@ -1,8 +1,8 @@
-import Image from "next/image"
-import PaymentCalculator from "@/components/payment-calculator"
-import WaitlistForm from "@/components/waitlist-form"
-import StructuredData from "@/components/structured-data"
-import Link from "next/link";
+import Image from 'next/image'
+import PaymentCalculator from '@/components/payment-calculator'
+import WaitlistForm from '@/components/waitlist-form'
+import StructuredData from '@/components/structured-data'
+import Link from 'next/link';
 
 export default function Home() {
   return (
@@ -38,17 +38,17 @@ export default function Home() {
           <section className="md:flex md:items-center">
             <div className="md:w-1/2 flex-none p-8 md:p-0 md:pe-15 mb-5 md:mb-0">
               <h1 className="text-4xl md:text-6xl font-medium mb-6">
-                Where{" "}
+                Where{' '}
                 <span className="inline-flex items-center align-top w-25 relative me-1 md:me-3" aria-label="Flags">
                   <span className="size-7 md:size-11 text-base md:text-2xl border rounded-full flex justify-center items-center rotate-12 absolute z-50 top-2 left-0 bg-white">🇸🇬</span>
                   <span className="size-7 md:size-11 text-base md:text-2xl border rounded-full flex justify-center items-center rotate-12 absolute z-40 top-2 left-5 bg-white">🇺🇸</span>
                   <span className="size-7 md:size-11 text-base md:text-2xl border rounded-full flex justify-center items-center rotate-12 absolute z-30 top-2 left-10 bg-white">🇸🇦</span>
                   <span className="size-7 md:size-11 text-base md:text-2xl border rounded-full flex justify-center items-center rotate-12 absolute z-20 top-2 left-15 bg-white">🇵🇱</span>
                   <span className="size-7 md:size-11 text-base md:text-2xl border rounded-full flex justify-center items-center rotate-12 absolute z-10 top-2 left-20 bg-white">🇦🇺</span>
-                </span>{" "}
+                </span>{' '}
                 Global
                 <br />
-                Education Meets{" "}
+                Education Meets{' '}
                 <span className="text-yellow-400" aria-hidden="true">
                   👋
                 </span>
@@ -64,8 +64,8 @@ export default function Home() {
               <WaitlistForm />
             </div>
 
-            <div className="md:flex-1 bg-slate-50 px-8 py-13  md:py-20 md:px-28 md:rounded-2xl">
-              <div className="p-8 bg-white rounded-2xl shadow-md">
+            <div className="md:flex-1 bg-slate-50 px-8 py-13  md:py-20 md:px-28 md:rounded-2xl bg-[url(/images/sidebar-bg.svg)] bg-cover bg-center">
+              <div className="p-8 md:px-14 md:py-15 bg-white rounded-2xl shadow-md">
                 <PaymentCalculator />
               </div>
             </div>

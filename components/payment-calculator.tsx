@@ -1,44 +1,30 @@
-"use client"
+'use client'
 
-import { useState } from "react"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import Image from "next/image"
-import CompareRateDrawer from "./compare-rate-drawer"
+import { useState } from 'react'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import Image from 'next/image'
+import CompareRateDrawer from './compare-rate-drawer'
+import { Combobox } from '@headlessui/react';
+import MyCombobox from '@/components/my-combobox';
+import { CurrencyList } from '@/data';
 
 export default function PaymentCalculator() {
-  const [fromCountry, setFromCountry] = useState("China")
-  const [toCountry, setToCountry] = useState("United States")
-  const [university, setUniversity] = useState("Emory University")
-  const [amount, setAmount] = useState("24,000 USD")
+  const [fromCountry, setFromCountry] = useState('China')
+  const [toCountry, setToCountry] = useState('United States')
+  const [university, setUniversity] = useState('Emory University')
+  const [amount, setAmount] = useState('24,000 USD')
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <div className="space-y-2">
         <label htmlFor="from-country" className="block text-sm font-medium">
           Paying From
         </label>
-        <Select defaultValue={fromCountry} onValueChange={setFromCountry}>
-          <SelectTrigger id="from-country" className="w-full border rounded-lg p-3">
-            <div className="flex items-center">
-              <div className="w-6 h-6 mr-2 rounded-full overflow-hidden flex-shrink-0">
-                <Image
-                  src="/images/flag-china.png"
-                  alt="China flag"
-                  width={24}
-                  height={24}
-                  className="object-cover"
-                  priority
-                />
-              </div>
-              <SelectValue placeholder="Select country" />
-            </div>
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="China">China</SelectItem>
-            <SelectItem value="India">India</SelectItem>
-            <SelectItem value="Nigeria">Nigeria</SelectItem>
-          </SelectContent>
-        </Select>
+        <MyCombobox
+          options={CurrencyList.map(currency => currency.country)}
+          onChange={setFromCountry}
+          value={fromCountry}
+        />
       </div>
 
       <div className="space-y-2">
@@ -67,12 +53,6 @@ export default function PaymentCalculator() {
             <SelectItem value="Canada">Canada</SelectItem>
           </SelectContent>
         </Select>
-      </div>
-
-      <div className="space-y-2">
-        <label htmlFor="university" className="block text-sm font-medium">
-          University
-        </label>
         <Select defaultValue={university} onValueChange={setUniversity}>
           <SelectTrigger id="university" className="w-full border rounded-lg p-3">
             <div className="flex items-center">
@@ -118,10 +98,10 @@ export default function PaymentCalculator() {
         </Select>
       </div>
 
-      <div className="pt-4">
-        <p className="text-sm">Best price paying with Intuipay</p>
+      <div className="pt-4 space-y-2">
+        <p>Best price paying with Intuipay</p>
         <p className="text-3xl font-bold">175,432.18 CNY</p>
-        <p className="text-sm">Will take only ~20-60 mins</p>
+        <p>Will take only <strong>~20-60 mins</strong></p>
       </div>
 
       <CompareRateDrawer />

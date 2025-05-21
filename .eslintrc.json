@@ -2,5 +2,13 @@
   "extends": [
     "next/core-web-vitals",
     "next/typescript"
-  ]
+  ],
+  "rules": {
+    "@typescript-eslint/no-dynamic-delete": "off",
+    "@typescript-eslint/no-unused-vars": "off",
+    "quotes": [ "error", "single" ],
+    "object-curly-spacing": [ "error", "always" ],
+    "computed-property-spacing": [ "error", "always" ],
+    "vue/no-multiple-template-root": "off"
+  }
 }

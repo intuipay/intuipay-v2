@@ -1,9 +1,9 @@
-"use client"
+'use client'
 
-import { useState, useEffect } from "react"
-import Image from "next/image"
-import { X, Copy, Check } from "lucide-react"
-import { Dialog, DialogContent } from "@/components/ui/dialog"
+import { useState, useEffect } from 'react'
+import Image from 'next/image'
+import { X, Copy, Check } from 'lucide-react'
+import { Dialog, DialogContent } from '@/components/ui/dialog'
 
 interface ConfirmationDialogProps {
   open: boolean
@@ -16,7 +16,7 @@ export default function ConfirmationDialog({ open, onOpenChange, email }: Confir
   const [isMobile, setIsMobile] = useState(false)
 
   // Generate a unique referral ID based on email (in a real app, this would come from the backend)
-  const referralId = `PIRHAHIM1D`
+  const referralId = 'PIRHAHIM1D'
   const referralLink = `intuipay.ref_id=${referralId}`
 
   // Check if the device is mobile
@@ -26,10 +26,10 @@ export default function ConfirmationDialog({ open, onOpenChange, email }: Confir
     }
 
     checkIfMobile()
-    window.addEventListener("resize", checkIfMobile)
+    window.addEventListener('resize', checkIfMobile)
 
     return () => {
-      window.removeEventListener("resize", checkIfMobile)
+      window.removeEventListener('resize', checkIfMobile)
     }
   }, [])
 
@@ -39,7 +39,7 @@ export default function ConfirmationDialog({ open, onOpenChange, email }: Confir
       setCopied(true)
       setTimeout(() => setCopied(false), 2000)
     } catch (err) {
-      console.error("Failed to copy text: ", err)
+      console.error('Failed to copy text: ', err)
     }
   }
 
@@ -48,14 +48,14 @@ export default function ConfirmationDialog({ open, onOpenChange, email }: Confir
       <DialogContent
         className={`p-0 gap-0 overflow-hidden ${
           isMobile
-            ? "fixed inset-0 w-full h-full max-w-none rounded-none m-0 bg-gradient-to-b from-blue-50 to-pink-50"
-            : "sm:max-w-md"
+            ? 'fixed inset-0 w-full h-full max-w-none rounded-none m-0 bg-gradient-to-b from-blue-50 to-pink-50'
+            : 'sm:max-w-md'
         }`}
       >
         <button
           onClick={() => onOpenChange(false)}
           className={`absolute left-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 ${
-            isMobile ? "text-gray-700" : ""
+            isMobile ? 'text-gray-700' : ''
           }`}
         >
           <X className="h-5 w-5" />
@@ -63,18 +63,18 @@ export default function ConfirmationDialog({ open, onOpenChange, email }: Confir
         </button>
 
         <div
-          className={`flex flex-col items-center text-center ${isMobile ? "h-full justify-center px-6" : "px-6 py-10"}`}
+          className={`flex flex-col items-center text-center ${isMobile ? 'h-full justify-center px-6' : 'px-6 py-10'}`}
         >
           <div className="mb-6">
             <Image src="/images/intuipay-logo.png" alt="Intuipay" width={130} height={40} className="h-10 w-auto" />
           </div>
 
           <h2 className="text-2xl font-semibold mb-3">
-            Welcome. <span className="text-yellow-400">👋</span> You've joined the waitlist!
+            Welcome. <span className="text-yellow-400">👋</span> You&apos;ve joined the waitlist!
           </h2>
 
           <p className="text-gray-600 mb-8 max-w-sm">
-            We'll notify you as soon as Intuipay is ready, spread this exciting news to your friend today!
+            We&apos;ll notify you as soon as Intuipay is ready, spread this exciting news to your friend today!
           </p>
 
           <div className="w-full mb-8">

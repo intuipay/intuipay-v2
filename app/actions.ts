@@ -1,14 +1,14 @@
-"use server"
+'use server'
 
 export async function submitWaitlistForm(formData: FormData) {
   // Validate the form data
-  const name = formData.get("name")
-  const email = formData.get("email")
+  const name = formData.get('name')
+  const email = formData.get('email')
 
   if (!name || !email) {
     return {
       success: false,
-      message: "Name and email are required",
+      message: 'Name and email are required',
     }
   }
 
@@ -23,6 +23,6 @@ export async function submitWaitlistForm(formData: FormData) {
 
   return {
     success: true,
-    message: "Thank you for joining our waitlist!",
+    message: 'Thank you for joining our waitlist!',
   }
 }

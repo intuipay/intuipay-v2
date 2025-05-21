@@ -1,18 +1,18 @@
-"use client"
+'use client'
 
-import type React from "react"
+import type React from 'react'
 
-import { useState, useEffect } from "react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { TriangleAlert } from "lucide-react"
-import ConfirmationDialog from "./confirmation-dialog"
+import { useState, useEffect } from 'react'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { TriangleAlert } from 'lucide-react'
+import ConfirmationDialog from './confirmation-dialog'
 
 export default function WaitlistForm() {
-  const [name, setName] = useState("")
-  const [email, setEmail] = useState("")
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [message, setMessage] = useState("")
+  const [message, setMessage] = useState('')
   const [errors, setErrors] = useState<{
     name?: string
     email?: string
@@ -31,14 +31,14 @@ export default function WaitlistForm() {
     const newErrors: { name?: string; email?: string } = {}
 
     if (touched.name && !name) {
-      newErrors.name = "Name is required"
+      newErrors.name = 'Name is required'
     }
 
     if (touched.email) {
       if (!email) {
-        newErrors.email = "Email is required"
+        newErrors.email = 'Email is required'
       } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-        newErrors.email = "This is not a valid email format"
+        newErrors.email = 'This is not a valid email format'
       }
     }
 
@@ -66,12 +66,12 @@ export default function WaitlistForm() {
       setShowConfirmation(true)
 
       // Reset form
-      setName("")
-      setEmail("")
+      setName('')
+      setEmail('')
       setTouched({ name: false, email: false })
-      setMessage("")
+      setMessage('')
     } catch (error) {
-      setMessage("Something went wrong. Please try again.")
+      setMessage('Something went wrong. Please try again.')
     } finally {
       setIsSubmitting(false)
     }
@@ -90,10 +90,10 @@ export default function WaitlistForm() {
               onChange={(e) => setName(e.target.value)}
               onBlur={() => setTouched((prev) => ({ ...prev, name: true }))}
               className={`w-full bg-gray-50 py-5 px-8 rounded-lg ${
-                errors.name ? "border-red-500 text-red-500 placeholder-red-300" : ""
+                errors.name ? 'border-red-500 text-red-500 placeholder-red-300' : ''
               }`}
               aria-invalid={!!errors.name}
-              aria-describedby={errors.name ? "name-error" : undefined}
+              aria-describedby={errors.name ? 'name-error' : undefined}
               disabled={isSubmitting}
             />
           </div>
@@ -115,10 +115,10 @@ export default function WaitlistForm() {
               onChange={(e) => setEmail(e.target.value)}
               onBlur={() => setTouched((prev) => ({ ...prev, email: true }))}
               className={`w-full bg-gray-50 py-6 px-4 rounded-lg ${
-                errors.email ? "border-red-500 text-red-500 placeholder-red-300" : ""
+                errors.email ? 'border-red-500 text-red-500 placeholder-red-300' : ''
               }`}
               aria-invalid={!!errors.email}
-              aria-describedby={errors.email ? "email-error" : undefined}
+              aria-describedby={errors.email ? 'email-error' : undefined}
               disabled={isSubmitting}
             />
           </div>
@@ -136,7 +136,7 @@ export default function WaitlistForm() {
           disabled={isSubmitting}
           aria-label="Join Waitlist"
         >
-          {isSubmitting ? "Processing..." : "Join Waitlist"}
+          {isSubmitting ? 'Processing...' : 'Join Waitlist'}
         </Button>
 
         {message && (
