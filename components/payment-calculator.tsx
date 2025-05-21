@@ -1,18 +1,22 @@
 'use client'
 
-import { useState } from 'react'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import Image from 'next/image'
+import { useMemo, useState } from 'react'
+import uniq from 'lodash-es/uniq';
 import CompareRateDrawer from './compare-rate-drawer'
-import { Combobox } from '@headlessui/react';
 import MyCombobox from '@/components/my-combobox';
-import { CurrencyList } from '@/data';
+import { CurrencyList, UniversityList } from '@/data';
+
+const AmountOptions = ['24,000 USD'];
 
 export default function PaymentCalculator() {
   const [fromCountry, setFromCountry] = useState('China')
   const [toCountry, setToCountry] = useState('United States')
   const [university, setUniversity] = useState('Emory University')
   const [amount, setAmount] = useState('24,000 USD')
+  const univercities = useMemo(() => {
+    return uniq(UniversityList.filter(item => item.country === toCountry)
+      .map(item => item.name));
+  }, [toCountry]);
 
   return (
     <div className="space-y-8">
@@ -31,71 +35,27 @@ export default function PaymentCalculator() {
         <label htmlFor="to-country" className="block text-sm font-medium">
           Institution Destination
         </label>
-        <Select defaultValue={toCountry} onValueChange={setToCountry}>
-          <SelectTrigger id="to-country" className="w-full border rounded-lg p-3">
-            <div className="flex items-center">
-              <div className="w-6 h-6 mr-2 rounded-full overflow-hidden flex-shrink-0">
-                <Image
-                  src="/images/flag-us.png"
-                  alt="US flag"
-                  width={24}
-                  height={24}
-                  className="object-cover"
-                  priority
-                />
-              </div>
-              <SelectValue placeholder="Select country" />
-            </div>
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="United States">United States</SelectItem>
-            <SelectItem value="United Kingdom">United Kingdom</SelectItem>
-            <SelectItem value="Canada">Canada</SelectItem>
-          </SelectContent>
-        </Select>
-        <Select defaultValue={university} onValueChange={setUniversity}>
-          <SelectTrigger id="university" className="w-full border rounded-lg p-3">
-            <div className="flex items-center">
-              <div className="w-6 h-6 mr-2 rounded-full overflow-hidden bg-blue-900 flex items-center justify-center text-white text-xs flex-shrink-0">
-                E
-              </div>
-              <SelectValue placeholder="Select university" />
-            </div>
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="Emory University">Emory University</SelectItem>
-            <SelectItem value="Harvard University">Harvard University</SelectItem>
-            <SelectItem value="Stanford University">Stanford University</SelectItem>
-          </SelectContent>
-        </Select>
+        <MyCombobox
+          options={uniq(UniversityList.map(item => item.country))}
+          onChange={setToCountry}
+          value={toCountry}
+        />
+        <MyCombobox
+          options={univercities}
+          onChange={setUniversity}
+          value={university}
+        />
       </div>
 
       <div className="space-y-2">
         <label htmlFor="amount" className="block text-sm font-medium">
           Payment Amount
         </label>
-        <Select defaultValue={amount} onValueChange={setAmount}>
-          <SelectTrigger id="amount" className="w-full border rounded-lg p-3">
-            <div className="flex items-center">
-              <div className="w-6 h-6 mr-2 rounded-full overflow-hidden flex-shrink-0">
-                <Image
-                  src="/images/flag-us.png"
-                  alt="US flag"
-                  width={24}
-                  height={24}
-                  className="object-cover"
-                  priority
-                />
-              </div>
-              <SelectValue placeholder="Select amount" />
-            </div>
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="24,000 USD">24,000 USD</SelectItem>
-            <SelectItem value="30,000 USD">30,000 USD</SelectItem>
-            <SelectItem value="50,000 USD">50,000 USD</SelectItem>
-          </SelectContent>
-        </Select>
+        <MyCombobox
+          options={AmountOptions}
+          onChange={setAmount}
+          value={amount}
+        />
       </div>
 
       <div className="pt-4 space-y-2">

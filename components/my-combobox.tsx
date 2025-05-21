@@ -15,7 +15,7 @@ export default function MyCombobox({
   options,
   onChange,
 }: Props) {
-  const [selected, setSelected] = useState<string>(value || options[ 0 ]);
+  const [selected, setSelected] = useState<string>(value || options[ 0 ] || '');
   const [query, setQuery] = useState<string>('');
   const filteredOptions = useMemo(() => {
     return query === ''
