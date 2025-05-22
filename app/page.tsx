@@ -73,7 +73,7 @@ export default function Home() {
         </main>
 
         <footer className="container mx-auto px-4 py-6 text-gray-500 text-sm border-t">
-          © 2025 IntuiPay. All rights reserved.
+          © 2025 Intuipay Holding PTE. LTD. All rights reserved.
         </footer>
       </div>
     </>

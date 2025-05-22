@@ -1,22 +1,32 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import uniq from 'lodash-es/uniq';
 import CompareRateDrawer from './compare-rate-drawer'
 import MyCombobox from '@/components/my-combobox';
 import { CurrencyList, UniversityList } from '@/data';
-
-const AmountOptions = ['24,000 USD'];
+import useStore from '@/store';
 
 export default function PaymentCalculator() {
+  const updateAllMethods = useStore(state => state.updateAllMethods);
+  const paymentMethodList = useStore(state => state.paymentMethodList);
   const [fromCountry, setFromCountry] = useState('China')
   const [toCountry, setToCountry] = useState('United States')
-  const [university, setUniversity] = useState('Emory University')
-  const [amount, setAmount] = useState('24,000 USD')
+  const [university, setUniversity] = useState('')
+  const [amount, setAmount] = useState<number>(24000);
+  const [currency, setCurrency] = useState<string>('USD');
   const univercities = useMemo(() => {
     return uniq(UniversityList.filter(item => item.country === toCountry)
       .map(item => item.name));
   }, [toCountry]);
+  const fromCurrency = useMemo(() => {
+    return CurrencyList.find(item => item.country === fromCountry)?.code;
+  }, [fromCountry]);
+
+  useEffect(() => {
+    const fromCode: string = CurrencyList.find(item => item.country === fromCountry)?.code as string;
+    updateAllMethods(fromCode, currency, amount);
+  }, [fromCountry, amount, currency]);
 
   return (
     <div className="space-y-8">
@@ -51,16 +61,25 @@ export default function PaymentCalculator() {
         <label htmlFor="amount" className="block text-sm font-medium">
           Payment Amount
         </label>
-        <MyCombobox
-          options={AmountOptions}
-          onChange={setAmount}
-          value={amount}
-        />
+        <div className="flex items-center">
+          <input
+            type="number"
+            className="w-full border rounded-l-lg border-r-0 h-14 font-semibold px-4"
+            onChange={event => setAmount(Number(event.target.value))}
+            value={amount}
+          />
+          <MyCombobox
+            className="rounded-r-lg"
+            options={CurrencyList.map(item => item.code)}
+            onChange={setCurrency}
+            value={currency}
+          />
+        </div>
       </div>
 
       <div className="pt-4 space-y-2">
         <p>Best price paying with Intuipay</p>
-        <p className="text-3xl font-bold">175,432.18 CNY</p>
+        <p className="text-3xl font-bold">{paymentMethodList?.[ 0 ]?.amount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) || 0} {fromCurrency}</p>
         <p>Will take only <strong>~20-60 mins</strong></p>
       </div>
 

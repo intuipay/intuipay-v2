@@ -2,15 +2,18 @@
 
 import { Combobox, ComboboxButton, ComboboxInput, ComboboxOption, ComboboxOptions } from '@headlessui/react';
 import { useMemo, useState } from 'react';
-import { CheckIcon, ChevronDownIcon, CircleXIcon } from 'lucide-react';
+import { CheckIcon, ChevronDownIcon, ChevronUpIcon, CircleXIcon } from 'lucide-react';
+import { clsx } from 'clsx';
 
 type Props = {
+  className?: string;
   value?: string;
   options: string[];
   onChange: (value: string) => void;
 }
 
 export default function MyCombobox({
+  className = 'rounded-lg',
   value,
   options,
   onChange,
@@ -38,17 +41,22 @@ export default function MyCombobox({
     >
       <div className="relative">
         <ComboboxInput
-          className="w-full border rounded-lg h-14 font-semibold px-4"
+          className={clsx('w-full border h-14 font-semibold px-4', className)}
           aria-label="Select country"
           value={selected}
           onChange={(event) => setQuery(event.target.value)}
         />
         <ComboboxButton className="group absolute inset-y-0 right-0 px-4">
-          <ChevronDownIcon className="size-4 text-gray-400 group-data-hover:fill-white" />
+          {({ open }) => (
+            open
+              ? <ChevronUpIcon className="size-4 text-gray-400" />
+              : <ChevronDownIcon className="size-4 text-gray-400" />
+          )}
         </ComboboxButton>
       </div>
       <ComboboxOptions
         anchor="bottom"
+        transition
         className="w-(--input-width) border rounded-lg bg-white space-y-1"
       >
         {filteredOptions.map(option => (

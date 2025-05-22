@@ -99,7 +99,7 @@ export default function ConfirmationDialog({ open, onOpenChange, email }: Confir
 
           <div className="flex items-center justify-center">
             <a
-              href="https://twitter.com/intuipay"
+              href="https://x.com/intuipay"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center"
