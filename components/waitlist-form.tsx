@@ -1,16 +1,21 @@
 'use client'
 
-import type React from 'react'
+import React, { useRef } from 'react'
 
 import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { TriangleAlert } from 'lucide-react'
 import ConfirmationDialog from './confirmation-dialog'
+import { APIResponse } from '@/types';
+
+const LOCAL_KEY = 'intuipay_ref_id';
 
 export default function WaitlistForm() {
+  const referEmail = useRef<string>('');
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
+  const [myEmail, setMyEmail] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [message, setMessage] = useState('')
   const [errors, setErrors] = useState<{
@@ -24,7 +29,7 @@ export default function WaitlistForm() {
     name: false,
     email: false,
   })
-  const [showConfirmation, setShowConfirmation] = useState(false)
+  const [showConfirmation, setShowConfirmation] = useState(false);
 
   // Validate form fields
   useEffect(() => {
@@ -43,9 +48,20 @@ export default function WaitlistForm() {
     }
 
     setErrors(newErrors)
-  }, [name, email, touched])
+  }, [name, email, touched]);
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const refId = params.get('ref_id') || '';
+    if (refId) {
+      localStorage.setItem(LOCAL_KEY, refId);
+    }
+    const local = localStorage.getItem(LOCAL_KEY);
+    if (local) {
+      referEmail.current = local;
+    }
+  }, []);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
 
     // Mark all fields as touched to show validation errors
@@ -60,12 +76,21 @@ export default function WaitlistForm() {
 
     try {
       // This would be replaced with an actual API call
-      await new Promise((resolve) => setTimeout(resolve, 1000))
+      const response = await fetch('/api/submit', {
+        method: 'POST',
+        body: JSON.stringify({
+          email,
+          name,
+          refer: referEmail.current, // This would be replaced with the actual referral ID
+        }),
+      });
+      const data = await response.json() as APIResponse<number>;
 
       // Show confirmation dialog instead of message
       setShowConfirmation(true)
 
       // Reset form
+      setMyEmail(email);
       setName('')
       setEmail('')
       setTouched({ name: false, email: false })
@@ -114,7 +139,7 @@ export default function WaitlistForm() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               onBlur={() => setTouched((prev) => ({ ...prev, email: true }))}
-              className={`w-full bg-gray-50 py-6 px-4 rounded-lg ${
+              className={`w-full bg-gray-50 py-6 px-8 rounded-lg ${
                 errors.email ? 'border-red-500 text-red-500 placeholder-red-300' : ''
               }`}
               aria-invalid={!!errors.email}
@@ -146,7 +171,11 @@ export default function WaitlistForm() {
         )}
       </form>
 
-      <ConfirmationDialog open={showConfirmation} onOpenChange={setShowConfirmation} email={email} />
+      <ConfirmationDialog
+        open={showConfirmation}
+        onOpenChange={setShowConfirmation}
+        email={myEmail}
+      />
     </>
   )
 }

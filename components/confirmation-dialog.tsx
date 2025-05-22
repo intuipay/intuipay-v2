@@ -15,9 +15,7 @@ export default function ConfirmationDialog({ open, onOpenChange, email }: Confir
   const [copied, setCopied] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
 
-  // Generate a unique referral ID based on email (in a real app, this would come from the backend)
-  const referralId = 'PIRHAHIM1D'
-  const referralLink = `intuipay.ref_id=${referralId}`
+  const referralLink = `https://intuipay.com/?ref_id=${email}`
 
   // Check if the device is mobile
   useEffect(() => {
@@ -49,43 +47,49 @@ export default function ConfirmationDialog({ open, onOpenChange, email }: Confir
         className={`p-0 gap-0 overflow-hidden ${
           isMobile
             ? 'fixed inset-0 w-full h-full max-w-none rounded-none m-0 bg-gradient-to-b from-blue-50 to-pink-50'
-            : 'sm:max-w-md'
+            : 'sm:max-w-[30rem]'
         }`}
       >
         <button
           onClick={() => onOpenChange(false)}
-          className={`absolute left-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 ${
+          className={`absolute top-8 right-8 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 ${
             isMobile ? 'text-gray-700' : ''
           }`}
         >
-          <X className="h-5 w-5" />
+          <X className="size-6" />
           <span className="sr-only">Close</span>
         </button>
 
         <div
-          className={`flex flex-col items-center text-center ${isMobile ? 'h-full justify-center px-6' : 'px-6 py-10'}`}
+          className={`flex flex-col items-center text-center bg-[url(/images/sidebar-bg.svg)] ${isMobile ? 'h-full justify-center px-6' : 'px-16 py-22'}`}
         >
           <div className="mb-6">
-            <Image src="/images/intuipay-logo.png" alt="Intuipay" width={130} height={40} className="h-10 w-auto" />
+            <Image
+              src="/images/intuipay-logo.svg"
+              alt="Intuipay"
+              width={122}
+              height={24}
+              className="h-6 w-auto"
+            />
           </div>
 
-          <h2 className="text-2xl font-semibold mb-3">
+          <h2 className="text-2xl font-medium mb-4 text-pretty">
             Welcome. <span className="text-yellow-400">👋</span> You&apos;ve joined the waitlist!
           </h2>
 
-          <p className="text-gray-600 mb-8 max-w-sm">
+          <p className="text-gray-800 mb-12 max-w-sm text-sm font-medium">
             We&apos;ll notify you as soon as Intuipay is ready, spread this exciting news to your friend today!
           </p>
 
           <div className="w-full mb-8">
             <p className="text-sm font-medium mb-2 text-left">Share your referral link</p>
-            <div className="flex">
-              <div className="flex-grow bg-white border rounded-l-md p-3 text-sm overflow-hidden text-ellipsis whitespace-nowrap">
+            <div className="flex border rounded-lg bg-white">
+              <div className="flex-grow p-3 font-medium truncate text-left">
                 {referralLink}
               </div>
               <button
                 onClick={handleCopy}
-                className="bg-white border border-l-0 rounded-r-md p-3 flex items-center justify-center"
+                className="p-4 flex items-center justify-center"
                 aria-label="Copy referral link"
               >
                 {copied ? <Check className="h-4 w-4 text-green-500" /> : <Copy className="h-4 w-4 text-blue-500" />}
@@ -94,14 +98,20 @@ export default function ConfirmationDialog({ open, onOpenChange, email }: Confir
           </div>
 
           <div className="flex items-center justify-center">
-            <span className="mr-2">Follow us on</span>
             <a
               href="https://twitter.com/intuipay"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center"
             >
-              <X size={16} />
+              <span className="font-medium mr-2">Follow us on</span>
+              <Image
+                src="/images/x.svg"
+                alt="X logo"
+                width={20}
+                height={20}
+                className="size-5 block"
+              />
             </a>
           </div>
         </div>

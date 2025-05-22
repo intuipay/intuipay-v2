@@ -4,7 +4,7 @@ export const runtime = 'edge';
 
 export async function GET(request: Request) {
   const { env } = getRequestContext();
-  const d1 = process.env.DB;
+  const d1 = (env as NodeJS.ProcessEnv).DB;
   if (!d1) {
     return new Response(JSON.stringify({ error: 'D1 database binding not found' }), {
       status: 500,
