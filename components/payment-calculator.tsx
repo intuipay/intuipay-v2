@@ -89,7 +89,7 @@ export default function PaymentCalculator() {
       <div className="pt-4 space-y-2">
         <p>Best price with Intuipay</p>
         {isLoading
-          ? <div className="skeleton w-full h-9" />
+          ? <div className="skeleton w-full h-9 bg-gray-100" />
           : <p className="text-3xl font-bold">{(paymentMethodList?.[ 0 ]?.amountRange?.[ 0 ] || 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) || 0} {fromCurrency}</p>
         }
         <p>Should arrive in seconds</p>
