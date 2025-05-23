@@ -25,7 +25,7 @@ export default function CompareRateDrawer() {
       <SheetContent className="p-0 overflow-y-auto rounded-l-xl pb-8">
         <header className="sticky top-0 bg-white z-10 px-12 py-6 flex items-center">
           <div className="flex justify-between items-center">
-            <h2 className="text-xl">Compare Rate</h2>
+            <h2 className="text-xl">Compare Rates</h2>
           </div>
           <Button
             className="ms-auto aspect-square px-0"
