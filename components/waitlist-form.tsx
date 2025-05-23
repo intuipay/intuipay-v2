@@ -166,7 +166,7 @@ export default function WaitlistForm({
 
         <Button
           type="submit"
-          className="w-full h-16 bg-primary hover:bg-primary/90 text-white py-6 rounded-full text-xl font-semibold"
+          className="w-full h-13 sm:h-15 bg-primary hover:bg-primary/90 text-white rounded-full text-base font-semibold"
           disabled={isSubmitting}
           aria-label="Join Waitlist"
         >

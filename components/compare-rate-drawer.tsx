@@ -16,7 +16,7 @@ export default function CompareRateDrawer() {
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
         <Button
-          className="w-full bg-blue-50 border border-blue-500 text-blue-500 hover:bg-blue-100 rounded-full h-16 text-xl font-semibold"
+          className="w-full bg-blue-50 border border-blue-500 text-blue-500 hover:bg-blue-100 rounded-full h-13 sm:h-15 text-xl font-semibold"
           onClick={() => setOpen(true)}
         >
           Compare Rates

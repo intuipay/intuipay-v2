@@ -9,7 +9,7 @@ export default function Home() {
     <>
       <StructuredData />
       <div className="min-h-screen flex flex-col">
-        <header className="container mx-auto px-4 py-4 sm:py-7.5 flex justify-between items-center border-b">
+        <header className="container mx-auto px-8 sm:px-4 py-4 sm:py-7.5 flex justify-between items-center border-b">
           <div className="flex items-center">
             <Image
               src="/images/intuipay-logo.svg"

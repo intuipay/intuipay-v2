@@ -369,7 +369,7 @@ export const PaymentMethodsOther: PaymentMethod[] = [
   },
   {
     name: 'Western Union / Convera',
-    icon: 'wuc',
+    icon: 'convera',
     description: '',
     processingFee: [1, 3],
     fxMarkupRate: [2, 3.5],
@@ -384,7 +384,7 @@ export const PaymentMethodsOther: PaymentMethod[] = [
   },
   {
     name: 'Bank Wire Transfer',
-    icon: 'bwt',
+    icon: 'rmb',
     description: '',
     processingFee: [20, 50, true],
     fxMarkupRate: [1, 4],
@@ -424,7 +424,7 @@ export const PaymentMethodsOther: PaymentMethod[] = [
   },
   {
     name: 'PayPal',
-    icon: 'american',
+    icon: 'paypal',
     description: '',
     processingFee: [2.9, 4.4],
     fxMarkupRate: [2.5, 4],
