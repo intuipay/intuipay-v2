@@ -3,8 +3,8 @@ export default function StructuredData() {
     '@context': 'https://schema.org',
     '@type': 'Organization',
     name: 'Intuipay',
-    url: 'https://intuipay.com',
-    logo: 'https://intuipay.com/images/intuipay-logo.png',
+    url: 'https://intuipay.xyz',
+    logo: 'https://intuipay.xyz/images/intuipay-logo.png',
     description:
       'Support global universities and pay tuition & make donation across borders — with speed, trust, and simplicity.',
     sameAs: ['https://twitter.com/intuipay', 'https://www.linkedin.com/company/intuipay'],

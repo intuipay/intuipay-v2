@@ -8,10 +8,16 @@ import { Input } from '@/components/ui/input'
 import { TriangleAlert } from 'lucide-react'
 import ConfirmationDialog from './confirmation-dialog'
 import { APIResponse } from '@/types';
+import { clsx } from 'clsx';
 
 const LOCAL_KEY = 'intuipay_ref_id';
 
-export default function WaitlistForm() {
+type Props = {
+  className?: string;
+}
+export default function WaitlistForm({
+  className,
+}: Props) {
   const referEmail = useRef<string>('');
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
@@ -104,7 +110,10 @@ export default function WaitlistForm() {
 
   return (
     <>
-      <form onSubmit={handleSubmit} className="space-y-8">
+      <form
+        onSubmit={handleSubmit}
+        className={clsx('space-y-8', className)}
+      >
         <div>
           <div className="relative">
             <Input
@@ -157,7 +166,7 @@ export default function WaitlistForm() {
 
         <Button
           type="submit"
-          className="w-full h-16 bg-blue-500 hover:bg-blue-600 text-white py-6 rounded-full text-xl font-semibold"
+          className="w-full h-16 bg-primary hover:bg-primary/90 text-white py-6 rounded-full text-xl font-semibold"
           disabled={isSubmitting}
           aria-label="Join Waitlist"
         >

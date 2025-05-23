@@ -16,9 +16,12 @@ export default function PaymentCalculator() {
   const [university, setUniversity] = useState('')
   const [amount, setAmount] = useState<number>(24000);
   const [currency, setCurrency] = useState<string>('USD');
+  const toCountries = useMemo(() => {
+    const countries = uniq(UniversityList.map(item => item.country));
+    return CurrencyList.filter(item => countries.includes(item.country));
+  }, []);
   const univercities = useMemo(() => {
-    return uniq(UniversityList.filter(item => item.country === toCountry)
-      .map(item => item.name));
+    return UniversityList.filter(item => item.country === toCountry);
   }, [toCountry]);
   const fromCurrency = useMemo(() => {
     return CurrencyList.find(item => item.country === fromCountry)?.code;
@@ -36,7 +39,7 @@ export default function PaymentCalculator() {
           Paying From
         </label>
         <MyCombobox
-          options={CurrencyList.map(currency => currency.country)}
+          options={CurrencyList}
           onChange={setFromCountry}
           value={fromCountry}
         />
@@ -47,14 +50,17 @@ export default function PaymentCalculator() {
           Institution Destination
         </label>
         <MyCombobox
-          options={uniq(UniversityList.map(item => item.country))}
+          options={toCountries}
           onChange={setToCountry}
           value={toCountry}
         />
         <MyCombobox
+          iconPath="university"
+          iconExtension="png"
           options={univercities}
           onChange={setUniversity}
           value={university}
+          valueKey="name"
         />
       </div>
 
@@ -71,9 +77,11 @@ export default function PaymentCalculator() {
           />
           <MyCombobox
             className="rounded-r-lg"
-            options={CurrencyList.map(item => item.code)}
+            hasIcon={false}
+            options={CurrencyList}
             onChange={setCurrency}
             value={currency}
+            valueKey="code"
           />
         </div>
       </div>

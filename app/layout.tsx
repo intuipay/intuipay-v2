@@ -6,6 +6,7 @@ import './globals.css'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://intuipay.xyz'),
   title: 'Intuipay - Where Global Education Meets Next-Gen Payments',
   description:
     'Support global universities and pay tuition & make donation across borders — with speed, trust, and simplicity.',
@@ -22,7 +23,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: 'https://intuipay.com',
+    url: 'https://intuipay.xyz',
     title: 'Intuipay - Where Global Education Meets Next-Gen Payments',
     description:
       'Support global universities and pay tuition & make donation across borders — with speed, trust, and simplicity.',
@@ -44,7 +45,7 @@ export const metadata: Metadata = {
     images: ['/images/twitter-image.png'],
   },
   alternates: {
-    canonical: 'https://intuipay.com',
+    canonical: 'https://intuipay.xyz',
   },
   generator: 'v0.dev',
   icons: {

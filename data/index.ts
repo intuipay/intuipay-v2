@@ -1,100 +1,113 @@
-import {Currency, PaymentMethod} from "@/types";
+import {Currency, PaymentMethod, University} from "@/types";
 
 export const CurrencyList: Currency[] = [
   {
     country: 'China',
     code: 'CNY',
     symbol: '¥',
-    anotherSymbol: 'RMB'
+    anotherSymbol: 'RMB',
+    icon: 'china',
   },
   {
     country: 'Hong Kong',
     code: 'HKD',
     symbol: '$',
-    anotherSymbol: 'HKD'
+    anotherSymbol: 'HKD',
+    icon: 'hongkong',
   },
   {
     country: 'India',
     code: 'INR',
     symbol: '₹',
-    anotherSymbol: 'INR'
+    anotherSymbol: 'INR',
+    icon: 'india',
   },
   {
     country: 'Nigeria',
     code: 'NGN',
     symbol: '₦',
-    anotherSymbol: 'NGN'
+    anotherSymbol: 'NGN',
+    icon: 'nigeria',
   },
   {
     country: 'United States',
     code: 'USD',
     symbol: '$',
-    anotherSymbol: 'USD'
+    anotherSymbol: 'USD',
+    icon: 'usa',
   },
   {
     country: 'United Kingdom',
     code: 'GBP',
     symbol: '£',
-    anotherSymbol: 'GBP'
+    anotherSymbol: 'GBP',
+    icon: 'uk',
   },
   {
     country: 'France',
     code: 'EUR',
     symbol: '€',
-    anotherSymbol: 'EUR'
+    anotherSymbol: 'EUR',
+    icon: 'france',
   },
   {
     country: 'Singapore',
     code: 'SGD',
     symbol: '$',
-    anotherSymbol: 'SGD'
+    anotherSymbol: 'SGD',
+    icon: 'singapore',
   },
   {
     country: 'Canada',
     code: 'CAD',
     symbol: '$',
-    anotherSymbol: 'CAD'
+    anotherSymbol: 'CAD',
+    icon: 'canada',
   },
   {
     country: 'Australia',
     code: 'AUD',
     symbol: '$',
-    anotherSymbol: 'AUD'
+    anotherSymbol: 'AUD',
+    icon: 'australia',
   },
   {
     country: 'Malaysia',
     code: 'MYR',
     symbol: 'RM',
-    anotherSymbol: 'MYR'
+    anotherSymbol: 'MYR',
+    icon: 'malaysia',
   },
   // Switzerland
   {
     country: 'Switzerland',
     code: 'CHF',
     symbol: '₣',
-    anotherSymbol: 'CHF'
+    anotherSymbol: 'CHF',
+    icon: 'switzerland',
   },
   //United Arab Emirates
   {
     country: 'United Arab Emirates',
     code: 'AED',
     symbol: 'د.إ',
-    anotherSymbol: 'AED'
+    anotherSymbol: 'AED',
+    icon: 'aed',
   },
   //Philippines
   {
     country: 'Philippines',
     code: 'PHP',
     symbol: '₱',
-    anotherSymbol: 'PHP'
+    anotherSymbol: 'PHP',
+    icon: 'philippines',
   }
 ]
 
-export const UniversityList = [
+export const UniversityList: University[] = [
   {
     name: 'New York University',
     icon: "nyu",
-    logo: "nyuLogo",
     countryIcon: "usa",
     country: 'United States',
   },
@@ -102,7 +115,6 @@ export const UniversityList = [
   {
     name: 'Columbia University',
     icon: "columbia",
-    logo: "columbiaLogo",
     countryIcon: "usa",
     country: 'United States',
   },
@@ -110,7 +122,6 @@ export const UniversityList = [
   {
     name: 'University of Southern California',
     icon: "usc",
-    logo: "uscLogo",
     countryIcon: "usa",
     country: 'United States',
   },
@@ -118,7 +129,6 @@ export const UniversityList = [
   {
     name: 'University of Illinois Urbana-Champaign',
     icon: "illinois",
-    logo: "illinoisLogo",
     countryIcon: "usa",
     country: 'United States',
   },
@@ -126,7 +136,6 @@ export const UniversityList = [
   {
     name: 'Emory University',
     icon: "emory",
-    logo: "emoryLogo",
     countryIcon: "usa",
     country: 'United States',
   },
@@ -134,7 +143,6 @@ export const UniversityList = [
   {
     name: 'Geogia Institute of Technology',
     icon: "gatech",
-    logo: "gatechLogo",
     countryIcon: "usa",
     country: 'United States',
   },
@@ -142,7 +150,6 @@ export const UniversityList = [
   {
     name: 'University College London',
     icon: "ucl",
-    logo: "uclLogo",
     countryIcon: "uk",
     country: 'United Kingdom',
   },
@@ -150,7 +157,6 @@ export const UniversityList = [
   {
     name: `King's College London`,
     icon: "kings",
-    logo: "kingsLogo",
     countryIcon: "uk",
     country: 'United Kingdom',
   },
@@ -158,7 +164,6 @@ export const UniversityList = [
   {
     name: 'University of Manchester',
     icon: "manchester",
-    logo: "manchesterLogo",
     countryIcon: "uk",
     country: 'United Kingdom',
   },
@@ -166,7 +171,6 @@ export const UniversityList = [
   {
     name: 'ETH Zürich',
     icon: "eth",
-    logo: "ethLogo",
     countryIcon: "switzerland",
     country: 'Switzerland',
   },
@@ -174,7 +178,6 @@ export const UniversityList = [
   {
     name: 'University of Zurich',
     icon: "zurich",
-    logo: "zurichLogo",
     countryIcon: "switzerland",
     country: 'Switzerland',
   },
@@ -182,7 +185,6 @@ export const UniversityList = [
   {
     name: 'University of Basel',
     icon: "basel",
-    logo: "baselLogo",
     countryIcon: "switzerland",
     country: 'Switzerland',
   },
@@ -190,7 +192,6 @@ export const UniversityList = [
   {
     name: 'Khalifa University',
     icon: "khalifa",
-    logo: "khalifaLogo",
     countryIcon: "uae",
     country: 'United Arab Emirates',
   },
@@ -198,7 +199,6 @@ export const UniversityList = [
   {
     name: 'Zayed University',
     icon: "zayed",
-    logo: "zayedLogo",
     countryIcon: "uae",
     country: 'United Arab Emirates',
   },
@@ -206,7 +206,6 @@ export const UniversityList = [
   {
     name: 'University of Sharjah',
     icon: "sharjah",
-    logo: "sharjahLogo",
     countryIcon: "uae",
     country: 'United Arab Emirates',
   },
@@ -214,7 +213,6 @@ export const UniversityList = [
   {
     name: 'University of British Columbia',
     icon: "ubc",
-    logo: "ubcLogo",
     countryIcon: "ca",
     country: 'Canada',
   },
@@ -222,7 +220,6 @@ export const UniversityList = [
   {
     name: 'McGill University',
     icon: "mcgill",
-    logo: "mcgillLogo",
     countryIcon: "ca",
     country: 'Canada',
   },
@@ -230,7 +227,6 @@ export const UniversityList = [
   {
     name: 'University of Waterloo',
     icon: "waterloo",
-    logo: "waterlooLogo",
     countryIcon: "ca",
     country: 'Canada',
   },
@@ -238,7 +234,6 @@ export const UniversityList = [
   {
     name: 'National University of Singapore',
     icon: "nus",
-    logo: "nusLogo",
     countryIcon: "sg",
     country: 'Singapore',
   },
@@ -246,7 +241,6 @@ export const UniversityList = [
   {
     name: 'Nanyang Technological University',
     icon: "ntus",
-    logo: "ntusLogo",
     countryIcon: "sg",
     country: 'Singapore',
   },
@@ -254,7 +248,6 @@ export const UniversityList = [
   {
     name: 'Singapore Management University',
     icon: "smu",
-    logo: "smuLogo",
     countryIcon: "sg",
     country: 'Singapore',
   },
@@ -262,7 +255,6 @@ export const UniversityList = [
   {
     name: 'Hong Kong University',
     icon: "hku",
-    logo: "hkuLogo",
     countryIcon: "hk",
     country: 'Hong Kong',
   },
@@ -270,7 +262,6 @@ export const UniversityList = [
   {
     name: 'City University of Hong Kong',
     icon: "cku",
-    logo: "ckuLogo",
     countryIcon: "hk",
     country: 'Hong Kong',
   },
@@ -278,7 +269,6 @@ export const UniversityList = [
   {
     name: 'Hong Kong University of Science and Technology',
     icon: "hkust",
-    logo: "hkustLogo",
     countryIcon: "hk",
     country: 'Hong Kong',
   },
@@ -286,7 +276,6 @@ export const UniversityList = [
   {
     name: 'Universiti Teknologi Malaysia',
     icon: "utm",
-    logo: "utmLogo",
     countryIcon: "ma",
     country: 'Malaysia',
   },
@@ -294,7 +283,6 @@ export const UniversityList = [
   {
     name: 'Universiti Sains Malaysia',
     icon: "usm",
-    logo: "usmLogo",
     countryIcon: "ma",
     country: 'Malaysia',
   },
@@ -302,7 +290,6 @@ export const UniversityList = [
   {
     name: 'Sunway University',
     icon: "sunway",
-    logo: "sunwayLogo",
     countryIcon: "ma",
     country: 'Malaysia',
   },
@@ -310,7 +297,6 @@ export const UniversityList = [
   {
     name: 'University of Sydney',
     icon: "sydney",
-    logo: "sydneyLogo",
     countryIcon: "au",
     country: 'Australia',
   },
@@ -318,7 +304,6 @@ export const UniversityList = [
   {
     name: 'Monash University',
     icon: "monash",
-    logo: "monashLogo",
     countryIcon: "au",
     country: 'Australia',
   },
@@ -326,7 +311,6 @@ export const UniversityList = [
   {
     name: 'University of Melbourne',
     icon: "melbourne",
-    logo: "melbourneLogo",
     countryIcon: "au",
     country: 'Australia',
   },
@@ -334,7 +318,6 @@ export const UniversityList = [
   {
     name: 'University of the Philippines',
     icon: "up",
-    logo: "upLogo",
     countryIcon: "ph",
     country: 'Philippines',
   },

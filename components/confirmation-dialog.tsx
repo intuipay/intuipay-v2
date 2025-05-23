@@ -15,7 +15,7 @@ export default function ConfirmationDialog({ open, onOpenChange, email }: Confir
   const [copied, setCopied] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
 
-  const referralLink = `https://intuipay.com/?ref_id=${email}`
+  const referralLink = `https://intuipay.xyz/?ref_id=${email}`
 
   // Check if the device is mobile
   useEffect(() => {

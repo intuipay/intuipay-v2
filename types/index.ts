@@ -1,8 +1,16 @@
-export type Currency = {
+export type DropdownItemProps = {
   country: string;
+  icon: string;
+}
+export type Currency = DropdownItemProps & {
   code: string;
   symbol: string;
   anotherSymbol: string;
+}
+
+export type University = DropdownItemProps & {
+  name: string;
+  countryIcon: string;
 }
 
 export type APIResponse<T> = {

@@ -2,35 +2,45 @@
 
 import { Combobox, ComboboxButton, ComboboxInput, ComboboxOption, ComboboxOptions } from '@headlessui/react';
 import { useMemo, useState } from 'react';
-import { CheckIcon, ChevronDownIcon, ChevronUpIcon, CircleXIcon } from 'lucide-react';
+import { ChevronDownIcon, ChevronUpIcon, CircleXIcon } from 'lucide-react';
 import { clsx } from 'clsx';
+import Image from 'next/image';
+import { DropdownItemProps } from '@/types';
 
 type Props = {
   className?: string;
-  value?: string;
-  options: string[];
+  hasIcon?: boolean;
+  iconPath?: string;
+  iconExtension?: string;
   onChange: (value: string) => void;
+  options: DropdownItemProps[];
+  value?: string;
+  valueKey?: 'country' | 'code' | 'name';
 }
 
 export default function MyCombobox({
   className = 'rounded-lg',
-  value,
-  options,
+  hasIcon = true,
+  iconPath = 'country',
+  iconExtension = 'svg',
   onChange,
+  options,
+  value,
+  valueKey = 'country',
 }: Props) {
-  const [selected, setSelected] = useState<string>(value || options[ 0 ] || '');
+  const [selected, setSelected] = useState<DropdownItemProps>(options.find(item => item[ valueKey ] === value) || options[ 0 ]);
   const [query, setQuery] = useState<string>('');
   const filteredOptions = useMemo(() => {
     return query === ''
       ? options
       : options.filter((item) => {
-        return item.toLowerCase().includes(query.toLowerCase());
+        return item[ valueKey ].toLowerCase().includes(query.toLowerCase());
       });
-  }, [query]);
+  }, [query, options, valueKey]);
 
-  function doUpdate(value: string) {
+  function doUpdate(value: DropdownItemProps) {
     setSelected(value);
-    onChange(value);
+    onChange(value[ valueKey ]);
   }
 
   return (
@@ -40,10 +50,21 @@ export default function MyCombobox({
       onClose={() => setQuery('')}
     >
       <div className="relative">
+        {hasIcon && (query
+          ? <div className="absolute size-6 rounded-full bg-primary top-4 left-4" />
+          : <Image
+              src={`/images/${iconPath}/${selected.icon}.${iconExtension}`}
+              width={24}
+              height={24}
+              className="size-6 absolute top-4 left-4"
+              alt={selected.country}
+              loading="lazy"
+            />
+        )}
         <ComboboxInput
-          className={clsx('w-full border h-14 font-semibold px-4', className)}
+          className={clsx('w-full ps-12 pe-4 border h-14 font-semibold', className)}
           aria-label="Select country"
-          value={selected}
+          displayValue={(item: DropdownItemProps) => item[ valueKey ]}
           onChange={(event) => setQuery(event.target.value)}
         />
         <ComboboxButton className="group absolute inset-y-0 right-0 px-4">
@@ -61,12 +82,24 @@ export default function MyCombobox({
       >
         {filteredOptions.map(option => (
           <ComboboxOption
-            className="flex items-center gap-3 hover:bg-blue-50 px-4 h-12 cursor-pointer"
-            key={option}
+            className={clsx(
+              'flex items-center gap-3 px-4 h-12 cursor-pointer',
+              value === option[ valueKey ] ? 'bg-blue-50 hover:bg-blue-100' : 'hover:bg-blue-50',
+            )}
+            key={option[ valueKey ]}
             value={option}
           >
-            {option === selected ? <CheckIcon className="size-5" /> : <span className="block size-5" /> }
-            {option}
+            <div className="flex items-center gap-3">
+              {hasIcon && <Image
+                src={`/images/${iconPath}/${option.icon}.${iconExtension}`}
+                width={24}
+                height={24}
+                className="w-6 h-6 block"
+                alt={option[ valueKey ]}
+                loading="lazy"
+              />}
+              {option[ valueKey ]}
+            </div>
           </ComboboxOption>
         ))}
         {!filteredOptions.length && <div className="flex items-center gap-3 px-4 h-12">
