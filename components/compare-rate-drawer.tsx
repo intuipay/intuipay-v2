@@ -19,7 +19,7 @@ export default function CompareRateDrawer() {
           className="w-full bg-blue-50 border border-blue-500 text-blue-500 hover:bg-blue-100 rounded-full h-16 text-xl font-semibold"
           onClick={() => setOpen(true)}
         >
-          Compare Rate
+          Compare Rates
         </Button>
       </SheetTrigger>
       <SheetContent className="p-0 overflow-y-auto rounded-l-xl pb-8">

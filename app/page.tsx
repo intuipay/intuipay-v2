@@ -16,7 +16,7 @@ export default function Home() {
               alt="Intuipay"
               width={122}
               height={24}
-              className="h-6 w-auto"
+              className="h-5 sm:h-6 w-auto"
               priority
             />
           </div>
@@ -37,7 +37,7 @@ export default function Home() {
         <main className="flex-1 container mx-auto md:p-8">
           <section className="md:flex md:items-center">
             <div className="md:w-1/2 flex-none p-8 md:p-0 mb-5 md:mb-0">
-              <h1 className="w-3/4 mx-auto min-w-107 text-4xl md:text-6xl font-medium mb-6 text-nowrap">
+              <h1 className="sm:w-3/4 mx-auto sm:min-w-107 text-4xl md:text-6xl font-medium mb-6 text-nowrap">
                 Where{' '}
                 <span className="inline-flex items-center align-top w-25 relative me-1 md:me-3" aria-label="Flags">
                   <span className="size-7 md:size-11 text-base md:text-2xl border rounded-full flex justify-center items-center rotate-12 absolute z-50 top-2 left-0 bg-white">🇸🇬</span>
@@ -56,16 +56,16 @@ export default function Home() {
                 <span className="text-blue-500">Next-Gen Payments.</span>
               </h1>
 
-              <p className="w-3/4 mx-auto min-w-107 text-xl mb-16">
+              <p className="sm:w-3/4 mx-auto sm:min-w-107 text-xl mb-16">
                 Support global universities and pay tuition & make donation across borders — with speed, trust, and
                 simplicity.
               </p>
 
-              <WaitlistForm className="w-3/4 mx-auto min-w-107" />
+              <WaitlistForm className="sm:w-3/4 mx-auto sm:min-w-107" />
             </div>
 
             <div className="md:w-1/2 flex-none bg-slate-50 px-8 py-13  md:rounded-2xl bg-[url(/images/sidebar-bg.svg)] bg-cover bg-center">
-              <div className="w-3/4 mx-auto min-w-107 p-8 md:px-14 md:py-15 bg-white rounded-2xl shadow-md">
+              <div className="sm:w-3/4 mx-auto sm:min-w-107 p-8 md:px-14 md:py-15 bg-white rounded-2xl shadow-md">
                 <PaymentCalculator />
               </div>
             </div>
