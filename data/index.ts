@@ -346,10 +346,7 @@ export const PaymentMethods: PaymentMethod[] = [
     action: 'Pay USD Coin (USDC) on Solana',
     icon: 'usdc',
     description: 'Select payment method will take <span>10 MINUTES</span>',
-    processingFee: 0,
-    fxMarkupRate: 0,
-    additionalFee: 0,
-    fee: 0,
+    processingFee: [0, 1],
     title: 'FASTEST & CHEAPEST, IF YOU ALREADY OWN ENOUGH USDC',
     background: '#16A34A',
     note: `
@@ -366,10 +363,8 @@ export const PaymentMethods: PaymentMethod[] = [
     name: 'Solana in Chinese Yuan (CNY)',
     action: 'Pay Chinese Yuan (CNY) on Solana',
     icon: 'solana',
-    processingFee: 0,
-    fxMarkupRate: 0.01,
-    additionalFee: 0,
-    fee: 0.01,
+    processingFee: [0, 1],
+    fxMarkupRate: [0, 1],
     description: 'Select payment method will take <span>~20-60 MINUTES</span>',
     title: 'FAST & MOST POPULAR',
     background: 'linear-gradient(180deg, #0037C2 0%, #217BE0 100%)',
@@ -382,74 +377,88 @@ export const PaymentMethods: PaymentMethod[] = [
 
 export const PaymentMethodsOther: PaymentMethod[] = [
   {
-    name: 'Alipay in Chinese Yuan (CNY) ',
-    icon: 'alipay',
-    description: 'Select payment method will take <span>1-2 DAYS</span>',
-    fee: 0.04,
-    note: `
-      <p>You will be required to upload the tuition invoice provided by your institution and other documents that may be required according to relevant laws and regulations.</p>
-      <p>Student & Payer must be a Mainland China citizen to be eligible to make a payment successfully.</p>
-      <p>The recommended amount is not more than 300,000 CNY.</p>
-      <p>After you complete your payment, your documents still need to be verified. Once the document verification passes, Intuipay will update the payment status and will then convert and deliver funds to your institution.</p>
-    `,
+    name: 'Flywire',
+    icon: 'flywire',
+    description: '',
+    processingFee: [1, 2],
+    fxMarkupRate: [1, 1.5],
+    additionalFee: [0, 30, true],
   },
   {
-    name: 'RMB transfer in Chinese Yuan (CNY)-A Payment notice / bill / invoice from institution is required',
-    icon: 'rmb',
-    description: 'Select payment method will take <span>3-7 Days</span>',
-    fee: 0.04,
-    extra_fee: 80,
-    note: `
-      <p>You will be required to upload the tuition invoice provided by your institution. Please make sure the document is ready for upload. *</p>
-      <p>Student & Payer must be a Mainland China citizen to be eligible to make a payment successfully.</p>
-      <p>Payment invoice and payer information will be validated once the funds are received by Intuipay’s authorized partner in China.</p>
-      <p>Please transfer CNY (RMB) to the beneficiary bank account (large payments are accepted) according to the instruction given at the end of the booking process. Intuipay will deliver your funds securely within 1 business day after regulatory check is completed and funds received by Intuipay.</p>
-    `
+    name: 'Western Union / Convera',
+    icon: 'wuc',
+    description: '',
+    processingFee: [1, 3],
+    fxMarkupRate: [2, 3.5],
+    additionalFee: [0, 20, true],
   },
   {
-    name: 'UnionPay debit card in Chinese Yuan (CNY)',
-    icon: 'unionpay',
-    description: 'Select payment method will take <span>1-3 Days</span>',
-    fee: 0.04,
-    note: `
-      <p>Enjoy the fastest payment experience with no documents required and instant issuance of receipt upon payment.</p>
-      <p>Please ready your China UnionPay debit card and the cardholder’s phone to receive payment verification message before starting the payment.</p>
-      <p>Please note:</p>
-      <p>If you are paying with a China Construction Bank Debit card, please enable the overseas transaction feature through “Account Inquiry-Management-Account Security” of Mobile Banking.</p>
-      <p><span>If you are paying with a Bank of China Debit card, please pre-adjust the online payment limit in the mobile banking app or online banking, please refer to <a href="https://www.unionpayintl.com/ZT/EducationExpends/" target="_blank">this link</a>.</span></p>
-    `
+    name: 'EasyTransfer',
+    icon: 'wuc',
+    description: '',
+    processingFee: [1, 2],
+    fxMarkupRate: [0.5, 1.5],
   },
   {
-    name: 'Visa Debit / Credit in Chinese Yuan (CNY)',
+    name: 'Bank Wire Transfer',
+    icon: 'bwt',
+    description: '',
+    processingFee: [20, 50, true],
+    fxMarkupRate: [1, 4],
+    additionalFee: [10, 30, true],
+  },
+  {
+    name: 'Visa',
     icon: 'visa',
-    description: 'Select payment method will take <span>1-3 Days</span>',
-    fee: 0.057,
-    important_info: 'Important info',
+    description: '',
+    processingFee: [1.5, 2.5],
+    fxMarkupRate: [1, 2],
+    additionalFee: [0.8, 1.2],
   },
   {
-    name: 'Mastercard Debit / Credit in Chinese Yuan (CNY)',
+    name: 'Mastercard',
     icon: 'mastercard',
-    description: 'Select payment method will take <span>1-3 Days</span>',
-    fee: 0.057,
-    important_info: 'Important info',
+    description: '',
+    processingFee: [1.5, 2.5],
+    fxMarkupRate: [1, 2],
+    additionalFee: [0.8, 1.2],
   },
   {
-    name: 'American Express in Chinese Yuan (CNY)',
+    name: 'American Express',
     icon: 'american',
-    description: 'Select payment method will take <span>1-3 Days</span>',
-    fee: 0.078,
-    important_info: 'Important info',
+    description: '',
+    processingFee: [2.5, 3.5],
+    fxMarkupRate: [1, 3],
+    additionalFee: [0.9, 1.3],
   },
   {
-    name: 'PayPal in Chinese Yuan (CNY)',
-    icon: 'paypal',
-    description: 'Select payment method will take <span>1-2 Days</span>',
-    fee: 0.084,
-    extra_fee: 0.3,
-    note: `
-      <p>You will be required to upload the tuition invoice provided by your institution and other documents that may be required according to relevant laws and regulations.</p>
-      <p>Student & Payer must have a PayPal account linked to a Chinese bank account or payment method to use this option.</p>
-      <p>After you complete your payment via PayPal, your documents still need to be verified. Once the document verification passes, Intuipay will update the payment status and will then convert and deliver funds to your institution. Please allow 1-2 business days for the entire process to complete.</p>
-    `
-  }
+    name: 'UnionPay',
+    icon: 'unionpay',
+    description: '',
+    processingFee: [1, 2],
+    fxMarkupRate: [1, 2],
+    currency: ['CNY'],
+  },
+  {
+    name: 'PayPal',
+    icon: 'american',
+    description: '',
+    processingFee: [2.9, 4.4],
+    fxMarkupRate: [2.5, 4],
+    additionalFee: [0.3, 0.3, true],
+  },
+  {
+    name: 'Alipay',
+    icon: 'alipay',
+    description: '',
+    processingFee: [1, 2],
+    fxMarkupRate: [1, 2],
+  },
+  {
+    name: 'WeChat pay',
+    icon: 'wechat',
+    description: '',
+    processingFee: [1, 2],
+    fxMarkupRate: [1, 2],
+  },
 ];

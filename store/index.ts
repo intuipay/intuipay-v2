@@ -79,26 +79,50 @@ const useStore = create<Props>((set, get) => {
       }
     }
   }
+  function getAmountRange(item: PaymentMethod, transferRate: TransferRate) {
+    const {
+      processingFee = [],
+      fxMarkupRate = [],
+      additionalFee = [],
+    } = item;
+    const fees = [ processingFee, fxMarkupRate, additionalFee];
+    const minRate = fees.reduce((acc, item) => {
+      return !item.length || item[2] ? acc : (acc + item[0]);
+    }, 0);
+    const maxRate = fees.reduce((acc, item) => {
+      return !item.length || item[2] ? acc : (acc + item[1]);
+    }, 0);
+    const minAdd = fees.reduce((acc, item) => {
+      return !item.length || !item[2] ? acc : (acc + item[0]) * transferRate.usdRate;
+    }, 0);
+    const maxAdd = fees.reduce((acc, item) => {
+      return !item.length || !item[2] ? acc : (acc + item[1]) * transferRate.usdRate;
+    }, 0);
+    const minFee = transferRate.value + transferRate.value * minRate / 100 + minAdd;
+    const maxFee = transferRate.value + transferRate.value * maxRate / 100 + maxAdd;
+    return [minFee, maxFee];
+  }
   async function updateAllMethods(to: string, from: string, amt: number) {
     await fetchAmount(to, from, amt);
     const { transferRate } = get();
     const anotherSymbol = CurrencyList.find(item => item.code === from)?.anotherSymbol;
     const paymentMethodList = PaymentMethods.map(item => {
-      item = {...item};
-      if (item.fee === 0) {
-        item.amount = transferRate.value * (1 + (+item.fee))
-        item.symbol = anotherSymbol;
-      } else {
-        item.amount = (transferRate.value * (1 + (+item.fee)));
-        item.symbol = anotherSymbol;
-      }
-      return item;
+      const range = getAmountRange(item, transferRate);
+      return {
+        ...item,
+        symbol: anotherSymbol,
+        amountRange: range,
+      };
     });
+    const baseRange = paymentMethodList[0].amountRange;
     const paymentMethodOtherList = PaymentMethodsOther.map(item => {
-      item = {...item};
-      item.amount = (transferRate.value * (1 + (+item.fee))) + ((item.extra_fee || 0) * transferRate.usdTargetRate);
-      item.symbol = anotherSymbol;
-      return item;
+      const range = getAmountRange(item, transferRate);
+      return {
+        ...item,
+        symbol: anotherSymbol,
+        amountRange: range,
+        diffAmountRange: [range[0] - baseRange[0], range[1] - baseRange[1]],
+      };
     });
     set({
       paymentMethodList,

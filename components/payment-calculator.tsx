@@ -82,7 +82,7 @@ export default function PaymentCalculator() {
         <p>Best price paying with Intuipay</p>
         {isLoading
           ? <div className="skeleton w-full h-9" />
-          : <p className="text-3xl font-bold">{(paymentMethodList?.[ 0 ]?.amount || 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) || 0} {fromCurrency}</p>
+          : <p className="text-3xl font-bold">{(paymentMethodList?.[ 0 ]?.amountRange?.[ 0 ] || 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) || 0} {fromCurrency}</p>
         }
         <p>Will take only <strong>~20-60 mins</strong></p>
       </div>

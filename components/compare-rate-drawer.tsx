@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Image from 'next/image'
+import { XIcon } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 import { Button } from '@/components/ui/button'
 import useStore from '@/store';
@@ -21,16 +22,26 @@ export default function CompareRateDrawer() {
           Compare Rate
         </Button>
       </SheetTrigger>
-      <SheetContent className="p-0 overflow-y-auto rounded-l-xl px-12">
-        <div className="sticky top-0 bg-white z-10">
-          <div className="flex justify-between items-center py-7">
+      <SheetContent className="p-0 overflow-y-auto rounded-l-xl pb-8">
+        <header className="sticky top-0 bg-white z-10 px-12 py-6 flex items-center">
+          <div className="flex justify-between items-center">
             <h2 className="text-xl">Compare Rate</h2>
           </div>
+          <Button
+            className="ms-auto aspect-square px-0"
+            type="button"
+            variant="ghost"
+            onClick={() => setOpen(false)}
+          >
+            <XIcon className="size-6" />
+          </Button>
+        </header>
+        <div className="px-12 mb-8">
+          <p className="mb-4">Most rates includes additional exchange rate markup and service fees. Some providers claim to offer “no fees,” but they often include a <strong>hidden markup</strong> in the exchange rate, which means you may end up paying more than you expected.</p>
+          <p>At Intuipay, we work with licensed onramp partners to offer you the best total rate available. Everything is shown up front, with no hidden charges. Your donation stays fast, transparent, and affordable.</p>
         </div>
-        <p className="mb-4">Most rates includes additional exchange rate markup and service fees. Some providers claim to offer “no fees,” but they often include a <strong>hidden markup</strong> in the exchange rate, which means you may end up paying more than you expected.</p>
-        <p className="mb-8">At Intuipay, we work with licensed onramp partners to offer you the best total rate available. Everything is shown up front, with no hidden charges. Your donation stays fast, transparent, and affordable.</p>
 
-        <div>
+        <div className="px-12">
           <div className="text-center text-gray-400 mb-6 relative">
             <div className="absolute left-0 right-0 top-1/2 h-px bg-gray-200"></div>
             <span className="relative bg-white px-4">Methods offered by Intuipay</span>
@@ -68,9 +79,9 @@ export default function CompareRateDrawer() {
                     </div>
                     <div className="space-y-2">
                       <p className="font-medium text-gray-600">{method.name}</p>
-                      <p className="text-2xl font-bold">
-                        {method.amount} {method.symbol}
-                      </p>
+                      {method.amountRange && <p className="text-2xl font-bold">
+                        {method.amountRange[ 0 ].toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} - {method.amountRange[ 1 ].toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} {method.symbol}
+                      </p>}
                       <p dangerouslySetInnerHTML={{ __html: method.description }} />
                     </div>
                   </div>
@@ -101,10 +112,10 @@ export default function CompareRateDrawer() {
                     <p className="text-gray-600">
                       {method.name}
                     </p>
-                    <p className="text-2xl font-bold">
-                      {method.amountRange} {method.symbol}
-                    </p>
-                    {method.additionalFees && <p className="font-medium text-orange-500">{method.additionalFees}</p>}
+                    {method.amountRange && <p className="text-2xl font-bold">
+                      {method.amountRange[ 0 ].toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} - ${method.amountRange[ 1 ].toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} {method.symbol}
+                    </p>}
+                    {method.diffAmountRange && <p className="font-medium text-red-700">+ {method.diffAmountRange[ 0 ].toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} - {method.diffAmountRange[ 1 ].toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} {method.symbol}</p>}
                     <p dangerouslySetInnerHTML={{ __html: method.description }} />
                   </div>
                 </div>
