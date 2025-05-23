@@ -14,9 +14,9 @@ export default function Home() {
             <Image
               src="/images/intuipay-logo.svg"
               alt="Intuipay"
-              width={142}
-              height={29}
-              className="h-7 w-auto"
+              width={122}
+              height={24}
+              className="h-6 w-auto"
               priority
             />
           </div>
@@ -37,7 +37,7 @@ export default function Home() {
         <main className="flex-1 container mx-auto md:p-8">
           <section className="md:flex md:items-center">
             <div className="md:w-1/2 flex-none p-8 md:p-0 md:pe-15 mb-5 md:mb-0">
-              <h1 className="text-4xl md:text-6xl font-medium mb-6">
+              <h1 className="text-4xl md:text-6xl font-medium mb-6 text-nowrap">
                 Where{' '}
                 <span className="inline-flex items-center align-top w-25 relative me-1 md:me-3" aria-label="Flags">
                   <span className="size-7 md:size-11 text-base md:text-2xl border rounded-full flex justify-center items-center rotate-12 absolute z-50 top-2 left-0 bg-white">🇸🇬</span>
@@ -73,7 +73,7 @@ export default function Home() {
         </main>
 
         <footer className="container mx-auto px-4 py-6 text-gray-500 text-sm border-t">
-          © 2025 Intuipay Holding PTE. LTD. All rights reserved.
+          © 2025 Intuipay Holding PTE. LTD. All rights reserved. v{process.env.NEXT_PUBLIC_APP_VERSION}
         </footer>
       </div>
     </>

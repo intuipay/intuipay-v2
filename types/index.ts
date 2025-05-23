@@ -21,3 +21,21 @@ export type TransferRate = {
   usdRate: number;
   usdTargetRate: number;
 }
+
+export type PaymentMethod = {
+  amount?: number;
+  symbol?: string;
+  name: string;
+  action?: string;
+  icon: string;
+  description: string;
+  processingFee?: number;
+  fxMarkupRate?: number;
+  additionalFee?: number;
+  fee: number;
+  extra_fee?: number;
+  title?: string;
+  background?: string;
+  note?: string;
+  important_info?: string;
+}

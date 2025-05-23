@@ -8,8 +8,9 @@ import { CurrencyList, UniversityList } from '@/data';
 import useStore from '@/store';
 
 export default function PaymentCalculator() {
-  const updateAllMethods = useStore(state => state.updateAllMethods);
+  const isLoading = useStore(state => state.isLoading);
   const paymentMethodList = useStore(state => state.paymentMethodList);
+  const updateAllMethods = useStore(state => state.updateAllMethods);
   const [fromCountry, setFromCountry] = useState('China')
   const [toCountry, setToCountry] = useState('United States')
   const [university, setUniversity] = useState('')
@@ -25,7 +26,7 @@ export default function PaymentCalculator() {
 
   useEffect(() => {
     const fromCode: string = CurrencyList.find(item => item.country === fromCountry)?.code as string;
-    updateAllMethods(fromCode, currency, amount);
+    updateAllMethods(currency, fromCode, amount);
   }, [fromCountry, amount, currency]);
 
   return (
@@ -79,7 +80,10 @@ export default function PaymentCalculator() {
 
       <div className="pt-4 space-y-2">
         <p>Best price paying with Intuipay</p>
-        <p className="text-3xl font-bold">{paymentMethodList?.[ 0 ]?.amount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) || 0} {fromCurrency}</p>
+        {isLoading
+          ? <div className="skeleton w-full h-9" />
+          : <p className="text-3xl font-bold">{(paymentMethodList?.[ 0 ]?.amount || 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) || 0} {fromCurrency}</p>
+        }
         <p>Will take only <strong>~20-60 mins</strong></p>
       </div>
 

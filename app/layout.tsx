@@ -46,7 +46,12 @@ export const metadata: Metadata = {
   alternates: {
     canonical: 'https://intuipay.com',
   },
-    generator: 'v0.dev'
+  generator: 'v0.dev',
+  icons: {
+    icon: [
+      { url: '/images/logo.svg', type: 'application/xml+svg' },
+    ],
+  }
 }
 
 export const viewport: Viewport = {

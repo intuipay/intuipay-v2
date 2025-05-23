@@ -1,7 +1,20 @@
 import { create } from 'zustand';
 import {CurrencyList, PaymentMethods, PaymentMethodsOther} from "@/data";
+import {PaymentMethod, TransferRate} from "@/types";
 
-const useStore = create((set, get) => {
+type Props = {
+  amount: number;
+  isLoading: boolean;
+  source: string;
+  target: string;
+  paymentMethodList: PaymentMethod[];
+  paymentMethodOtherList: PaymentMethod[];
+  transferRate: TransferRate;
+
+  updateAllMethods: (source: string, target: string, amt: number) => Promise<void>;
+}
+
+const useStore = create<Props>((set, get) => {
   async function fetchAmount(source: string, target: string, amt: number) {
     let currencies = ''
     if (source === target) {
@@ -16,7 +29,7 @@ const useStore = create((set, get) => {
     console.log(currencies)
     if (currencies === '') {
       set({
-        amt,
+        amount: amt,
         source,
         target,
         transferRate: {
@@ -29,12 +42,14 @@ const useStore = create((set, get) => {
       });
       return;
     } else {
+      set({ isLoading: true });
       const response = await fetch(`https://apilayer.net/api/live?access_key=c00b1d196651f1245a3e4410df9863db&currencies=USD,${target}&source=${source}`);
       const data = await response.json();
       if (data.success) {
         if (target === source) {
           set({
-            amt,
+            amount: amt,
+            isLoading: false,
             source,
             target,
             transferRate: {
@@ -48,7 +63,8 @@ const useStore = create((set, get) => {
         }
         else {
           set({
-            amt,
+            amount: amt,
+            isLoading: false,
             source,
             target,
             transferRate: {
@@ -63,13 +79,13 @@ const useStore = create((set, get) => {
       }
     }
   }
-  async function updateAllMethods(source: string, target: string, amt: number) {
-    await fetchAmount(source, target, amt);
+  async function updateAllMethods(to: string, from: string, amt: number) {
+    await fetchAmount(to, from, amt);
     const { transferRate } = get();
-    const anotherSymbol = CurrencyList.find(item => item.code === source)?.anotherSymbol;
+    const anotherSymbol = CurrencyList.find(item => item.code === from)?.anotherSymbol;
     const paymentMethodList = PaymentMethods.map(item => {
       item = {...item};
-      if (item.fee == '0') {
+      if (item.fee === 0) {
         item.amount = transferRate.value * (1 + (+item.fee))
         item.symbol = anotherSymbol;
       } else {
@@ -80,7 +96,7 @@ const useStore = create((set, get) => {
     });
     const paymentMethodOtherList = PaymentMethodsOther.map(item => {
       item = {...item};
-      item.amount = (transferRate.value * (1 + (+item.fee))) + ((+item.extra_fee || 0) * transferRate.usdTargetRate);
+      item.amount = (transferRate.value * (1 + (+item.fee))) + ((item.extra_fee || 0) * transferRate.usdTargetRate);
       item.symbol = anotherSymbol;
       return item;
     });
@@ -92,6 +108,7 @@ const useStore = create((set, get) => {
 
   return {
     amount: 0,
+    isLoading: false,
     source: '',
     target: '',
     paymentMethodList: [],
@@ -104,7 +121,6 @@ const useStore = create((set, get) => {
       usdTargetRate: 1,
     },
 
-    fetchAmount,
     updateAllMethods,
   }
 });

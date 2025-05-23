@@ -1,4 +1,4 @@
-import {Currency} from "@/types";
+import {Currency, PaymentMethod} from "@/types";
 
 export const CurrencyList: Currency[] = [
   {
@@ -340,7 +340,7 @@ export const UniversityList = [
   },
 ]
 
-export const PaymentMethods = [
+export const PaymentMethods: PaymentMethod[] = [
   {
     name: 'Solana in USD Coin (USDC)',
     action: 'Pay USD Coin (USDC) on Solana',
@@ -349,7 +349,7 @@ export const PaymentMethods = [
     processingFee: 0,
     fxMarkupRate: 0,
     additionalFee: 0,
-    fee: '0',
+    fee: 0,
     title: 'FASTEST & CHEAPEST, IF YOU ALREADY OWN ENOUGH USDC',
     background: '#16A34A',
     note: `
@@ -369,7 +369,7 @@ export const PaymentMethods = [
     processingFee: 0,
     fxMarkupRate: 0.01,
     additionalFee: 0,
-    fee: '0.01',
+    fee: 0.01,
     description: 'Select payment method will take <span>~20-60 MINUTES</span>',
     title: 'FAST & MOST POPULAR',
     background: 'linear-gradient(180deg, #0037C2 0%, #217BE0 100%)',
@@ -380,12 +380,12 @@ export const PaymentMethods = [
   },
 ];
 
-export const PaymentMethodsOther = [
+export const PaymentMethodsOther: PaymentMethod[] = [
   {
     name: 'Alipay in Chinese Yuan (CNY) ',
     icon: 'alipay',
     description: 'Select payment method will take <span>1-2 DAYS</span>',
-    fee: '0.04',
+    fee: 0.04,
     note: `
       <p>You will be required to upload the tuition invoice provided by your institution and other documents that may be required according to relevant laws and regulations.</p>
       <p>Student & Payer must be a Mainland China citizen to be eligible to make a payment successfully.</p>
@@ -397,8 +397,8 @@ export const PaymentMethodsOther = [
     name: 'RMB transfer in Chinese Yuan (CNY)-A Payment notice / bill / invoice from institution is required',
     icon: 'rmb',
     description: 'Select payment method will take <span>3-7 Days</span>',
-    fee: '0.04',
-    extra_fee: '80',
+    fee: 0.04,
+    extra_fee: 80,
     note: `
       <p>You will be required to upload the tuition invoice provided by your institution. Please make sure the document is ready for upload. *</p>
       <p>Student & Payer must be a Mainland China citizen to be eligible to make a payment successfully.</p>
@@ -410,7 +410,7 @@ export const PaymentMethodsOther = [
     name: 'UnionPay debit card in Chinese Yuan (CNY)',
     icon: 'unionpay',
     description: 'Select payment method will take <span>1-3 Days</span>',
-    fee: '0.04',
+    fee: 0.04,
     note: `
       <p>Enjoy the fastest payment experience with no documents required and instant issuance of receipt upon payment.</p>
       <p>Please ready your China UnionPay debit card and the cardholder’s phone to receive payment verification message before starting the payment.</p>
@@ -423,29 +423,29 @@ export const PaymentMethodsOther = [
     name: 'Visa Debit / Credit in Chinese Yuan (CNY)',
     icon: 'visa',
     description: 'Select payment method will take <span>1-3 Days</span>',
-    fee: '0.057',
+    fee: 0.057,
     important_info: 'Important info',
   },
   {
     name: 'Mastercard Debit / Credit in Chinese Yuan (CNY)',
     icon: 'mastercard',
     description: 'Select payment method will take <span>1-3 Days</span>',
-    fee: '0.057',
+    fee: 0.057,
     important_info: 'Important info',
   },
   {
     name: 'American Express in Chinese Yuan (CNY)',
     icon: 'american',
     description: 'Select payment method will take <span>1-3 Days</span>',
-    fee: '0.078',
+    fee: 0.078,
     important_info: 'Important info',
   },
   {
     name: 'PayPal in Chinese Yuan (CNY)',
     icon: 'paypal',
     description: 'Select payment method will take <span>1-2 Days</span>',
-    fee: '0.084',
-    extra_fee: '0.3',
+    fee: 0.084,
+    extra_fee: 0.3,
     note: `
       <p>You will be required to upload the tuition invoice provided by your institution and other documents that may be required according to relevant laws and regulations.</p>
       <p>Student & Payer must have a PayPal account linked to a Chinese bank account or payment method to use this option.</p>

@@ -4,95 +4,12 @@ import { useState } from 'react'
 import Image from 'next/image'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 import { Button } from '@/components/ui/button'
-
-interface PaymentMethod {
-  id: string
-  name: string
-  currency: string
-  amount: string
-  amountRange?: string
-  additionalFees?: string
-  timeframe: string
-  icon: string
-  color?: string
-  label?: string
-  requiresNotice?: boolean
-}
+import useStore from '@/store';
 
 export default function CompareRateDrawer() {
+  const featuredMethods = useStore(state => state.paymentMethodList);
+  const otherMethods = useStore(state => state.paymentMethodOtherList);
   const [open, setOpen] = useState(false)
-
-  const paymentMethods: PaymentMethod[] = [
-    {
-      id: 'edu-chain-cny',
-      name: 'Edu Chain in Chinese Yuan',
-      currency: 'CNY',
-      amount: '175,432.18',
-      timeframe: '~20-60 mins',
-      icon: '/images/edu-chain-icon.png',
-      color: 'blue',
-      label: 'FAST & MOST POPULAR',
-    },
-    {
-      id: 'edu-chain-usdc',
-      name: 'Edu Chain in USD Coin',
-      currency: 'USDC',
-      amount: '24,000.00',
-      timeframe: '10 mins',
-      icon: '/images/usdc-icon.png',
-      color: 'green',
-      label: 'FASTEST & CHEAPEST, IF YOU ALREADY OWN ENOUGH USDC',
-    },
-    {
-      id: 'alipay',
-      name: 'Alipay pay in Chinese Yuan',
-      currency: 'CNY',
-      amountRange: '180,643.03 - 180,888.88',
-      additionalFees: '+ 5,210.85 - 5,444.44 CNY',
-      timeframe: '1-2 days',
-      icon: '/images/alipay-icon.png',
-    },
-    {
-      id: 'rmb-transfer',
-      name: 'RMB transfer in Chinese Yuan',
-      currency: 'CNY',
-      amountRange: '181,222.02 - 180,888.88',
-      additionalFees: '+ 5,210.85 - 5,444.44 CNY',
-      timeframe: '3-7 days',
-      icon: '/images/bank-icon.png',
-      requiresNotice: true,
-    },
-    {
-      id: 'unionpay',
-      name: 'UnionPay Debit / Credit card in Chinese Yuan',
-      currency: 'CNY',
-      amountRange: '181,222.02 - 180,888.88',
-      additionalFees: '+ 5,210.85 - 5,444.44 CNY',
-      timeframe: '3-7 days',
-      icon: '/images/unionpay-icon.png',
-    },
-    {
-      id: 'mastercard',
-      name: 'Mastercard Debit / Credit card in Chinese Yuan',
-      currency: 'CNY',
-      amountRange: '181,222.02 - 180,888.88',
-      additionalFees: '+ 5,210.85 - 5,444.44 CNY',
-      timeframe: '3-7 days',
-      icon: '/images/mastercard-icon.png',
-    },
-    {
-      id: 'visa',
-      name: 'Visa Debit / Credit card in Chinese Yuan',
-      currency: 'CNY',
-      amountRange: '181,222.02 - 180,888.88',
-      additionalFees: '+ 5,210.85 - 5,444.44 CNY',
-      timeframe: '3-7 days',
-      icon: '/images/visa-icon.png',
-    },
-  ]
-
-  const featuredMethods = paymentMethods.slice(0, 2)
-  const otherMethods = paymentMethods.slice(2)
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
@@ -110,9 +27,11 @@ export default function CompareRateDrawer() {
             <h2 className="text-xl">Compare Rate</h2>
           </div>
         </div>
+        <p className="mb-4">Most rates includes additional exchange rate markup and service fees. Some providers claim to offer “no fees,” but they often include a <strong>hidden markup</strong> in the exchange rate, which means you may end up paying more than you expected.</p>
+        <p className="mb-8">At Intuipay, we work with licensed onramp partners to offer you the best total rate available. Everything is shown up front, with no hidden charges. Your donation stays fast, transparent, and affordable.</p>
 
         <div>
-          <div className="text-center text-gray-500 mb-6 relative">
+          <div className="text-center text-gray-400 mb-6 relative">
             <div className="absolute left-0 right-0 top-1/2 h-px bg-gray-200"></div>
             <span className="relative bg-white px-4">Methods offered by Intuipay</span>
           </div>
@@ -120,29 +39,27 @@ export default function CompareRateDrawer() {
           <div className="space-y-6">
             {featuredMethods.map((method) => (
               <div
-                key={method.id}
+                key={method.name}
                 className={`rounded-xl overflow-hidden ${
-                  method.color === 'blue' ? 'bg-blue-500' : method.color === 'green' ? 'bg-green-500' : 'bg-gray-100'
+                  method.name.toLowerCase().includes('usdc') ? 'bg-blue-500' : 'bg-green-500'
                 }`}
               >
-                {method.label && (
+                {method.name && (
                   <div
                     className={`text-xs font-semibold text-white px-4 pt-2.5 pb-1 ${
-                      method.color === 'blue'
+                      method.name.toLowerCase().includes('usdc')
                         ? 'bg-blue-500'
-                        : method.color === 'green'
-                          ? 'bg-green-500'
-                          : 'bg-gray-500'
+                        : 'bg-green-500'
                     }`}
                   >
-                    {method.label}
+                    {method.name}
                   </div>
                 )}
                 <div className="bg-white m-1.5 rounded-lg px-7 py-8">
                   <div className="flex items-start gap-6">
-                    <div className="w-10 h-10 flex-shrink-0">
+                    <div className="w-20 h-20 flex-shrink-0">
                       <Image
-                        src={method.icon || '/placeholder.svg'}
+                        src={`/images/information/${method.icon}.png` || '/placeholder.svg'}
                         alt={method.name}
                         width={80}
                         height={80}
@@ -151,17 +68,10 @@ export default function CompareRateDrawer() {
                     </div>
                     <div className="space-y-2">
                       <p className="font-medium text-gray-600">{method.name}</p>
-                      {method.amountRange ? (
-                        <p className="text-2xl font-bold">
-                          {method.amountRange} {method.currency}
-                        </p>
-                      ) : (
-                        <p className="text-2xl font-bold">
-                          {method.amount} {method.currency}
-                        </p>
-                      )}
-                      {method.additionalFees && <p className="text-sm text-orange-500">{method.additionalFees}</p>}
-                      <p>Will take only <strong>{method.timeframe}</strong></p>
+                      <p className="text-2xl font-bold">
+                        {method.amount} {method.symbol}
+                      </p>
+                      <p dangerouslySetInnerHTML={{ __html: method.description }} />
                     </div>
                   </div>
                 </div>
@@ -176,11 +86,11 @@ export default function CompareRateDrawer() {
 
           <div className="space-y-6">
             {otherMethods.map((method) => (
-              <div key={method.id} className="bg-gray-50 rounded-2xl px-7 pt-8 pb-4">
+              <div key={method.name} className="bg-gray-50 rounded-2xl px-7 pt-8 pb-4">
                 <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 flex-shrink-0">
+                  <div className="w-20 h-20 flex-shrink-0">
                     <Image
-                      src={method.icon || '/placeholder.svg'}
+                      src={`/images/information/${method.icon}.png` || '/placeholder.svg'}
                       alt={method.name}
                       width={80}
                       height={80}
@@ -190,15 +100,12 @@ export default function CompareRateDrawer() {
                   <div className="space-y-2">
                     <p className="text-gray-600">
                       {method.name}
-                      {method.requiresNotice && (
-                        <span> -A Payment notice / bill / invoice from institution is required</span>
-                      )}
                     </p>
                     <p className="text-2xl font-bold">
-                      {method.amountRange} {method.currency}
+                      {method.amountRange} {method.symbol}
                     </p>
                     {method.additionalFees && <p className="font-medium text-orange-500">{method.additionalFees}</p>}
-                    <p>Will take <strong>{method.timeframe}</strong></p>
+                    <p dangerouslySetInnerHTML={{ __html: method.description }} />
                   </div>
                 </div>
               </div>
