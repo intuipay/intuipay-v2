@@ -8,10 +8,10 @@ export async function POST(req: Request) {
 
   const { email, name, refer } = await req.json();
   const sql = `INSERT INTO waitlist
-(email, fullname, refer)
-VALUES (?, ?, ?)`;
+(email, fullname, created, refer)
+VALUES (?, ?, ?, ?)`;
   const { success, meta } = await d1.prepare(sql)
-    .bind(email, name, refer)
+    .bind(email, name, Date.now(), refer)
     .run();
   if (success) {
     return new Response(
