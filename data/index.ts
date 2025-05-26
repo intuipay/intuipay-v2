@@ -333,7 +333,7 @@ export const PaymentMethods: PaymentMethod[] = [
     background: '#16A34A',
   },
   {
-    name: 'EDU Chain in Chinese Yuan (CNY)',
+    name: 'EDU Chain in Chinese Yuan',
     icon: 'edu',
     processingFee: [0, 1],
     fxMarkupRate: [0, 1],
@@ -402,6 +402,7 @@ export const PaymentMethodsOther: PaymentMethod[] = [
   {
     name: 'UnionPay',
     icon: 'unionpay',
+    isChina: true,
     description: '',
     processingFee: [1, 2],
     fxMarkupRate: [1, 2],
@@ -418,6 +419,7 @@ export const PaymentMethodsOther: PaymentMethod[] = [
   {
     name: 'Alipay',
     icon: 'alipay',
+    isChina: true,
     description: '',
     processingFee: [1, 2],
     fxMarkupRate: [1, 2],
@@ -425,6 +427,7 @@ export const PaymentMethodsOther: PaymentMethod[] = [
   {
     name: 'WeChat pay',
     icon: 'wechat',
+    isChina: true,
     description: '',
     processingFee: [1, 2],
     fxMarkupRate: [1, 2],

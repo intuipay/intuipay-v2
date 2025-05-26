@@ -70,6 +70,7 @@ export default function ConfirmationDialog({ open, onOpenChange, email }: Confir
               width={122}
               height={24}
               className="h-6 w-auto"
+              loading="lazy"
             />
           </div>
 
@@ -111,6 +112,7 @@ export default function ConfirmationDialog({ open, onOpenChange, email }: Confir
                 width={20}
                 height={20}
                 className="size-5 block"
+                loading="lazy"
               />
             </a>
           </div>

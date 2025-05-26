@@ -140,3 +140,19 @@ input.border-red-500:focus {
 .w-\(--input-width\) {
   width: var(--input-width);
 }
+
+.sticky.top-0 {
+  top: 0;
+  top: env(safe-area-inset-top);
+}
+
+input[type=number]::-webkit-outer-spin-button,
+input[type=number]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* For Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}

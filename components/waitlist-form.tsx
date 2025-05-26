@@ -122,7 +122,6 @@ export default function WaitlistForm({
               placeholder="Enter your name"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              onBlur={() => setTouched((prev) => ({ ...prev, name: true }))}
               className={`w-full bg-gray-50 py-5 px-8 rounded-lg ${
                 errors.name ? 'border-red-500 text-red-500 placeholder-red-300' : ''
               }`}
@@ -147,7 +146,6 @@ export default function WaitlistForm({
               placeholder="Enter your email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              onBlur={() => setTouched((prev) => ({ ...prev, email: true }))}
               className={`w-full bg-gray-50 py-6 px-8 rounded-lg ${
                 errors.email ? 'border-red-500 text-red-500 placeholder-red-300' : ''
               }`}

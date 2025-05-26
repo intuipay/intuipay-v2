@@ -33,7 +33,7 @@ export default function PaymentCalculator() {
   }, [fromCountry, amount, currency]);
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       <div className="space-y-2">
         <label htmlFor="from-country" className="block text-sm font-medium">
           Paying From
@@ -73,11 +73,11 @@ export default function PaymentCalculator() {
             type="number"
             className="w-full border rounded-l-lg border-r-0 h-14 font-semibold px-4"
             onChange={event => setAmount(Number(event.target.value))}
+            step="0.01"
             value={amount}
           />
           <MyCombobox
             className="rounded-r-lg"
-            hasIcon={false}
             options={CurrencyList}
             onChange={setCurrency}
             value={currency}
@@ -86,7 +86,7 @@ export default function PaymentCalculator() {
         </div>
       </div>
 
-      <div className="pt-4 space-y-2">
+      <div className="space-y-2">
         <p>Best price with Intuipay</p>
         {isLoading
           ? <div className="skeleton w-full h-9 bg-gray-100" />

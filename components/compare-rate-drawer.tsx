@@ -22,8 +22,8 @@ export default function CompareRateDrawer() {
           Compare Rates
         </Button>
       </SheetTrigger>
-      <SheetContent className="p-0 overflow-y-auto rounded-l-xl pb-8">
-        <header className="sticky top-0 bg-white z-10 px-12 py-6 flex items-center">
+      <SheetContent className="p-0 overflow-y-auto md:rounded-l-xl pb-8">
+        <header className="sticky top-0 bg-white z-10 px-8 sm:px-12 py-6 flex items-center">
           <div className="flex justify-between items-center">
             <h2 className="text-xl">Compare Rates</h2>
           </div>
@@ -36,12 +36,12 @@ export default function CompareRateDrawer() {
             <XIcon className="size-6" />
           </Button>
         </header>
-        <div className="px-12 mb-8">
+        <div className="px-8 sm:px-12 mb-8">
           <p className="mb-4">Most rates includes additional exchange rate markup and service fees. Some providers claim to offer “no fees,” but they often include a <strong>hidden markup</strong> in the exchange rate, which means you may end up paying more than you expected.</p>
           <p>At Intuipay, we work with licensed onramp partners to offer you the best total rate available. Everything is shown up front, with no hidden charges. Your donation stays fast, transparent, and affordable.</p>
         </div>
 
-        <div className="px-12">
+        <div className="px-8 sm:px-12">
           <div className="text-center text-gray-400 mb-6 relative">
             <div className="absolute left-0 right-0 top-1/2 h-px bg-gray-200"></div>
             <span className="relative bg-white px-4">Methods offered by Intuipay</span>
@@ -63,11 +63,11 @@ export default function CompareRateDrawer() {
                         : 'bg-green-500'
                     }`}
                   >
-                    {method.name}
+                    {method.title} {method.name.toLowerCase().includes('usdc') ? '' : `(${method.symbol})`}
                   </div>
                 )}
                 <div className="bg-white m-1.5 rounded-lg px-7 py-8">
-                  <div className="flex items-start gap-6">
+                  <div className="flex flex-col sm:flex-row items-start gap-6">
                     <div className="w-20 h-20 flex-shrink-0">
                       <Image
                         src={`/images/information/${method.icon}.png` || '/placeholder.svg'}
@@ -75,6 +75,7 @@ export default function CompareRateDrawer() {
                         width={80}
                         height={80}
                         className="w-full h-full object-contain"
+                        loading="lazy"
                       />
                     </div>
                     <div className="space-y-2">
@@ -98,7 +99,7 @@ export default function CompareRateDrawer() {
           <div className="space-y-6">
             {otherMethods.map((method) => (
               <div key={method.name} className="bg-gray-50 rounded-2xl px-7 pt-8 pb-4">
-                <div className="flex items-start gap-4">
+                <div className="flex flex-col sm:flex-row items-start gap-4">
                   <div className="w-20 h-20 flex-shrink-0">
                     <Image
                       src={`/images/information/${method.icon}.png` || '/placeholder.svg'}
@@ -106,6 +107,7 @@ export default function CompareRateDrawer() {
                       width={80}
                       height={80}
                       className="w-full h-full object-contain"
+                      loading="lazy"
                     />
                   </div>
                   <div className="space-y-2">

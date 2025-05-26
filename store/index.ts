@@ -105,25 +105,29 @@ const useStore = create<Props>((set, get) => {
   async function updateAllMethods(to: string, from: string, amt: number) {
     await fetchAmount(to, from, amt);
     const { transferRate } = get();
-    const anotherSymbol = CurrencyList.find(item => item.code === from)?.anotherSymbol;
     const paymentMethodList = PaymentMethods.map(item => {
       const range = getAmountRange(item, transferRate);
       return {
         ...item,
-        symbol: anotherSymbol,
+        symbol: from,
         amountRange: range,
       };
     });
     const baseRange = paymentMethodList[0].amountRange;
-    const paymentMethodOtherList = PaymentMethodsOther.map(item => {
-      const range = getAmountRange(item, transferRate);
-      return {
-        ...item,
-        symbol: anotherSymbol,
-        amountRange: range,
-        diffAmountRange: [range[0] - baseRange[0], range[1] - baseRange[1]],
-      };
-    });
+    const paymentMethodOtherList = PaymentMethodsOther
+      .filter(item => from === 'CNY' || !item.isChina)
+      .map(item => {
+        const range = getAmountRange(item, transferRate);
+        return {
+          ...item,
+          symbol: from,
+          amountRange: range,
+          diffAmountRange: [range[0] - baseRange[0], range[1] - baseRange[1]],
+        };
+      }).sort((a, b) => {
+        const diff0 = a.amountRange[0] - b.amountRange[0];
+        return diff0 ? diff0 : a.amountRange[1] - b.amountRange[1];
+      });
     set({
       paymentMethodList,
       paymentMethodOtherList,

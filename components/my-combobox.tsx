@@ -14,6 +14,7 @@ type Props = {
   iconExtension?: string;
   onChange: (value: string) => void;
   options: DropdownItemProps[];
+  symbolKey?: string;
   value?: string;
   valueKey?: 'country' | 'code' | 'name';
 }
@@ -25,6 +26,7 @@ export default function MyCombobox({
   iconExtension = 'svg',
   onChange,
   options,
+  symbolKey = '',
   value,
   valueKey = 'country',
 }: Props) {
@@ -39,6 +41,8 @@ export default function MyCombobox({
   }, [query, options, valueKey]);
 
   function doUpdate(value: DropdownItemProps) {
+    if (!value) return;
+
     setSelected(value);
     onChange(value[ valueKey ]);
   }
@@ -64,7 +68,7 @@ export default function MyCombobox({
         <ComboboxInput
           className={clsx('w-full ps-12 pe-4 border h-14 font-semibold', className)}
           aria-label="Select country"
-          displayValue={(item: DropdownItemProps) => item[ valueKey ]}
+          displayValue={(item: DropdownItemProps) => `${symbolKey ? `${item[ symbolKey ]} ` : ''}${item[ valueKey ]}`}
           onChange={(event) => setQuery(event.target.value)}
         />
         <ComboboxButton className="group absolute inset-y-0 right-0 px-4">
@@ -98,6 +102,7 @@ export default function MyCombobox({
                 alt={option[ valueKey ]}
                 loading="lazy"
               />}
+              {symbolKey && <span className="text-gray-500">{option[ symbolKey ]}</span>}
               {option[ valueKey ]}
             </div>
           </ComboboxOption>

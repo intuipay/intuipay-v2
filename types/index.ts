@@ -37,6 +37,7 @@ export type PaymentMethod = {
   name: string;
   action?: string;
   icon: string;
+  isChina?: boolean;
   description: string;
   processingFee?: [number, number, boolean?];
   fxMarkupRate?: [number, number, boolean?];
