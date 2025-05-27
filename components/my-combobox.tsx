@@ -54,7 +54,7 @@ export default function MyCombobox({
     if (option) return;
 
     doUpdate(options[ 0 ]);
-  }, [options]);
+  }, [options, selected, value, valueKey]);
 
   return (
     <Combobox
