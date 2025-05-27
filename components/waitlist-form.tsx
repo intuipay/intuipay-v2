@@ -35,7 +35,7 @@ export default function WaitlistForm({
     name: false,
     email: false,
   })
-  const [showConfirmation, setShowConfirmation] = useState(true);
+  const [showConfirmation, setShowConfirmation] = useState(false);
 
   // Validate form fields
   useEffect(() => {
