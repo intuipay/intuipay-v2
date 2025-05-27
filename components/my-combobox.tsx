@@ -1,7 +1,7 @@
 'use client';
 
 import { Combobox, ComboboxButton, ComboboxInput, ComboboxOption, ComboboxOptions } from '@headlessui/react';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { ChevronDownIcon, ChevronUpIcon, CircleXIcon } from 'lucide-react';
 import { clsx } from 'clsx';
 import Image from 'next/image';
@@ -46,6 +46,15 @@ export default function MyCombobox({
     setSelected(value);
     onChange(value[ valueKey ]);
   }
+
+  useEffect(() => {
+    if (options.includes(selected)) return;
+
+    const option = options.find(item => item[ valueKey ] === value);
+    if (option) return;
+
+    doUpdate(options[ 0 ]);
+  }, [options]);
 
   return (
     <Combobox

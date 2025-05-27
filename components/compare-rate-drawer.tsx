@@ -115,7 +115,7 @@ export default function CompareRateDrawer() {
                       {method.name}
                     </p>
                     {method.amountRange && <p className="text-2xl font-bold">
-                      {method.amountRange[ 0 ].toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} - ${method.amountRange[ 1 ].toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} {method.symbol}
+                      {method.amountRange[ 0 ].toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} - {method.amountRange[ 1 ].toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} {method.symbol}
                     </p>}
                     {method.diffAmountRange && <p className="font-medium text-red-700">+ {method.diffAmountRange[ 0 ].toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} - {method.diffAmountRange[ 1 ].toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} {method.symbol}</p>}
                     <p dangerouslySetInnerHTML={{ __html: method.description }} />

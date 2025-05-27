@@ -82,7 +82,7 @@ export default function ConfirmationDialog({ open, onOpenChange, email }: Confir
             We&apos;ll notify you as soon as Intuipay is ready, spread this exciting news to your friend today!
           </p>
 
-          <div className="w-full mb-8">
+          <div className="w-full mb-12">
             <p className="text-sm font-medium mb-2 text-left">Share your referral link</p>
             <div className="flex border rounded-lg bg-white">
               <div className="flex-grow p-3 font-medium truncate text-left max-w-72">

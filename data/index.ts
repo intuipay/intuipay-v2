@@ -327,7 +327,7 @@ export const PaymentMethods: PaymentMethod[] = [
   {
     name: 'EDU Chain in USD Coin (USDC)',
     icon: 'usdc',
-    description: 'Select payment method will take <span>10 MINUTES</span>',
+    description: 'Will take <span>10 MINUTES</span>',
     processingFee: [0, 1],
     title: 'FASTEST & CHEAPEST, IF YOU ALREADY OWN ENOUGH USDC',
     background: '#16A34A',
@@ -337,7 +337,7 @@ export const PaymentMethods: PaymentMethod[] = [
     icon: 'edu',
     processingFee: [0, 1],
     fxMarkupRate: [0, 1],
-    description: 'Select payment method will take <span>~20-60 MINUTES</span>',
+    description: 'Will take <span>~20-60 MINUTES</span>',
     title: 'FAST & MOST POPULAR',
     background: 'linear-gradient(180deg, #0037C2 0%, #217BE0 100%)',
   },
