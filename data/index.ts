@@ -366,6 +366,7 @@ export const PaymentMethodsOther: PaymentMethod[] = [
     description: '',
     processingFee: [1, 2],
     fxMarkupRate: [0.5, 1.5],
+    currency: ['CNY', 'NGN', 'INR'],
   },
   {
     name: 'Bank Wire Transfer',
@@ -402,7 +403,6 @@ export const PaymentMethodsOther: PaymentMethod[] = [
   {
     name: 'UnionPay',
     icon: 'unionpay',
-    isChina: true,
     description: '',
     processingFee: [1, 2],
     fxMarkupRate: [1, 2],
@@ -419,17 +419,17 @@ export const PaymentMethodsOther: PaymentMethod[] = [
   {
     name: 'Alipay',
     icon: 'alipay',
-    isChina: true,
     description: '',
     processingFee: [1, 2],
     fxMarkupRate: [1, 2],
+    currency: ['CNY'],
   },
   {
     name: 'WeChat pay',
     icon: 'wechat',
-    isChina: true,
     description: '',
     processingFee: [1, 2],
     fxMarkupRate: [1, 2],
+    currency: ['CNY'],
   },
 ];

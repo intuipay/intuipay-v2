@@ -14,7 +14,7 @@ export default function PaymentCalculator() {
   const [fromCountry, setFromCountry] = useState('China')
   const [toCountry, setToCountry] = useState('United States')
   const [university, setUniversity] = useState('')
-  const [amount, setAmount] = useState<number>(24000);
+  const [amount, setAmount] = useState<number | ''>(24000);
   const [currency, setCurrency] = useState<string>('USD');
   const toCountries = useMemo(() => {
     const countries = uniq(UniversityList.map(item => item.country));
@@ -29,7 +29,7 @@ export default function PaymentCalculator() {
 
   useEffect(() => {
     const fromCode: string = CurrencyList.find(item => item.country === fromCountry)?.code as string;
-    updateAllMethods(currency, fromCode, amount);
+    updateAllMethods(currency, fromCode, Number(amount));
   }, [fromCountry, amount, currency]);
 
   return (
@@ -72,7 +72,7 @@ export default function PaymentCalculator() {
           <input
             type="number"
             className="w-full border rounded-l-lg border-r-0 h-14 font-semibold px-4"
-            onChange={event => setAmount(Number(event.target.value))}
+            onChange={event => setAmount(event.target.value.trim() ? Number(event.target.value) : '')}
             step="0.01"
             value={amount}
           />

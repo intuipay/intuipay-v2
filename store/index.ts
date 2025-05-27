@@ -115,7 +115,7 @@ const useStore = create<Props>((set, get) => {
     });
     const baseRange = paymentMethodList[0].amountRange;
     const paymentMethodOtherList = PaymentMethodsOther
-      .filter(item => from === 'CNY' || !item.isChina)
+      .filter(item => !item.currency || item.currency.includes(from))
       .map(item => {
         const range = getAmountRange(item, transferRate);
         return {
