@@ -26,9 +26,6 @@ const nextConfig = {
   poweredByHeader: false,
   compress: true,
   reactStrictMode: true,
-  experimental: {
-    optimizeCss: true,
-  },
 };
 
 export default nextConfig;

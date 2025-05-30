@@ -13,23 +13,23 @@ VALUES (?, ?, ?, ?)`;
   const { success, meta } = await d1.prepare(sql)
     .bind(email, name, Date.now(), refer)
     .run();
-  if (success) {
-    return new Response(
-      JSON.stringify({
-        code: 0,
-        data: meta.last_row_id,
-        meta,
-      }),
-      { status: 201 }
-    );
-  } else {
+  if (!success) {
     return new Response(
       JSON.stringify({
         code: 1,
         message: 'Failed to add item',
         data: { meta },
       }),
-      { status: 500 }
+      { status: 400 },
     );
   }
+
+  return new Response(
+    JSON.stringify({
+      code: 0,
+      data: meta.last_row_id,
+      meta,
+    }),
+    { status: 201 }
+  );
 }
