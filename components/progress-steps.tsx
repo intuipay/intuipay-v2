@@ -1,17 +1,17 @@
-"use client"
+'use client'
 
-import { usePathname } from "next/navigation"
-import Link from "next/link"
-import { motion } from "framer-motion"
+import { usePathname } from 'next/navigation'
+import Link from 'next/link'
+import { motion } from 'framer-motion'
 
 export function ProgressSteps() {
   const pathname = usePathname()
 
   const steps = [
-    { id: "initialization", label: "Initialization", path: "/" },
-    { id: "contracts", label: "Contracts", path: "/contracts" },
-    { id: "payment", label: "Payment", path: "/payment" },
-    { id: "complete", label: "Complete", path: "/complete" },
+    { id: 'initialization', label: 'Initialization', path: '/' },
+    { id: 'contracts', label: 'Contracts', path: '/contracts' },
+    { id: 'payment', label: 'Payment', path: '/payment' },
+    { id: 'complete', label: 'Complete', path: '/complete' },
   ]
 
   const currentStepIndex =
@@ -28,7 +28,7 @@ export function ProgressSteps() {
                   initial={{ scale: 0.8 }}
                   animate={{ scale: 1 }}
                   className={`w-6 h-6 rounded-full flex items-center justify-center ${
-                    index < currentStepIndex ? "bg-blue-600" : "bg-blue-600 border-2 border-blue-600"
+                    index < currentStepIndex ? 'bg-blue-600' : 'bg-blue-600 border-2 border-blue-600'
                   }`}
                 >
                   {index < currentStepIndex ? (
@@ -50,7 +50,7 @@ export function ProgressSteps() {
                 {index < currentStepIndex && (
                   <motion.div
                     initial={{ width: 0 }}
-                    animate={{ width: "100%" }}
+                    animate={{ width: '100%' }}
                     className="absolute top-0 left-0 h-full bg-blue-600"
                   />
                 )}
@@ -63,7 +63,7 @@ export function ProgressSteps() {
         {steps.map((step, index) => (
           <span
             key={step.id}
-            className={`${index <= currentStepIndex ? "text-blue-600 font-medium" : "text-gray-500"}`}
+            className={`${index <= currentStepIndex ? 'text-blue-600 font-medium' : 'text-gray-500'}`}
           >
             {step.label}
           </span>

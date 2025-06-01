@@ -1,3 +1,5 @@
+import {DonationProjectStatus} from "@/constants/donation";
+
 export type DropdownItemProps = {
   country: string;
   icon: string;
@@ -48,4 +50,27 @@ export type PaymentMethod = {
   note?: string;
   important_info?: string;
   currency?: string[];
+}
+
+export type DonationProject = {
+  id: number;
+  banner: string;
+  created_at: string;
+  deleted_at?: string;
+  description: string;
+  org_id: number;
+  project_name: string;
+  project_slug: string;
+  qrcode: string;
+  status: DonationProjectStatus;
+  updated_at: string;
+  vault_account_id: string;
+  wallet_address: string;
+}
+
+export type TiDBDataServiceResponse<T> = {
+  data: {
+    columns: string[];
+    rows: T[];
+  }
 }

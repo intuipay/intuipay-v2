@@ -1,6 +1,6 @@
-import { ChevronLeft, ArrowLeft, Mail } from "lucide-react"
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
+import { ChevronLeft, ArrowLeft, Mail } from 'lucide-react'
+import Link from 'next/link'
+import { Button } from '@/components/ui/button'
 
 export default function SupportPage() {
   return (
@@ -37,7 +37,7 @@ export default function SupportPage() {
             {/* Description */}
             <div className="text-center space-y-4">
               <p className="text-gray-600 leading-relaxed">
-                Our support team is available 24/7 to assist you with any questions or concerns. We're committed to
+                Our support team is available 24/7 to assist you with any questions or concerns. We&apos;re committed to
                 providing a prompt and reliable response whenever you need help.
               </p>
             </div>

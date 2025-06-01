@@ -1,0 +1,17 @@
+export enum DonationProjectStatus {
+  Draft,
+  Review,
+  Rejected,
+  Reopened,
+  Approved,
+  Active = 10,
+  Cancelled,
+  Suspended,
+  Completed = 20,
+  PaymentPending,
+  PaymentFailed,
+  PaymentSuccessful,
+  PaymentRefunded,
+  PaymentCancelled,
+  Archived = 100,
+}

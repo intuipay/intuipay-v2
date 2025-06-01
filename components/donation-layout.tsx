@@ -1,12 +1,12 @@
-"use client"
+'use client'
 
-import type React from "react"
+import type React from 'react'
 
-import { AnimatePresence, motion } from "framer-motion"
-import Image from "next/image"
-import { Header } from "@/components/header"
-import { ProgressSteps } from "@/components/progress-steps"
-import { Footer } from "@/components/footer"
+import { AnimatePresence, motion } from 'framer-motion'
+import Image from 'next/image'
+import { Header } from '@/components/header'
+import { ProgressSteps } from '@/components/progress-steps'
+import { Footer } from '@/components/footer'
 
 export function DonationLayout({ children }: { children: React.ReactNode }) {
   return (
