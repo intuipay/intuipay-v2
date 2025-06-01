@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { ChevronLeft, ArrowLeft } from 'lucide-react'
+import { ArrowLeft, CircleDotIcon, HeadsetIcon } from 'lucide-react'
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Button } from '@/components/ui/button'
@@ -11,12 +11,22 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Checkbox } from '@/components/ui/checkbox'
 import Link from 'next/link'
 import { DonationProject } from '@/types';
+import { clsx } from 'clsx';
 
 type Step = 'initialization' | 'contracts' | 'payment' | 'complete'
 type Props = {
   project: DonationProject;
   slug: string;
 }
+
+// Steps configuration
+const steps = [
+  { id: 'initialization', label: 'Initialization' },
+  { id: 'contracts', label: 'Contracts' },
+  { id: 'payment', label: 'Payment' },
+  { id: 'complete', label: 'Complete' },
+];
+
 export default function DonationPageComp({
   project,
   slug,
@@ -62,14 +72,6 @@ export default function DonationPageComp({
     setIsAnonymous(false)
   }
 
-  // Steps configuration
-  const steps = [
-    { id: 'initialization', label: 'Initialization' },
-    { id: 'contracts', label: 'Contracts' },
-    { id: 'payment', label: 'Payment' },
-    { id: 'complete', label: 'Complete' },
-  ]
-
   // Get current step index
   const currentStepIndex = steps.findIndex((step) => step.id === currentStep)
 
@@ -99,67 +101,51 @@ export default function DonationPageComp({
 
   return (
     <main className="lg:flex lg:items-center lg:justify-center lg:min-h-[calc(100vh-80px)]">
-      <div className="w-full max-w-md mx-auto bg-white lg:rounded-2xl lg:shadow-lg lg:p-8 p-4">
+      <div className="w-full max-w-xl mx-auto bg-white lg:rounded-2xl lg:shadow-lg px-8 py-6 lg:px-10">
         {/* Hero Image */}
-        <div className="mb-8">
-          <div className="relative w-full h-48 lg:h-56 rounded-2xl overflow-hidden">
-            <Image
-              src="/hero-image.png"
-              alt="Lion King inspired scene with lions silhouetted against full moon"
-              fill
-              className="object-cover"
-              priority
-            />
-          </div>
+        <div className="relative w-full aspect-[3/1] rounded-lg mb-4">
+          <Image
+            src={project.banner}
+            alt="Lion King inspired scene with lions silhouetted against full moon"
+            fill
+            className="object-cover"
+            priority
+          />
         </div>
 
         {/* Progress Steps */}
-        <div className="mb-8">
-          <div className="flex items-center justify-between mb-4">
+        <div className="mb-12 py-4">
+          <div className={clsx('grid grid-cols-4 items-center justify-between mb-2')}>
             {steps.map((step, index) => (
               <div key={step.id} className="flex items-center">
-                <div className="relative">
+                <div className={clsx(
+                  'h-0.5 flex-1',
+                  index === 0 ? 'bg-gradient-to-r from-white to-blue-600'
+                    : (index > currentStepIndex ? 'bg-black/40' : 'bg-blue-600')
+                )} />
+                <div className="relative w-6 flex-none">
                   {index <= currentStepIndex ? (
-                    <motion.div
-                      initial={{ scale: 0.8 }}
-                      animate={{ scale: 1 }}
-                      className={`w-6 h-6 rounded-full flex items-center justify-center ${
-                        index <= currentStepIndex ? 'bg-blue-600' : 'bg-blue-600 border-2 border-blue-600'
-                      }`}
-                    >
-                      {index <= currentStepIndex && (
-                        <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
-                          <path
-                            fillRule="evenodd"
-                            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                            clipRule="evenodd"
-                          />
-                        </svg>
-                      )}
-                    </motion.div>
+                    <CircleDotIcon
+                      className="size-6 text-blue-600"
+                    />
                   ) : (
-                    <div className="w-6 h-6 rounded-full bg-white border-2 border-gray-300" />
+                    <div className="w-6 h-6 rounded-full bg-white border-2 border-black/40" />
                   )}
                 </div>
-                {index < steps.length - 1 && (
-                  <div className="relative w-16 lg:w-20 h-0.5 bg-gray-300 mx-2">
-                    {index < currentStepIndex && (
-                      <motion.div
-                        initial={{ width: 0 }}
-                        animate={{ width: '100%' }}
-                        className="absolute top-0 left-0 h-full bg-blue-600"
-                      />
-                    )}
-                  </div>
-                )}
+                <div className={clsx(
+                  'h-0.5 flex-1',
+                  index === steps.length - 1
+                    ? 'bg-gradient-to-l from-white ' + (index < currentStepIndex ? 'to-blue-600' : 'to-black/40')
+                    : (index < currentStepIndex ? 'bg-blue-600' : 'bg-black/40')
+                )} />
               </div>
             ))}
           </div>
-          <div className="flex justify-between text-xs">
+          <div className="grid grid-cols-4 text-center text-sm font-medium">
             {steps.map((step, index) => (
               <span
                 key={step.id}
-                className={`${index <= currentStepIndex ? 'text-blue-600 font-medium' : 'text-gray-500'}`}
+                className={`${index <= currentStepIndex ? 'text-blue-600' : 'text-black/40'}`}
               >
                 {step.label}
               </span>
@@ -176,49 +162,27 @@ export default function DonationPageComp({
             exit={slideDirection === 'right' ? 'exitToLeft' : 'exitToRight'}
             variants={slideVariants}
             transition={{ type: 'tween', duration: 0.3 }}
-            className="min-h-[400px]"
           >
             {/* Initialization Step */}
-            {currentStep === 'initialization' && (
+            {currentStep === 'initialization' && <>
               <div className="space-y-6">
-                <h1 className="text-xl font-semibold text-center text-gray-900">Make your donation today</h1>
-
-                {/* Payment Method Toggle */}
-                <div className="flex gap-2">
-                  <Button
-                    variant={paymentMethod === 'crypto' ? 'default' : 'outline'}
-                    className={`flex-1 ${
-                      paymentMethod === 'crypto'
-                        ? 'bg-blue-50 text-blue-600 border-blue-200 hover:bg-blue-100'
-                        : 'bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-100'
-                    }`}
-                    onClick={() => setPaymentMethod('crypto')}
-                  >
-                    <span className="mr-2">💳</span>
-                    Crypto
-                  </Button>
-                  <Button
-                    variant={paymentMethod === 'cash' ? 'default' : 'outline'}
-                    className={`flex-1 ${
-                      paymentMethod === 'cash'
-                        ? 'bg-blue-50 text-blue-600 border-blue-200 hover:bg-blue-100'
-                        : 'bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-100'
-                    }`}
-                    onClick={() => setPaymentMethod('cash')}
-                  >
-                    <span className="mr-2">💵</span>
-                    Cash
-                  </Button>
-                </div>
+                <h2 className="text-xl font-semibold text-center text-black">Make your donation today</h2>
 
                 {/* Currency Selection */}
                 <div className="space-y-2">
-                  <Label className="text-sm text-gray-600">Donate with</Label>
+                  <Label className="text-sm font-semibold text-black/50">Donate with</Label>
                   <Select defaultValue="usdc">
-                    <SelectTrigger className="w-full">
-                      <div className="flex items-center gap-2">
+                    <SelectTrigger className="w-full h-12 px-4">
+                      <div className="flex items-center gap-3">
                         <div className="w-6 h-6 bg-blue-600 rounded-full flex items-center justify-center">
-                          <span className="text-white text-xs font-bold">$</span>
+                          <Image
+                            alt="USDC Logo"
+                            className="size-6 block"
+                            src="/images/information/usdc.png"
+                            width={24}
+                            height={24}
+                            loading="lazy"
+                          />
                         </div>
                         <SelectValue placeholder="USD Coin (USDC) ERC-20" />
                       </div>
@@ -231,31 +195,29 @@ export default function DonationPageComp({
 
                 {/* Amount Input */}
                 <div className="space-y-2">
-                  <Label className="text-sm text-gray-600">Amount</Label>
-                  <div className="relative">
+                  <Label className="text-sm font-semibold text-black/50">Amount</Label>
+                  <div className="flex items-center border border-black/10 rounded-lg">
                     <Input
                       type="number"
                       value={amount}
                       onChange={(e) => setAmount(e.target.value)}
-                      className="pr-24"
+                      className="h-12 w-1/2 px-4"
                       step="0.1"
                       min="0"
                     />
-                    <div className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-gray-500">
-                      USDC = $ {amount}
+                    <div className="text-sm">
+                      USDC ≈ $ <span className=" text-black/50">{amount}</span>
                     </div>
                   </div>
                 </div>
-
-                {/* Next Button */}
-                <Button
-                  className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-full text-base font-medium"
-                  onClick={goToNextStep}
-                >
-                  Donate
-                </Button>
               </div>
-            )}
+              <Button
+                className="mt-12 w-full h-12 bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-full text-base font-medium"
+                onClick={goToNextStep}
+              >
+                Donate
+              </Button>
+            </>}
 
             {/* Contracts Step */}
             {currentStep === 'contracts' && (
@@ -548,13 +510,27 @@ export default function DonationPageComp({
         </AnimatePresence>
 
         {/* Footer */}
-        <footer className="flex items-center justify-between mt-8 pt-6 text-xs text-gray-500">
-          <div className="flex items-center gap-1">
+        <footer className="flex items-center justify-between mt-12 text-sm font-semibold text-black px-3">
+          <Link
+            className="flex items-center gap-2 hover:text-blue-600 hover:underline transition-colors"
+            href="/"
+          >
             <span>Powered by</span>
-            <span className="font-medium text-gray-700">🔷 Intuipay</span>
-          </div>
-          <Link href="/support" className="text-gray-500 hover:text-gray-700 transition-colors">
-            Terms & Conditions
+            <Image
+              alt="Intuipay Logo"
+              className="h-3.5"
+              src="/images/intuipay-logo.svg"
+              width={71}
+              height={14}
+              loading="lazy"
+            />
+          </Link>
+          <Link
+            href="/donate/support"
+            className="hover:text-blue-600 hover:underline transition-colors flex items-center gap-2"
+          >
+            <HeadsetIcon className="size-4" />
+            Support
           </Link>
         </footer>
       </div>

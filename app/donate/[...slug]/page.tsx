@@ -1,8 +1,7 @@
 import { Metadata } from 'next';
-import { fetchTidb } from '@/services/fetch-tidb';
-import { DonationProject } from '@/types';
 import { getDonationProjectBySlug } from '@/lib/data';
 import DonationPageComp from '@/app/_components/donate/donate-page';
+import { notFound } from 'next/navigation';
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -13,6 +12,13 @@ export async function generateMetadata({
 }: Props): Promise<Metadata> {
   const slug = (await params).slug;
   const project = await getDonationProjectBySlug(slug);
+  if (!project) {
+    return {
+      title: 'Donation Project Not Found',
+      description: 'The requested donation project does not exist.',
+    };
+  }
+
   return {
     title: project.project_name,
     description: project.description,
@@ -36,6 +42,10 @@ export default async function DonatePage({
 }: Props) {
   const slug = (await params).slug;
   const project = await getDonationProjectBySlug(slug);
+
+  if (!project) {
+    return notFound();
+  }
 
   return <DonationPageComp
     project={project}
