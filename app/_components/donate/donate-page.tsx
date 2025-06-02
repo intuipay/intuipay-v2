@@ -5,14 +5,14 @@ import { ArrowLeft, CircleDotIcon, HeadsetIcon } from 'lucide-react'
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Checkbox } from '@/components/ui/checkbox'
 import Link from 'next/link'
-import { DonationProject } from '@/types';
+import { DonationInfo, DonationProject } from '@/types';
 import { clsx } from 'clsx';
-import DonateStep1 from '@/app/_components/donate/step1';
+import DonationStep1 from '@/app/_components/donate/step1';
+import DonationStep2 from '@/app/_components/donate/step2';
+import { createDonationInfo } from '@/utils';
 
 type Step = 'initialization' | 'contracts' | 'payment' | 'complete'
 type Props = {
@@ -37,12 +37,10 @@ export default function DonationPageComp({
   const [slideDirection, setSlideDirection] = useState<'right' | 'left'>('right')
 
   // Form state
-  const [paymentMethod, setPaymentMethod] = useState<string>('usdc')
-  const [amount, setAmount] = useState<number | string>(1)
-  const [isCompany, setIsCompany] = useState(false)
-  const [sendInvoice, setSendInvoice] = useState(false)
-  const [isAnonymous, setIsAnonymous] = useState(false)
-  const [walletConnected, setWalletConnected] = useState(false)
+  const [paymentMethod, setPaymentMethod] = useState<string>('usdc');
+  const [amount, setAmount] = useState<number | string>(1);
+  const [info, setInfo] = useState<DonationInfo>(createDonationInfo(project.id));
+  const [walletConnected, setWalletConnected] = useState(false);
 
   // Step navigation
   const goToNextStep = () => {
@@ -63,14 +61,16 @@ export default function DonationPageComp({
     setWalletConnected(true)
   }
 
-  const resetForm = () => {
+  function resetForm() {
     setSlideDirection('left')
     setCurrentStep('initialization')
-    setWalletConnected(false)
-    setAmount('1.0')
-    setIsCompany(false)
-    setSendInvoice(false)
-    setIsAnonymous(false)
+    setInfo(createDonationInfo(project.id));
+  }
+  function updateInfo(newInfo: Partial<DonationInfo>) {
+    setInfo((prev) => ({
+      ...prev,
+      ...newInfo,
+    }));
   }
 
   // Get current step index
@@ -101,7 +101,7 @@ export default function DonationPageComp({
   }
 
   return (
-    <main className="lg:flex lg:items-center lg:justify-center lg:min-h-[calc(100vh-80px)]">
+    <main className="lg:flex lg:items-center lg:justify-center lg:py-20">
       <div className="w-full max-w-xl mx-auto bg-white lg:rounded-2xl lg:shadow-lg px-8 py-6 lg:px-10">
         {/* Hero Image */}
         <div className="relative w-full aspect-[3/1] rounded-lg mb-4">
@@ -165,142 +165,21 @@ export default function DonationPageComp({
             transition={{ type: 'tween', duration: 0.3 }}
           >
             {/* Initialization Step */}
-            {currentStep === 'initialization' && <DonateStep1
+            {currentStep === 'initialization' && <DonationStep1
               amount={amount}
               goToNextStep={goToNextStep}
+              paymentMethod={paymentMethod}
               setAmount={setAmount}
               setPaymentMethod={setPaymentMethod}
             />}
 
             {/* Contracts Step */}
-            {currentStep === 'contracts' && (
-              <div className="space-y-6">
-                <div className="flex items-center justify-center relative mb-4">
-                  <button onClick={goToPreviousStep} className="absolute left-0 p-1 lg:hidden">
-                    <ArrowLeft className="h-5 w-5" />
-                  </button>
-                  <h1 className="text-xl font-semibold text-center text-gray-900">Leave your contract information</h1>
-                </div>
-
-                {/* Company/Institution Checkbox */}
-                <div className="flex items-center space-x-2">
-                  <Checkbox
-                    id="company"
-                    checked={isCompany}
-                    onCheckedChange={(checked) => setIsCompany(checked as boolean)}
-                  />
-                  <Label htmlFor="company" className="text-sm font-medium">
-                    Company / Institution
-                  </Label>
-                </div>
-
-                {/* Name Fields */}
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="firstName" className="text-sm text-gray-600">
-                      First Name
-                    </Label>
-                    <Input id="firstName" placeholder="First name *" />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="lastName" className="text-sm text-gray-600">
-                      Last Name
-                    </Label>
-                    <Input id="lastName" placeholder="Last name *" />
-                  </div>
-                </div>
-
-                {/* Address Fields */}
-                <div className="space-y-2">
-                  <Label htmlFor="address1" className="text-sm text-gray-600">
-                    Address
-                  </Label>
-                  <Input id="address1" placeholder="Line 1*" className="mb-2" />
-                  <Input id="address2" placeholder="Line 2" />
-                </div>
-
-                {/* Country and State */}
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="country" className="text-sm text-gray-600">
-                      Country
-                    </Label>
-                    <Input id="country" placeholder="Country *" />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="state" className="text-sm text-gray-600">
-                      State
-                    </Label>
-                    <Input id="state" placeholder="State *" />
-                  </div>
-                </div>
-
-                {/* City and Zip */}
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="city" className="text-sm text-gray-600">
-                      City
-                    </Label>
-                    <Input id="city" placeholder="City *" />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="zipCode" className="text-sm text-gray-600">
-                      Zip Code
-                    </Label>
-                    <Input id="zipCode" placeholder="Zip code *" />
-                  </div>
-                </div>
-
-                {/* Email */}
-                <div className="space-y-2">
-                  <Label htmlFor="email" className="text-sm text-gray-600">
-                    Email Address
-                  </Label>
-                  <Input id="email" type="email" placeholder="Email address *" />
-                </div>
-
-                {/* Tax Invoice Checkbox */}
-                <div className="flex items-center space-x-2">
-                  <Checkbox
-                    id="taxInvoice"
-                    checked={sendInvoice}
-                    onCheckedChange={(checked) => setSendInvoice(checked as boolean)}
-                  />
-                  <Label htmlFor="taxInvoice" className="text-sm font-medium">
-                    Send me the tax invoice
-                  </Label>
-                </div>
-
-                {/* Anonymous Donation Checkbox */}
-                <div className="flex items-center justify-center space-x-2 mt-8">
-                  <Checkbox
-                    id="anonymous"
-                    checked={isAnonymous}
-                    onCheckedChange={(checked) => setIsAnonymous(checked as boolean)}
-                  />
-                  <Label htmlFor="anonymous" className="text-sm font-medium">
-                    Make my donation anonymous
-                  </Label>
-                </div>
-
-                {/* Navigation Buttons */}
-                <div className="flex gap-4 mt-8 lg:justify-end">
-                  <Button
-                    variant="outline"
-                    className="flex-1 lg:flex-none lg:px-8 rounded-full"
-                    onClick={goToPreviousStep}
-                  >
-                    Back
-                  </Button>
-                  <Button
-                    className="flex-1 lg:flex-none lg:px-8 bg-blue-600 hover:bg-blue-700 text-white rounded-full"
-                    onClick={goToNextStep}
-                  >
-                    Next
-                  </Button>
-                </div>
-              </div>
-            )}
+            {currentStep === 'contracts' && <DonationStep2
+              goToNextStep={goToNextStep}
+              goToPreviousStep={goToPreviousStep}
+              info={info}
+              setInfo={updateInfo}
+            />}
 
             {/* Payment Step */}
             {currentStep === 'payment' && (
@@ -463,7 +342,7 @@ export default function DonationPageComp({
         </AnimatePresence>
 
         {/* Footer */}
-        <footer className="flex items-center justify-between mt-12 text-sm font-semibold text-black px-3">
+        <footer className="flex items-center justify-between mt-6 py-6 text-sm font-semibold text-black px-3 sticky bottom-0 left-0 right-0 sm:static bg-white">
           <Link
             className="flex items-center gap-2 hover:text-blue-600 hover:underline transition-colors"
             href="/"

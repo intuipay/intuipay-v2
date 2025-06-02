@@ -81,7 +81,7 @@ export default function MyCombobox({
         <ComboboxInput
           className={clsx('w-full ps-12 pe-4 border h-14 font-semibold', className)}
           aria-label="Select country"
-          displayValue={(item: DropdownItemProps) => item[ labelKey ]}
+          displayValue={(item: DropdownItemProps) => item[ labelKey ] as string}
           onChange={(event) => setQuery(event.target.value)}
         />
         <ComboboxButton className="group absolute inset-y-0 right-0 px-4">

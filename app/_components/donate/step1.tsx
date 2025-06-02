@@ -19,7 +19,7 @@ const PaymentMethods: DropdownItemProps[] = [
     value: 'usdc',
   },
 ];
-export default function DonateStep1({
+export default function DonationStep1({
   amount,
   goToNextStep,
   paymentMethod,
