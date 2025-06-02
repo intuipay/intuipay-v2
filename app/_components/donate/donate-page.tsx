@@ -12,6 +12,7 @@ import { Checkbox } from '@/components/ui/checkbox'
 import Link from 'next/link'
 import { DonationProject } from '@/types';
 import { clsx } from 'clsx';
+import DonateStep1 from '@/app/_components/donate/step1';
 
 type Step = 'initialization' | 'contracts' | 'payment' | 'complete'
 type Props = {
@@ -36,8 +37,8 @@ export default function DonationPageComp({
   const [slideDirection, setSlideDirection] = useState<'right' | 'left'>('right')
 
   // Form state
-  const [paymentMethod, setPaymentMethod] = useState('crypto')
-  const [amount, setAmount] = useState('1.0')
+  const [paymentMethod, setPaymentMethod] = useState<string>('usdc')
+  const [amount, setAmount] = useState<number | string>(1)
   const [isCompany, setIsCompany] = useState(false)
   const [sendInvoice, setSendInvoice] = useState(false)
   const [isAnonymous, setIsAnonymous] = useState(false)
@@ -164,60 +165,12 @@ export default function DonationPageComp({
             transition={{ type: 'tween', duration: 0.3 }}
           >
             {/* Initialization Step */}
-            {currentStep === 'initialization' && <>
-              <div className="space-y-6">
-                <h2 className="text-xl font-semibold text-center text-black">Make your donation today</h2>
-
-                {/* Currency Selection */}
-                <div className="space-y-2">
-                  <Label className="text-sm font-semibold text-black/50">Donate with</Label>
-                  <Select defaultValue="usdc">
-                    <SelectTrigger className="w-full h-12 px-4">
-                      <div className="flex items-center gap-3">
-                        <div className="w-6 h-6 bg-blue-600 rounded-full flex items-center justify-center">
-                          <Image
-                            alt="USDC Logo"
-                            className="size-6 block"
-                            src="/images/information/usdc.png"
-                            width={24}
-                            height={24}
-                            loading="lazy"
-                          />
-                        </div>
-                        <SelectValue placeholder="USD Coin (USDC) ERC-20" />
-                      </div>
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="usdc">USD Coin (USDC) ERC-20</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                {/* Amount Input */}
-                <div className="space-y-2">
-                  <Label className="text-sm font-semibold text-black/50">Amount</Label>
-                  <div className="flex items-center border border-black/10 rounded-lg">
-                    <Input
-                      type="number"
-                      value={amount}
-                      onChange={(e) => setAmount(e.target.value)}
-                      className="h-12 w-1/2 px-4"
-                      step="0.1"
-                      min="0"
-                    />
-                    <div className="text-sm">
-                      USDC ≈ $ <span className=" text-black/50">{amount}</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <Button
-                className="mt-12 w-full h-12 bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-full text-base font-medium"
-                onClick={goToNextStep}
-              >
-                Donate
-              </Button>
-            </>}
+            {currentStep === 'initialization' && <DonateStep1
+              amount={amount}
+              goToNextStep={goToNextStep}
+              setAmount={setAmount}
+              setPaymentMethod={setPaymentMethod}
+            />}
 
             {/* Contracts Step */}
             {currentStep === 'contracts' && (

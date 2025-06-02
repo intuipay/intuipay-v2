@@ -1,18 +1,21 @@
 import {DonationProjectStatus} from "@/constants/donation";
 
 export type DropdownItemProps = {
-  country: string;
   icon: string;
+  label?: string;
+  value?: string;
 }
 export type Currency = DropdownItemProps & {
   code: string;
+  country?: string;
   symbol: string;
   anotherSymbol: string;
 }
 
 export type University = DropdownItemProps & {
-  name: string;
+  country?: string;
   countryIcon: string;
+  name: string;
 }
 
 export type APIResponse<T> = {

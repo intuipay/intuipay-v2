@@ -14,9 +14,12 @@ type Props = {
   iconExtension?: string;
   onChange: (value: string) => void;
   options: DropdownItemProps[];
-  symbolKey?: string;
   value?: string;
-  valueKey?: 'country' | 'code' | 'name';
+}
+type ComboboxProps = {
+  symbolKey?: keyof DropdownItemProps;
+  valueKey?: keyof DropdownItemProps;
+  labelKey?: keyof DropdownItemProps;
 }
 
 export default function MyCombobox({
@@ -24,19 +27,20 @@ export default function MyCombobox({
   hasIcon = true,
   iconPath = 'country',
   iconExtension = 'svg',
+  labelKey = 'label',
   onChange,
   options,
-  symbolKey = '',
+  symbolKey = 'icon',
   value,
-  valueKey = 'country',
-}: Props) {
+  valueKey = 'value',
+}: Props & ComboboxProps) {
   const [selected, setSelected] = useState<DropdownItemProps>(options.find(item => item[ valueKey ] === value) || options[ 0 ]);
   const [query, setQuery] = useState<string>('');
   const filteredOptions = useMemo(() => {
     return query === ''
       ? options
       : options.filter((item) => {
-        return item[ valueKey ].toLowerCase().includes(query.toLowerCase());
+        return (item[ valueKey ] as string).toLowerCase().includes(query.toLowerCase());
       });
   }, [query, options, valueKey]);
 
@@ -44,7 +48,7 @@ export default function MyCombobox({
     if (!value) return;
 
     setSelected(value);
-    onChange(value[ valueKey ]);
+    onChange(value[ valueKey ] as string);
   }
 
   useEffect(() => {
@@ -70,14 +74,14 @@ export default function MyCombobox({
               width={24}
               height={24}
               className="size-6 absolute top-4 left-4"
-              alt={selected.country}
+              alt={selected[ labelKey ] || ''}
               loading="lazy"
             />
         )}
         <ComboboxInput
           className={clsx('w-full ps-12 pe-4 border h-14 font-semibold', className)}
           aria-label="Select country"
-          displayValue={(item: DropdownItemProps) => `${symbolKey ? `${item[ symbolKey ]} ` : ''}${item[ valueKey ]}`}
+          displayValue={(item: DropdownItemProps) => item[ labelKey ]}
           onChange={(event) => setQuery(event.target.value)}
         />
         <ComboboxButton className="group absolute inset-y-0 right-0 px-4">
@@ -108,11 +112,10 @@ export default function MyCombobox({
                 width={24}
                 height={24}
                 className="w-6 h-6 block"
-                alt={option[ valueKey ]}
+                alt={option[ valueKey ] || ''}
                 loading="lazy"
               />}
-              {symbolKey && <span className="text-gray-500">{option[ symbolKey ]}</span>}
-              {option[ valueKey ]}
+              {option[ labelKey ]}
             </div>
           </ComboboxOption>
         ))}
