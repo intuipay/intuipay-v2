@@ -1,4 +1,4 @@
-import {Currency, PaymentMethod, University} from "@/types";
+import {Currency, DropdownItemProps, PaymentMethod, University} from "@/types";
 
 export const CurrencyList: Currency[] = [
   {
@@ -431,5 +431,13 @@ export const PaymentMethodsOther: PaymentMethod[] = [
     processingFee: [1, 2],
     fxMarkupRate: [1, 2],
     currency: ['CNY'],
+  },
+];
+
+export const Networks: DropdownItemProps[] = [
+  {
+    icon: 'ethereum',
+    label: 'Ethereum',
+    value: 'ethereum',
   },
 ];

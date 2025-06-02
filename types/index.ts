@@ -79,22 +79,27 @@ export type TiDBDataServiceResponse<T> = {
 }
 
 export type DonationInfo = {
-  amount: number;
-  id: number;
-  project_id: number;
-  first_name?: string;
-  last_name?: string;
-  company_name?: string;
   address1: string;
   address2?: string;
-  country: string;
-  state: string;
+  amount: number;
   city: string;
-  zip: string;
+  company_name?: string;
+  country: string;
+  currency: string;
   email: string;
-  is_anonymous?: boolean;
+  first_name?: string;
   has_tax_invoice?: boolean;
+  id: number;
+  is_anonymous?: boolean;
+  last_name?: string;
+  network: string;
+  note?: string;
+  project_id: number;
+  state: string;
+  wallet: string;
+  zip: string;
+
+  index?: number;
   created_at?: string;
   updated_at?: string;
-  note?: string;
 }

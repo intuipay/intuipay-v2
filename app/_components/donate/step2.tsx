@@ -3,7 +3,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import React, { ChangeEvent, FormEvent, useState } from 'react';
+import React, { ChangeEvent, FormEvent, useRef, useState } from 'react';
 import { DonationInfo } from '@/types';
 import { Textarea } from '@/components/ui/textarea';
 
@@ -31,7 +31,7 @@ export default function DonationStep2({
     goToNextStep();
   }
   function onChange(event: ChangeEvent<HTMLFormElement>) {
-    setIsSubmittable(event.target.matches(':valid'));
+    setIsSubmittable(event.currentTarget.matches(':valid'));
   }
 
   return (

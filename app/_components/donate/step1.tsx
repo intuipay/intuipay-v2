@@ -8,7 +8,7 @@ type Props = {
   amount: number | string;
   goToNextStep: () => void;
   paymentMethod: string;
-  setAmount: (value: number | string) => void;
+  setAmount: (value: number) => void;
   setPaymentMethod: (value: string) => void;
 }
 
@@ -49,7 +49,7 @@ export default function DonationStep1({
           <Input
             type="number"
             value={amount}
-            onChange={(e) => setAmount(e.target.value ? Number(e.target.value) : '')}
+            onChange={(e) => e.target.value && setAmount(Number(e.target.value))}
             className="h-12 w-1/2 px-4"
             step="0.1"
             min="0"
@@ -62,6 +62,7 @@ export default function DonationStep1({
     </div>
     <Button
       className="mt-12 w-full h-12 bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-full text-base font-medium"
+      disabled={!amount}
       onClick={goToNextStep}
     >
       Donate
