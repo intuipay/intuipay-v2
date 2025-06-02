@@ -1,10 +1,13 @@
+import { clsx } from 'clsx';
 import { ArrowLeft } from 'lucide-react';
-import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Button } from '@/components/ui/button';
+import Image from 'next/image';
 import { useState } from 'react';
+import { Label } from '@/components/ui/label';
+import { Button } from '@/components/ui/button';
 import MyCombobox from '@/components/my-combobox';
-import { Networks } from '@/data';
+import { Networks, Wallets } from '@/data';
+import { Web3 } from 'web3';
+import useWalletStore from '@/store/wallet';
 
 type Props = {
   goToPreviousStep: () => void;
@@ -15,12 +18,65 @@ export default function DonationStep3({
   goToPreviousStep,
   goToNextStep,
 }: Props) {
+  const setWallet = useWalletStore(state => state.setWallet);
+  const [inConnecting, setInConnecting] = useState<string>('');
   const [network, setNetwork] = useState<string>('ethereum');
-  const [walletConnected, setWalletConnected] = useState<boolean>(false);
-  const [selectedWallet, setSelectedWallet] = useState<string>('metamask');
+  const [selectedWallet, setSelectedWallet] = useState<string>('');
+  const detected: Record<string, boolean> = {
+    metamask: window.ethereum && window.ethereum.isMetaMask,
+    coinbase: window.ethereum && window.ethereum.isCoinbaseWallet,
+  };
 
-  const connectWallet = () => {
-    setWalletConnected(true)
+  async function connectWallet() {
+    if (!selectedWallet) return;
+
+    setInConnecting(selectedWallet);
+    switch (selectedWallet) {
+      case 'metamask':
+      case 'coinbase':
+        if (!window.ethereum) {
+          alert(`${selectedWallet} not detected.`);
+          setInConnecting('');
+          return;
+        }
+        await window.ethereum.request({ method: 'eth_requestAccounts' });
+        const web3 = new Web3(window.ethereum);
+        const accounts = await web3.eth.getAccounts();
+        if (!accounts || accounts.length === 0) {
+          setInConnecting('');
+          throw new Error('No accounts found');
+        }
+        setWallet(selectedWallet, accounts[ 0 ]);
+        console.log('Connected wallet:', accounts[ 0 ]);
+        goToNextStep();
+        break;
+
+      case 'phantom':
+      {
+        if (window.phantom && window.phantom.ethereum) {
+          const provider = window.phantom.ethereum;
+          const web3 = new Web3(provider);
+          try {
+            const accounts = await provider.request({ method: 'eth_requestAccounts' });
+            setWallet(selectedWallet, accounts[ 0 ]);
+          } catch (error) {
+            // ...
+          }
+        } else if (window.solana && window.solana.isPhantom) {
+          // 这是连接 Solana 的方式
+          try {
+            const resp = await window.solana.connect();
+            console.log(resp.publicKey.toString());
+            // 对于 Solana，你需要使用 @solana/web3.js
+          } catch (err) {
+            // 处理错误
+          }
+        } else {
+          // 提示用户安装 Phantom
+        }
+      }
+    }
+    setInConnecting('');
   }
 
   return (
@@ -37,6 +93,7 @@ export default function DonationStep3({
           Switch Network
         </Label>
         <MyCombobox
+          disabled={!!inConnecting}
           iconPath="logo"
           onChange={setNetwork}
           options={Networks}
@@ -45,63 +102,48 @@ export default function DonationStep3({
       </div>
 
       {/* Wallet Options */}
-      <div className="space-y-3 mt-4">
-        {/* MetaMask */}
-        <div className="flex items-center justify-between p-3 border rounded-lg bg-blue-50">
-          <div className="flex items-center gap-2">
-            <div className="w-6 h-6 bg-orange-500 rounded-full flex items-center justify-center">
-              <span className="text-white text-xs">M</span>
-            </div>
-            <span className="font-medium">MetaMask</span>
-          </div>
-          <span className="text-sm text-gray-500">Detected</span>
-        </div>
-
-        {/* WalletConnect */}
-        <div className="flex items-center justify-between p-3 border rounded-lg bg-blue-50">
-          <div className="flex items-center gap-2">
-            <div className="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center">
-              <span className="text-white text-xs">W</span>
-            </div>
-            <span className="font-medium">WalletConnect</span>
-          </div>
-          <span className="text-sm text-gray-500">Detected</span>
-        </div>
-
-        {/* Phantom */}
-        <div className="flex items-center justify-between p-3 border rounded-lg">
-          <div className="flex items-center gap-2">
-            <div className="w-6 h-6 bg-purple-500 rounded-full flex items-center justify-center">
-              <span className="text-white text-xs">P</span>
-            </div>
-            <span className="font-medium">Phantom</span>
-          </div>
-        </div>
-
-        {/* Coinbase */}
-        <div className="flex items-center justify-between p-3 border rounded-lg">
-          <div className="flex items-center gap-2">
-            <div className="w-6 h-6 bg-blue-700 rounded-full flex items-center justify-center">
-              <span className="text-white text-xs">C</span>
-            </div>
-            <span className="font-medium">Coinbase</span>
-          </div>
-        </div>
+      <div className="grid grid-cols-2 gap-x-2.5 gap-y-6">
+        {Wallets.map(wallet => (
+          <label
+            className={clsx(
+              'flex items-center p-3 gap-3 border rounded-lg cursor-pointer',
+              { 'bg-blue-50 border-blue-500': selectedWallet === wallet.value },
+              { 'opacity-50': !!inConnecting },
+            )}
+            key={wallet.value}
+          >
+            <input
+              checked={selectedWallet === wallet.value}
+              className="hidden"
+              disabled={!!inConnecting}
+              name="wallet"
+              type="radio"
+              onChange={event => setSelectedWallet(event.target.value)}
+              value={wallet.value}
+            />
+            <Image
+              src={`/images/logo/${wallet.icon}.svg`}
+              width={24}
+              height={24}
+              className="size-6"
+              alt={wallet.label || ''}
+              loading="lazy"
+            />
+            <span className="font-medium">{wallet.label}</span>
+            {detected[ wallet.value as string ] && <span className="text-sm text-gray-500">Detected</span>}
+          </label>
+        ))}
       </div>
 
       {/* Navigation Buttons */}
-      <div className="flex gap-4 mt-8 lg:justify-center">
+      <div className="pt-6">
         <Button
-          variant="outline"
-          className="flex-1 lg:flex-none lg:px-8 rounded-full"
-          onClick={goToPreviousStep}
-        >
-          Back
-        </Button>
-        <Button
-          className="flex-1 lg:flex-none lg:px-8 bg-blue-600 hover:bg-blue-700 text-white rounded-full"
+          className="w-full h-12 text-base font-semibold bg-blue-600 hover:bg-blue-700 text-white rounded-full gap-2"
+          disabled={!selectedWallet || !!inConnecting}
           onClick={connectWallet}
+          type="button"
         >
+          {inConnecting && <span className="loading loading-spinner size-4" />}
           Connect
         </Button>
       </div>

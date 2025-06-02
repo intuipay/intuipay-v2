@@ -441,3 +441,26 @@ export const Networks: DropdownItemProps[] = [
     value: 'ethereum',
   },
 ];
+
+export const Wallets: DropdownItemProps[] = [
+  {
+    icon: 'metamask',
+    label: 'MetaMask',
+    value: 'metamask',
+  },
+  {
+    icon: 'wallet-connect',
+    label: 'WalletConnect',
+    value: 'wallet-connect',
+  },
+  {
+    icon: 'phantom',
+    label: 'Phantom',
+    value: 'phantom',
+  },
+  {
+    icon: 'coinbase',
+    label: 'Coinbase Wallet',
+    value: 'coinbase',
+  },
+];

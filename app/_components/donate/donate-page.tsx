@@ -146,7 +146,7 @@ export default function DonationPageComp({
           </div>
           <div className="grid grid-cols-4 text-center text-sm font-medium">
             {steps.map((step, index) => (
-              <span
+              index === 3 ? null : <span
                 key={step.id}
                 className={`${index <= currentStepIndex ? 'text-blue-600' : 'text-black/40'}`}
               >
@@ -197,7 +197,7 @@ export default function DonationPageComp({
 
             {/* Complete Step */}
             {currentStep === 'complete' && <DonationStep5
-              index={info.index || 0}
+              index={info.id}
               reset={resetForm}
             />}
           </motion.div>

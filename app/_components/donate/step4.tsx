@@ -1,6 +1,11 @@
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, TerminalIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { DonationInfo } from '@/types';
+import { useState } from 'react';
+import { fetchTidb } from '@/services/fetch-tidb';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import omit from 'lodash-es/omit';
+import { DonationMethodType, DonationStatus } from '@/constants/donation';
 
 type Props = {
   goToPreviousStep: () => void;
@@ -13,7 +18,36 @@ export default function DonationStep4({
   goToNextStep,
   info,
 }: Props) {
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [message, setMessage] = useState<string>('');
   const usd = 100;
+
+  async function doSubmit() {
+    setIsSubmitting(true);
+    setMessage('');
+
+    // make donation
+    const txHash = '';
+
+    // save data to DB
+    try {
+      const data = await fetchTidb<{id: number}>('/donation', 'POST', {
+        ...omit(info, ['id', 'created_at', 'updated_at']),
+        account: '',
+        method: DonationMethodType.Crypto,
+        status: DonationStatus.Successful,
+        tx_hash: txHash,
+        wallet_address: '',
+      });
+      info.id = data[ 0 ].id;
+      goToNextStep();
+    } catch (e) {
+      const errorMessage = (e as Error).message || String(e);
+      setMessage(`Error saving donation: ${errorMessage}`);
+    } finally {
+      setIsSubmitting(false);
+    }
+  }
 
   return (
     <>
@@ -31,11 +65,21 @@ export default function DonationStep4({
       </div>
 
       {/* Navigation Buttons */}
-      <div className="flex gap-4 mt-8 lg:justify-center">
+      <div className="pt-6">
+        {message && (
+          <Alert variant="destructive">
+            <TerminalIcon />
+            <AlertTitle>Error</AlertTitle>
+            <AlertDescription>{message}</AlertDescription>
+          </Alert>
+        )}
         <Button
-          className="flex-1 lg:w-full lg:max-w-xs bg-blue-600 hover:bg-blue-700 text-white rounded-full"
-          onClick={goToNextStep}
+          className="w-full bg-blue-600 hover:bg-blue-700 text-white rounded-full gap-2"
+          disabled={isSubmitting}
+          onClick={doSubmit}
+          type="button"
         >
+          {isSubmitting && <span className="loading loading-spinner size-4" />}
           Donate
         </Button>
       </div>

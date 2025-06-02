@@ -9,6 +9,7 @@ import { DropdownItemProps } from '@/types';
 
 type Props = {
   className?: string;
+  disabled?: boolean;
   hasIcon?: boolean;
   iconPath?: string;
   iconExtension?: string;
@@ -24,6 +25,7 @@ type ComboboxProps = {
 
 export default function MyCombobox({
   className = 'rounded-lg',
+  disabled,
   hasIcon = true,
   iconPath = 'country',
   iconExtension = 'svg',
@@ -80,11 +82,15 @@ export default function MyCombobox({
         )}
         <ComboboxInput
           className={clsx('w-full ps-12 pe-4 border h-14 font-semibold', className)}
+          disabled={disabled}
           aria-label="Select country"
           displayValue={(item: DropdownItemProps) => item[ labelKey ] as string}
           onChange={(event) => setQuery(event.target.value)}
         />
-        <ComboboxButton className="group absolute inset-y-0 right-0 px-4">
+        <ComboboxButton
+          className="group absolute inset-y-0 right-0 px-4"
+          disabled={disabled}
+        >
           {({ open }) => (
             open
               ? <ChevronUpIcon className="size-4 text-gray-400" />
@@ -97,13 +103,14 @@ export default function MyCombobox({
         transition
         className="w-(--input-width) border rounded-lg bg-white space-y-1"
       >
-        {filteredOptions.map(option => (
+        {filteredOptions.map((option, index) => (
           <ComboboxOption
             className={clsx(
               'flex items-center gap-3 px-4 h-12 cursor-pointer',
               value === option[ valueKey ] ? 'bg-blue-50 hover:bg-blue-100' : 'hover:bg-blue-50',
             )}
-            key={option[ valueKey ]}
+            disabled={disabled}
+            key={index}
             value={option}
           >
             <div className="flex items-center gap-3">

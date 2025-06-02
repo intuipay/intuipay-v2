@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import {CurrencyList, PaymentMethods, PaymentMethodsOther} from "@/data";
+import { PaymentMethods, PaymentMethodsOther} from "@/data";
 import {PaymentMethod, TransferRate} from "@/types";
 
 type Props = {

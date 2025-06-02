@@ -3,6 +3,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import MyCombobox from '@/components/my-combobox';
 import { DropdownItemProps } from '@/types';
+import { useEffect } from 'react';
 
 type Props = {
   amount: number | string;
@@ -26,6 +27,11 @@ export default function DonationStep1({
   setAmount,
   setPaymentMethod,
 }: Props) {
+
+  useEffect(() => {
+
+  }, []);
+
   return <>
     <div className="space-y-6">
       <h2 className="text-xl font-semibold text-center text-black">Make your donation today</h2>
