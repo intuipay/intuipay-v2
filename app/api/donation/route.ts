@@ -1,5 +1,7 @@
 import { fetchTidb } from '@/services/fetch-tidb';
 
+export const runtime = 'edge';
+
 export async function POST(req: Request) {
   const json = await req.json();
   try {
