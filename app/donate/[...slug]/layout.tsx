@@ -2,6 +2,8 @@ import type React from 'react'
 import { Button } from '@/components/ui/button';
 import BackButton from '@/components/back-button';
 
+export const runtime = 'edge';
+
 export default async function DonateLayout({
   children,
   params,
