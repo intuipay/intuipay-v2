@@ -1,7 +1,6 @@
 import type React from 'react'
 import { Button } from '@/components/ui/button';
-import { ChevronLeft } from 'lucide-react';
-import { getDonationProjectBySlug } from '@/lib/data';
+import BackButton from '@/components/back-button';
 
 export default async function DonateLayout({
   children,
@@ -18,14 +17,7 @@ export default async function DonateLayout({
       {/* Header */}
       <header className="flex items-center justify-between p-4 bg-white lg:bg-gray-50 border-b">
         <div className="flex items-center gap-3">
-          <Button
-            className="size-8 hidden"
-            size="icon"
-            type="button"
-            variant="ghost"
-          >
-            <ChevronLeft className="h-5 w-5" />
-          </Button>
+          <BackButton />
           <div>
             <p className="text-sm text-gray-600">Donating to</p>
             <p className="font-medium text-gray-900 truncate">{pageTitle}</p>
