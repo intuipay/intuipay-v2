@@ -1,6 +1,6 @@
 import { ArrowLeft, TerminalIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { DonationInfo } from '@/types';
+import { APIResponse, DonationInfo } from '@/types';
 import { useState } from 'react';
 import { fetchTidb } from '@/services/fetch-tidb';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
@@ -31,15 +31,28 @@ export default function DonationStep4({
 
     // save data to DB
     try {
-      const data = await fetchTidb<{id: number}>('/donation', 'POST', {
-        ...omit(info, ['id', 'created_at', 'updated_at']),
-        account: '',
-        method: DonationMethodType.Crypto,
-        status: DonationStatus.Successful,
-        tx_hash: txHash,
-        wallet_address: '',
+      const response = await fetch('/api/donation', {
+        method: 'POST',
+        headers: {
+          'content-type': 'application/json',
+        },
+        body: JSON.stringify({
+          ...omit(info, ['id', 'created_at', 'updated_at']),
+          account: '',
+          method: DonationMethodType.Crypto,
+          status: DonationStatus.Successful,
+          tx_hash: txHash,
+          wallet_address: '',
+        }),
       });
-      info.id = data[ 0 ].id;
+
+      if (!response.ok) {
+        setMessage('Error saving donation: ' + response.statusText);
+        return;
+      }
+
+      const { data } = (await response.json()) as APIResponse<number>;
+      info.id = data;
       goToNextStep();
     } catch (e) {
       const errorMessage = (e as Error).message || String(e);
