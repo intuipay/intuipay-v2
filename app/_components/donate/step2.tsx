@@ -3,7 +3,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import React, { ChangeEvent, FormEvent, useRef, useState } from 'react';
+import { FormEvent, useEffect, useRef, useState } from 'react';
 import { DonationInfo } from '@/types';
 import { Textarea } from '@/components/ui/textarea';
 
@@ -19,6 +19,7 @@ export default function DonationStep2({
   info,
   setInfo,
 }: Props) {
+  const form = useRef<HTMLFormElement>(null);
   const [isAnonymous, setIsAnonymous] = useState<boolean>(false);
   const [isCompany, setIsCompany] = useState<boolean>(false);
   const [isSubmittable, setIsSubmittable] = useState<boolean>(false);
@@ -30,15 +31,22 @@ export default function DonationStep2({
 
     goToNextStep();
   }
-  function onChange(event: ChangeEvent<HTMLFormElement>) {
-    setIsSubmittable(event.currentTarget.matches(':valid'));
+  function onChange() {
+    if (form.current) {
+      setIsSubmittable(form.current.matches(':valid'));
+    }
   }
+
+  useEffect(() => {
+    onChange();
+  }, []);
 
   return (
     <form
       className="space-y-6"
       onChange={onChange}
       onSubmit={doSubmit}
+      ref={form}
     >
       <div className="flex items-center justify-center relative">
         <button
