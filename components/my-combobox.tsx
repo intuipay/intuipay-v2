@@ -39,12 +39,13 @@ export default function MyCombobox({
   const [selected, setSelected] = useState<DropdownItemProps>(options.find(item => item[ valueKey ] === value) || options[ 0 ]);
   const [query, setQuery] = useState<string>('');
   const filteredOptions = useMemo(() => {
-    return query === ''
-      ? options
-      : options.filter((item) => {
-        return (item[ valueKey ] as string).toLowerCase().includes(query.toLowerCase());
-      });
-  }, [query, options, valueKey]);
+    if (query === '') return options;
+
+    const theQuery = query.trim().toLowerCase();
+    return options.filter((item) => {
+      return (item[ labelKey ] as string).toLowerCase().includes(theQuery);
+    });
+  }, [labelKey, query, options]);
 
   function doUpdate(value: DropdownItemProps) {
     if (!value) return;
@@ -72,7 +73,7 @@ export default function MyCombobox({
         {hasIcon && (query
           ? <div className="absolute size-6 rounded-full bg-primary top-4 left-4" />
           : <Image
-              src={`/images/${iconPath}/${selected.icon}.${iconExtension}`}
+              src={`/images/${iconPath}/${selected[ symbolKey ]}.${iconExtension}`}
               width={24}
               height={24}
               className="size-6 absolute top-4 left-4"
@@ -115,7 +116,7 @@ export default function MyCombobox({
           >
             <div className="flex items-center gap-3">
               {hasIcon && <Image
-                src={`/images/${iconPath}/${option.icon}.${iconExtension}`}
+                src={`/images/${iconPath}/${option[ symbolKey ]}.${iconExtension}`}
                 width={24}
                 height={24}
                 className="w-6 h-6 block"

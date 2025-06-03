@@ -13,7 +13,7 @@ export async function fetchTidb<T>(url: string, method: string = 'GET', body?: u
   });
 
   if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
+    throw new Error(`HTTP error. status: ${response.status}`);
   }
 
   const result = (await response.json()) as TiDBDataServiceResponse<T>;

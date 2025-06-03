@@ -27,7 +27,7 @@ export default function DonationStep4({
     setMessage('');
 
     // make donation
-    const txHash = '';
+    const txHash = 'test-tx-hash-1234567890';
 
     // save data to DB
     try {
@@ -38,11 +38,14 @@ export default function DonationStep4({
         },
         body: JSON.stringify({
           ...omit(info, ['id', 'created_at', 'updated_at']),
+          has_tax_invoice: Number(info.has_tax_invoice),
+          is_anonymous: Number(info.is_anonymous),
           account: '',
           method: DonationMethodType.Crypto,
           status: DonationStatus.Successful,
           tx_hash: txHash,
-          wallet_address: '',
+          wallet: 'MetaMask',
+          wallet_address: '0x1234567890abcdef1234567890abcdef',
         }),
       });
 
@@ -64,30 +67,33 @@ export default function DonationStep4({
 
   return (
     <>
-      <div className="flex items-center justify-center relative mb-4">
+      <div className="flex items-center justify-center relative mb-12">
         <button onClick={goToPreviousStep} className="absolute left-0">
           <ArrowLeft className="h-5 w-5" />
         </button>
         <h1 className="text-xl font-semibold text-center text-gray-900">Finish your donation</h1>
       </div>
 
-      <div className="flex flex-col items-center justify-center py-8 space-y-2">
-        <p className="text-gray-600">Your are donating</p>
-        <p className="text-2xl font-semibold text-blue-600">{info.amount} {info.currency}</p>
-        <p className="text-gray-600">~ {usd.toLocaleString()} USD</p>
+      <div className="flex flex-col items-center justify-center py-5 gap-4">
+        <p className="text-xl font-semibold text-gray-900">Your are donating</p>
+        <p className="text-3xl font-semibold text-blue-600">{info.amount} {info.currency}</p>
+        <p className="text-xl font-semibold text-gray-900">~ {usd.toLocaleString()} USD</p>
       </div>
 
       {/* Navigation Buttons */}
       <div className="pt-6">
         {message && (
-          <Alert variant="destructive">
+          <Alert
+            className="mb-4"
+            variant="destructive"
+          >
             <TerminalIcon />
             <AlertTitle>Error</AlertTitle>
             <AlertDescription>{message}</AlertDescription>
           </Alert>
         )}
         <Button
-          className="w-full bg-blue-600 hover:bg-blue-700 text-white rounded-full gap-2"
+          className="w-full h-12 text-base font-semibold bg-blue-600 hover:bg-blue-700 text-white rounded-full gap-2"
           disabled={isSubmitting}
           onClick={doSubmit}
           type="button"

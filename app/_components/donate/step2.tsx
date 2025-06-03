@@ -82,7 +82,7 @@ export default function DonationStep2({
           name="company"
           onChange={event => setInfo({ company_name: event.target.value })}
           placeholder="Company / Institution Name *"
-          required
+          required={!isAnonymous}
           value={info.company_name}
         />
       </div> : <div className="grid grid-cols-2 gap-2">
@@ -99,7 +99,7 @@ export default function DonationStep2({
           name="first-name"
           onChange={event => setInfo({ first_name: event.target.value })}
           placeholder="First name *"
-          required
+          required={!isAnonymous}
           value={info.first_name}
         />
         <Input
@@ -109,7 +109,7 @@ export default function DonationStep2({
           name="last-name"
           onChange={event => setInfo({ last_name: event.target.value })}
           placeholder="Last name *"
-          required
+          required={!isAnonymous}
           value={info.last_name}
         />
       </div>}
@@ -126,7 +126,7 @@ export default function DonationStep2({
           name="address1"
           onChange={event => setInfo({ address1: event.target.value })}
           placeholder="Line 1*"
-          required
+          required={!isAnonymous}
           value={info.address1}
         />
         <Input
@@ -155,7 +155,7 @@ export default function DonationStep2({
           name="country"
           onChange={event => setInfo({ country: event.target.value })}
           placeholder="Country *"
-          required
+          required={!isAnonymous}
           value={info.country}
         />
         <Input
@@ -165,7 +165,7 @@ export default function DonationStep2({
           name="state"
           onChange={event => setInfo({ state: event.target.value })}
           placeholder="State *"
-          required
+          required={!isAnonymous}
           value={info.state}
         />
       </div>
@@ -185,7 +185,7 @@ export default function DonationStep2({
           name="city"
           onChange={event => setInfo({ city: event.target.value })}
           placeholder="City *"
-          required
+          required={!isAnonymous}
           value={info.city}
         />
         <Input
@@ -195,7 +195,7 @@ export default function DonationStep2({
           name="zip-code"
           onChange={event => setInfo({ zip: event.target.value })}
           placeholder="Zip code *"
-          required
+          required={!isAnonymous}
           value={info.zip}
         />
       </div>
@@ -212,7 +212,7 @@ export default function DonationStep2({
           name="email"
           onChange={event => setInfo({ email: event.target.value })}
           placeholder="Email address *"
-          required
+          required={!isAnonymous}
           type="email"
           value={info.email}
         />

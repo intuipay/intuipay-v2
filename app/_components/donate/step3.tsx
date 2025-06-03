@@ -8,6 +8,7 @@ import MyCombobox from '@/components/my-combobox';
 import { Networks, Wallets } from '@/data';
 import { Web3 } from 'web3';
 import useWalletStore from '@/store/wallet';
+import { sleep } from '@/utils';
 
 type Props = {
   goToPreviousStep: () => void;
@@ -31,6 +32,11 @@ export default function DonationStep3({
     if (!selectedWallet) return;
 
     setInConnecting(selectedWallet);
+    await sleep(1000); // mock loading
+    goToNextStep();
+    setInConnecting('');
+    return;
+
     switch (selectedWallet) {
       case 'metamask':
       case 'coinbase':

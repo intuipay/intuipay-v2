@@ -1,5 +1,9 @@
 import {DonationInfo} from "@/types";
 
+export function sleep(ms: number): Promise<void> {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 export function createDonationInfo(projectId: number): DonationInfo {
   return {
     address1: '',

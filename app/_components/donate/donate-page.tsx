@@ -67,13 +67,14 @@ export default function DonationPageComp({
     setSlideDirection('right')
     if (currentStep === 'initialization') setCurrentStep('contracts')
     else if (currentStep === 'contracts') setCurrentStep('payment')
-    else if (currentStep === 'payment') setCurrentStep('complete')
+    else if (currentStep === 'payment') setCurrentStep('confirm')
+    else  if (currentStep === 'confirm') setCurrentStep('complete')
   }
   const goToPreviousStep = () => {
     setSlideDirection('left')
     if (currentStep === 'contracts') setCurrentStep('initialization')
     else if (currentStep === 'payment') setCurrentStep('contracts')
-    else if (currentStep === 'complete') setCurrentStep('payment')
+    else if (currentStep === 'confirm') setCurrentStep('payment')
   }
 
   function resetForm() {
@@ -90,8 +91,7 @@ export default function DonationPageComp({
 
   // Get current step index
   const currentStepIndex = useMemo(() => {
-    const index = steps.findIndex((step) => step.id === currentStep);
-    return index > 2 ? index - 1 : index;
+    return steps.findIndex((step) => step.id === currentStep);
   }, [currentStep]);
 
   return (
