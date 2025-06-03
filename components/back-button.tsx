@@ -3,11 +3,17 @@
 import { ChevronLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import type React from 'react';
+import { clsx } from 'clsx';
 
-export default function BackButton() {
+type Props = {
+  className?: string;
+}
+export default function BackButton({
+  className = '',
+}: Props) {
   return (
     <Button
-      className="size-8"
+      className={clsx('size-8', className)}
       size="icon"
       title="Back"
       type="button"

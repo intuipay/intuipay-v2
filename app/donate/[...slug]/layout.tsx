@@ -19,7 +19,7 @@ export default async function DonateLayout({
       {/* Header */}
       <header className="flex items-center justify-between p-4 bg-white lg:bg-gray-50 border-b">
         <div className="flex items-center gap-3">
-          <BackButton />
+          <BackButton className="hidden" />
           <div>
             <p className="text-sm text-gray-600">Donating to</p>
             <p className="font-medium text-gray-900 truncate">{pageTitle}</p>
