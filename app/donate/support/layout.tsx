@@ -8,9 +8,9 @@ export default function DonateLayout({
   children: React.ReactNode
 }) {
   return (
-    <div className="min-h-screen bg-gray-50 lg:bg-gray-100">
+    <div className="min-h-dvh bg-gray-50 lg:bg-gray-100 flex flex-col">
       {/* Header */}
-      <header className="flex items-center justify-between p-4 bg-white lg:bg-gray-50 border-b">
+      <header className="items-center justify-between p-4 bg-white lg:bg-gray-50 border-b hidden sm:flex">
         <div className="flex items-center gap-3">
           <BackButton />
           <div className="font-medium text-gray-900 truncate">Support</div>
