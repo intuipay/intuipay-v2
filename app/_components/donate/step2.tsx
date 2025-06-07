@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { FormEvent, useEffect, useRef, useState } from 'react';
 import { DonationInfo } from '@/types';
 import { Textarea } from '@/components/ui/textarea';
+import CtaFooter from '@/app/_components/donate/cta-footer';
 
 type Props = {
   goToNextStep: () => void;
@@ -43,7 +44,7 @@ export default function DonationStep2({
 
   return (
     <form
-      className="space-y-6"
+      className="space-y-6 pt-8"
       onChange={onChange}
       onSubmit={doSubmit}
       ref={form}
@@ -51,7 +52,7 @@ export default function DonationStep2({
       <div className="flex items-center justify-center relative">
         <button
           onClick={goToPreviousStep}
-          className="absolute left-0"
+          className="absolute left-0 hidden sm:block"
         >
           <ArrowLeft className="h-5 w-5" />
         </button>
@@ -207,11 +208,10 @@ export default function DonationStep2({
         </Label>
         <Input
           className="border placeholder:text-sm placeholder:font-semibold disabled:border-black/20"
-          disabled={isAnonymous}
           id="email"
           name="email"
           onChange={event => setInfo({ email: event.target.value })}
-          placeholder="Email address *"
+          placeholder={'Email address' + isAnonymous ? '' : ' *'}
           required={!isAnonymous}
           type="email"
           value={info.email}
@@ -235,7 +235,6 @@ export default function DonationStep2({
         </Label>
         <Textarea
           className="h-30 border placeholder:text-sm placeholder:font-semibold disabled:border-black/20"
-          disabled={isAnonymous}
           id="note"
           name="note"
           onChange={event => setInfo({ note: event.target.value })}
@@ -246,8 +245,12 @@ export default function DonationStep2({
       </div>
 
       {/* Navigation Buttons */}
-      <div className="space-y-3 pt-6 sticky left-0 bottom-17 right-0 sm:static bg-white">
-        <div className="flex items-center justify-center space-x-2">
+      <CtaFooter
+        buttonType="submit"
+        goToPreviousStep={goToPreviousStep}
+        isSubmittable={isSubmittable}
+      >
+        <div className="col-span-2 flex items-center justify-center space-x-2 relative z-[1]">
           <Checkbox
             id="anonymous"
             checked={isAnonymous}
@@ -257,13 +260,7 @@ export default function DonationStep2({
             Make my donation anonymous
           </Label>
         </div>
-        <Button
-          className="w-full h-12 bg-blue-600 hover:bg-blue-700 text-white rounded-full"
-          disabled={!isSubmittable}
-        >
-          Next
-        </Button>
-      </div>
+      </CtaFooter>
     </form>
   )
 }

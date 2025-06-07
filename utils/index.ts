@@ -8,7 +8,7 @@ export function createDonationInfo(projectId: number): DonationInfo {
   return {
     address1: '',
     address2: '',
-    amount: 1,
+    amount: '',
     city: '',
     company_name: '',
     country: '',

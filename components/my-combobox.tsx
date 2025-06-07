@@ -11,6 +11,7 @@ type Props = {
   className?: string;
   disabled?: boolean;
   hasIcon?: boolean;
+  iconClass?: string;
   iconPath?: string;
   iconExtension?: string;
   onChange: (value: string) => void;
@@ -24,9 +25,10 @@ type ComboboxProps = {
 }
 
 export default function MyCombobox({
-  className = 'rounded-lg',
+  className = 'rounded-lg h-14',
   disabled,
   hasIcon = true,
+  iconClass = 'top-4',
   iconPath = 'country',
   iconExtension = 'svg',
   labelKey = 'label',
@@ -71,18 +73,18 @@ export default function MyCombobox({
     >
       <div className="relative">
         {hasIcon && (query
-          ? <div className="absolute size-6 rounded-full bg-primary top-4 left-4" />
+          ? <div className={clsx('absolute size-6 rounded-full bg-primary left-4', iconClass)} />
           : <Image
               src={`/images/${iconPath}/${selected[ symbolKey ]}.${iconExtension}`}
               width={24}
               height={24}
-              className="size-6 absolute top-4 left-4"
+              className={clsx('size-6 absolute left-4', iconClass)}
               alt={selected[ labelKey ] || ''}
               loading="lazy"
             />
         )}
         <ComboboxInput
-          className={clsx('w-full ps-12 pe-4 border h-14 font-semibold', className)}
+          className={clsx('w-full ps-12 pe-4 border font-semibold', className)}
           disabled={disabled}
           aria-label="Select country"
           displayValue={(item: DropdownItemProps) => item[ labelKey ] as string}

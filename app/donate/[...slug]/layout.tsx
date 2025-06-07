@@ -17,7 +17,7 @@ export default async function DonateLayout({
   return (
     <div className="min-h-screen bg-gray-50 lg:bg-gray-100">
       {/* Header */}
-      <header className="flex items-center justify-between p-4 bg-white lg:bg-gray-50 border-b">
+      <header className="flex items-center justify-between px-8 sm:px-30 py-4 bg-white lg:bg-gray-50 border-b">
         <div className="flex items-center gap-3">
           <BackButton className="hidden" />
           <div>

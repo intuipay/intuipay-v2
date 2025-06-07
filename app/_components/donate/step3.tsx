@@ -1,14 +1,14 @@
 import { clsx } from 'clsx';
 import { ArrowLeft } from 'lucide-react';
 import Image from 'next/image';
-import { useState } from 'react';
+import { FormEvent, useState } from 'react';
 import { Label } from '@/components/ui/label';
-import { Button } from '@/components/ui/button';
 import MyCombobox from '@/components/my-combobox';
 import { Networks, Wallets } from '@/data';
 import { Web3 } from 'web3';
 import useWalletStore from '@/store/wallet';
 import { sleep } from '@/utils';
+import CtaFooter from '@/app/_components/donate/cta-footer';
 
 type Props = {
   goToPreviousStep: () => void;
@@ -20,7 +20,7 @@ export default function DonationStep3({
   goToNextStep,
 }: Props) {
   const setWallet = useWalletStore(state => state.setWallet);
-  const [inConnecting, setInConnecting] = useState<string>('');
+  const [isConnecting, setIsConnecting] = useState<string>('');
   const [network, setNetwork] = useState<string>('ethereum');
   const [selectedWallet, setSelectedWallet] = useState<string>('');
   const detected: Record<string, boolean> = {
@@ -28,13 +28,14 @@ export default function DonationStep3({
     coinbase: window.ethereum && window.ethereum.isCoinbaseWallet,
   };
 
-  async function connectWallet() {
+  async function connectWallet(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
     if (!selectedWallet) return;
 
-    setInConnecting(selectedWallet);
+    setIsConnecting(selectedWallet);
     await sleep(1000); // mock loading
     goToNextStep();
-    setInConnecting('');
+    setIsConnecting('');
     return;
 
     switch (selectedWallet) {
@@ -42,14 +43,14 @@ export default function DonationStep3({
       case 'coinbase':
         if (!window.ethereum) {
           alert(`${selectedWallet} not detected.`);
-          setInConnecting('');
+          setIsConnecting('');
           return;
         }
         await window.ethereum.request({ method: 'eth_requestAccounts' });
         const web3 = new Web3(window.ethereum);
         const accounts = await web3.eth.getAccounts();
         if (!accounts || accounts.length === 0) {
-          setInConnecting('');
+          setIsConnecting('');
           throw new Error('No accounts found');
         }
         setWallet(selectedWallet, accounts[ 0 ]);
@@ -82,13 +83,19 @@ export default function DonationStep3({
         }
       }
     }
-    setInConnecting('');
+    setIsConnecting('');
   }
 
   return (
-    <div className="space-y-6">
+    <form
+      className="space-y-6 pt-8"
+      onSubmit={connectWallet}
+    >
       <div className="flex items-center justify-center relative mb-4">
-        <button onClick={goToPreviousStep} className="absolute left-0">
+        <button
+          onClick={goToPreviousStep}
+          className="absolute left-0 hidden sm:block "
+        >
           <ArrowLeft className="h-5 w-5" />
         </button>
         <h1 className="text-xl font-semibold text-center text-gray-900">Connect with your wallet</h1>
@@ -99,7 +106,7 @@ export default function DonationStep3({
           Switch Network
         </Label>
         <MyCombobox
-          disabled={!!inConnecting}
+          disabled={!!isConnecting}
           iconPath="logo"
           onChange={setNetwork}
           options={Networks}
@@ -108,20 +115,20 @@ export default function DonationStep3({
       </div>
 
       {/* Wallet Options */}
-      <div className="grid grid-cols-2 gap-x-2.5 gap-y-6">
+      <div className="grid sm:grid-cols-2 gap-2.5 sm:gap-y-6">
         {Wallets.map(wallet => (
           <label
             className={clsx(
               'flex items-center p-3 gap-3 border rounded-lg cursor-pointer',
               { 'bg-blue-50 border-blue-500': selectedWallet === wallet.value },
-              { 'opacity-50': !!inConnecting },
+              { 'opacity-50': !!isConnecting },
             )}
             key={wallet.value}
           >
             <input
               checked={selectedWallet === wallet.value}
               className="hidden"
-              disabled={!!inConnecting}
+              disabled={!!isConnecting}
               name="wallet"
               type="radio"
               onChange={event => setSelectedWallet(event.target.value)}
@@ -141,18 +148,13 @@ export default function DonationStep3({
         ))}
       </div>
 
-      {/* Navigation Buttons */}
-      <div className="pt-6">
-        <Button
-          className="w-full h-12 text-base font-semibold bg-blue-600 hover:bg-blue-700 text-white rounded-full gap-2"
-          disabled={!selectedWallet || !!inConnecting}
-          onClick={connectWallet}
-          type="button"
-        >
-          {inConnecting && <span className="loading loading-spinner size-4" />}
-          Connect
-        </Button>
-      </div>
-    </div>
+      <CtaFooter
+        buttonLabel="Connect"
+        buttonType="submit"
+        goToPreviousStep={goToPreviousStep}
+        isLoading={!!isConnecting}
+        isSubmittable={!!selectedWallet}
+      />
+    </form>
   )
 }

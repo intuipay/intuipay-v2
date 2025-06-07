@@ -81,7 +81,7 @@ export type TiDBDataServiceResponse<T> = {
 export type DonationInfo = {
   address1: string;
   address2?: string;
-  amount: number;
+  amount: number | '';
   city: string;
   company_name?: string;
   country: string;
