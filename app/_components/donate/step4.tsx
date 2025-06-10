@@ -165,7 +165,7 @@ export default function DonationStep4({
               onClick={() => disconnect()}
               className="text-sm text-green-700 hover:text-green-800 underline"
             >
-              Switch Wallet
+              Disconnect Wallet
             </button>
           </div>
         </div>

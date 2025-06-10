@@ -51,7 +51,7 @@ export default function DonationStep3({
             connector.id;
 
       console.log(`Wallet connected: ${walletName}`, address, 'Chain ID:', chainId);
-      goToNextStep();
+      goToNextStep(); // automatically go to next step on successful connection
     }
   }, [isConnected, address, connector, chainId, goToNextStep]);
 
