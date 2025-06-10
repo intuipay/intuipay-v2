@@ -250,7 +250,7 @@ export default function DonationStep2({
         goToPreviousStep={goToPreviousStep}
         isSubmittable={isSubmittable}
       >
-        <div className="col-span-2 flex items-center justify-center space-x-2 relative z-[1]">
+        <div className="col-span-2 flex items-center justify-center space-x-2 relative z-[1] mb-3">
           <Checkbox
             id="anonymous"
             checked={isAnonymous}
