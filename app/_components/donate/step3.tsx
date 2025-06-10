@@ -7,6 +7,7 @@ import MyCombobox from '@/components/my-combobox';
 import { Networks, Wallets } from '@/data';
 import CtaFooter from '@/app/_components/donate/cta-footer';
 import { useAccount, useConnect, useDisconnect, useChainId } from 'wagmi';
+import { WalletConnectButton } from '@/components/wallet-connect-button';
 
 type Props = {
   goToPreviousStep: () => void;
@@ -25,9 +26,10 @@ export default function DonationStep3({
   const { address, isConnected, connector } = useAccount();
   const { connect, connectors, isPending, error: connectError } = useConnect();
   const { disconnect } = useDisconnect();
-  const chainId = useChainId();  // 钱包连接器映射
+  const chainId = useChainId();
+
   const connectorMap = {
-    metamask: connectors.find(c => c.id === 'metaMaskSDK'),
+    metamask: connectors.find(c => c.id === 'metaMaskSDK' || c.id === 'io.metamask'),
     coinbase: connectors.find(c => c.id === 'coinbaseWalletSDK'),
     'wallet-connect': connectors.find(c => c.id === 'walletConnect'),
   };
@@ -35,14 +37,13 @@ export default function DonationStep3({
   useEffect(() => {
     console.log('Available connectors:', connectors.map(c => ({ id: c.id, name: c.name })));
     console.log('Connector map:', connectorMap);
-  }, [connectors]);
-
+  }, [connectors, connectorMap]);
   // Detect installed wallets
   const detected: Record<string, boolean> = {
-    metamask: typeof window !== 'undefined' && window.ethereum && window.ethereum.isMetaMask,
-    coinbase: typeof window !== 'undefined' && window.ethereum && window.ethereum.isCoinbaseWallet,
+    metamask: typeof window !== 'undefined' && !!window.ethereum && !!(window.ethereum as any)?.isMetaMask,
+    coinbase: typeof window !== 'undefined' && !!window.ethereum && !!(window.ethereum as any)?.isCoinbaseWallet,
     'wallet-connect': true, // WalletConnect 总是可用的
-  };  // Monitor connection state changes
+  };// Monitor connection state changes
   useEffect(() => {
     if (isConnected && address && connector) {
       const walletName = connector.id === 'metaMaskSDK' ? 'metamask' :
@@ -69,23 +70,23 @@ export default function DonationStep3({
         setError(`Connection failed: ${connectError.message}`);
       }
     }
-  }, [connectError]);
-
-  const handleConnect = async (event: FormEvent<HTMLFormElement>) => {
+  }, [connectError]); const handleConnect = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!selectedWallet || isPending) return;
 
     setError('');
-    const targetConnector = connectorMap[selectedWallet as keyof typeof connectorMap];
-    if (!targetConnector) {
-      setError('Unsupported wallet type');
-      return;
-    }
 
     try {
       // Disconnect if already connected to another wallet
       if (isConnected) {
         disconnect();
+      }
+
+      // Handle non-WalletConnect wallets using wagmi connectors
+      const targetConnector = connectorMap[selectedWallet as keyof typeof connectorMap];
+      if (!targetConnector) {
+        setError('Unsupported wallet type');
+        return;
       }
 
       connect({ connector: targetConnector });
@@ -132,35 +133,56 @@ export default function DonationStep3({
 
       {/* Wallet Options */}
       <div className="grid sm:grid-cols-2 gap-2.5 sm:gap-y-6">
-        {Wallets.map(wallet => (
-          <label className={clsx(
-            'flex items-center p-3 gap-3 border rounded-lg cursor-pointer',
-            { 'bg-blue-50 border-blue-500': selectedWallet === wallet.value },
-            { 'opacity-50': isPending },
-          )}
-            key={wallet.value}
-          >
-            <input
-              checked={selectedWallet === wallet.value}
-              className="hidden"
-              disabled={isPending}
-              name="wallet"
-              type="radio"
-              onChange={event => setSelectedWallet(event.target.value)}
-              value={wallet.value}
-            />
-            <Image
-              src={`/images/logo/${wallet.icon}.svg`}
-              width={24}
-              height={24}
-              className="size-6"
-              alt={wallet.label || ''}
-              loading="lazy"
-            />
-            <span className="font-medium">{wallet.label}</span>
-            {detected[wallet.value as string] && <span className="text-sm text-gray-500">Detected</span>}
-          </label>
-        ))}
+        {Wallets.map(wallet => {
+          // Handle WalletConnect separately
+          if (wallet.value === 'wallet-connect') {
+            return (
+              <WalletConnectButton
+                key={wallet.value}
+                isSelected={selectedWallet === wallet.value}
+                onClick={() => setSelectedWallet(wallet.value || '')}
+                onConnect={() => {
+                  // WalletConnect will handle the connection automatically
+                  // We just need to wait for the wagmi hooks to detect the connection
+                }}
+                className={clsx(
+                  { 'opacity-50': isPending },
+                )}
+              />
+            )
+          }
+
+          // Handle other wallets normally
+          return (
+            <label className={clsx(
+              'flex items-center p-3 gap-3 border rounded-lg cursor-pointer',
+              { 'bg-blue-50 border-blue-500': selectedWallet === wallet.value },
+              { 'opacity-50': isPending },
+            )}
+              key={wallet.value}
+            >
+              <input
+                checked={selectedWallet === wallet.value}
+                className="hidden"
+                disabled={isPending}
+                name="wallet"
+                type="radio"
+                onChange={event => setSelectedWallet(event.target.value)}
+                value={wallet.value}
+              />
+              <Image
+                src={`/images/logo/${wallet.icon}.svg`}
+                width={24}
+                height={24}
+                className="size-6"
+                alt={wallet.label || ''}
+                loading="lazy"
+              />
+              <span className="font-medium">{wallet.label}</span>
+              {detected[wallet.value as string] && <span className="text-sm text-gray-500">Detected</span>}
+            </label>
+          )
+        })}
       </div>
       <CtaFooter
         buttonLabel="Connect"
