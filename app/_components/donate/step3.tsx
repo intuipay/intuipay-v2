@@ -5,7 +5,6 @@ import { FormEvent, useState, useEffect } from 'react';
 import { Label } from '@/components/ui/label';
 import MyCombobox from '@/components/my-combobox';
 import { Networks, Wallets } from '@/data';
-import useWalletStore from '@/store/wallet';
 import CtaFooter from '@/app/_components/donate/cta-footer';
 import { useAccount, useConnect, useDisconnect, useChainId } from 'wagmi';
 
@@ -18,7 +17,6 @@ export default function DonationStep3({
   goToPreviousStep,
   goToNextStep,
 }: Props) {
-  const setWallet = useWalletStore(state => state.setWallet);
   const [selectedWallet, setSelectedWallet] = useState<string>('');
   const [network, setNetwork] = useState<string>('ethereum');
   const [error, setError] = useState<string>('');
@@ -52,11 +50,10 @@ export default function DonationStep3({
           connector.id === 'walletConnect' ? 'wallet-connect' :
             connector.id;
 
-      setWallet(walletName, address);
       console.log(`Wallet connected: ${walletName}`, address, 'Chain ID:', chainId);
       goToNextStep();
     }
-  }, [isConnected, address, connector, chainId, setWallet, goToNextStep]);
+  }, [isConnected, address, connector, chainId, goToNextStep]);
 
   // Monitor connection errors
   useEffect(() => {
@@ -101,16 +98,19 @@ export default function DonationStep3({
     <form
       className="space-y-6 pt-8"
       onSubmit={handleConnect}
-    ><div className="flex items-center justify-center relative mb-4">        <button
-      onClick={goToPreviousStep}
-      className="absolute left-0 hidden sm:block"
-      title="Go back to previous step"
-      aria-label="Go back to previous step"
     >
-      <ArrowLeft className="h-5 w-5" />
-    </button>
+      <div className="flex items-center justify-center relative mb-4">
+        <button
+          onClick={goToPreviousStep}
+          className="absolute left-0 hidden sm:block"
+          title="Go back to previous step"
+          aria-label="Go back to previous step"
+        >
+          <ArrowLeft className="h-5 w-5" />
+        </button>
         <h1 className="text-xl font-semibold text-center text-gray-900">Connect with your wallet</h1>
-      </div>      {/* Error message */}
+      </div>
+      {/* Error message */}
       {error && (
         <div className="bg-red-50 border border-red-200 rounded-lg p-3">
           <p className="text-red-600 text-sm">{error}</p>
@@ -120,7 +120,8 @@ export default function DonationStep3({
       <div className="space-y-2">
         <Label htmlFor="network" className="text-sm text-gray-600">
           Switch Network
-        </Label>        <MyCombobox
+        </Label>
+        <MyCombobox
           disabled={isPending}
           iconPath="logo"
           onChange={setNetwork}
@@ -138,7 +139,8 @@ export default function DonationStep3({
             { 'opacity-50': isPending },
           )}
             key={wallet.value}
-          >            <input
+          >
+            <input
               checked={selectedWallet === wallet.value}
               className="hidden"
               disabled={isPending}
@@ -159,7 +161,8 @@ export default function DonationStep3({
             {detected[wallet.value as string] && <span className="text-sm text-gray-500">Detected</span>}
           </label>
         ))}
-      </div>      <CtaFooter
+      </div>
+      <CtaFooter
         buttonLabel="Connect"
         buttonType="submit"
         goToPreviousStep={goToPreviousStep}

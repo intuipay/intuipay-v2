@@ -9,7 +9,6 @@ import { DonationMethodType, DonationStatus } from '@/constants/donation';
 import CtaFooter from '@/app/_components/donate/cta-footer';
 import { useAccount, useChainId, useDisconnect } from 'wagmi';
 import { mainnet, sepolia } from 'wagmi/chains';
-import useWalletStore from '@/store/wallet';
 import Image from 'next/image';
 
 type Props = {
@@ -31,7 +30,6 @@ export default function DonationStep4({
   const { address, isConnected, connector } = useAccount();
   const chainId = useChainId();
   const { disconnect } = useDisconnect();
-  const wallets = useWalletStore(state => state.wallets);
   // Get network name
   const getNetworkName = (chainId: number) => {
     switch (chainId) {
@@ -106,16 +104,20 @@ export default function DonationStep4({
   }
 
   return (
-    <>      <div className="flex items-center justify-center relative mb-12">        <button
-      onClick={goToPreviousStep}
-      className="absolute left-0 hidden sm:block"
-      title="Go back to previous step"
-      aria-label="Go back to previous step"
-    >
-      <ArrowLeft className="h-5 w-5" />
-    </button>
-      <h1 className="text-xl font-semibold text-center text-gray-900">Finish your donation</h1>
-    </div>      {/* Wallet connection status */}
+    <>
+      <div className="flex items-center justify-center relative mb-12">
+        <button
+          onClick={goToPreviousStep}
+          className="absolute left-0 hidden sm:block"
+          title="Go back to previous step"
+          aria-label="Go back to previous step"
+        >
+          <ArrowLeft className="h-5 w-5" />
+        </button>
+        <h1 className="text-xl font-semibold text-center text-gray-900">Finish your donation</h1>
+      </div>
+
+      {/* Wallet connection status */}
       {isConnected && address && (
         <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
           <div className="flex items-center gap-3 mb-3">
@@ -202,7 +204,9 @@ export default function DonationStep4({
             <AlertDescription>{message}</AlertDescription>
           </Alert>
         )}
-      </div>      <CtaFooter
+      </div>
+
+      <CtaFooter
         buttonLabel="Donate"
         goToPreviousStep={goToPreviousStep}
         isLoading={isSubmitting}
