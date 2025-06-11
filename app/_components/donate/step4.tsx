@@ -1,14 +1,15 @@
 import { ArrowLeft, TerminalIcon, Wallet, Globe } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { APIResponse, DonationInfo } from '@/types';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { fetchTidb } from '@/services/fetch-tidb';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import omit from 'lodash-es/omit';
 import { DonationMethodType, DonationStatus } from '@/constants/donation';
 import CtaFooter from '@/app/_components/donate/cta-footer';
-import { useAccount, useChainId, useDisconnect } from 'wagmi';
+import { useAccount, useChainId, useDisconnect, useWriteContract, useWaitForTransactionReceipt } from 'wagmi';
 import { mainnet, sepolia } from 'wagmi/chains';
+import { parseUnits, formatUnits } from 'viem';
 import Image from 'next/image';
 
 type Props = {
@@ -24,12 +25,69 @@ export default function DonationStep4({
 }: Props) {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [message, setMessage] = useState<string>('');
-  const usd = 100;
+  const [txHash, setTxHash] = useState<string>('');
+  const usdcContractAddress = '0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238'; // TODO: read from config
+  const universityAddress = '0xE62868F9Ae622aa11aff94DB30091B9De20AEf86'; // TODO: fetch from api
+
+  // USDC合约ABI (ERC-20标准)
+  const usdcAbi = [
+    {
+      name: 'transfer',
+      type: 'function',
+      inputs: [
+        { name: 'to', type: 'address' },
+        { name: 'amount', type: 'uint256' }
+      ],
+      outputs: [{ name: '', type: 'bool' }],
+      stateMutability: 'nonpayable'
+    },
+    {
+      name: 'decimals',
+      type: 'function',
+      inputs: [],
+      outputs: [{ name: '', type: 'uint8' }],
+      stateMutability: 'view'
+    },
+    {
+      name: 'balanceOf',
+      type: 'function',
+      inputs: [{ name: 'account', type: 'address' }],
+      outputs: [{ name: '', type: 'uint256' }],
+      stateMutability: 'view'
+    }
+  ] as const;
 
   // wagmi hooks
   const { address, isConnected, connector } = useAccount();
   const chainId = useChainId();
   const { disconnect } = useDisconnect();
+
+  // 写入合约钩子
+  const { writeContract, data: writeData, isPending: isWritePending, error: writeError } = useWriteContract();
+
+  // 等待交易确认钩子
+  const {
+    isLoading: isConfirming,
+    isSuccess: isConfirmed,
+    error: confirmError
+  } = useWaitForTransactionReceipt({
+    hash: writeData,
+  });  // 监听交易确认状态
+  useEffect(() => {
+    if (isConfirmed && writeData) {
+      // 交易确认成功，保存到数据库
+      saveDonationToDatabase(writeData);
+    }
+    if (confirmError) {
+      setMessage(`Transaction failed: ${getReadableErrorMessage(confirmError)}`);
+      setIsSubmitting(false);
+    }
+    if (writeError) {
+      setMessage(getReadableErrorMessage(writeError));
+      setIsSubmitting(false);
+    }
+  }, [isConfirmed, confirmError, writeError, writeData]);
+
   // Get network name
   const getNetworkName = (chainId: number) => {
     switch (chainId) {
@@ -56,19 +114,42 @@ export default function DonationStep4({
     }
   };
 
+  // Get explorer URL for transaction
+  const getExplorerUrl = (txHash: string) => {
+    const baseUrl = chainId === mainnet.id
+      ? 'https://etherscan.io/tx/'
+      : 'https://sepolia.etherscan.io/tx/';
+    return `${baseUrl}${txHash}`;
+  };
+
   // Format address display
   const formatAddress = (address: string) => {
     return `${address.slice(0, 6)}...${address.slice(-4)}`;
   };
 
-  async function doSubmit() {
-    setIsSubmitting(true);
-    setMessage('');
+  // 处理用户友好的错误信息
+  const getReadableErrorMessage = (error: Error | any) => {
+    const errorMessage = error?.message || String(error);
 
-    // make donation
-    const txHash = 'test-tx-hash-1234567890';
+    // 用户拒绝交易
+    if (errorMessage.includes('User rejected') ||
+      errorMessage.includes('user rejected') ||
+      errorMessage.includes('User denied') ||
+      errorMessage.includes('rejected') ||
+      errorMessage.includes('denied')) {
+      return 'Transaction cancelled by user';
+    }
 
-    // save data to DB
+    // 如果是其他未知错误，返回简化的错误信息
+    if (errorMessage.length > 100) {
+      return 'Transaction failed. Please try again or contact the support team.';
+    }
+
+    return errorMessage;
+  };
+
+  // 保存捐赠数据到数据库
+  async function saveDonationToDatabase(transactionHash: `0x${string}`) {
     try {
       const response = await fetch('/api/donation', {
         method: 'POST',
@@ -82,23 +163,60 @@ export default function DonationStep4({
           account: '',
           method: DonationMethodType.Crypto,
           status: DonationStatus.Successful,
-          tx_hash: txHash, wallet: getWalletName(connector?.id || ''),
+          tx_hash: transactionHash,
           wallet_address: address || '',
         }),
       });
 
       if (!response.ok) {
         setMessage('Error saving donation: ' + response.statusText);
+        setIsSubmitting(false);
         return;
       }
 
       const { data } = (await response.json()) as APIResponse<number>;
       info.id = data;
-      goToNextStep();
+      setIsSubmitting(false); goToNextStep();
     } catch (e) {
-      const errorMessage = (e as Error).message || String(e);
-      setMessage(`Error saving donation: ${errorMessage}`);
-    } finally {
+      setMessage(`Error saving donation: ${getReadableErrorMessage(e)}`);
+      setIsSubmitting(false);
+    }
+  }
+  async function doSubmit() {
+    if (!isConnected || !address) {
+      setMessage('Please connect your wallet first');
+      return;
+    }
+
+    // 检查网络是否支持 (这里假设 USDC 合约在 mainnet 或 sepolia 上)
+    if (chainId !== mainnet.id && chainId !== sepolia.id) {
+      setMessage('Please switch to Ethereum Mainnet or Sepolia Testnet');
+      return;
+    }
+
+    // 检查捐赠金额是否有效
+    if (!info.amount || info.amount <= 0) {
+      setMessage('Invalid donation amount');
+      return;
+    }
+
+    setIsSubmitting(true);
+    setMessage('');
+
+    try {
+      // 将捐赠金额转换为 USDC 的最小单位 (6位小数)
+      const amount = parseUnits(info.amount.toString(), 6);
+
+      // 发起 USDC 转账交易
+      writeContract({
+        address: usdcContractAddress as `0x${string}`,
+        abi: usdcAbi,
+        functionName: 'transfer',
+        args: [universityAddress as `0x${string}`, amount],
+      });
+
+    } catch (e) {
+      setMessage(getReadableErrorMessage(e));
       setIsSubmitting(false);
     }
   }
@@ -187,9 +305,52 @@ export default function DonationStep4({
       )}
 
       <div className="flex flex-col items-center justify-center py-5 gap-4">
-        <p className="text-base sm:text-xl font-semibold text-gray-900">Your are donating</p>
+        <p className="text-base sm:text-xl font-semibold text-gray-900">You are donating</p>
         <p className="text-2xl sm:text-3xl font-semibold text-blue-600">{info.amount} {info.currency}</p>
-        <p className="text-base sm:text-xl font-semibold text-gray-900">~ {usd.toLocaleString()} USD</p>
+        <p className="text-base sm:text-xl font-semibold text-gray-900">~ {info.amount.toLocaleString()} USD</p>
+        {/* 交易状态显示 */}
+        {writeData && (
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mt-4 w-full">
+            <div className="flex items-center gap-3 mb-2">
+              <div className={`h-3 w-3 rounded-full ${isConfirmed ? 'bg-green-600' : isConfirming ? 'bg-yellow-500' : 'bg-blue-600'
+                }`}></div>
+              <span className="font-medium text-blue-800">Transaction Status</span>
+            </div>
+            <div className="space-y-2 text-sm">
+              <div className="flex items-center justify-between">
+                <span className="text-gray-600">Transaction Hash:</span>
+                <a
+                  href={getExplorerUrl(writeData)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-mono text-blue-600 text-xs hover:text-blue-800 underline"
+                >
+                  {formatAddress(writeData)}
+                </a>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-gray-600">Status:</span>
+                <span className={`font-medium ${isConfirming ? 'text-yellow-600' :
+                  isConfirmed ? 'text-green-600' :
+                    'text-blue-600'
+                  }`}>
+                  {isConfirming ? 'Confirming...' : isConfirmed ? 'Confirmed ✓' : 'Pending'}
+                </span>
+              </div>
+              {isConfirming && (
+                <div className="text-xs text-gray-500 mt-2">
+                  Please wait while the transaction is being confirmed on the blockchain...
+                </div>
+              )}
+              {isConfirmed && (
+                <div className="text-xs text-green-600 mt-2 flex items-center gap-1">
+                  <span>✓</span>
+                  <span>Transaction successfully confirmed!</span>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Navigation Buttons */}
@@ -207,10 +368,15 @@ export default function DonationStep4({
       </div>
 
       <CtaFooter
-        buttonLabel="Donate"
+        buttonLabel={
+          isWritePending ? "Sending Transaction..." :
+            isConfirming ? "Confirming..." :
+              isConfirmed ? "Saving..." :
+                "Donate"
+        }
         goToPreviousStep={goToPreviousStep}
-        isLoading={isSubmitting}
-        isSubmittable={!isSubmitting && isConnected}
+        isLoading={isSubmitting || isWritePending || isConfirming}
+        isSubmittable={!isSubmitting && !isWritePending && !isConfirming && isConnected}
         onSubmit={doSubmit}
       />
     </>
