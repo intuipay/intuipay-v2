@@ -23,7 +23,7 @@ export default function DonationStep4({
 }: Props) {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [message, setMessage] = useState<string>('');
-  const usdcContractAddress = '0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238'; // TODO: read from config
+  const usdcContractAddress = process.env.NEXT_PUBLIC_USDC_CONTRACT_ADDRESS || ''; // Read from environment variable
   const universityAddress = '0xE62868F9Ae622aa11aff94DB30091B9De20AEf86'; // TODO: fetch from api
 
   // USDC合约ABI (ERC-20标准)
