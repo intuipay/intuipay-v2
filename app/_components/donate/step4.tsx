@@ -1,15 +1,13 @@
 import { ArrowLeft, TerminalIcon, Wallet, Globe } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 import { APIResponse, DonationInfo } from '@/types';
 import { useState, useEffect } from 'react';
-import { fetchTidb } from '@/services/fetch-tidb';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import omit from 'lodash-es/omit';
 import { DonationMethodType, DonationStatus } from '@/constants/donation';
 import CtaFooter from '@/app/_components/donate/cta-footer';
 import { useAccount, useChainId, useDisconnect, useWriteContract, useWaitForTransactionReceipt } from 'wagmi';
 import { mainnet, sepolia } from 'wagmi/chains';
-import { parseUnits, formatUnits } from 'viem';
+import { parseUnits } from 'viem';
 import Image from 'next/image';
 
 type Props = {
@@ -25,7 +23,6 @@ export default function DonationStep4({
 }: Props) {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [message, setMessage] = useState<string>('');
-  const [txHash, setTxHash] = useState<string>('');
   const usdcContractAddress = '0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238'; // TODO: read from config
   const universityAddress = '0xE62868F9Ae622aa11aff94DB30091B9De20AEf86'; // TODO: fetch from api
 

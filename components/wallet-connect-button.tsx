@@ -56,7 +56,7 @@ export function WalletConnectButton({
         src="/images/logo/wallet-connect.svg"
         width={24}
         height={24}
-        className="size-6"
+        className="w-6 h-6"
         alt="WalletConnect"
         loading="lazy"
       />
