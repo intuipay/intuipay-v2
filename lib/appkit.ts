@@ -18,31 +18,29 @@ const wagmiAdapter = new WagmiAdapter({
 // 3. Configure the metadata
 const metadata = {
   name: 'IntuiPay Donation',
-  description: 'IntuiPay - 让捐赠更简单',
-  url: 'https://intuipay.com',
-  icons: ['https://intuipay.com/images/logo.svg']
+  description: 'IntuiPay - A simple and secure way to donate to your favorite projects.',
+  url: 'https://intuipay.xyz',
+  icons: ['https://intuipay.xyz/images/logo.svg']
 }
 
-// 4. Create the AppKit instance (only on client side)
-let appkit: any = null
+// 4. Create the AppKit instance
+const appkit = createAppKit({
+  adapters: [wagmiAdapter],
+  networks: [mainnet, sepolia],
+  metadata,
+  projectId,
+  features: {
+    analytics: true,
+  },
+  // 启用常用的钱包连接器
+  enableWalletConnect: true,
+  enableInjected: true,
+  enableEIP6963: true,
+  enableCoinbase: true,
+})
 
 if (typeof window !== 'undefined') {
-  appkit = createAppKit({
-    adapters: [wagmiAdapter],
-    networks: [mainnet, sepolia],
-    metadata,
-    projectId,
-    features: {
-      analytics: true,
-    },
-    // 启用常用的钱包连接器
-    enableWalletConnect: true,
-    enableInjected: true,
-    enableEIP6963: true,
-    enableCoinbase: true,
-  })
-  
-  // 将 appkit 实例挂载到全局，方便访问
+  // 目前没法从 wallet-connect-button 组件中直接访问 appkit 实例，所以只能挂载到 window 对象上
   ;(window as any).appkit = appkit
 }
 

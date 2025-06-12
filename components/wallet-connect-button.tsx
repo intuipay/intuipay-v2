@@ -17,12 +17,6 @@ export function WalletConnectButton({
   isSelected = false,
   onClick
 }: WalletConnectButtonProps) {
-  const [isClient, setIsClient] = useState(false)
-
-  useEffect(() => {
-    setIsClient(true)
-  }, [])
-
   const handleClick = (e: React.MouseEvent) => {
     e.preventDefault()
 
@@ -40,10 +34,6 @@ export function WalletConnectButton({
     }
 
     onConnect?.()
-  }
-
-  if (!isClient) {
-    return null
   }
 
   return (

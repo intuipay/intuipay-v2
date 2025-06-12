@@ -6,7 +6,7 @@ import { useState, useEffect } from 'react'
 import type { Config } from 'wagmi'
 
 export function Web3Provider({ children }: { children: React.ReactNode }) {
-  const [queryClient] = useState(() => new QueryClient())
+  const queryClient = new QueryClient()
   const [config, setConfig] = useState<Config | null>(null)
 
   useEffect(() => {

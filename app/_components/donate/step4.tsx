@@ -176,7 +176,8 @@ export default function DonationStep4({
 
       const { data } = (await response.json()) as APIResponse<number>;
       info.id = data;
-      setIsSubmitting(false); goToNextStep();
+      setIsSubmitting(false);
+      goToNextStep();
     } catch (e) {
       setMessage(`Error saving donation: ${getReadableErrorMessage(e)}`);
       setIsSubmitting(false);
