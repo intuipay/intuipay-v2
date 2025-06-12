@@ -5,8 +5,9 @@ import { WagmiProvider } from 'wagmi'
 import { useState, useEffect } from 'react'
 import type { Config } from 'wagmi'
 
+const queryClient = new QueryClient()
+
 export function Web3Provider({ children }: { children: React.ReactNode }) {
-  const queryClient = new QueryClient()
   const [config, setConfig] = useState<Config | null>(null)
 
   useEffect(() => {
@@ -24,12 +25,11 @@ export function Web3Provider({ children }: { children: React.ReactNode }) {
   }, [])
 
   if (!config) {
-    // 在配置加载前显示加载状态
     return <div>{children}</div>
   }
 
   return (
-    <WagmiProvider config={config as unknown as any}>
+    <WagmiProvider config={config}>
       <QueryClientProvider client={queryClient}>
         {children}
       </QueryClientProvider>

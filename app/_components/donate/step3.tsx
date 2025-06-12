@@ -33,11 +33,6 @@ export default function DonationStep3({
     coinbase: connectors.find(c => c.id === 'coinbaseWalletSDK'),
     'wallet-connect': connectors.find(c => c.id === 'walletConnect'),
   };
-  // Debug: Print connector information
-  useEffect(() => {
-    console.log('Available connectors:', connectors.map(c => ({ id: c.id, name: c.name })));
-    console.log('Connector map:', connectorMap);
-  }, [connectors, connectorMap]);
   // Detect installed wallets
   const detected: Record<string, boolean> = {
     metamask: typeof window !== 'undefined' && !!window.ethereum && !!(window.ethereum as any)?.isMetaMask,
@@ -51,7 +46,6 @@ export default function DonationStep3({
           connector.id === 'walletConnect' ? 'wallet-connect' :
             connector.id;
 
-      console.log(`Wallet connected: ${walletName}`, address, 'Chain ID:', chainId);
       goToNextStep(); // automatically go to next step on successful connection
     }
   }, [isConnected, address, connector, chainId, goToNextStep]);
