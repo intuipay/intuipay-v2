@@ -61,6 +61,9 @@ export default function DonationPageComp({
   const [slideDirection, setSlideDirection] = useState<'right' | 'left'>('right')
   // Form state
   const [info, setInfo] = useState<DonationInfo>(createDonationInfo(project.id));
+  // Wallet and Network state
+  const [network, setNetwork] = useState<string>('ethereum');
+  const [selectedWallet, setSelectedWallet] = useState<string>('');
 
   // Step navigation
   const goToNextStep = () => {
@@ -81,6 +84,8 @@ export default function DonationPageComp({
     setSlideDirection('left')
     setCurrentStep('initialization')
     setInfo(createDonationInfo(project.id));
+    setNetwork('ethereum');
+    setSelectedWallet('');
   }
   function updateInfo(newInfo: Partial<DonationInfo>) {
     setInfo((prev) => ({
@@ -173,6 +178,10 @@ export default function DonationPageComp({
               paymentMethod={info.currency}
               setAmount={value => updateInfo({ amount: value })}
               setPaymentMethod={value => updateInfo({ currency: value })}
+              network={network}
+              setNetwork={setNetwork}
+              selectedWallet={selectedWallet}
+              setSelectedWallet={setSelectedWallet}
             />}
 
             {/* Contracts Step */}
@@ -187,6 +196,8 @@ export default function DonationPageComp({
             {currentStep === 'payment' && <DonationStep3
               goToNextStep={goToNextStep}
               goToPreviousStep={goToPreviousStep}
+              selectedWallet={selectedWallet}
+              network={network}
             />}
 
             {currentStep === 'confirm' && <DonationStep4
