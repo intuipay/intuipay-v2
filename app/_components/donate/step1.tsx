@@ -30,6 +30,11 @@ const PaymentMethods: DropdownItemProps[] = [
     label: 'USD Coin (USDC) ERC-20',
     value: 'usdc',
   },
+  {
+    icon: 'solana',
+    label: 'Solana (SOL)',
+    value: 'solana',
+  },
 ];
 export default function DonationStep1({
   amount,
@@ -50,6 +55,28 @@ export default function DonationStep1({
   const { connect, connectors, isPending, error: connectError } = useConnect();
   const { disconnect } = useDisconnect();
   const chainId = useChainId();
+
+  const [isPhantomConnected, setIsPhantomConnected] = useState(false);
+
+  useEffect(() => {
+    // 确保在客户端执行
+    if (typeof window !== 'undefined' && window.phantom?.solana) {
+      // 监听连接事件
+      window.phantom.solana.on('connect', () => {
+        console.log('Phantom wallet connected');
+        setIsPhantomConnected(true);
+        setSelectedWallet('phantom');
+        setError('');
+      });
+
+      // 监听断开连接事件
+      window.phantom.solana.on('disconnect', () => {
+        console.log('Phantom wallet disconnected');
+        setIsPhantomConnected(false);
+        setSelectedWallet('');
+      });
+    }
+  }, []);
 
   const connectorMap = {
     metamask: connectors.find(c => c.id === 'metaMaskSDK' || c.id === 'io.metamask'),
@@ -104,6 +131,12 @@ export default function DonationStep1({
         return;
       }
 
+      if (selectedWallet === 'phantom') {
+        // handle phantom wallet connection to solana
+        window?.phantom?.solana.connect();
+        return;
+      }
+
       // Handle other wallets using wagmi connectors
       const targetConnector = connectorMap[selectedWallet as keyof typeof connectorMap];
       if (!targetConnector) {
@@ -124,6 +157,12 @@ export default function DonationStep1({
   };
 
   const handleDisconnect = () => {
+    if (window?.phantom?.solana) {
+      window.phantom.solana.disconnect();
+      setIsPhantomConnected(false);
+      setSelectedWallet('');
+      return;
+    }
     disconnect();
     setError('');
   };
@@ -168,7 +207,7 @@ export default function DonationStep1({
         {/* Wallet Selection */}
         <div className="space-y-2">
           <Label className="text-sm font-semibold text-black/50">Select Wallet</Label>
-          {!isConnected ? (
+          {(!isConnected && !isPhantomConnected) ? (
             <div className="grid sm:grid-cols-2 gap-2.5 sm:gap-y-6">
               {Wallets.map(wallet => {
                 // Handle WalletConnect separately
@@ -280,11 +319,11 @@ export default function DonationStep1({
           </div>
         </div>
         <CtaFooter
-          buttonLabel={isConnected ? "Next" : "Connect Wallet"}
-          buttonType={isConnected ? "button" : "submit"}
-          isSubmittable={isConnected ? !!amount : false}
+          buttonLabel={(isConnected || isPhantomConnected) ? "Next" : "Connect Wallet"}
+          buttonType={(isConnected || isPhantomConnected) ? "button" : "submit"}
+          isSubmittable={(isConnected || isPhantomConnected) ? !!amount : true}
           isLoading={isPending}
-          onSubmit={isConnected ? handleSubmit : undefined}
+          onSubmit={(isConnected || isPhantomConnected) ? handleSubmit : undefined}
         />
       </div>
     </form>
