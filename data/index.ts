@@ -440,6 +440,11 @@ export const Networks: DropdownItemProps[] = [
     label: 'Ethereum',
     value: 'ethereum',
   },
+  {
+    icon: 'solana',
+    label: 'Solana',
+    value: 'solana',
+  }
 ];
 
 export const Wallets: DropdownItemProps[] = [
