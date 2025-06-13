@@ -8,6 +8,19 @@ import CtaFooter from '@/app/_components/donate/cta-footer';
 import { useAccount, useChainId, useDisconnect, useWriteContract, useWaitForTransactionReceipt } from 'wagmi';
 import { mainnet, sepolia } from 'wagmi/chains';
 import { parseUnits } from 'viem';
+import { 
+  pipe,
+  createTransactionMessage,
+  setTransactionMessageFeePayer, 
+  setTransactionMessageLifetimeUsingBlockhash, 
+  createSolanaRpc, 
+  devnet,
+  appendTransactionMessageInstruction,
+  lamports,
+  address as solanaAddress,
+  signAndSendTransactionMessageWithSigners,
+ } from '@solana/kit';
+import { getSystemErrorMessage, getTransferSolInstruction, isSystemError } from '@solana-program/system';
 
 type Props = {
   goToPreviousStep: () => void;
@@ -24,6 +37,7 @@ export default function DonationStep4({
   const [message, setMessage] = useState<string>('');
   const usdcContractAddress = process.env.NEXT_PUBLIC_USDC_CONTRACT_ADDRESS || ''; // Read from environment variable
   const universityAddress = '0xE62868F9Ae622aa11aff94DB30091B9De20AEf86'; // TODO: fetch from api
+  const universitySolanaDevnetAddress = 'Ft7m7qrY3spLNKo6aMAHMArAT3oLSSy4DnJ3y3SF1DP1'; // Solana Devnet address for the university
 
   // USDC合约ABI (ERC-20标准)
   const usdcAbi = [
@@ -153,6 +167,46 @@ export default function DonationStep4({
     }
   }
   async function doSubmit() {
+    if (window?.phantom?.solana && window.phantom.solana.isConnected) {
+      console.log('handle solana donation using phantom, from address: ', window.phantom.solana.publicKey.toString());
+      const rpc = createSolanaRpc(devnet('https://api.devnet.solana.com'));
+      const { value: latestBlockhash } = await rpc.getLatestBlockhash().send();
+      console.log('latest blockhash', latestBlockhash);
+
+      const ix1 = getTransferSolInstruction({
+                amount: lamports(BigInt(info.amount as number * 1e9)), // Convert to lamports (1 SOL = 1e9 lamports)
+                destination: solanaAddress(universitySolanaDevnetAddress),
+                source: solanaAddress(window.phantom.solana.publicKey.toString()),
+              });
+      console.log('ix1', ix1)
+      const transactionMessage = pipe(
+        /**
+         * Every transaction must state from which account the transaction fee should be debited from,
+         * and that account must sign the transaction. Here, we'll make the source account pay the fee.
+         */
+        createTransactionMessage({ version: 0 }),
+        tx => (
+          setTransactionMessageFeePayer(solanaAddress(window.phantom.solana.publicKey.toString()), tx)
+        ),
+        tx => (
+          setTransactionMessageLifetimeUsingBlockhash(latestBlockhash, tx)
+        ),
+        tx =>
+          appendTransactionMessageInstruction(
+              ix1,
+            tx,
+          ),
+      );
+
+      
+      console.log('transactionMessage', transactionMessage);
+
+      const result = window.phantom.solana.signAndSendTransaction(transactionMessage)
+      console.log('solana tx result', result);
+      return;
+    }
+
+    // evm transaction
     if (!isConnected || !address) {
       setMessage('Please connect your wallet first');
       return;
@@ -277,7 +331,7 @@ export default function DonationStep4({
         }
         goToPreviousStep={goToPreviousStep}
         isLoading={isSubmitting || isWritePending || isConfirming}
-        isSubmittable={!isSubmitting && !isWritePending && !isConfirming && isConnected}
+        isSubmittable={(!isSubmitting && !isWritePending && !isConfirming && isConnected) || (window?.phantom?.solana.isConnected)}
         onSubmit={doSubmit}
       />
     </>
