@@ -33,7 +33,7 @@ const PaymentMethods: DropdownItemProps[] = [
   {
     icon: 'solana',
     label: 'Solana (SOL)',
-    value: 'solana',
+    value: 'sol',
   },
 ];
 export default function DonationStep1({
@@ -151,7 +151,7 @@ export default function DonationStep1({
     }
   };
   const handleSubmit = () => {
-    if (isConnected && amount) {
+    if ((isConnected || isPhantomConnected) && amount) {
       goToNextStep();
     }
   };
@@ -305,7 +305,7 @@ export default function DonationStep1({
               value={amount}
             />
             <div className="text-sm w-fit flex-none px-4">
-              USDC ≈ $
+              {paymentMethod} ≈ $
             </div>
             <Input
               className="text-sm h-12 flex-1 px-4 focus:outline-none"
