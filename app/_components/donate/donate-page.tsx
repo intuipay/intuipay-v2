@@ -9,12 +9,11 @@ import { DonationInfo, DonationProject } from '@/types';
 import { clsx } from 'clsx';
 import DonationStep1 from '@/app/_components/donate/step1';
 import DonationStep2 from '@/app/_components/donate/step2';
-import DonationStep3 from '@/app/_components/donate/step3';
 import DonationStep4 from '@/app/_components/donate/step4';
 import DonationStep5 from '@/app/_components/donate/step5';
 import { createDonationInfo } from '@/utils';
 
-type Step = 'initialization' | 'contracts' | 'payment' | 'confirm' | 'complete'
+type Step = 'initialization' | 'contracts' | 'confirm' | 'complete'
 type Props = {
   project: DonationProject;
   slug: string;
@@ -24,7 +23,6 @@ type Props = {
 const steps = [
   { id: 'initialization', label: 'Initialization' },
   { id: 'contracts', label: 'Contracts' },
-  { id: 'payment', label: 'Payment' },
   { id: 'confirm', label: 'Confirm' },
   { id: 'complete', label: 'Complete' },
 ];
@@ -64,20 +62,17 @@ export default function DonationPageComp({
   // Wallet and Network state
   const [network, setNetwork] = useState<string>('ethereum');
   const [selectedWallet, setSelectedWallet] = useState<string>('');
-
   // Step navigation
   const goToNextStep = () => {
     setSlideDirection('right')
     if (currentStep === 'initialization') setCurrentStep('contracts')
-    else if (currentStep === 'contracts') setCurrentStep('payment')
-    else if (currentStep === 'payment') setCurrentStep('confirm')
+    else if (currentStep === 'contracts') setCurrentStep('confirm')
     else  if (currentStep === 'confirm') setCurrentStep('complete')
   }
   const goToPreviousStep = () => {
     setSlideDirection('left')
     if (currentStep === 'contracts') setCurrentStep('initialization')
-    else if (currentStep === 'payment') setCurrentStep('contracts')
-    else if (currentStep === 'confirm') setCurrentStep('payment')
+    else if (currentStep === 'confirm') setCurrentStep('contracts')
   }
 
   function resetForm() {
@@ -117,7 +112,7 @@ export default function DonationPageComp({
         <div className="mb-4 py-4">
           <div className={clsx('grid grid-cols-4 items-center justify-between mb-2')}>
             {steps.map((step, index) => (
-              index === 3 ? null : <div key={step.id} className="flex items-center">
+              <div key={step.id} className="flex items-center">
                 <div className={clsx(
                   'h-0.5 flex-1',
                   index === 0 ? 'bg-gradient-to-r from-white to-blue-600'
@@ -151,7 +146,7 @@ export default function DonationPageComp({
           </div>
           <div className="grid grid-cols-4 text-center text-sm font-medium">
             {steps.map((step, index) => (
-              index === 3 ? null : <span
+              <span
                 key={step.id}
                 className={`${index <= currentStepIndex ? 'text-blue-600' : 'text-black/40'}`}
               >
@@ -190,14 +185,6 @@ export default function DonationPageComp({
               goToPreviousStep={goToPreviousStep}
               info={info}
               setInfo={updateInfo}
-            />}
-
-            {/* Payment Step */}
-            {currentStep === 'payment' && <DonationStep3
-              goToNextStep={goToNextStep}
-              goToPreviousStep={goToPreviousStep}
-              selectedWallet={selectedWallet}
-              network={network}
             />}
 
             {currentStep === 'confirm' && <DonationStep4

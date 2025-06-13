@@ -61,6 +61,12 @@ export default function DonationStep1({
   useEffect(() => {
     if (isConnected && address && connector) {
       setError('');
+
+      const walletName = connector.id === 'metaMaskSDK' || connector.id === 'io.metamask' ? 'metamask' :
+        connector.id === 'coinbaseWalletSDK' ? 'coinbase' :
+          connector.id === 'walletConnect' ? 'wallet-connect' :
+            'metamask'; // fallback
+      setSelectedWallet(walletName);
     }
   }, [isConnected, address, connector, chainId]);
 
@@ -146,137 +152,137 @@ export default function DonationStep1({
           </div>
         )}
 
-      {/* Network Selection */}
-      <div className="space-y-2">
-        <Label className="text-sm font-semibold text-black/50">Network</Label>
-        <MyCombobox
-          className="rounded-lg h-12"
-          iconClass="top-3"
-          iconPath="logo"
-          options={Networks}
-          onChange={setNetwork}
-          value={network}
-        />
-      </div>
-
-      {/* Wallet Selection */}
-      <div className="space-y-2">
-        <Label className="text-sm font-semibold text-black/50">Select Wallet</Label>
-        {!isConnected ? (
-          <div className="grid sm:grid-cols-2 gap-2.5 sm:gap-y-6">
-            {Wallets.map(wallet => {
-              // Handle WalletConnect separately
-              if (wallet.value === 'wallet-connect') {
-                return (
-                  <WalletConnectButton
-                    key={wallet.value}
-                    isSelected={selectedWallet === wallet.value}
-                    onClick={() => setSelectedWallet(wallet.value || '')}
-                  />
-                )
-              }
-
-              // Handle other wallets normally
-              return (
-                <label 
-                  className={clsx(
-                    'flex items-center p-3 gap-3 border rounded-lg cursor-pointer',
-                    { 'bg-blue-50 border-blue-500': selectedWallet === wallet.value },
-                  )}
-                  key={wallet.value}
-                >
-                  <input
-                    checked={selectedWallet === wallet.value}
-                    className="hidden"
-                    name="wallet"
-                    type="radio"
-                    onChange={event => setSelectedWallet(event.target.value)}
-                    value={wallet.value}
-                  />
-                  <Image
-                    src={`/images/logo/${wallet.icon}.svg`}
-                    width={24}
-                    height={24}
-                    className="size-6"
-                    alt={wallet.label || ''}
-                    loading="lazy"
-                  />
-                  <span className="font-medium">{wallet.label}</span>
-                </label>
-              )
-            })}
-          </div>
-        ) : (
-          <div className="flex items-center justify-between p-3 border rounded-lg bg-gray-50">
-            <div className="flex items-center gap-3">
-              <Image
-                src={`/images/logo/${Wallets.find(w => w.value === selectedWallet)?.icon}.svg`}
-                width={24}
-                height={24}
-                className="size-6"
-                alt={Wallets.find(w => w.value === selectedWallet)?.label || ''}
-                loading="lazy"
-              />
-              <span className="font-medium">
-                {Wallets.find(w => w.value === selectedWallet)?.label}
-              </span>
-            </div>
-            <button
-              type="button"
-              onClick={handleDisconnect}
-              className="text-red-600 hover:text-red-700 text-sm font-medium"
-            >
-              Disconnect Wallet
-            </button>
-          </div>
-        )}
-      </div>
-
-      {/* Currency Selection */}
-      <div className="space-y-2">
-        <Label className="text-sm font-semibold text-black/50">Donate with</Label>
-        <MyCombobox
-          className="rounded-lg h-12"
-          iconClass="top-3"
-          iconPath="information"
-          iconExtension="png"
-          options={PaymentMethods}
-          onChange={setPaymentMethod}
-          value={paymentMethod}
-        />
-      </div>
-
-      {/* Amount Input */}
-      <div className="space-y-2">
-        <Label className="text-sm font-semibold text-black/50">Amount</Label>
-        <div className="flex items-center border border-black/10 rounded-lg focus-within:outline focus-within:outline-1 focus-within:outline-blue-400">
-          <Input
-            className="text-sm h-12 flex-1 px-4 focus:outline-none"
-            hasRing={false}
-            min="0"
-            onChange={onAmountChange}
-            placeholder="1.0"
-            type="number"
-            value={amount}
-          />
-          <div className="text-sm w-fit flex-none px-4">
-            USDC ≈ $
-          </div>
-          <Input
-            className="text-sm h-12 flex-1 px-4 focus:outline-none"
-            hasRing={false}
-            min="0"
-            onChange={onDollarChange}
-            placeholder="1.00"
-            type="number"
-            value={dollar}
+        {/* Network Selection */}
+        <div className="space-y-2">
+          <Label className="text-sm font-semibold text-black/50">Network</Label>
+          <MyCombobox
+            className="rounded-lg h-12"
+            iconClass="top-3"
+            iconPath="logo"
+            options={Networks}
+            onChange={setNetwork}
+            value={network}
           />
         </div>
-      </div>
-      <CtaFooter
+
+        {/* Wallet Selection */}
+        <div className="space-y-2">
+          <Label className="text-sm font-semibold text-black/50">Select Wallet</Label>
+          {!isConnected ? (
+            <div className="grid sm:grid-cols-2 gap-2.5 sm:gap-y-6">
+              {Wallets.map(wallet => {
+                // Handle WalletConnect separately
+                if (wallet.value === 'wallet-connect') {
+                  return (
+                    <WalletConnectButton
+                      key={wallet.value}
+                      isSelected={selectedWallet === wallet.value}
+                      onClick={() => setSelectedWallet(wallet.value || '')}
+                    />
+                  )
+                }
+
+                // Handle other wallets normally
+                return (
+                  <label
+                    className={clsx(
+                      'flex items-center p-3 gap-3 border rounded-lg cursor-pointer',
+                      { 'bg-blue-50 border-blue-500': selectedWallet === wallet.value },
+                    )}
+                    key={wallet.value}
+                  >
+                    <input
+                      checked={selectedWallet === wallet.value}
+                      className="hidden"
+                      name="wallet"
+                      type="radio"
+                      onChange={event => setSelectedWallet(event.target.value)}
+                      value={wallet.value}
+                    />
+                    <Image
+                      src={`/images/logo/${wallet.icon}.svg`}
+                      width={24}
+                      height={24}
+                      className="size-6"
+                      alt={wallet.label || ''}
+                      loading="lazy"
+                    />
+                    <span className="font-medium">{wallet.label}</span>
+                  </label>
+                )
+              })}
+            </div>
+          ) : (
+            <div className="flex items-center justify-between p-3 border rounded-lg bg-gray-50">
+              <div className="flex items-center gap-3">
+                <Image
+                  src={`/images/logo/${Wallets.find(w => w.value === selectedWallet)?.icon}.svg`}
+                  width={24}
+                  height={24}
+                  className="size-6"
+                  alt={Wallets.find(w => w.value === selectedWallet)?.label || ''}
+                  loading="lazy"
+                />
+                <span className="font-medium">
+                  {Wallets.find(w => w.value === selectedWallet)?.label}
+                </span>
+              </div>
+              <button
+                type="button"
+                onClick={handleDisconnect}
+                className="text-red-600 hover:text-red-700 text-sm font-medium"
+              >
+                Disconnect Wallet
+              </button>
+            </div>
+          )}
+        </div>
+
+        {/* Currency Selection */}
+        <div className="space-y-2">
+          <Label className="text-sm font-semibold text-black/50">Donate with</Label>
+          <MyCombobox
+            className="rounded-lg h-12"
+            iconClass="top-3"
+            iconPath="information"
+            iconExtension="png"
+            options={PaymentMethods}
+            onChange={setPaymentMethod}
+            value={paymentMethod}
+          />
+        </div>
+
+        {/* Amount Input */}
+        <div className="space-y-2">
+          <Label className="text-sm font-semibold text-black/50">Amount</Label>
+          <div className="flex items-center border border-black/10 rounded-lg focus-within:outline focus-within:outline-1 focus-within:outline-blue-400">
+            <Input
+              className="text-sm h-12 flex-1 px-4 focus:outline-none"
+              hasRing={false}
+              min="0"
+              onChange={onAmountChange}
+              placeholder="1.0"
+              type="number"
+              value={amount}
+            />
+            <div className="text-sm w-fit flex-none px-4">
+              USDC ≈ $
+            </div>
+            <Input
+              className="text-sm h-12 flex-1 px-4 focus:outline-none"
+              hasRing={false}
+              min="0"
+              onChange={onDollarChange}
+              placeholder="1.00"
+              type="number"
+              value={dollar}
+            />
+          </div>
+        </div>
+        <CtaFooter
           buttonLabel={isConnected ? "Next" : "Connect Wallet"}
           buttonType={isConnected ? "button" : "submit"}
-          isSubmittable={isConnected ? (!!amount && !!selectedWallet) : !!selectedWallet}
+          isSubmittable={isConnected ? !!amount : false}
           isLoading={isPending}
           onSubmit={isConnected ? handleSubmit : undefined}
         />

@@ -233,60 +233,6 @@ export default function DonationStep4({
         <h1 className="text-xl font-semibold text-center text-gray-900">Finish your donation</h1>
       </div>
 
-      {/* Wallet connection status */}
-      {isConnected && address && (
-        <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
-          <div className="flex items-center gap-3 mb-3">
-            <Wallet className="h-5 w-5 text-green-600" />
-            <span className="font-medium text-green-800">Wallet Connected</span>
-          </div>
-
-          <div className="space-y-2 text-sm">
-            <div className="flex items-center justify-between">
-              <span className="text-gray-600">Wallet Type:</span>
-              <div className="flex items-center gap-2">
-                {connector?.id === 'metaMaskSDK' && (
-                  <Image src="/images/logo/metamask.svg" width={16} height={16} alt="MetaMask" />
-                )}
-                {connector?.id === 'coinbaseWalletSDK' && (
-                  <Image src="/images/logo/coinbase.svg" width={16} height={16} alt="Coinbase" />
-                )}
-                {connector?.id === 'walletConnect' && (
-                  <Image src="/images/logo/wallet-connect.svg" width={16} height={16} alt="WalletConnect" />
-                )}
-                <span className="font-medium text-gray-900">
-                  {getWalletName(connector?.id || '')}
-                </span>
-              </div>
-            </div>
-
-            <div className="flex items-center justify-between">
-              <span className="text-gray-600">Wallet Address:</span>
-              <span className="font-mono text-gray-900">{formatAddress(address)}</span>
-            </div>
-
-            <div className="flex items-center justify-between">
-              <span className="text-gray-600">Network:</span>
-              <div className="flex items-center gap-2">
-                <Globe className="h-4 w-4 text-blue-600" />
-                <span className="font-medium text-gray-900">
-                  {getNetworkName(chainId)}
-                </span>
-              </div>
-            </div>
-          </div>
-
-          <div className="mt-3 pt-3 border-t border-green-200">
-            <button
-              onClick={() => disconnect()}
-              className="text-sm text-green-700 hover:text-green-800 underline"
-            >
-              Disconnect Wallet
-            </button>
-          </div>
-        </div>
-      )}
-
       {/* Wallet not connected warning */}
       {!isConnected && (
         <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
