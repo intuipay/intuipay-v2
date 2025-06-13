@@ -3,12 +3,14 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import MyCombobox from '@/components/my-combobox';
 import { DropdownItemProps } from '@/types';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useState, useEffect, FormEvent } from 'react';
 import CtaFooter from '@/app/_components/donate/cta-footer';
 import { clsx } from 'clsx';
 import Image from 'next/image';
 import { Networks, Wallets } from '@/data';
 import { WalletConnectButton } from '@/components/wallet-connect-button';
+import { useAccount, useConnect, useDisconnect, useChainId } from 'wagmi';
+import { appkit } from '@/lib/appkit';
 
 type Props = {
   amount: number | '';
@@ -41,6 +43,80 @@ export default function DonationStep1({
   setSelectedWallet,
 }: Props) {
   const [dollar, setDollar] = useState<number | ''>(amount);
+  const [error, setError] = useState<string>('');
+
+  // wagmi hooks
+  const { address, isConnected, connector } = useAccount();
+  const { connect, connectors, isPending, error: connectError } = useConnect();
+  const { disconnect } = useDisconnect();
+  const chainId = useChainId();
+
+  const connectorMap = {
+    metamask: connectors.find(c => c.id === 'metaMaskSDK' || c.id === 'io.metamask'),
+    coinbase: connectors.find(c => c.id === 'coinbaseWalletSDK'),
+    'wallet-connect': connectors.find(c => c.id === 'walletConnect'),
+  };
+
+  // Monitor connection state changes
+  useEffect(() => {
+    if (isConnected && address && connector) {
+      setError('');
+    }
+  }, [isConnected, address, connector, chainId]);
+
+  // Monitor connection errors
+  useEffect(() => {
+    if (connectError) {
+      console.error('Wallet connection error:', connectError);
+
+      // Handle specific errors
+      if (connectError.message.includes('User rejected')) {
+        setError('User rejected the connection request');
+      } else if (connectError.message.includes('Already processing')) {
+        setError('Request is already being processed, please check your wallet');
+      } else {
+        setError(`Connection failed: ${connectError.message}`);
+      }
+    }
+  }, [connectError]);
+
+  const handleConnect = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (!selectedWallet || isPending) return;
+
+    setError('');
+
+    try {
+      // Disconnect if already connected to another wallet
+      if (isConnected) {
+        disconnect();
+      }
+
+      // Handle WalletConnect specially
+      if (selectedWallet === 'wallet-connect') {
+        appkit.open();
+        return;
+      }
+
+      // Handle other wallets using wagmi connectors
+      const targetConnector = connectorMap[selectedWallet as keyof typeof connectorMap];
+      if (!targetConnector) {
+        setError('Unsupported wallet type');
+        return;
+      }
+
+      connect({ connector: targetConnector });
+    } catch (error: any) {
+      console.error('Wallet connection failed:', error);
+      setError(`Connection failed: ${error.message || 'Unknown error'}`);
+    }
+  };
+
+  const handleSubmit = () => {
+    if (isConnected && amount) {
+      goToNextStep();
+    }
+  };
 
   // update Dollar value based on amount and payment method
   function onAmountChange(event: ChangeEvent<HTMLInputElement>) {
@@ -56,10 +132,26 @@ export default function DonationStep1({
     setDollar(value);
     setAmount(value);
   }
+  return (
+    <form onSubmit={handleConnect}>
+      <div className="space-y-6 pt-8">
+        <h2 className="text-xl font-semibold text-center text-black">Make your donation today</h2>
 
-  return <>
-    <div className="space-y-6 pt-8">
-      <h2 className="text-xl font-semibold text-center text-black">Make your donation today</h2>
+        {/* Error message */}
+        {error && (
+          <div className="bg-red-50 border border-red-200 rounded-lg p-3">
+            <p className="text-red-600 text-sm">{error}</p>
+          </div>
+        )}
+
+        {/* Connection status */}
+        {isConnected && address && (
+          <div className="bg-green-50 border border-green-200 rounded-lg p-3">
+            <p className="text-green-600 text-sm">
+              ✅ Wallet connected: {address.slice(0, 6)}...{address.slice(-4)}
+            </p>
+          </div>
+        )}
 
       {/* Network Selection */}
       <div className="space-y-2">
@@ -164,10 +256,13 @@ export default function DonationStep1({
         </div>
       </div>
       <CtaFooter
-        buttonLabel="Next"
-        isSubmittable={!!amount && !!selectedWallet}
-        onSubmit={goToNextStep}
-      />
-    </div>
-  </>
+          buttonLabel={isConnected ? "Next" : "Connect Wallet"}
+          buttonType={isConnected ? "button" : "submit"}
+          isSubmittable={isConnected ? (!!amount && !!selectedWallet) : !!selectedWallet}
+          isLoading={isPending}
+          onSubmit={isConnected ? handleSubmit : undefined}
+        />
+      </div>
+    </form>
+  )
 }
