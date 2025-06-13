@@ -111,11 +111,15 @@ export default function DonationStep1({
       setError(`Connection failed: ${error.message || 'Unknown error'}`);
     }
   };
-
   const handleSubmit = () => {
     if (isConnected && amount) {
       goToNextStep();
     }
+  };
+
+  const handleDisconnect = () => {
+    disconnect();
+    setError('');
   };
 
   // update Dollar value based on amount and payment method
@@ -135,21 +139,10 @@ export default function DonationStep1({
   return (
     <form onSubmit={handleConnect}>
       <div className="space-y-6 pt-8">
-        <h2 className="text-xl font-semibold text-center text-black">Make your donation today</h2>
-
-        {/* Error message */}
+        <h2 className="text-xl font-semibold text-center text-black">Make your donation today</h2>        {/* Error message */}
         {error && (
           <div className="bg-red-50 border border-red-200 rounded-lg p-3">
             <p className="text-red-600 text-sm">{error}</p>
-          </div>
-        )}
-
-        {/* Connection status */}
-        {isConnected && address && (
-          <div className="bg-green-50 border border-green-200 rounded-lg p-3">
-            <p className="text-green-600 text-sm">
-              ✅ Wallet connected: {address.slice(0, 6)}...{address.slice(-4)}
-            </p>
           </div>
         )}
 
@@ -169,49 +162,74 @@ export default function DonationStep1({
       {/* Wallet Selection */}
       <div className="space-y-2">
         <Label className="text-sm font-semibold text-black/50">Select Wallet</Label>
-        <div className="grid sm:grid-cols-2 gap-2.5 sm:gap-y-6">
-          {Wallets.map(wallet => {
-            // Handle WalletConnect separately
-            if (wallet.value === 'wallet-connect') {
-              return (
-                <WalletConnectButton
-                  key={wallet.value}
-                  isSelected={selectedWallet === wallet.value}
-                  onClick={() => setSelectedWallet(wallet.value || '')}
-                />
-              )
-            }
+        {!isConnected ? (
+          <div className="grid sm:grid-cols-2 gap-2.5 sm:gap-y-6">
+            {Wallets.map(wallet => {
+              // Handle WalletConnect separately
+              if (wallet.value === 'wallet-connect') {
+                return (
+                  <WalletConnectButton
+                    key={wallet.value}
+                    isSelected={selectedWallet === wallet.value}
+                    onClick={() => setSelectedWallet(wallet.value || '')}
+                  />
+                )
+              }
 
-            // Handle other wallets normally
-            return (
-              <label 
-                className={clsx(
-                  'flex items-center p-3 gap-3 border rounded-lg cursor-pointer',
-                  { 'bg-blue-50 border-blue-500': selectedWallet === wallet.value },
-                )}
-                key={wallet.value}
-              >
-                <input
-                  checked={selectedWallet === wallet.value}
-                  className="hidden"
-                  name="wallet"
-                  type="radio"
-                  onChange={event => setSelectedWallet(event.target.value)}
-                  value={wallet.value}
-                />
-                <Image
-                  src={`/images/logo/${wallet.icon}.svg`}
-                  width={24}
-                  height={24}
-                  className="size-6"
-                  alt={wallet.label || ''}
-                  loading="lazy"
-                />
-                <span className="font-medium">{wallet.label}</span>
-              </label>
-            )
-          })}
-        </div>
+              // Handle other wallets normally
+              return (
+                <label 
+                  className={clsx(
+                    'flex items-center p-3 gap-3 border rounded-lg cursor-pointer',
+                    { 'bg-blue-50 border-blue-500': selectedWallet === wallet.value },
+                  )}
+                  key={wallet.value}
+                >
+                  <input
+                    checked={selectedWallet === wallet.value}
+                    className="hidden"
+                    name="wallet"
+                    type="radio"
+                    onChange={event => setSelectedWallet(event.target.value)}
+                    value={wallet.value}
+                  />
+                  <Image
+                    src={`/images/logo/${wallet.icon}.svg`}
+                    width={24}
+                    height={24}
+                    className="size-6"
+                    alt={wallet.label || ''}
+                    loading="lazy"
+                  />
+                  <span className="font-medium">{wallet.label}</span>
+                </label>
+              )
+            })}
+          </div>
+        ) : (
+          <div className="flex items-center justify-between p-3 border rounded-lg bg-gray-50">
+            <div className="flex items-center gap-3">
+              <Image
+                src={`/images/logo/${Wallets.find(w => w.value === selectedWallet)?.icon}.svg`}
+                width={24}
+                height={24}
+                className="size-6"
+                alt={Wallets.find(w => w.value === selectedWallet)?.label || ''}
+                loading="lazy"
+              />
+              <span className="font-medium">
+                {Wallets.find(w => w.value === selectedWallet)?.label}
+              </span>
+            </div>
+            <button
+              type="button"
+              onClick={handleDisconnect}
+              className="text-red-600 hover:text-red-700 text-sm font-medium"
+            >
+              Disconnect Wallet
+            </button>
+          </div>
+        )}
       </div>
 
       {/* Currency Selection */}
