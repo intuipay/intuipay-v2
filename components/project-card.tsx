@@ -32,19 +32,19 @@ export function ProjectCard({ project }: ProjectCardProps) {
           />
         </div>
         <CardHeader>
-          <CardTitle className="text-md sm:text-lg font-semibold text-neutral-text">{project.title}</CardTitle>
-          <p className="text-xs text-neutral-darkgray mt-1 line-clamp-2">{project.description}</p>
+          <CardTitle className="text-base sm:text-lg text-neutral-text">{project.title}</CardTitle>
+          <p className="text-xs text-[#000000] text-neutral-darkgray mt-1 line-clamp-2">{project.description}</p>
         </CardHeader>
         <CardContent className="flex-grow">
-          <div className="flex items-center text-xs text-neutral-darkgray">
+          <div className="flex items-center text-xs">
             <ShieldCheck className="h-4 w-4 mr-1.5 text-intuipay-blue" />
             <span>{project.universityName}</span>
           </div>
         </CardContent>
-        <CardFooter className="flex justify-between items-center pt-4 border-t border-neutral-mediumgray/30">
+        <CardFooter className="mx-5 flex justify-between items-center pt-4 border-t border-neutral-mediumgray/30">
           <span className="text-xs text-neutral-darkgray">Total Raised</span>
           <span className="text-base font-bold text-neutral-text">
-            ${project.totalRaised.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+            $ {project.totalRaised.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
           </span>
         </CardFooter>
       </Card>

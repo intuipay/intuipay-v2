@@ -15,10 +15,11 @@ const navLinks = [
 
 export function SiteHeader() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [selectedNav] = useState(navLinks[0].label)
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-neutral-mediumgray/50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container flex h-16 items-center justify-between">
+      <div className="container flex h-16 items-center justify-between px-[120px]">
         <IntuipayLogo />
 
         <nav className="hidden md:flex items-center space-x-6">
@@ -26,7 +27,7 @@ export function SiteHeader() {
             <Link
               key={link.label}
               href={link.href}
-              className="text-sm font-medium text-neutral-darkgray hover:text-neutral-text transition-colors"
+              className={`text-sm font-medium text-neutral-darkgray hover:text-neutral-text transition-colors ${selectedNav === link.label ? 'text-[#2461F2]' : ''}`}
             >
               {link.label}
             </Link>
@@ -47,6 +48,17 @@ export function SiteHeader() {
               <DropdownMenuItem>ES (Español)</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
+
+          <Button className="border-neutral-mediumgray text-base ml-2 bg-[#2461F2] rounded-full text-white w-[117px]">
+            Sign In
+          </Button>
+          <Link
+            href={''}
+            aria-label={'todo'}
+            className="text-[#2461F2] ml-6"
+          >
+            Crete account
+          </Link>
         </div>
 
         <div className="md:hidden">
