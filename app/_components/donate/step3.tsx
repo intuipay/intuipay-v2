@@ -8,6 +8,7 @@ import { Networks, Wallets } from '@/data';
 import CtaFooter from '@/app/_components/donate/cta-footer';
 import { useAccount, useConnect, useDisconnect, useChainId } from 'wagmi';
 import { WalletConnectButton } from '@/components/wallet-connect-button';
+import { appkit } from '@/lib/appkit';
 
 type Props = {
   goToPreviousStep: () => void;
@@ -64,7 +65,9 @@ export default function DonationStep3({
         setError(`Connection failed: ${connectError.message}`);
       }
     }
-  }, [connectError]); const handleConnect = async (event: FormEvent<HTMLFormElement>) => {
+  }, [connectError]);
+
+  const handleConnect = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!selectedWallet || isPending) return;
 
@@ -76,7 +79,13 @@ export default function DonationStep3({
         disconnect();
       }
 
-      // Handle non-WalletConnect wallets using wagmi connectors
+      // Handle WalletConnect specially
+      if (selectedWallet === 'wallet-connect') {
+        appkit.open();
+        return;
+      }
+
+      // Handle other wallets using wagmi connectors
       const targetConnector = connectorMap[selectedWallet as keyof typeof connectorMap];
       if (!targetConnector) {
         setError('Unsupported wallet type');
@@ -128,55 +137,51 @@ export default function DonationStep3({
       {/* Wallet Options */}
       <div className="grid sm:grid-cols-2 gap-2.5 sm:gap-y-6">
         {Wallets.map(wallet => {
-          // Handle WalletConnect separately
-          if (wallet.value === 'wallet-connect') {
-            return (
-              <WalletConnectButton
-                key={wallet.value}
-                isSelected={selectedWallet === wallet.value}
-                onClick={() => setSelectedWallet(wallet.value || '')}
-                onConnect={() => {
-                  // WalletConnect will handle the connection automatically
-                  // We just need to wait for the wagmi hooks to detect the connection
-                }}
-                className={clsx(
-                  { 'opacity-50': isPending },
-                )}
-              />
-            )
-          }
-
-          // Handle other wallets normally
+        // Handle WalletConnect separately
+        if (wallet.value === 'wallet-connect') {
           return (
-            <label className={clsx(
-              'flex items-center p-3 gap-3 border rounded-lg cursor-pointer',
-              { 'bg-blue-50 border-blue-500': selectedWallet === wallet.value },
-              { 'opacity-50': isPending },
-            )}
+            <WalletConnectButton
               key={wallet.value}
-            >
-              <input
-                checked={selectedWallet === wallet.value}
-                className="hidden"
-                disabled={isPending}
-                name="wallet"
-                type="radio"
-                onChange={event => setSelectedWallet(event.target.value)}
-                value={wallet.value}
-              />
-              <Image
-                src={`/images/logo/${wallet.icon}.svg`}
-                width={24}
-                height={24}
-                className="size-6"
-                alt={wallet.label || ''}
-                loading="lazy"
-              />
-              <span className="font-medium">{wallet.label}</span>
-              {detected[wallet.value as string] && <span className="text-sm text-gray-500">Detected</span>}
-            </label>
+              isSelected={selectedWallet === wallet.value}
+              onClick={() => setSelectedWallet(wallet.value || '')}
+              className={clsx(
+                { 'opacity-50': isPending },
+              )}
+            />
           )
-        })}
+        }
+
+        // Handle other wallets normally
+        return (
+          <label className={clsx(
+            'flex items-center p-3 gap-3 border rounded-lg cursor-pointer',
+            { 'bg-blue-50 border-blue-500': selectedWallet === wallet.value },
+            { 'opacity-50': isPending },
+          )}
+            key={wallet.value}
+          >
+            <input
+              checked={selectedWallet === wallet.value}
+              className="hidden"
+              disabled={isPending}
+              name="wallet"
+              type="radio"
+              onChange={event => setSelectedWallet(event.target.value)}
+              value={wallet.value}
+            />
+            <Image
+              src={`/images/logo/${wallet.icon}.svg`}
+              width={24}
+              height={24}
+              className="size-6"
+              alt={wallet.label || ''}
+              loading="lazy"
+            />
+            <span className="font-medium">{wallet.label}</span>
+            {detected[wallet.value as string] && <span className="text-sm text-gray-500">Detected</span>}
+          </label>
+        )
+      })}
       </div>
       <CtaFooter
         buttonLabel="Connect"

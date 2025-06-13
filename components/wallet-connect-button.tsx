@@ -3,17 +3,14 @@
 import React from 'react'
 import Image from 'next/image'
 import { clsx } from 'clsx'
-import { appkit } from '@/lib/appkit'
 
 interface WalletConnectButtonProps {
-  onConnect?: () => void
   className?: string
   isSelected?: boolean
   onClick?: () => void
 }
 
 export function WalletConnectButton({
-  onConnect,
   className = '',
   isSelected = false,
   onClick
@@ -24,11 +21,6 @@ export function WalletConnectButton({
     if (onClick) {
       onClick()
     }
-
-    // Open WalletConnect modal using AppKit instance
-    appkit.open()
-
-    onConnect?.()
   }
 
   return (
