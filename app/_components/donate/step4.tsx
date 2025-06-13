@@ -5,22 +5,10 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import omit from 'lodash-es/omit';
 import { DonationMethodType, DonationStatus } from '@/constants/donation';
 import CtaFooter from '@/app/_components/donate/cta-footer';
-import { useAccount, useChainId, useDisconnect, useWriteContract, useWaitForTransactionReceipt } from 'wagmi';
+import { useAccount, useChainId, useWriteContract, useWaitForTransactionReceipt } from 'wagmi';
 import { mainnet, sepolia } from 'wagmi/chains';
 import { parseUnits } from 'viem';
-import { 
-  pipe,
-  createTransactionMessage,
-  setTransactionMessageFeePayer, 
-  setTransactionMessageLifetimeUsingBlockhash, 
-  createSolanaRpc, 
-  devnet,
-  appendTransactionMessageInstruction,
-  lamports,
-  address as solanaAddress,
-  signAndSendTransactionMessageWithSigners,
- } from '@solana/kit';
-import { getSystemErrorMessage, getTransferSolInstruction, isSystemError } from '@solana-program/system';
+import { TransactionMessage, VersionedTransaction, LAMPORTS_PER_SOL, SystemProgram, Connection, PublicKey, clusterApiUrl } from '@solana/web3.js';
 
 type Props = {
   goToPreviousStep: () => void;
@@ -168,41 +156,40 @@ export default function DonationStep4({
   }
   async function doSubmit() {
     if (window?.phantom?.solana && window.phantom.solana.isConnected) {
-      console.log('handle solana donation using phantom, from address: ', window.phantom.solana.publicKey.toString());
-      const rpc = createSolanaRpc(devnet('https://api.devnet.solana.com'));
-      const { value: latestBlockhash } = await rpc.getLatestBlockhash().send();
-      console.log('latest blockhash', latestBlockhash);
+      setIsSubmitting(true);
+      const instructions = [
+        SystemProgram.transfer({
+          fromPubkey: window.phantom.solana.publicKey,
+          toPubkey: new PublicKey(universitySolanaDevnetAddress),
+          lamports: info.amount * LAMPORTS_PER_SOL,
+        }),
+      ];
 
-      const ix1 = getTransferSolInstruction({
-                amount: lamports(BigInt(info.amount as number * 1e9)), // Convert to lamports (1 SOL = 1e9 lamports)
-                destination: solanaAddress(universitySolanaDevnetAddress),
-                source: solanaAddress(window.phantom.solana.publicKey.toString()),
-              });
-      console.log('ix1', ix1)
-      const transactionMessage = pipe(
-        /**
-         * Every transaction must state from which account the transaction fee should be debited from,
-         * and that account must sign the transaction. Here, we'll make the source account pay the fee.
-         */
-        createTransactionMessage({ version: 0 }),
-        tx => (
-          setTransactionMessageFeePayer(solanaAddress(window.phantom.solana.publicKey.toString()), tx)
-        ),
-        tx => (
-          setTransactionMessageLifetimeUsingBlockhash(latestBlockhash, tx)
-        ),
-        tx =>
-          appendTransactionMessageInstruction(
-              ix1,
-            tx,
-          ),
-      );
+      const connection = new Connection(clusterApiUrl("devnet"));
+
+      // get latest `blockhash`
+      let blockhash = await connection.getLatestBlockhash().then((res) => res.blockhash);
+
+      // create v0 compatible message
+      const messageV0 = new TransactionMessage({
+        payerKey: window.phantom.solana.publicKey,
+        recentBlockhash: blockhash,
+        instructions,
+      }).compileToV0Message();
+
+      // make a versioned transaction
+      const transactionV0 = new VersionedTransaction(messageV0);
 
       
-      console.log('transactionMessage', transactionMessage);
+      console.log('transactionMessage', transactionV0);
 
-      const result = window.phantom.solana.signAndSendTransaction(transactionMessage)
+      const result = await window.phantom.solana.signAndSendTransaction(transactionV0)
       console.log('solana tx result', result);
+
+      setIsSubmitting(false);
+      goToNextStep();
+
+      // todo: save to db
       return;
     }
 
