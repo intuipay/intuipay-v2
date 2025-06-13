@@ -3,6 +3,7 @@
 import React from 'react'
 import Image from 'next/image'
 import { clsx } from 'clsx'
+import { appkit } from '@/lib/appkit'
 
 interface WalletConnectButtonProps {
   onConnect?: () => void
@@ -25,13 +26,7 @@ export function WalletConnectButton({
     }
 
     // Open WalletConnect modal using AppKit instance
-    if (typeof window !== 'undefined' && (window as any).appkit) {
-      try {
-        (window as any).appkit.open()
-      } catch (error) {
-        console.error('Failed to open WalletConnect modal:', error)
-      }
-    }
+    appkit.open()
 
     onConnect?.()
   }

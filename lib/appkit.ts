@@ -24,7 +24,7 @@ const metadata = {
 }
 
 // 4. Create the AppKit instance
-const appkit = createAppKit({
+export const appkit = createAppKit({
   adapters: [wagmiAdapter],
   networks: [mainnet, sepolia],
   metadata,
@@ -39,11 +39,6 @@ const appkit = createAppKit({
   enableCoinbase: true,
 })
 
-if (typeof window !== 'undefined') {
-  // 目前没法从 wallet-connect-button 组件中直接访问 appkit 实例，所以只能挂载到 window 对象上
-  ;(window as any).appkit = appkit
-}
 
 // Export wagmi config for use in providers
 export const config = wagmiAdapter.wagmiConfig
-export { appkit }
