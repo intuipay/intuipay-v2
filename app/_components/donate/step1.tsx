@@ -117,7 +117,10 @@ export default function DonationStep1({
         return true;
       })();
 
+      console.log('isWalletCompatible:', isWalletCompatible, 'for network:', network, 'and selectedWallet:', selectedWallet);
+
       if (!isWalletCompatible) {
+        console.log('Clearing selected wallet due to network change');
         setSelectedWallet('');
         // Disconnect if currently connected
         if (isConnected || isPhantomConnected) {
@@ -163,7 +166,7 @@ export default function DonationStep1({
       const walletName = connector.id === 'metaMaskSDK' || connector.id === 'io.metamask' ? 'metamask' :
         connector.id === 'coinbaseWalletSDK' ? 'coinbase' :
           connector.id === 'walletConnect' ? 'wallet-connect' :
-            'metamask'; // fallback
+            'wallet-connect'; // 未识别的钱包，应该算到 WalletConnect里去，展示已连接钱包图标的时候用得到
       setSelectedWallet(walletName);
     }
   }, [isConnected, address, connector, chainId]);
