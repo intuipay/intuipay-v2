@@ -3,7 +3,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import MyCombobox from '@/components/my-combobox';
 import { DropdownItemProps } from '@/types';
-import { ChangeEvent, useState, useEffect, FormEvent } from 'react';
+import { ChangeEvent, useState, useEffect, FormEvent, useCallback } from 'react';
 import CtaFooter from '@/app/_components/donate/cta-footer';
 import { clsx } from 'clsx';
 import Image from 'next/image';
@@ -50,19 +50,40 @@ export default function DonationStep1({
   const [dollar, setDollar] = useState<number | ''>(amount);
   const [error, setError] = useState<string>('');
 
+  // Filter payment methods based on selected network
+  const getFilteredPaymentMethods = (): DropdownItemProps[] => {
+    if (network === 'ethereum') {
+      return PaymentMethods.filter(method => method.value === 'usdc');
+    } else if (network === 'solana') {
+      return PaymentMethods.filter(method => method.value === 'sol');
+    }
+    // If no network selected, show all payment methods
+    return PaymentMethods;
+  };
+
   // wagmi hooks
   const { address, isConnected, connector } = useAccount();
   const { connect, connectors, isPending, error: connectError } = useConnect();
   const { disconnect } = useDisconnect();
   const chainId = useChainId();
-
   const [isPhantomConnected, setIsPhantomConnected] = useState(false);
+
+  const handleDisconnect = useCallback(() => {
+    if ((window as any)?.phantom?.solana) {
+      (window as any).phantom.solana.disconnect();
+      setIsPhantomConnected(false);
+      setSelectedWallet('');
+      return;
+    }
+    disconnect();
+    setError('');
+  }, [disconnect, setSelectedWallet]);
 
   useEffect(() => {
     // 确保在客户端执行
-    if (typeof window !== 'undefined' && window.phantom?.solana) {
+    if (typeof window !== 'undefined' && (window as any).phantom?.solana) {
       // 监听连接事件
-      window.phantom.solana.on('connect', () => {
+      (window as any).phantom.solana.on('connect', () => {
         console.log('Phantom wallet connected');
         setIsPhantomConnected(true);
         setSelectedWallet('phantom');
@@ -70,13 +91,52 @@ export default function DonationStep1({
       });
 
       // 监听断开连接事件
-      window.phantom.solana.on('disconnect', () => {
+      (window as any).phantom.solana.on('disconnect', () => {
         console.log('Phantom wallet disconnected');
         setIsPhantomConnected(false);
         setSelectedWallet('');
       });
     }
   }, []);
+  // Clear selected wallet when network changes if the wallet is not compatible
+  useEffect(() => {
+    if (selectedWallet) {
+      const isWalletCompatible = (() => {
+        if (network === 'ethereum') {
+          return ['metamask', 'wallet-connect', 'coinbase'].includes(selectedWallet);
+        } else if (network === 'solana') {
+          return selectedWallet === 'phantom';
+        }
+        return true;
+      })();
+
+      if (!isWalletCompatible) {
+        setSelectedWallet('');
+        // Disconnect if currently connected
+        if (isConnected || isPhantomConnected) {
+          handleDisconnect();
+        }
+      }
+    }
+  }, [network, selectedWallet, isConnected, isPhantomConnected, handleDisconnect, setSelectedWallet]);
+
+  // Clear selected payment method when network changes if the payment method is not compatible
+  useEffect(() => {
+    if (paymentMethod) {
+      const isPaymentMethodCompatible = (() => {
+        if (network === 'ethereum') {
+          return paymentMethod === 'usdc';
+        } else if (network === 'solana') {
+          return paymentMethod === 'sol';
+        }
+        return true;
+      })();
+
+      if (!isPaymentMethodCompatible) {
+        setPaymentMethod('');
+      }
+    }
+  }, [network, paymentMethod, setPaymentMethod]);
 
   const connectorMap = {
     metamask: connectors.find(c => c.id === 'metaMaskSDK' || c.id === 'io.metamask'),
@@ -133,7 +193,7 @@ export default function DonationStep1({
 
       if (selectedWallet === 'phantom') {
         // handle phantom wallet connection to solana
-        window?.phantom?.solana.connect();
+        (window as any)?.phantom?.solana.connect();
         return;
       }
 
@@ -156,17 +216,6 @@ export default function DonationStep1({
     }
   };
 
-  const handleDisconnect = () => {
-    if (window?.phantom?.solana) {
-      window.phantom.solana.disconnect();
-      setIsPhantomConnected(false);
-      setSelectedWallet('');
-      return;
-    }
-    disconnect();
-    setError('');
-  };
-
   // update Dollar value based on amount and payment method
   function onAmountChange(event: ChangeEvent<HTMLInputElement>) {
     const input = event.target as HTMLInputElement;
@@ -184,7 +233,8 @@ export default function DonationStep1({
   return (
     <form onSubmit={handleConnect}>
       <div className="space-y-6 pt-8">
-        <h2 className="text-xl font-semibold text-center text-black">Make your donation today</h2>        {/* Error message */}
+        <h2 className="text-xl font-semibold text-center text-black">Make your donation today</h2>
+        {/* Error message */}
         {error && (
           <div className="bg-red-50 border border-red-200 rounded-lg p-3">
             <p className="text-red-600 text-sm">{error}</p>
@@ -203,13 +253,21 @@ export default function DonationStep1({
             value={network}
           />
         </div>
-
         {/* Wallet Selection */}
         <div className="space-y-2">
           <Label className="text-sm font-semibold text-black/50">Select Wallet</Label>
           {(!isConnected && !isPhantomConnected) ? (
             <div className="grid sm:grid-cols-2 gap-2.5 sm:gap-y-6">
-              {Wallets.map(wallet => {
+              {Wallets.filter(wallet => {
+                // Filter wallets based on selected network
+                if (network === 'ethereum') {
+                  return ['metamask', 'wallet-connect', 'coinbase'].includes(wallet.value || '');
+                } else if (network === 'solana') {
+                  return wallet.value === 'phantom';
+                }
+                // If no network selected, show all wallets
+                return true;
+              }).map(wallet => {
                 // Handle WalletConnect separately
                 if (wallet.value === 'wallet-connect') {
                   return (
@@ -275,9 +333,7 @@ export default function DonationStep1({
               </button>
             </div>
           )}
-        </div>
-
-        {/* Currency Selection */}
+        </div>        {/* Currency Selection */}
         <div className="space-y-2">
           <Label className="text-sm font-semibold text-black/50">Donate with</Label>
           <MyCombobox
@@ -285,7 +341,7 @@ export default function DonationStep1({
             iconClass="top-3"
             iconPath="information"
             iconExtension="png"
-            options={PaymentMethods}
+            options={getFilteredPaymentMethods()}
             onChange={setPaymentMethod}
             value={paymentMethod}
           />
