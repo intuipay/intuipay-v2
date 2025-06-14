@@ -70,10 +70,10 @@ export default function DonationStep1({
 
   const handleDisconnect = useCallback(() => {
     if ((window as any)?.phantom?.solana) {
+      console.log('Disconnecting Phantom wallet');
       (window as any).phantom.solana.disconnect();
       setIsPhantomConnected(false);
       setSelectedWallet('');
-      return;
     }
     disconnect();
     setError('');
@@ -82,7 +82,14 @@ export default function DonationStep1({
   useEffect(() => {
     // 确保在客户端执行
     if (typeof window !== 'undefined' && (window as any).phantom?.solana) {
+      if ((window as any).phantom.solana.isConnected) {
+        console.log('Phantom wallet is already connected');
+        setIsPhantomConnected(true);
+        setSelectedWallet('phantom');
+      }
       // 监听连接事件
+      // TODO: 这里要判断只监听一次
+      console.log('Setting up Phantom wallet connection listener');
       (window as any).phantom.solana.on('connect', () => {
         console.log('Phantom wallet connected');
         setIsPhantomConnected(true);
@@ -119,10 +126,14 @@ export default function DonationStep1({
       }
     }
   }, [network, selectedWallet, isConnected, isPhantomConnected, handleDisconnect, setSelectedWallet]);
-
   // Clear selected payment method when network changes if the payment method is not compatible
   useEffect(() => {
-    if (paymentMethod) {
+    if (network && !paymentMethod) {
+      const filteredMethods = getFilteredPaymentMethods();
+      if (filteredMethods.length === 1 && filteredMethods[0].value) {
+        setPaymentMethod(filteredMethods[0].value);
+      }
+    } else if (paymentMethod) {
       const isPaymentMethodCompatible = (() => {
         if (network === 'ethereum') {
           return paymentMethod === 'usdc';
@@ -333,7 +344,8 @@ export default function DonationStep1({
               </button>
             </div>
           )}
-        </div>        {/* Currency Selection */}
+        </div>
+        {/* Currency Selection */}
         <div className="space-y-2">
           <Label className="text-sm font-semibold text-black/50">Donate with</Label>
           <MyCombobox
