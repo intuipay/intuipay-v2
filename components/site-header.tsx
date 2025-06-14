@@ -19,7 +19,7 @@ export function SiteHeader() {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-neutral-mediumgray/50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container flex h-16 items-center justify-between px-[120px]">
+      <div className="container flex h-16 items-center justify-between lg:px-30 px-12">
         <IntuipayLogo />
 
         <nav className="hidden md:flex items-center space-x-6">
@@ -49,13 +49,13 @@ export function SiteHeader() {
             </DropdownMenuContent>
           </DropdownMenu>
 
-          <Button className="border-neutral-mediumgray text-base ml-2 bg-[#2461F2] rounded-full text-white w-[117px]">
+          <Button className="border-neutral-mediumgray text-base ml-2 bg-[#2461F2] rounded-full text-white w-[117px] hidden lg:block">
             Sign In
           </Button>
           <Link
             href={''}
             aria-label={'todo'}
-            className="text-[#2461F2] ml-6"
+            className="text-[#2461F2] ml-6 hidden lg:block"
           >
             Crete account
           </Link>

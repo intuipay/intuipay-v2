@@ -21,19 +21,18 @@ export function ProjectCard({ project }: ProjectCardProps) {
       href={`/project/${project.slug}`}
       className="block hover:shadow-lg transition-shadow duration-200 rounded-lg h-full"
     >
-      <Card className="overflow-hidden flex flex-col h-full border-transparent hover:border-action-blue/50 transition-colors">
-        <div className="relative w-full aspect-[16/9]">
+      <Card className="group overflow-hidden flex flex-col h-full border-transparent hover:border-action-blue/50 transition-colors">
+        <div className="relative w-full aspect-[16/9] h-[405px] group-hover:h-[65%] transition-height duration-800">
           <Image
             src={project.imageUrl || "/placeholder.svg"}
             alt={project.title}
             fill
             className="object-cover"
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           />
         </div>
         <CardHeader>
           <CardTitle className="text-base sm:text-lg text-neutral-text">{project.title}</CardTitle>
-          <p className="text-xs text-[#000000] text-neutral-darkgray mt-1 line-clamp-2">{project.description}</p>
+          <p className="text-xs text-[#000000] text-neutral-darkgray mt-1 line-clamp-1 group-hover:line-clamp-2">{project.description}</p>
         </CardHeader>
         <CardContent className="flex-grow">
           <div className="flex items-center text-xs">
@@ -41,11 +40,14 @@ export function ProjectCard({ project }: ProjectCardProps) {
             <span>{project.universityName}</span>
           </div>
         </CardContent>
-        <CardFooter className="mx-5 flex justify-between items-center pt-4 border-t border-neutral-mediumgray/30">
-          <span className="text-xs text-neutral-darkgray">Total Raised</span>
-          <span className="text-base font-bold text-neutral-text">
-            $ {project.totalRaised.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-          </span>
+        <CardFooter className="mx-5 pt-4 border-t border-neutral-mediumgray/30 whitespace-nowrap overflow-hidden">
+          <div className="flex justify-between items-center">
+            <span className="text-xs text-neutral-darkgray">Total Raised</span>
+            <span className="text-base font-bold text-neutral-text text-ellipsis">
+              $ {project.totalRaised.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+            </span>
+          </div>
+          <p className="text-[14px] text-[#000000] mt-4 hidden opacity-0 group-hover:block group-hover:opacity-60 transition-opacity duration-800">xxx days left • xx% founded</p>
         </CardFooter>
       </Card>
     </Link>

@@ -76,24 +76,22 @@ export default function ProjectsPage() {
   return (
     <div className="flex flex-col min-h-screen bg-neutral-white text-neutral-text">
       <SiteHeader />
-      <div className="flex-grow px-[120px]">
-        <main>
-          {/* Hero Section */}
-          <section className="w-full flex py-12 md:py-20 lg:py-21 bg-gradient-to-b from-intuipay-lighterblue/20 via-neutral-white to-neutral-white">
-            <div className="container flex-1">
-              <h1 className="text-5xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-4">
+      <main className="flex-grow px-12 lg:px-[120px]">
+        {/* Hero Section */}
+        <section className="flex flex-col-reverse items-center lg:flex-row w-full py-12 lg:py-21 bg-gradient-to-b from-intuipay-lighterblue/20 via-neutral-white to-neutral-white">
+          <div className="container flex-1">
+              <h1 className="text-5xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-4 text-center">
                 Fuel Trusted University-Backed Research
               </h1>
               <p className="text-base sm:text-lg md:text-xl text-neutral-darkgray text-[#00000080] mb-16">
                 All projects on Intuipay are verified academic research initiatives from accredited universities and
                 institutions, ensuring every donation supports real, impactful science.
               </p>
-
               <div className="flex w-full md:flex-grow max-w-xl mx-auto md:mx-0 md:max-w-none">
                 <Input
                   type="search"
                   placeholder="Search"
-                  className="rounded-[79px] focus:ring-0 focus:border-neutral-mediumgray border-[1px] border-[#00000033] text-base bg-neutral-lightgray flex-grow width-[540px] h-[60px]"
+                  className="rounded-[79px] focus:ring-0 focus:border-neutral-mediumgray border-[1px] border-[#00000033] text-base bg-neutral-lightgray flex-grow lg:w-[540px] sm:w-47 min-w-46 h-[60px] pl-6 pr-15"
                 />
                 <Button type="submit" className="bg-action-blue hover:bg-action-blue/90 w-15 h-15 px-5 bg-[#2562F2] rounded-[100px] relative right-15">
                   <Search className="h-5 w-5 text-primary-foreground" />
@@ -108,66 +106,65 @@ export default function ProjectsPage() {
                   <SlidersHorizontal className="ml-2 h-4 w-4" />
                 </Button>
               </div>
-            </div>
-            <div>
-              <Image
-                className="ml-16"
-                src="/hero-image.png"
-                alt="Stylized image of hands exchanging coins over a digital interface"
-                priority
-                width={326}
-                height={298}
-              />
-            </div>
-          </section>
-          <div className="flex flex-col space-y-4 lg:space-y-0 lg:flex-row justify-between items-center mb-6 md:mb-8 mt-2">
-            <h2 className="text-2xl sm:text-3xl">
-              Explore {projects.length * 100 + (projects.length % 3) * 10} Projects
-            </h2>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <div className="flex items-center">
-                  <span className="text-[#00000080]">Sort by</span>
-                  <Button variant="outline" className="w-full lg:w-auto h-11 border-neutral-mediumgray text-base ml-4 rounded-full">
-                    <ArrowUpDown className="mr-2 h-4 w-4" />
-                    Newest
-                    <ChevronDown className="ml-2 h-4 w-4" />
-                  </Button>
-                </div>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem>Newest</DropdownMenuItem>
-                <DropdownMenuItem>Oldest</DropdownMenuItem>
-                <DropdownMenuItem>Most Raised</DropdownMenuItem>
-                <DropdownMenuItem>Ending Soon</DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-            {projects.map((project) => (
-              <ProjectCard key={project.id} project={project} />
-            ))}
-          </div>
+          <Image
+            className="ml-16 mb-6 lg:mb-0"
+            src="/hero-image.png"
+            alt="Stylized image of hands exchanging coins over a digital interface"
+            priority
+            width={326}
+            height={298}
+          />
+        </section>
+        <div className="flex flex-col items-start space-y-4 lg:space-y-0 lg:flex-row justify-between mb-6 md:mb-8 mt-2">
+          <h2 className="text-2xl sm:text-3xl whitespace-nowrap">
+            Explore {projects.length * 100 + (projects.length % 3) * 10} Projects
+          </h2>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <div className="flex items-center mt-6 sm:mt-0">
+                <span className="text-[#00000080] whitespace-nowrap">Sort by</span>
+                <Button variant="outline" className="sm:w-40 w-56 h-11 border-neutral-mediumgray text-base ml-4 rounded-full">
+                  <ArrowUpDown className="mr-2 h-4 w-4" />
+                  Newest
+                  <ChevronDown className="ml-2 h-4 w-4" />
+                </Button>
+              </div>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem>Newest</DropdownMenuItem>
+              <DropdownMenuItem>Oldest</DropdownMenuItem>
+              <DropdownMenuItem>Most Raised</DropdownMenuItem>
+              <DropdownMenuItem>Ending Soon</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+          {projects.map((project) => (
+            <ProjectCard key={project.id} project={project} />
+          ))}
+        </div>
 
-          <div className="h-[400px] bg-[#F5F5F7] my-20 flex justify-between items-center px-12">
-            <Image
-              src="/laptop.png"
-              alt="laptop"
-              priority
-              width={370}
-              height={270}
-            />
-            <section>
-              <h1 className="text-4xl font-bold mb-4">Have A Project That Needs Support?</h1>
-              <p className="mb-8 text-[#00000080]">We're building a platform to support groundbreaking, university-affiliated research. If you're leading a verified academic or institutional project, you can share it here and start receiving donations.</p>
-              <Button className="w-[239px] h-14 border-neutral-mediumgray text-base ml-4 bg-[#2461F2] rounded-full text-white">
-                Create project
-              </Button>
-            </section>
-          </div>
-        </main>
+        <div className="flex justify-evenly lg:justify-between items-center flex-col lg:flex-row w-full lg:h-[400px] sm:h-[646px] h-auto bg-[#F5F5F7] my-20 py-8 px-6 sm:px-8 lg:px-11">
+          <Image
+            src="/laptop.png"
+            alt="laptop"
+            priority
+            width={370}
+            height={270}
+            className="lg:mb-0 mb-10"
+          />
+          <section className="lg:ml-16">
+            <h1 className="font-bold mb-4 lg:text-4xl sm:text-3xl text-2xl">Have A Project That Needs Support?</h1>
+            <p className="mb-8 text-[#00000080]">We're building a platform to support groundbreaking, university-affiliated research. If you're leading a verified academic or institutional project, you can share it here and start receiving donations.</p>
+            <Button className="w-[239px] h-14 border-neutral-mediumgray text-base bg-[#2461F2] rounded-full text-white">
+              Create project
+            </Button>
+          </section>
+        </div>
+        <div className="h-16"></div>
         <SiteFooter />
-      </div>
+      </main>
       <FilterDrawer isOpen={isFilterDrawerOpen} onOpenChange={setIsFilterDrawerOpen} />
     </div>
   )
