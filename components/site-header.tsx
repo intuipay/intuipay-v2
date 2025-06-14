@@ -15,7 +15,7 @@ const navLinks = [
 
 export function SiteHeader() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const [selectedNav] = useState(navLinks[0].label)
+  const [selectedNav, setSelectedNav] = useState(navLinks[0].label)
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-neutral-mediumgray/50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -27,7 +27,7 @@ export function SiteHeader() {
             <Link
               key={link.label}
               href={link.href}
-              className={`text-sm font-medium text-neutral-darkgray hover:text-neutral-text transition-colors ${selectedNav === link.label ? 'text-[#2461F2]' : ''}`}
+              className={`text-sm font-medium text-neutral-darkgray hover:text-neutral-text transition-colors ${selectedNav === link.label ? 'text-blue-btn' : ''}`}
             >
               {link.label}
             </Link>
@@ -49,15 +49,15 @@ export function SiteHeader() {
             </DropdownMenuContent>
           </DropdownMenu>
 
-          <Button className="border-neutral-mediumgray text-base ml-2 bg-[#2461F2] rounded-full text-white w-[117px] hidden lg:block">
+          <Button className="border-neutral-mediumgray text-base ml-2 bg-blue-btn rounded-full text-white w-28 hidden lg:block">
             Sign In
           </Button>
           <Link
             href={''}
             aria-label={'todo'}
-            className="text-[#2461F2] ml-6 hidden lg:block"
+            className="text-blue-btn ml-6 hidden lg:block"
           >
-            Crete account
+            Create account
           </Link>
         </div>
 

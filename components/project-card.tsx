@@ -19,10 +19,10 @@ export function ProjectCard({ project }: ProjectCardProps) {
   return (
     <Link
       href={`/project/${project.slug}`}
-      className="block hover:shadow-lg transition-shadow duration-200 rounded-lg h-full"
+      className="block hover:shadow-lg transition-shadow duration-800 rounded-lg h-full"
     >
       <Card className="group overflow-hidden flex flex-col h-full border-transparent hover:border-action-blue/50 transition-colors">
-        <div className="relative w-full aspect-[16/9] h-[405px] group-hover:h-[65%] transition-height duration-800">
+        <div className="relative w-full aspect-[16/9] h-[405px] group-hover:h-[60%] transition-height duration-800">
           <Image
             src={project.imageUrl || "/placeholder.svg"}
             alt={project.title}
@@ -32,7 +32,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
         </div>
         <CardHeader>
           <CardTitle className="text-base sm:text-lg text-neutral-text">{project.title}</CardTitle>
-          <p className="text-xs text-[#000000] text-neutral-darkgray mt-1 line-clamp-1 group-hover:line-clamp-2">{project.description}</p>
+          <p className="text-xs text-black/70 text-neutral-darkgray mt-1 line-clamp-1 group-hover:line-clamp-2">{project.description}</p>
         </CardHeader>
         <CardContent className="flex-grow">
           <div className="flex items-center text-xs">
@@ -47,7 +47,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
               $ {project.totalRaised.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
             </span>
           </div>
-          <p className="text-[14px] text-[#000000] mt-4 hidden opacity-0 group-hover:block group-hover:opacity-60 transition-opacity duration-800">xxx days left • xx% founded</p>
+          <p className="text-sm text-black mt-4 hidden opacity-0 group-hover:block group-hover:opacity-60 transition-opacity duration-800">xxx days left • xx% founded</p>
         </CardFooter>
       </Card>
     </Link>

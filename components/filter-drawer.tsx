@@ -68,7 +68,7 @@ export function FilterDrawer({ isOpen, onOpenChange }: FilterDrawerProps) {
           <div className="flex justify-end">
             <Button
               variant="link"
-              className="text-sm text-[#2461F2] p-0 h-auto"
+              className="text-sm text-blue-btn p-0 h-auto"
               onClick={() => console.log("Clear all filters")} // Implement clear logic
             >
               CLEAR ALL

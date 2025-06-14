@@ -76,14 +76,14 @@ export default function ProjectsPage() {
   return (
     <div className="flex flex-col min-h-screen bg-neutral-white text-neutral-text">
       <SiteHeader />
-      <main className="flex-grow px-12 lg:px-[120px]">
+      <main className="flex-grow px-12 lg:px-28">
         {/* Hero Section */}
         <section className="flex flex-col-reverse items-center lg:flex-row w-full py-12 lg:py-21 bg-gradient-to-b from-intuipay-lighterblue/20 via-neutral-white to-neutral-white">
           <div className="container flex-1">
-              <h1 className="text-5xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-4 text-center">
+              <h1 className="text-5xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-4 text-center md:text-left">
                 Fuel Trusted University-Backed Research
               </h1>
-              <p className="text-base sm:text-lg md:text-xl text-neutral-darkgray text-[#00000080] mb-16">
+              <p className="text-base sm:text-lg md:text-xl text-neutral-darkgray text-black/50 mb-16">
                 All projects on Intuipay are verified academic research initiatives from accredited universities and
                 institutions, ensuring every donation supports real, impactful science.
               </p>
@@ -91,15 +91,15 @@ export default function ProjectsPage() {
                 <Input
                   type="search"
                   placeholder="Search"
-                  className="rounded-[79px] focus:ring-0 focus:border-neutral-mediumgray border-[1px] border-[#00000033] text-base bg-neutral-lightgray flex-grow lg:w-[540px] sm:w-47 min-w-46 h-[60px] pl-6 pr-15"
+                  className="rounded-full focus:ring-0 focus:border-neutral-mediumgray border-[1px] border-black/20 text-base bg-neutral-lightgray flex-grow sm:w-47 min-w-46 h-15 pl-6 pr-15"
                 />
-                <Button type="submit" className="bg-action-blue hover:bg-action-blue/90 w-15 h-15 px-5 bg-[#2562F2] rounded-[100px] relative right-15">
+                <Button type="submit" className="bg-action-blue hover:bg-action-blue/90 w-15 h-15 px-5 bg-blue-btn rounded-full relative right-15">
                   <Search className="h-5 w-5 text-primary-foreground" />
                   <span className="sr-only">Search</span>
                 </Button>
                 <Button
                   variant="outline"
-                  className="w-[149px] h-15 text-base flex items-center justify-center rounded-[100px]"
+                  className="w-36 h-15 text-base flex items-center justify-center rounded-full"
                   onClick={() => setIsFilterDrawerOpen(true)}
                 >
                   Filter
@@ -109,7 +109,7 @@ export default function ProjectsPage() {
           </div>
           <Image
             className="ml-16 mb-6 lg:mb-0"
-            src="/hero-image.png"
+            src="/diamond.svg"
             alt="Stylized image of hands exchanging coins over a digital interface"
             priority
             width={326}
@@ -123,7 +123,7 @@ export default function ProjectsPage() {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <div className="flex items-center mt-6 sm:mt-0">
-                <span className="text-[#00000080] whitespace-nowrap">Sort by</span>
+                <span className="text-black/50 whitespace-nowrap">Sort by</span>
                 <Button variant="outline" className="sm:w-40 w-56 h-11 border-neutral-mediumgray text-base ml-4 rounded-full">
                   <ArrowUpDown className="mr-2 h-4 w-4" />
                   Newest
@@ -145,9 +145,9 @@ export default function ProjectsPage() {
           ))}
         </div>
 
-        <div className="flex justify-evenly lg:justify-between items-center flex-col lg:flex-row w-full lg:h-[400px] sm:h-[646px] h-auto bg-[#F5F5F7] my-20 py-8 px-6 sm:px-8 lg:px-11">
+        <div className="flex justify-evenly lg:justify-between items-center flex-col lg:flex-row w-full h-full bg-blue-search my-20 py-8 px-6 sm:px-8 lg:px-11">
           <Image
-            src="/laptop.png"
+            src="/laptop.svg"
             alt="laptop"
             priority
             width={370}
@@ -156,8 +156,8 @@ export default function ProjectsPage() {
           />
           <section className="lg:ml-16">
             <h1 className="font-bold mb-4 lg:text-4xl sm:text-3xl text-2xl">Have A Project That Needs Support?</h1>
-            <p className="mb-8 text-[#00000080]">We're building a platform to support groundbreaking, university-affiliated research. If you're leading a verified academic or institutional project, you can share it here and start receiving donations.</p>
-            <Button className="w-[239px] h-14 border-neutral-mediumgray text-base bg-[#2461F2] rounded-full text-white">
+            <p className="mb-8 text-black/50">We're building a platform to support groundbreaking, university-affiliated research. If you're leading a verified academic or institutional project, you can share it here and start receiving donations.</p>
+            <Button className="w-60 h-14 border-neutral-mediumgray text-base rounded-full text-white">
               Create project
             </Button>
           </section>
