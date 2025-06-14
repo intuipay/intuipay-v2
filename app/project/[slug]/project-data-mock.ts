@@ -1,5 +1,4 @@
 // No changes needed here, it serves as the data source for the mock fetching function.
-import { CircleDollarSign, Wallet, BanknoteIcon as BankIcon, CreditCard } from "lucide-react"
 import type { ProjectDataType } from "./project-data"
 
 export const projectData: ProjectDataType = {
@@ -130,12 +129,10 @@ export const projectData: ProjectDataType = {
       timeAgo: "38 mins ago",
       amountOriginal: "46,500",
       currencyOriginal: "USDC",
-      currencyIcon: CircleDollarSign,
       amountUSD: "46,494.89",
       countryFlag: "🇨🇳",
       countryName: "China",
       paymentMethod: "Wallet",
-      paymentIcon: Wallet,
     },
     {
       id: "don-2",
@@ -143,12 +140,10 @@ export const projectData: ProjectDataType = {
       timeAgo: "38 mins ago",
       amountOriginal: "335088.65",
       currencyOriginal: "CNY",
-      currencyIcon: () => <span className="text-red-500 font-bold">¥</span>,
       amountUSD: "46,494.89",
       countryFlag: "🇨🇳",
       countryName: "China",
       paymentMethod: "Wallet",
-      paymentIcon: Wallet,
     },
     {
       id: "don-3",
@@ -156,12 +151,10 @@ export const projectData: ProjectDataType = {
       timeAgo: "1 hr ago",
       amountOriginal: "46,494.89",
       currencyOriginal: "USD",
-      currencyIcon: () => <span className="font-bold">$</span>,
       amountUSD: "46,494.89",
       countryFlag: "🇺🇸",
       countryName: "United States",
       paymentMethod: "Bank Transfer",
-      paymentIcon: BankIcon,
     },
     {
       id: "don-4",
@@ -169,12 +162,10 @@ export const projectData: ProjectDataType = {
       timeAgo: "3 hrs ago",
       amountOriginal: "721.12",
       currencyOriginal: "CNY",
-      currencyIcon: () => <span className="text-red-500 font-bold">¥</span>,
       amountUSD: "100.00",
       countryFlag: "🇺🇸",
       countryName: "United States",
       paymentMethod: "Mastercard",
-      paymentIcon: CreditCard,
     },
     {
       id: "don-5",
@@ -182,12 +173,10 @@ export const projectData: ProjectDataType = {
       timeAgo: "06/12/25",
       amountOriginal: "46,500",
       currencyOriginal: "USDC",
-      currencyIcon: CircleDollarSign,
       amountUSD: "46,494.89",
       countryFlag: "🇺🇸",
       countryName: "United States",
       paymentMethod: "Alipay",
-      paymentIcon: () => <span className="font-bold text-blue-600">A</span>,
     },
     {
       id: "don-6",
@@ -195,12 +184,10 @@ export const projectData: ProjectDataType = {
       timeAgo: "06/12/25",
       amountOriginal: "46,500",
       currencyOriginal: "USDC",
-      currencyIcon: CircleDollarSign,
       amountUSD: "46,494.89",
       countryFlag: "🇨🇳",
       countryName: "China",
       paymentMethod: "Wallet",
-      paymentIcon: Wallet,
     },
   ],
 }

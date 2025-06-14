@@ -24,12 +24,10 @@ export type ProjectDonation = {
   timeAgo: string
   amountOriginal: string
   currencyOriginal: string
-  currencyIcon: StringOrComponent
   amountUSD: string
   countryFlag: string
   countryName: string
   paymentMethod: string
-  paymentIcon: StringOrComponent
 }
 
 export type UniversityData = {
