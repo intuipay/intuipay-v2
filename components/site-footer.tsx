@@ -11,8 +11,8 @@ const socialLinks = [
 export function SiteFooter() {
   return (
     <footer className="border-t border-neutral-mediumgray/50 bg-background">
-      <div className="container py-8 flex flex-col md:flex-row justify-between items-center text-center md:text-left">
-        <p className="text-xs text-neutral-darkgray mb-4 md:mb-0">
+      <div className="h-13 mb-16 flex flex-col md:flex-row justify-between items-center md:items-end text-center md:text-left">
+        <p className="text-xs text-neutral-darkgray mb-4 md:mb-0 text-[#737373] sm:mt-8">
           &copy; {new Date().getFullYear()} Intuipay Holding PTE. LTD. All rights reserved.
         </p>
         <div className="flex space-x-4">

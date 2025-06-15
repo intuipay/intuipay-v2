@@ -54,13 +54,6 @@ export function FilterDrawer({ isOpen, onOpenChange }: FilterDrawerProps) {
           <div className="flex justify-between items-center">
             <SheetTitle className="text-xl font-semibold">Filter</SheetTitle>
             <div className="flex items-center space-x-4">
-              <Button
-                variant="link"
-                className="text-sm text-action-blue p-0 h-auto"
-                onClick={() => console.log("Clear all filters")} // Implement clear logic
-              >
-                CLEAR ALL
-              </Button>
               <SheetClose asChild>
                 <Button variant="ghost" size="icon" className="rounded-full">
                   <X className="h-5 w-5" />
@@ -72,6 +65,15 @@ export function FilterDrawer({ isOpen, onOpenChange }: FilterDrawerProps) {
         </SheetHeader>
 
         <ScrollArea className="flex-grow px-6 py-4">
+          <div className="flex justify-end">
+            <Button
+              variant="link"
+              className="text-sm text-blue-btn p-0 h-auto"
+              onClick={() => console.log("Clear all filters")} // Implement clear logic
+            >
+              CLEAR ALL
+            </Button>
+          </div>
           <div className="space-y-8">
             {/* Category Section */}
             <FilterSection icon={FlaskConical} title="Category">
@@ -193,7 +195,7 @@ type FilterSectionProps = {
 function FilterSection({ icon: Icon, title, children }: FilterSectionProps) {
   return (
     <div>
-      <div className="flex items-center mb-3">
+      <div className="flex items-center mt-13 mb-8">
         <Icon className="h-5 w-5 mr-2 text-neutral-text" />
         <h3 className="text-md font-medium text-neutral-text">{title}</h3>
       </div>
