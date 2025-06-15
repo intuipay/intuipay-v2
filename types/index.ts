@@ -49,3 +49,20 @@ export type PaymentMethod = {
   important_info?: string;
   currency?: string[];
 }
+
+export type TiDBDataServiceResponse<T> = {
+  data: {
+    columns: string[];
+    rows: T[];
+  }
+}
+
+export type Project = {
+  id: string;
+  slug: string;
+  title: string;
+  description: string;
+  universityName: string;
+  banner: string;
+  goal_amount: number;
+}

@@ -1,13 +1,13 @@
-"use client"
+'use client'
 
-import Image from "next/image"
-import Link from "next/link"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Mail, MapPin, Link2, ExternalLink, Linkedin, Instagram, Twitter, Youtube, Facebook } from "lucide-react"
-import type { ProjectDataType } from "@/app/project/[slug]/project-data"
+import Image from 'next/image'
+import Link from 'next/link'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { Mail, MapPin, Link2, ExternalLink, Linkedin, Instagram, Twitter, Youtube, Facebook } from 'lucide-react'
+import type { ProjectDataType } from '@/app/project/[slug]/project-data'
 
 type AboutTabProps = {
-  university: ProjectDataType["university"]
+  university: ProjectDataType['university']
 }
 
 export function AboutTab({ university }: AboutTabProps) {
@@ -16,7 +16,7 @@ export function AboutTab({ university }: AboutTabProps) {
       <h2 className="text-xl sm:text-2xl font-semibold mb-4">About this organization</h2>
       <div className="flex items-center mb-4">
         <Avatar className="h-12 w-12 mr-4">
-          <AvatarImage src={university.logoUrl || "/placeholder.svg"} alt={university.name} />
+          <AvatarImage src={university.logoUrl || '/placeholder.svg'} alt={university.name} />
           <AvatarFallback>{university.name.substring(0, 2)}</AvatarFallback>
         </Avatar>
         <h3 className="text-xl font-semibold">{university.name}</h3>
@@ -104,7 +104,7 @@ export function AboutTab({ university }: AboutTabProps) {
       {university.aboutImage && (
         <div className="relative aspect-video rounded-lg overflow-hidden shadow-md">
           <Image
-            src={university.aboutImage || "/placeholder.svg"}
+            src={university.aboutImage || '/placeholder.svg'}
             alt={`About ${university.name}`}
             fill
             className="object-cover"

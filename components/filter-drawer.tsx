@@ -1,16 +1,16 @@
-"use client"
+'use client'
 
-import type React from "react"
+import type React from 'react'
 
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetClose, SheetFooter } from "@/components/ui/sheet"
-import { Button } from "@/components/ui/button"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { Label } from "@/components/ui/label"
-import { Slider } from "@/components/ui/slider"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { ScrollArea } from "@/components/ui/scroll-area"
-import { Separator } from "@/components/ui/separator"
-import { FlaskConical, Smile, MapPin, Coins, Landmark, X } from "lucide-react"
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetClose, SheetFooter } from '@/components/ui/sheet'
+import { Button } from '@/components/ui/button'
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
+import { Label } from '@/components/ui/label'
+import { Slider } from '@/components/ui/slider'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { ScrollArea } from '@/components/ui/scroll-area'
+import { Separator } from '@/components/ui/separator'
+import { FlaskConical, Smile, MapPin, Coins, Landmark, X } from 'lucide-react'
 
 type FilterDrawerProps = {
   isOpen: boolean
@@ -18,28 +18,28 @@ type FilterDrawerProps = {
 }
 
 const categories = [
-  { id: "all-cat", label: "All" },
-  { id: "animals", label: "Animals" },
-  { id: "art-culture", label: "Art & Culture" },
-  { id: "children-youth", label: "Children & Youth" },
-  { id: "health-medical", label: "Health & Medical" },
-  { id: "education", label: "Education" },
-  { id: "environment", label: "Environment" },
+  { id: 'all-cat', label: 'All' },
+  { id: 'animals', label: 'Animals' },
+  { id: 'art-culture', label: 'Art & Culture' },
+  { id: 'children-youth', label: 'Children & Youth' },
+  { id: 'health-medical', label: 'Health & Medical' },
+  { id: 'education', label: 'Education' },
+  { id: 'environment', label: 'Environment' },
 ]
 
 const donationMethods = [
-  { id: "all-dm", label: "All" },
-  { id: "crypto", label: "Crypto Only" },
-  { id: "cash", label: "Cash Only" },
-  { id: "crypto-cash", label: "Crypto / Cash" },
+  { id: 'all-dm', label: 'All' },
+  { id: 'crypto', label: 'Crypto Only' },
+  { id: 'cash', label: 'Cash Only' },
+  { id: 'crypto-cash', label: 'Crypto / Cash' },
 ]
 
 const projectTypes = [
-  { id: "all-pt", label: "All" },
-  { id: "non-profit", label: "Non-Profit / Academic Research" },
-  { id: "for-profit", label: "For-Profit Research" },
-  { id: "government", label: "Government-Funded Research" },
-  { id: "philanthropic", label: "Philanthropic Research" },
+  { id: 'all-pt', label: 'All' },
+  { id: 'non-profit', label: 'Non-Profit / Academic Research' },
+  { id: 'for-profit', label: 'For-Profit Research' },
+  { id: 'government', label: 'Government-Funded Research' },
+  { id: 'philanthropic', label: 'Philanthropic Research' },
 ]
 
 export function FilterDrawer({ isOpen, onOpenChange }: FilterDrawerProps) {
@@ -69,7 +69,7 @@ export function FilterDrawer({ isOpen, onOpenChange }: FilterDrawerProps) {
             <Button
               variant="link"
               className="text-sm text-blue-btn p-0 h-auto"
-              onClick={() => console.log("Clear all filters")} // Implement clear logic
+              onClick={() => console.log('Clear all filters')} // Implement clear logic
             >
               CLEAR ALL
             </Button>

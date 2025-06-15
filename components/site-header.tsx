@@ -1,33 +1,33 @@
-"use client"
+'use client'
 
-import { useState } from "react"
-import Link from "next/link"
-import { IntuipayLogo } from "@/components/intuipay-logo"
-import { Button } from "@/components/ui/button"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { Globe, ChevronDown, Menu, X } from "lucide-react"
+import { useState } from 'react'
+import Link from 'next/link'
+import { IntuipayLogo } from '@/components/intuipay-logo'
+import { Button } from '@/components/ui/button'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
+import { Globe, ChevronDown, Menu, X } from 'lucide-react'
 
 const navLinks = [
-  { href: "#", label: "Donate" },
-  { href: "#", label: "Pay" },
-  { href: "#", label: "Team" },
+  { href: '#', label: 'Donate' },
+  { href: '#', label: 'Pay' },
+  { href: '#', label: 'Team' },
 ]
 
 export function SiteHeader() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const [selectedNav, setSelectedNav] = useState(navLinks[0].label)
+  const [selectedNav, setSelectedNav] = useState(navLinks[ 0 ].label)
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-neutral-mediumgray/50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 items-center justify-between lg:px-30 px-12">
         <IntuipayLogo />
 
-        <nav className="hidden md:flex items-center space-x-6">
+        <nav className="hidden md:flex items-center gap-4">
           {navLinks.map((link) => (
             <Link
               key={link.label}
               href={link.href}
-              className={`text-sm font-medium text-neutral-darkgray hover:text-neutral-text transition-colors ${selectedNav === link.label ? 'text-blue-btn' : ''}`}
+              className={`px-2 text-base font-medium text-neutral-darkgray hover:text-neutral-text transition-colors ${selectedNav === link.label ? 'text-blue-btn' : ''}`}
             >
               {link.label}
             </Link>

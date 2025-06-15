@@ -15,6 +15,12 @@ const config: Config = {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic": "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
+      dropShadow: {
+        custom1: [
+          '0 3px 8px #28303E05',
+          '0 14px 14px #28303E05',
+        ],
+      },
       colors: {
         blue: {
           50: "#f0f7ff",

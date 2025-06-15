@@ -1,0 +1,120 @@
+'use client'
+
+import { useState } from 'react'
+import Image from 'next/image'
+import { ProjectCard } from '@/components/project-card'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
+import { Search, SlidersHorizontal, ArrowUpDown, ChevronDown } from 'lucide-react'
+import { FilterDrawer } from '@/components/filter-drawer'
+import { Project } from '@/types'
+
+type ProjectListProps = {
+  data: Project[];
+  page: number;
+  pageSize: number;
+  total: number;
+}
+
+export default function ProjectList({ data, page, pageSize, total }: ProjectListProps) {
+  // Renamed component for clarity
+  const [isFilterDrawerOpen, setIsFilterDrawerOpen] = useState(false)
+
+  return <>
+    {/* Hero Section */}
+    <section className="flex flex-col-reverse gap-16 items-stretch lg:flex-row w-full lg:py-21 bg-gradient-to-b from-intuipay-lighterblue/20 via-neutral-white to-neutral-white mb-20">
+      <div className="flex-1 flex flex-col gap-4">
+        <h1 className="text-4xl sm:text-5xl font-bold tracking-tight text-center md:text-left">
+          Fuel Trusted University-Backed Research
+        </h1>
+        <p className="text-base font-medium text-neutral-darkgray text-black/50">
+          All projects on Intuipay are verified academic research initiatives from accredited universities and institutions, ensuring every donation supports real, impactful science.
+        </p>
+        <div className="flex w-full mt-auto gap-12">
+          <div className="flex-grow relative drop-shadow-custom1">
+            <Input
+              type="search"
+              placeholder="Search"
+              className="rounded-full focus:ring-0 focus:border-neutral-mediumgray border border-black/20 text-base bg-neutral-lightgray w-full h-15 ps-6 pe-15"
+            />
+            <Button
+              type="submit"
+              className="bg-action-blue hover:bg-action-blue/90 w-15 h-15 px-5 bg-blue-btn rounded-full absolute right-0 top-0"
+            >
+              <Search className="h-5 w-5 text-primary-foreground" />
+              <span className="sr-only">Search</span>
+            </Button>
+          </div>
+          <Button
+            variant="outline"
+            className="px-9 h-15 text-sm md:text-xl flex items-center rounded-full"
+            type="button"
+            onClick={() => setIsFilterDrawerOpen(true)}
+          >
+            Filter
+            <SlidersHorizontal className="ml-2 h-4 w-4" />
+          </Button>
+        </div>
+      </div>
+      <Image
+        className="w-80"
+        src="/images/diamond.svg"
+        alt="Stylized image of hands exchanging coins over a digital interface"
+        priority
+        width={320}
+        height={292}
+      />
+    </section>
+    <div className="flex flex-col items-center gap-6 lg:flex-row sm:justify-between mb-6 md:mb-8">
+      <h2 className="text-lg font-medium sm:text-3xl">
+        Explore {total} Projects
+      </h2>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <div className="flex items-center gap-4">
+            <span className="text-black/50 whitespace-nowrap">Sort by</span>
+            <Button variant="outline" className="sm:w-40 h-11 border-neutral-mediumgray text-base rounded-full">
+              <ArrowUpDown className="me-2 h-4 w-4" />
+              Newest
+              <ChevronDown className="ms-2 h-4 w-4" />
+            </Button>
+          </div>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent
+          className="sm:w-40"
+          align="end"
+        >
+          <DropdownMenuItem>Newest</DropdownMenuItem>
+          <DropdownMenuItem>Oldest</DropdownMenuItem>
+          <DropdownMenuItem>Most Raised</DropdownMenuItem>
+          <DropdownMenuItem>Ending Soon</DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </div>
+    <div className="grid grid-cols-1 sm:grid-cols-2 md :grid-cols-3 gap-8 sm:gap-6 md:gap-8">
+      {data.map((project) => (
+        <ProjectCard key={project.id} project={project} />
+      ))}
+    </div>
+
+    <div className="flex justify-evenly lg:justify-between items-center flex-col lg:flex-row w-full h-full bg-blue-search my-20 py-8 px-6 sm:px-8 lg:px-11">
+      <Image
+        src="/images/laptop.svg"
+        alt="laptop"
+        priority
+        width={372}
+        height={272}
+        className="lg:mb-0 mb-10"
+      />
+      <section className="lg:ml-16">
+        <h2 className="font-bold mb-4 sm:text-4xl text-3xl">Have A Project That Needs Support?</h2>
+        <p className="mb-8 font-medium text-black/50">We're building a platform to support groundbreaking, university-affiliated research. If you're leading a verified academic or institutional project, you can share it here and start receiving donations.</p>
+        <Button className="w-60 h-14 border-neutral-mediumgray text-base rounded-full text-white font-semibold">
+          Create project
+        </Button>
+      </section>
+    </div>
+    <FilterDrawer isOpen={isFilterDrawerOpen} onOpenChange={setIsFilterDrawerOpen} />
+  </>
+}

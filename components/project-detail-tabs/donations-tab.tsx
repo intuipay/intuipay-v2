@@ -1,23 +1,23 @@
-"use client"
+'use client'
 
-import { useState } from "react"
-import { Avatar, AvatarFallback } from "@/components/ui/avatar"
-import { Button } from "@/components/ui/button"
-import { Users } from "lucide-react"
-import type { ProjectDataType } from "@/app/project/[slug]/project-data"
+import { useState } from 'react'
+import { Avatar, AvatarFallback } from '@/components/ui/avatar'
+import { Button } from '@/components/ui/button'
+import { Users } from 'lucide-react'
+import type { ProjectDataType } from '@/app/project/[slug]/project-data'
 
 type DonationsTabProps = {
-  donations: ProjectDataType["donations"]
+  donations: ProjectDataType['donations']
 }
 
 export function DonationsTab({ donations }: DonationsTabProps) {
-  const [donationSort, setDonationSort] = useState<"newest" | "top">("newest")
+  const [donationSort, setDonationSort] = useState<'newest' | 'top'>('newest')
 
   const sortedDonations = [...donations].sort((a, b) => {
-    if (donationSort === "top") {
+    if (donationSort === 'top') {
       // Assuming amountUSD is a string like "$46,494.89", need to parse it
-      const amountA = Number.parseFloat(a.amountUSD.replace(/[^0-9.-]+/g, ""))
-      const amountB = Number.parseFloat(b.amountUSD.replace(/[^0-9.-]+/g, ""))
+      const amountA = Number.parseFloat(a.amountUSD.replace(/[^0-9.-]+/g, ''))
+      const amountB = Number.parseFloat(b.amountUSD.replace(/[^0-9.-]+/g, ''))
       return amountB - amountA // Sort descending for "top"
     }
     // For "newest", assuming data is already somewhat sorted or rely on original order
@@ -32,16 +32,16 @@ export function DonationsTab({ donations }: DonationsTabProps) {
     <>
       <div className="flex items-center space-x-2 mb-6">
         <Button
-          variant={donationSort === "newest" ? "default" : "outline"}
-          onClick={() => setDonationSort("newest")}
-          className={`rounded-full px-4 py-1.5 text-sm ${donationSort === "newest" ? "bg-neutral-text text-neutral-white hover:bg-neutral-text/90" : "border-neutral-mediumgray text-neutral-darkgray"}`}
+          variant={donationSort === 'newest' ? 'default' : 'outline'}
+          onClick={() => setDonationSort('newest')}
+          className={`rounded-full px-4 py-1.5 text-sm ${donationSort === 'newest' ? 'bg-neutral-text text-neutral-white hover:bg-neutral-text/90' : 'border-neutral-mediumgray text-neutral-darkgray'}`}
         >
           Newest
         </Button>
         <Button
-          variant={donationSort === "top" ? "default" : "outline"}
-          onClick={() => setDonationSort("top")}
-          className={`rounded-full px-4 py-1.5 text-sm ${donationSort === "top" ? "bg-neutral-text text-neutral-white hover:bg-neutral-text/90" : "border-neutral-mediumgray text-neutral-darkgray"}`}
+          variant={donationSort === 'top' ? 'default' : 'outline'}
+          onClick={() => setDonationSort('top')}
+          className={`rounded-full px-4 py-1.5 text-sm ${donationSort === 'top' ? 'bg-neutral-text text-neutral-white hover:bg-neutral-text/90' : 'border-neutral-mediumgray text-neutral-darkgray'}`}
         >
           Top
         </Button>
@@ -65,7 +65,7 @@ export function DonationsTab({ donations }: DonationsTabProps) {
                 </div>
                 <div className="sm:col-span-3 text-left sm:text-left">
                   <div className="flex items-center">
-                    {typeof donation.currencyIcon === "function" ? (
+                    {typeof donation.currencyIcon === 'function' ? (
                       <donation.currencyIcon />
                     ) : (
                       <donation.currencyIcon className="w-4 h-4 mr-1 text-neutral-darkgray" />
@@ -86,7 +86,7 @@ export function DonationsTab({ donations }: DonationsTabProps) {
                 <div className="sm:col-span-3 text-left sm:text-left">
                   <p className="text-xs text-neutral-darkgray mb-0.5">Donate via</p>
                   <div className="flex items-center">
-                    {typeof donation.paymentIcon === "function" ? (
+                    {typeof donation.paymentIcon === 'function' ? (
                       <donation.paymentIcon />
                     ) : (
                       <donation.paymentIcon className="w-4 h-4 mr-1.5 text-neutral-darkgray" />
