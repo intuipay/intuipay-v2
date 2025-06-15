@@ -1,4 +1,5 @@
-import {DonationProjectStatus} from "@/constants/donation";
+import { DonationProjectStatus } from "@/constants/donation";
+import { ProjectCategories, ProjectTypes, ProjectDonationMethods } from "@/data";
 
 export type DropdownItemProps = {
   icon: string;
@@ -107,4 +108,21 @@ export type DonationInfo = {
 
   created_at?: string;
   updated_at?: string;
+}
+
+export type ProjectInfo = {
+  id: string;
+  project_name: string;
+  project_slug: string;
+  description: string;
+  banner: string;
+  goal_amount: number;
+}
+
+export type ProjectFilter = {
+  category: ProjectCategories;
+  progress: number;
+  location: string;
+  donationMethods: ProjectDonationMethods;
+  projectType: ProjectTypes;
 }

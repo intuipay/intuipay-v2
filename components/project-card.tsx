@@ -2,35 +2,36 @@ import Image from 'next/image'
 import Link from 'next/link' // Import Link
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { ShieldCheck } from 'lucide-react'
-import { Project } from '@/types';
+import { ProjectInfo } from '@/types';
 
 type ProjectCardProps = {
-  project: Project;
+  project: ProjectInfo;
 }
 
 export function ProjectCard({ project }: ProjectCardProps) {
   return (
     <Link
-      href={`/project/${project.slug}`}
-      className="block hover:shadow-lg transition-shadow duration-800 rounded-lg h-full"
+      href={`/project/${project.project_slug}`}
+      className="block hover:shadow-lg transition-shadow duration-800 rounded-lg h-full drop-shadow-custom1"
     >
       <Card className="group overflow-hidden flex flex-col h-full border-transparent hover:border-action-blue/50 transition-colors">
         <div className="relative w-full aspect-[16/9] h-[405px] group-hover:h-[60%] transition-height duration-800">
           <Image
-            src={project.banner || '/placeholder.svg'}
-            alt={project.title}
+            src={project.banner || '/images/placeholder.svg'}
+            alt={project.project_name}
             fill
             className="object-cover"
+            loading="lazy"
           />
         </div>
         <CardHeader>
-          <CardTitle className="text-base sm:text-lg text-neutral-text">{project.title}</CardTitle>
+          <CardTitle className="text-base sm:text-lg text-neutral-text">{project.project_name}</CardTitle>
           <p className="text-xs text-black/70 text-neutral-darkgray mt-1 line-clamp-1 group-hover:line-clamp-2">{project.description}</p>
         </CardHeader>
         <CardContent className="flex-grow">
           <div className="flex items-center text-xs">
             <ShieldCheck className="h-4 w-4 mr-1.5 text-intuipay-blue" />
-            <span>{project.universityName}</span>
+            <span>{project.university_name}</span>
           </div>
         </CardContent>
         <CardFooter className="mx-5 pt-4 border-t border-neutral-mediumgray/30 whitespace-nowrap overflow-hidden">

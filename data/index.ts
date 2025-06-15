@@ -1,4 +1,6 @@
 import {Currency, DropdownItemProps, PaymentMethod, University} from "@/types";
+// 为了保持向后兼容，使用新的区块链配置系统
+import { getNetworkDropdownOptions, getWalletDropdownOptions } from '@/config/blockchain';
 
 export const CurrencyList: Currency[] = [
   {
@@ -434,8 +436,31 @@ export const PaymentMethodsOther: PaymentMethod[] = [
   },
 ];
 
-// 为了保持向后兼容，使用新的区块链配置系统
-import { getNetworkDropdownOptions, getWalletDropdownOptions } from '@/config/blockchain';
 
 export const Networks = getNetworkDropdownOptions();
 export const Wallets = getWalletDropdownOptions();
+
+export enum ProjectCategories {
+  All = 0,
+  Animals = 1,
+  'Art & Culture' = 2,
+  'Children & Youth' = 3,
+  'Health & Medical' = 4,
+  Education = 5,
+  Environment = 6,
+}
+
+export enum ProjectDonationMethods {
+  All = 0,
+  Crypto = 1,
+  Cash = 2,
+  CryptoCash = 3,
+}
+
+export enum ProjectTypes {
+  All = 0,
+  'Non-Profit / Academic Research' = 1,
+  'For-Profit Research' = 2,
+  'Government-Funded Research' = 3,
+  'Philanthropic Research' = 4,
+}

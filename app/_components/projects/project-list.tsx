@@ -1,25 +1,67 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Image from 'next/image'
 import { ProjectCard } from '@/components/project-card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
-import { Search, SlidersHorizontal, ArrowUpDown, ChevronDown } from 'lucide-react'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
+import { Search, SlidersHorizontal, ArrowUpDown, ChevronDown, CheckIcon } from 'lucide-react'
 import { FilterDrawer } from '@/components/filter-drawer'
-import { Project } from '@/types'
+import { ProjectInfo, ProjectFilter } from '@/types'
+import { DropdownMenuRadioGroup, DropdownMenuRadioItem } from '@radix-ui/react-dropdown-menu'
+import { useRouter } from 'next/navigation'
+import { ProjectCategories, ProjectDonationMethods, ProjectTypes } from '@/data'
+
 
 type ProjectListProps = {
-  data: Project[];
+  data: ProjectInfo[];
   page: number;
   pageSize: number;
   total: number;
 }
 
+const SortOptions = [
+  { value: 'newest', label: 'Newest' },
+  { value: 'oldest', label: 'Oldest' },
+  { value: 'most-raised', label: 'Most Raised' },
+  { value: 'ending-soon', label: 'Ending Soon' },
+]
+
 export default function ProjectList({ data, page, pageSize, total }: ProjectListProps) {
-  // Renamed component for clarity
-  const [isFilterDrawerOpen, setIsFilterDrawerOpen] = useState(false)
+  const router = useRouter();
+  const [isFilterDrawerOpen, setIsFilterDrawerOpen] = useState(false);
+  const [search, setSearch] = useState('');
+  const [sortBy, setSortBy] = useState(SortOptions[ 0 ].value);
+  const [filter, setFilter] = useState<ProjectFilter>({
+    category: ProjectCategories.All,
+    progress: 0,
+    location: '',
+    donationMethods: ProjectDonationMethods.All,
+    projectType: ProjectTypes.All,
+  });
+
+  function updateSearchAndSort(search: string, orderBy: string, orderDir: string, filter: ProjectFilter) {
+    const searchParams = new URLSearchParams(location.search);
+    searchParams.set('search', search);
+    searchParams.set('order_by', orderBy);
+    searchParams.set('order_dir', orderDir);
+    searchParams.set('category', filter.category.toString());
+    searchParams.set('progress', filter.progress.toString());
+    searchParams.set('location', filter.location);
+    searchParams.set('donation_methods', filter.donationMethods.toString());
+    searchParams.set('project_type', filter.projectType.toString());
+    router.push(`${location.pathname}?${searchParams.toString()}`);
+  }
+
+  useEffect(() => {
+    switch (sortBy) {
+      case 'newest': updateSearchAndSort(search, 'id', 'desc', filter); break;
+      case 'oldest': updateSearchAndSort(search, 'id', 'asc', filter); break;
+      case 'most-raised': updateSearchAndSort(search, 'goal_amount', 'desc', filter); break;
+      case 'ending-soon': updateSearchAndSort(search, 'end_date', 'asc', filter); break;
+    }
+  }, [sortBy, search, filter]);
 
   return <>
     {/* Hero Section */}
@@ -37,6 +79,8 @@ export default function ProjectList({ data, page, pageSize, total }: ProjectList
               type="search"
               placeholder="Search"
               className="rounded-full focus:ring-0 focus:border-neutral-mediumgray border border-black/20 text-base bg-neutral-lightgray w-full h-15 ps-6 pe-15"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
             />
             <Button
               type="submit"
@@ -76,7 +120,7 @@ export default function ProjectList({ data, page, pageSize, total }: ProjectList
             <span className="text-black/50 whitespace-nowrap">Sort by</span>
             <Button variant="outline" className="sm:w-40 h-11 border-neutral-mediumgray text-base rounded-full">
               <ArrowUpDown className="me-2 h-4 w-4" />
-              Newest
+              {SortOptions.find((option) => option.value === sortBy)?.label}
               <ChevronDown className="ms-2 h-4 w-4" />
             </Button>
           </div>
@@ -85,14 +129,25 @@ export default function ProjectList({ data, page, pageSize, total }: ProjectList
           className="sm:w-40"
           align="end"
         >
-          <DropdownMenuItem>Newest</DropdownMenuItem>
-          <DropdownMenuItem>Oldest</DropdownMenuItem>
-          <DropdownMenuItem>Most Raised</DropdownMenuItem>
-          <DropdownMenuItem>Ending Soon</DropdownMenuItem>
+          <DropdownMenuRadioGroup
+            value={sortBy}
+            onValueChange={setSortBy}
+          >
+            {SortOptions.map((option) => (
+              <DropdownMenuRadioItem
+                key={option.value}
+                className="h-8 flex items-center ps-8 pe-4 relative"
+                value={option.value}
+              >
+                {sortBy === option.value && <CheckIcon className="h-4 w-4 absolute left-2" />}
+                {option.label}
+              </DropdownMenuRadioItem>
+            ))}
+          </DropdownMenuRadioGroup>
         </DropdownMenuContent>
       </DropdownMenu>
     </div>
-    <div className="grid grid-cols-1 sm:grid-cols-2 md :grid-cols-3 gap-8 sm:gap-6 md:gap-8">
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 sm:gap-6 md:gap-8">
       {data.map((project) => (
         <ProjectCard key={project.id} project={project} />
       ))}
@@ -109,12 +164,17 @@ export default function ProjectList({ data, page, pageSize, total }: ProjectList
       />
       <section className="lg:ml-16">
         <h2 className="font-bold mb-4 sm:text-4xl text-3xl">Have A Project That Needs Support?</h2>
-        <p className="mb-8 font-medium text-black/50">We're building a platform to support groundbreaking, university-affiliated research. If you're leading a verified academic or institutional project, you can share it here and start receiving donations.</p>
+        <p className="mb-8 font-medium text-black/50">We&apos;re building a platform to support groundbreaking, university-affiliated research. If you&apos;re leading a verified academic or institutional project, you can share it here and start receiving donations.</p>
         <Button className="w-60 h-14 border-neutral-mediumgray text-base rounded-full text-white font-semibold">
           Create project
         </Button>
       </section>
     </div>
-    <FilterDrawer isOpen={isFilterDrawerOpen} onOpenChange={setIsFilterDrawerOpen} />
+    <FilterDrawer
+      isOpen={isFilterDrawerOpen}
+      onOpenChange={setIsFilterDrawerOpen}
+      filter={filter}
+      setFilter={setFilter}
+    />
   </>
 }
