@@ -76,91 +76,95 @@ export default function ProjectsPage() {
   return (
     <div className="flex flex-col min-h-screen bg-neutral-white text-neutral-text">
       <SiteHeader />
-      <main className="flex-grow">
+      <main className="flex-grow px-12 lg:px-28">
         {/* Hero Section */}
-        <section className="py-12 md:py-20 lg:py-28 bg-gradient-to-b from-intuipay-lighterblue/20 via-neutral-white to-neutral-white">
-          <div className="container text-center">
-            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-6">
-              Fuel Trusted University-Backed Research
-            </h1>
-            <p className="max-w-3xl mx-auto text-base sm:text-lg md:text-xl text-neutral-darkgray mb-10">
-              All projects on Intuipay are verified academic research initiatives from accredited universities and
-              institutions, ensuring every donation supports real, impactful science.
-            </p>
-            <div className="relative w-full max-w-5xl mx-auto aspect-[21/9] md:aspect-[24/9] sm:aspect-[16/9] lg:aspect-[21/9] rounded-lg overflow-hidden shadow-xl">
-              <Image
-                src="/hero-image.jpeg"
-                alt="Stylized image of hands exchanging coins over a digital interface"
-                fill
-                priority
-                className="object-cover"
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1280px"
-              />
-            </div>
-          </div>
-        </section>
-
-        {/* Search and Filter Section */}
-        <section className="py-8 md:py-12">
-          <div className="container">
-            {/* Search Bar and Filter Button */}
-            <div className="flex flex-col lg:flex-row gap-y-4 gap-x-0 lg:gap-x-4 lg:items-stretch mb-8">
-              {/* Search Input Group */}
+        <section className="flex flex-col-reverse items-center lg:flex-row w-full py-12 lg:py-21 bg-gradient-to-b from-intuipay-lighterblue/20 via-neutral-white to-neutral-white">
+          <div className="container flex-1">
+              <h1 className="text-5xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-4 text-center md:text-left">
+                Fuel Trusted University-Backed Research
+              </h1>
+              <p className="text-base sm:text-lg md:text-xl text-neutral-darkgray text-black/50 mb-16">
+                All projects on Intuipay are verified academic research initiatives from accredited universities and
+                institutions, ensuring every donation supports real, impactful science.
+              </p>
               <div className="flex w-full md:flex-grow max-w-xl mx-auto md:mx-0 md:max-w-none">
                 <Input
                   type="search"
                   placeholder="Search"
-                  className="rounded-r-none focus:ring-0 focus:border-neutral-mediumgray border-r-0 h-11 text-base bg-neutral-lightgray flex-grow"
+                  className="rounded-full focus:ring-0 focus:border-neutral-mediumgray border-[1px] border-black/20 text-base bg-neutral-lightgray flex-grow sm:w-47 min-w-46 h-15 pl-6 pr-15"
                 />
-                <Button type="submit" className="bg-action-blue hover:bg-action-blue/90 rounded-l-none h-11 px-5">
+                <Button type="submit" className="bg-action-blue hover:bg-action-blue/90 w-15 h-15 px-5 bg-blue-btn rounded-full relative right-15">
                   <Search className="h-5 w-5 text-primary-foreground" />
                   <span className="sr-only">Search</span>
                 </Button>
-              </div>
-              {/* Filter Button */}
-              <div className="w-full md:w-auto">
                 <Button
                   variant="outline"
-                  className="w-full md:w-auto h-11 border-neutral-mediumgray text-base flex items-center justify-center"
+                  className="w-36 h-15 text-base flex items-center justify-center rounded-full"
                   onClick={() => setIsFilterDrawerOpen(true)}
                 >
-                  <SlidersHorizontal className="mr-2 h-4 w-4" />
                   Filter
+                  <SlidersHorizontal className="ml-2 h-4 w-4" />
                 </Button>
               </div>
-            </div>
-
-            {/* Explore Projects Title and Sort By Dropdown */}
-            <div className="flex flex-col space-y-4 lg:space-y-0 lg:flex-row justify-between items-center mb-6 md:mb-8">
-              <h2 className="text-2xl sm:text-3xl font-semibold">
-                Explore {projects.length * 100 + (projects.length % 3) * 10} Projects
-              </h2>
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="outline" className="w-full lg:w-auto h-11 border-neutral-mediumgray text-base">
-                    <ArrowUpDown className="mr-2 h-4 w-4" />
-                    Newest
-                    <ChevronDown className="ml-2 h-4 w-4" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  <DropdownMenuItem>Newest</DropdownMenuItem>
-                  <DropdownMenuItem>Oldest</DropdownMenuItem>
-                  <DropdownMenuItem>Most Raised</DropdownMenuItem>
-                  <DropdownMenuItem>Ending Soon</DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-              {projects.map((project) => (
-                <ProjectCard key={project.id} project={project} />
-              ))}
-            </div>
           </div>
+          <Image
+            className="ml-16 mb-6 lg:mb-0"
+            src="/diamond.svg"
+            alt="Stylized image of hands exchanging coins over a digital interface"
+            priority
+            width={326}
+            height={298}
+          />
         </section>
+        <div className="flex flex-col items-start space-y-4 lg:space-y-0 lg:flex-row justify-between mb-6 md:mb-8 mt-2">
+          <h2 className="text-2xl sm:text-3xl whitespace-nowrap">
+            Explore {projects.length * 100 + (projects.length % 3) * 10} Projects
+          </h2>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <div className="flex items-center mt-6 sm:mt-0">
+                <span className="text-black/50 whitespace-nowrap">Sort by</span>
+                <Button variant="outline" className="sm:w-40 w-56 h-11 border-neutral-mediumgray text-base ml-4 rounded-full">
+                  <ArrowUpDown className="mr-2 h-4 w-4" />
+                  Newest
+                  <ChevronDown className="ml-2 h-4 w-4" />
+                </Button>
+              </div>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem>Newest</DropdownMenuItem>
+              <DropdownMenuItem>Oldest</DropdownMenuItem>
+              <DropdownMenuItem>Most Raised</DropdownMenuItem>
+              <DropdownMenuItem>Ending Soon</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+          {projects.map((project) => (
+            <ProjectCard key={project.id} project={project} />
+          ))}
+        </div>
+
+        <div className="flex justify-evenly lg:justify-between items-center flex-col lg:flex-row w-full h-full bg-blue-search my-20 py-8 px-6 sm:px-8 lg:px-11">
+          <Image
+            src="/laptop.svg"
+            alt="laptop"
+            priority
+            width={370}
+            height={270}
+            className="lg:mb-0 mb-10"
+          />
+          <section className="lg:ml-16">
+            <h1 className="font-bold mb-4 lg:text-4xl sm:text-3xl text-2xl">Have A Project That Needs Support?</h1>
+            <p className="mb-8 text-black/50">We're building a platform to support groundbreaking, university-affiliated research. If you're leading a verified academic or institutional project, you can share it here and start receiving donations.</p>
+            <Button className="w-60 h-14 border-neutral-mediumgray text-base rounded-full text-white">
+              Create project
+            </Button>
+          </section>
+        </div>
+        <div className="h-16"></div>
+        <SiteFooter />
       </main>
-      <SiteFooter />
       <FilterDrawer isOpen={isFilterDrawerOpen} onOpenChange={setIsFilterDrawerOpen} />
     </div>
   )
