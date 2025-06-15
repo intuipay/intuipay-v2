@@ -216,6 +216,48 @@
     },
     "params": [
       {
+        "name": "search",
+        "type": "string",
+        "required": 0,
+        "default": "",
+        "description": ""
+      },
+      {
+        "name": "category",
+        "type": "integer",
+        "required": 0,
+        "default": "",
+        "description": ""
+      },
+      {
+        "name": "location",
+        "type": "string",
+        "required": 0,
+        "default": "",
+        "description": ""
+      },
+      {
+        "name": "accepts",
+        "type": "integer",
+        "required": 0,
+        "default": "",
+        "description": ""
+      },
+      {
+        "name": "type",
+        "type": "integer",
+        "required": 0,
+        "default": "",
+        "description": ""
+      },
+      {
+        "name": "progress",
+        "type": "number",
+        "required": 0,
+        "default": "",
+        "description": ""
+      },
+      {
         "name": "order_by",
         "type": "string",
         "required": 1,
