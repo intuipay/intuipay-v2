@@ -116,7 +116,12 @@ export type ProjectInfo = {
   project_slug: string;
   description: string;
   banner: string;
+  amount: number;
   goal_amount: number;
+  end_at: string;
+  org_name: string;
+  org_slug: string;
+  org_logo: string;
 }
 
 export type ProjectFilter = {
