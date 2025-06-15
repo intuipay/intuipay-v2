@@ -9,10 +9,11 @@ export async function fetchTidb<T>(url: string, method: string = 'GET', body?: u
       'content-type': 'application/json',
     },
     method,
-    ...body && { body: JSON.stringify(body)},
+    ...(body ? { body: JSON.stringify(body) } : {}),
   });
 
   if (!response.ok) {
+    console.log('URL', url);
     throw new Error(`HTTP error. status: ${response.status}`);
   }
 

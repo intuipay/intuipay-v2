@@ -23,6 +23,12 @@ const config: Config = {
       boxShadow: {
         footer: "0 -14px 14px #28303E05, 0 -55px 22px #28303E02",
       },
+      dropShadow: {
+        custom1: [
+          '0 3px 8px #28303E05',
+          '0 14px 14px #28303E05',
+        ],
+      },
       colors: {
         blue: {
           50: "#f0f7ff",

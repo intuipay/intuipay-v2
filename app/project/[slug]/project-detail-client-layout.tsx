@@ -1,15 +1,15 @@
-"use client" // This is now the top-level CLIENT COMPONENT for this page's content
+'use client' // This is now the top-level CLIENT COMPONENT for this page's content
 
-import Image from "next/image"
-import Link from "next/link"
-import { SiteHeader } from "@/components/site-header"
-import { SiteFooter } from "@/components/site-footer"
-import { ProjectCard } from "@/components/project-card"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { Progress } from "@/components/ui/progress"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import Image from 'next/image'
+import Link from 'next/link'
+import { SiteHeader } from '@/components/site-header'
+import { SiteFooter } from '@/components/site-footer'
+import { ProjectCard } from '@/components/project-card'
+import { Button } from '@/components/ui/button'
+import { Badge } from '@/components/ui/badge'
+import { Progress } from '@/components/ui/progress'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import {
   FlaskConical,
   MapPin,
@@ -22,14 +22,14 @@ import {
   Twitter,
   ShieldCheck,
   ExternalLink,
-} from "lucide-react"
+} from 'lucide-react'
 
-import { CampaignTab } from "@/components/project-detail-tabs/campaign-tab"
-import { AboutTab } from "@/components/project-detail-tabs/about-tab"
-import { UpdatesTab } from "@/components/project-detail-tabs/updates-tab"
-import { DonationsTab } from "@/components/project-detail-tabs/donations-tab"
+import { CampaignTab } from '@/components/project-detail-tabs/campaign-tab'
+import { AboutTab } from '@/components/project-detail-tabs/about-tab'
+import { UpdatesTab } from '@/components/project-detail-tabs/updates-tab'
+import { DonationsTab } from '@/components/project-detail-tabs/donations-tab'
 
-import type { ProjectDataType } from "./project-data"
+import type { ProjectDataType } from './project-data'
 
 type ProjectDetailClientLayoutProps = {
   project: ProjectDataType
@@ -40,10 +40,10 @@ export default function ProjectDetailClientLayout({ project, similarProjects }: 
   const fundingPercentage = (project.funding.current / project.funding.goal) * 100
 
   const tocItems = [
-    { id: "overview", label: "Overview" },
-    { id: "mission-statement", label: "Mission Statement" },
-    { id: "why-donate", label: `Why donate to ${project.title}?` }, // Made dynamic
-    { id: "risks-challenges", label: "Risks & Challenges" },
+    { id: 'overview', label: 'Overview' },
+    { id: 'mission-statement', label: 'Mission Statement' },
+    { id: 'why-donate', label: `Why donate to ${project.title}?` }, // Made dynamic
+    { id: 'risks-challenges', label: 'Risks & Challenges' },
   ]
 
   return (
@@ -60,7 +60,7 @@ export default function ProjectDetailClientLayout({ project, similarProjects }: 
             <div className="lg:w-2/3">
               <div className="relative aspect-video rounded-lg overflow-hidden mb-6 shadow-lg">
                 <Image
-                  src={project.heroImageUrl || "/placeholder.svg"}
+                  src={project.heroImageUrl || '/placeholder.svg'}
                   alt={project.title}
                   fill
                   className="object-cover"
@@ -130,7 +130,7 @@ export default function ProjectDetailClientLayout({ project, similarProjects }: 
               <div className="border border-neutral-mediumgray/50 rounded-lg p-6 space-y-6">
                 <div className="flex items-center">
                   <Avatar className="h-10 w-10 mr-3">
-                    <AvatarImage src={project.university.logoUrl || "/placeholder.svg"} alt={project.university.name} />
+                    <AvatarImage src={project.university.logoUrl || '/placeholder.svg'} alt={project.university.name} />
                     <AvatarFallback>
                       <ShieldCheck className="w-5 h-5 text-intuipay-blue" />
                     </AvatarFallback>
@@ -167,7 +167,7 @@ export default function ProjectDetailClientLayout({ project, similarProjects }: 
                     rel="noopener noreferrer"
                     className="flex items-center text-neutral-darkgray hover:text-action-blue"
                   >
-                    <Link2 className="w-4 h-4 mr-2" /> {project.contact.website}{" "}
+                    <Link2 className="w-4 h-4 mr-2" /> {project.contact.website}{' '}
                     <ExternalLink className="w-3 h-3 ml-1" />
                   </Link>
                   <Link
@@ -176,7 +176,7 @@ export default function ProjectDetailClientLayout({ project, similarProjects }: 
                     rel="noopener noreferrer"
                     className="flex items-center text-neutral-darkgray hover:text-action-blue"
                   >
-                    <Github className="w-4 h-4 mr-2" /> {project.contact.github}{" "}
+                    <Github className="w-4 h-4 mr-2" /> {project.contact.github}{' '}
                     <ExternalLink className="w-3 h-3 ml-1" />
                   </Link>
                   <Link
@@ -185,7 +185,7 @@ export default function ProjectDetailClientLayout({ project, similarProjects }: 
                     rel="noopener noreferrer"
                     className="flex items-center text-neutral-darkgray hover:text-action-blue"
                   >
-                    <Twitter className="w-4 h-4 mr-2" /> @{project.contact.twitter}{" "}
+                    <Twitter className="w-4 h-4 mr-2" /> @{project.contact.twitter}{' '}
                     <ExternalLink className="w-3 h-3 ml-1" />
                   </Link>
                 </div>

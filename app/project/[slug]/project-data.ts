@@ -1,8 +1,8 @@
 // No changes needed here, but ensure it's correctly defining types used by both server and client.
 // It's good practice to define the shape of your data, especially when passing it around.
 // This is a simplified version based on current mock data.
-import type { LucideIcon } from "lucide-react"
-import type { JSX } from "react/jsx-runtime"
+import type { LucideIcon } from 'lucide-react'
+import type { JSX } from 'react/jsx-runtime'
 
 type StringOrComponent = string | (() => JSX.Element) | LucideIcon
 
@@ -12,7 +12,7 @@ export type ProjectUpdate = {
   title: string
   content: string
   media?: {
-    type: "placeholder" | "image" | "video"
+    type: 'placeholder' | 'image' | 'video'
     url: string
     alt?: string
   }

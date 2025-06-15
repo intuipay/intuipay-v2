@@ -1,18 +1,18 @@
-"use client"
+'use client'
 
-import Image from "next/image"
-import { Separator } from "@/components/ui/separator"
-import type { ProjectDataType } from "@/app/project/[slug]/project-data"
+import Image from 'next/image'
+import { Separator } from '@/components/ui/separator'
+import type { ProjectDataType } from '@/app/project/[slug]/project-data'
 
 type UpdatesTabProps = {
-  updates: ProjectDataType["updates"]
+  updates: ProjectDataType['updates']
 }
 
 const formatDateForUpdate = (dateString: string) => {
   const date = new Date(dateString)
-  const day = date.toLocaleDateString("en-US", { day: "2-digit" })
-  const month = date.toLocaleDateString("en-US", { month: "short" })
-  const year = date.toLocaleDateString("en-US", { year: "numeric" })
+  const day = date.toLocaleDateString('en-US', { day: '2-digit' })
+  const month = date.toLocaleDateString('en-US', { month: 'short' })
+  const year = date.toLocaleDateString('en-US', { year: 'numeric' })
   return { day, month, year }
 }
 
@@ -38,11 +38,11 @@ export function UpdatesTab({ updates }: UpdatesTabProps) {
                 <p className="text-neutral-darkgray leading-relaxed mb-4">{update.content}</p>
                 {update.media && (
                   <div className="bg-intuipay-lighterblue/30 aspect-video rounded-md p-4 mb-4 flex items-center justify-center">
-                    {update.media.type === "placeholder" ? (
+                    {update.media.type === 'placeholder' ? (
                       <p className="text-center text-neutral-darkgray">Media</p>
                     ) : (
                       <Image
-                        src={update.media.url || "/placeholder.svg"}
+                        src={update.media.url || '/placeholder.svg'}
                         alt={update.media.alt || update.title}
                         width={600}
                         height={400}

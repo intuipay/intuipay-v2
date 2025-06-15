@@ -1,16 +1,16 @@
-import { Facebook, Twitter, Instagram, Linkedin } from "lucide-react"
-import Link from "next/link"
+import { Facebook, Twitter, Instagram, Linkedin } from 'lucide-react'
+import Link from 'next/link'
 
 const socialLinks = [
-  { name: "Facebook", icon: Facebook, href: "#" },
-  { name: "Twitter", icon: Twitter, href: "#" },
-  { name: "Instagram", icon: Instagram, href: "#" },
-  { name: "LinkedIn", icon: Linkedin, href: "#" },
+  { name: 'Facebook', icon: Facebook, href: '#' },
+  { name: 'Twitter', icon: Twitter, href: '#' },
+  { name: 'Instagram', icon: Instagram, href: '#' },
+  { name: 'LinkedIn', icon: Linkedin, href: '#' },
 ]
 
 export function SiteFooter() {
   return (
-    <footer className="border-t border-neutral-mediumgray/50 bg-background">
+    <footer className="w-full max-w-7xl mx-auto px-12 md:px-10 border-t border-neutral-mediumgray/50 bg-background">
       <div className="h-13 mb-16 flex flex-col md:flex-row justify-between items-center md:items-end text-center md:text-left">
         <p className="text-xs text-neutral-darkgray mb-4 md:mb-0 text-[#737373] sm:mt-8">
           &copy; {new Date().getFullYear()} Intuipay Holding PTE. LTD. All rights reserved.

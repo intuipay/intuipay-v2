@@ -1,12 +1,12 @@
-"use client"
-import Link from "next/link"
-import { Badge } from "@/components/ui/badge"
-import type { ProjectDataType } from "@/app/project/[slug]/project-data"
+'use client'
+import Link from 'next/link'
+import { Badge } from '@/components/ui/badge'
+import type { ProjectDataType } from '@/app/project/[slug]/project-data'
 
 type CampaignTabProps = {
   project: Pick<
     ProjectDataType,
-    "overview" | "missionStatement" | "whyDonate" | "risksChallenges" | "faqLink" | "tags" | "title"
+    'overview' | 'missionStatement' | 'whyDonate' | 'risksChallenges' | 'faqLink' | 'tags' | 'title'
   >
 }
 
@@ -51,7 +51,7 @@ export function CampaignTab({ project }: CampaignTabProps) {
       </section>
 
       <p className="text-sm text-neutral-darkgray mb-8">
-        Questions about this project?{" "}
+        Questions about this project?{' '}
         <Link href={project.faqLink} className="text-action-blue hover:underline">
           Check out the FAQ
         </Link>
