@@ -318,6 +318,14 @@
         "description": ""
       },
       {
+        "name": "order",
+        "type": "string",
+        "required": 0,
+        "default": "id",
+        "description": "",
+        "enum": "id,amount"
+      },
+      {
         "name": "start",
         "type": "integer",
         "required": 1,
