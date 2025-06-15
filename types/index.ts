@@ -1,3 +1,5 @@
+import { ProjectCategories, ProjectTypes, ProjectDonationMethods } from "@/data";
+
 export type DropdownItemProps = {
   country: string;
   icon: string;
@@ -57,12 +59,19 @@ export type TiDBDataServiceResponse<T> = {
   }
 }
 
-export type Project = {
+export type ProjectInfo = {
   id: string;
-  slug: string;
-  title: string;
+  project_name: string;
+  project_slug: string;
   description: string;
-  universityName: string;
   banner: string;
   goal_amount: number;
+}
+
+export type ProjectFilter = {
+  category: ProjectCategories;
+  progress: number;
+  location: string;
+  donationMethods: ProjectDonationMethods;
+  projectType: ProjectTypes;
 }

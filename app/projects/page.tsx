@@ -10,14 +10,17 @@ type Props = {
   searchParams: Promise<{
     page: string;
     pageSize: string;
+    search: string;
+    order_by: string;
+    order_dir: string;
   }>
 };
 export default async function ProjectsPage({ searchParams }: Props) {
-  const { page, pageSize } = await searchParams;
+  const { page, pageSize, search, order_by, order_dir } = await searchParams;
   const pageNumber = page ? parseInt(page) : 1;
   const pageSizeNumber = pageSize ? parseInt(pageSize) : 9;
   const [projects, total] = await Promise.all([
-    getProjects(pageNumber, pageSizeNumber),
+    getProjects(pageNumber, pageSizeNumber, search, order_by, order_dir),
     getProjectCount(),
   ]);
 
