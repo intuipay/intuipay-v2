@@ -413,8 +413,8 @@
     },
     "params": [
       {
-        "name": "id",
-        "type": "number",
+        "name": "slug",
+        "type": "string",
         "required": 1,
         "default": "",
         "description": ""
