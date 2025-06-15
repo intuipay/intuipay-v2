@@ -434,7 +434,50 @@
     "data_source": {
       "cluster_id": 10914349176033975536
     },
-    "params": [],
+    "params": [
+      {
+        "name": "search",
+        "type": "string",
+        "required": 0,
+        "default": "",
+        "description": ""
+      },
+      {
+        "name": "category",
+        "type": "integer",
+        "required": 0,
+        "default": "",
+        "description": ""
+      },
+      {
+        "name": "location",
+        "type": "string",
+        "required": 0,
+        "default": "",
+        "description": ""
+      },
+      {
+        "name": "accepts",
+        "type": "integer",
+        "required": 0,
+        "default": "",
+        "description": ""
+      },
+      {
+        "name": "type",
+        "type": "integer",
+        "required": 0,
+        "default": "",
+        "description": ""
+      },
+      {
+        "name": "progress",
+        "type": "number",
+        "required": 0,
+        "default": "",
+        "description": ""
+      }
+    ],
     "settings": {
       "timeout": 30000,
       "row_limit": 1000,
