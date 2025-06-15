@@ -11,6 +11,7 @@ import { Networks, Wallets } from '@/data';
 import { WalletConnectButton } from '@/components/wallet-connect-button';
 import { useAccount, useConnect, useDisconnect, useChainId } from 'wagmi';
 import { appkit } from '@/lib/appkit';
+import { useMultiWalletBalance } from '@/hooks/use-multi-wallet-balance';
 
 type Props = {
   amount: number | '';
@@ -64,9 +65,11 @@ export default function DonationStep1({
   // wagmi hooks
   const { address, isConnected, connector } = useAccount();
   const { connect, connectors, isPending, error: connectError } = useConnect();
-  const { disconnect } = useDisconnect();
-  const chainId = useChainId();
+  const { disconnect } = useDisconnect();  const chainId = useChainId();
   const [isPhantomConnected, setIsPhantomConnected] = useState(false);
+
+  // Get wallet balances for all supported tokens
+  const { balances, refreshBalances } = useMultiWalletBalance(network);
 
   const handleDisconnect = useCallback(() => {
     if ((window as any)?.phantom?.solana) {
@@ -359,6 +362,8 @@ export default function DonationStep1({
             options={getFilteredPaymentMethods()}
             onChange={setPaymentMethod}
             value={paymentMethod}
+            showBalance={isConnected || isPhantomConnected}
+            balances={balances}
           />
         </div>
 
