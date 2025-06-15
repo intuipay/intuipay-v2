@@ -27,7 +27,7 @@ export function SiteHeader() {
             <Link
               key={link.label}
               href={link.href}
-              className={`px-2 text-base font-medium text-neutral-darkgray hover:text-neutral-text transition-colors ${selectedNav === link.label ? 'text-blue-btn' : ''}`}
+              className={`px-2 text-base font-medium text-neutral-darkgray hover:text-neutral-text transition-colors ${selectedNav === link.label ? 'text-primary' : ''}`}
             >
               {link.label}
             </Link>
@@ -49,13 +49,13 @@ export function SiteHeader() {
             </DropdownMenuContent>
           </DropdownMenu>
 
-          <Button className="border-neutral-mediumgray text-base ml-2 bg-blue-btn rounded-full text-white w-28 hidden lg:block">
+          <Button className="border-neutral-mediumgray text-base ml-2 bg-primary rounded-full text-white w-28 hidden lg:block">
             Sign In
           </Button>
           <Link
             href={''}
             aria-label={'todo'}
-            className="text-blue-btn ml-6 hidden lg:block"
+            className="text-primary ml-6 hidden lg:block"
           >
             Create account
           </Link>
