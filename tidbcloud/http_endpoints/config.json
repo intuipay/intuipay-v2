@@ -357,7 +357,7 @@
     "name": "/project_detailed",
     "description": "",
     "method": "GET",
-    "endpoint": "/donation_project_full",
+    "endpoint": "/project_detailed",
     "data_source": {
       "cluster_id": 10914349176033975536
     },
@@ -379,7 +379,7 @@
     },
     "tag": "Default",
     "batch_operation": 0,
-    "sql_file": "sql/GET-donation_project_full.sql",
+    "sql_file": "sql/GET-project_detailed.sql",
     "type": "sql_endpoint",
     "return_type": "json"
   },
