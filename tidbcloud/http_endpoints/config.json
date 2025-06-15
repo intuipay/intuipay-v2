@@ -210,7 +210,7 @@
     "name": "/projects",
     "description": "",
     "method": "GET",
-    "endpoint": "/donation_projects",
+    "endpoint": "/projects",
     "data_source": {
       "cluster_id": 10914349176033975536
     },
@@ -227,7 +227,8 @@
         "type": "string",
         "required": 1,
         "default": "",
-        "description": ""
+        "description": "",
+        "enum": "desc, asc"
       },
       {
         "name": "start",
@@ -253,7 +254,7 @@
     },
     "tag": "Default",
     "batch_operation": 0,
-    "sql_file": "sql/GET-donation_projects.sql",
+    "sql_file": "sql/GET-projects.sql",
     "type": "sql_endpoint",
     "return_type": "json"
   },
