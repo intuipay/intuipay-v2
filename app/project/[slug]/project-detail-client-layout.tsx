@@ -174,27 +174,27 @@ export default function ProjectDetailClientLayout({ project, similarProjects, do
                 <div className="space-y-2 text-sm grid grid-cols-2">
                   <Link
                     href={`mailto:${project.email}`}
-                    className="flex items-center text-neutral-darkgray hover:text-action-blue"
+                    className="flex items-center gap-1 text-neutral-darkgray hover:text-action-blue"
                   >
-                    <Mail className="w-4 h-4 mr-2" /> <span className="text-blue-btn">{project.email}</span>
+                    <Mail className="w-4 h-4" /> <span className="text-blue-btn">{project.email}</span>
                   </Link>
                   <Link
                     href={project.website || ''}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center text-neutral-darkgray hover:text-action-blue"
+                    className="flex items-center gap-1 text-neutral-darkgray hover:text-action-blue"
                   >
-                    <Link2 className="w-4 h-4 mr-2" /> <span className="text-blue-btn">{project.website}</span>
+                    <Link2 className="w-4 h-4" /> <span className="text-blue-btn">{project.website}</span>
                   </Link>
-                  <Link
+                  {project.github && <Link
                     href={`https://github.com/${project.github}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center text-neutral-darkgray hover:text-action-blue"
+                    className="flex items-center gap-1 text-neutral-darkgray hover:text-action-blue"
                   >
-                    <Github className="w-4 h-4 mr-2" /> <span className="text-blue-btn">{project.github}</span>
+                    <Github className="w-4 h-4" /> <span className="text-blue-btn">{project.github}</span>
                     {project.github && <ExternalLink className="w-3 h-3 ml-1" />}
-                  </Link>
+                  </Link>}
                   {
                     socialLinks && (
                       Object.entries(socialLinks).map(([key, value]) => (
@@ -203,8 +203,16 @@ export default function ProjectDetailClientLayout({ project, similarProjects, do
                           key={key}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="flex items-center text-neutral-darkgray hover:text-action-blue"
+                          className="flex items-center gap-1 text-neutral-darkgray hover:text-action-blue"
                         >
+                          <Image
+                            className="size-3.5"
+                            src={`/images/logos/${key === 'Twitter' ? 'x' : key.toLowerCase()}.svg`}
+                            alt={key}
+                            width={14}
+                            height={14}
+                            loading="lazy"
+                          />
                           <span className="text-blue-btn">{key}</span>
                         </Link>
                       ))
