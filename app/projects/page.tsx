@@ -1,6 +1,8 @@
 import ProjectList from '../_components/projects/project-list';
 import { getProjectCount, getProjects } from '@/lib/data';
 
+export const runtime = 'edge';
+
 export const metadata = {
   title: 'Projects',
   description: 'Projects',
