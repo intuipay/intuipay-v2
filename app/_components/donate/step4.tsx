@@ -122,6 +122,14 @@ export default function DonationStep4({
 
     return errorMessage;
   };
+  function convertAmountBasedOnCurrency(amount: number, currency: string): number {
+    if (currency.toUpperCase() === 'USDC') {
+      return amount * 1000000; // USDC has 6 decimal places
+    } else if (currency.toUpperCase() === 'SOL') {
+      return amount * LAMPORTS_PER_SOL; // SOL has 9 decimal places, but we use LAMPORTS_PER_SOL for transfer
+    }
+    return amount; // Default case, no conversion
+  }
   // 保存捐赠数据到数据库
   async function saveDonationToDatabase(transactionHash: string, walletAddress?: string) {
     try {
@@ -131,7 +139,8 @@ export default function DonationStep4({
           'content-type': 'application/json',
         },
         body: JSON.stringify({
-          ...omit(info, ['id', 'created_at', 'updated_at']),
+          ...omit(info, ['id', 'amount', 'created_at', 'updated_at']),
+          amount: convertAmountBasedOnCurrency(info.amount as number, info.currency),
           has_tax_invoice: Number(info.has_tax_invoice),
           is_anonymous: Number(info.is_anonymous),
           account: '',
