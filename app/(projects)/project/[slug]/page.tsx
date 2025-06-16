@@ -3,6 +3,7 @@ import type { Metadata, ResolvingMetadata } from 'next'
 import ProjectDetailClientLayout from './project-detail-client-layout' // New Client Component
 import { getProjectDetail, getDonations, getUpdates, getUpdatesCount, getProjects } from '@/lib/data'
 import { Donations, ProjectInfo, Updates } from '@/types'
+import { ProjectCategories } from '@/data';
 
 export const runtime = 'edge';
 
@@ -15,15 +16,15 @@ async function getProjectDetailById(slug: string): Promise<ProjectInfo> {
   return detail
 }
 
-async function getDonationsById(projectId: string, page: number): Promise<Donations> {
+async function getDonationsById(projectId: number, page: number): Promise<Donations> {
   const donations = await getDonations(projectId, page)
   return donations
 }
-async function getUpdatesById(projectId: string, page: number): Promise<Updates> {
+async function getUpdatesById(projectId: number, page: number): Promise<Updates> {
   const updates = await getUpdates(projectId, page)
   return updates
 }
-async function getUpdatesCountById(projectId: string): Promise<any> {
+async function getUpdatesCountById(projectId: number): Promise<any> {
   const updateCount = await getUpdatesCount(projectId)
   return updateCount
 }
@@ -31,7 +32,7 @@ async function getUpdatesCountById(projectId: string): Promise<any> {
 
 // Dynamic Metadata Generation for SEO
 type Props = {
-  params: { slug: string }
+  params: Promise<{ slug: string }>
 }
 
 export async function generateMetadata({ params }: Props, parent: ResolvingMetadata): Promise<Metadata> {
@@ -78,11 +79,12 @@ export default async function ProjectDetailPageServer({ params }: { params: { sl
     'id',
     'desc',
     {
-      category: project.category,
+      category: project.category as ProjectCategories,
       progress: 0,
       location: '',
       donationMethods: 0,
       projectType: 0,
+      excludes: project.id,
      });
   console.log('similarProjects: ', similarProjects);
   const updates = await getUpdatesById(project.id, 1)

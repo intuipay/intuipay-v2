@@ -60,14 +60,14 @@ export type TiDBDataServiceResponse<T> = {
 }
 
 export type ProjectInfo = {
-  id: string;
+  id: number;
   project_slug: string;
   accepts: string;
   amount: string;
   banner: string;
   banners: string;
   campaign: string;
-  category: string;
+  category: ProjectCategories;
   description: string;
   email: string;
   end_at: string;
@@ -87,8 +87,7 @@ export type ProjectInfo = {
   social_links: string | Record<string, string>;
   status: string;
   tags: string;
-  tags_1: string;
-  type: string;
+  type: ProjectTypes;
   wallet_address: string;
   website: string;
 }
@@ -99,6 +98,7 @@ export type ProjectFilter = {
   location?: string;
   donationMethods?: ProjectDonationMethods;
   projectType?: ProjectTypes;
+  excludes?: number;
 }
 
 export type Donation = {
