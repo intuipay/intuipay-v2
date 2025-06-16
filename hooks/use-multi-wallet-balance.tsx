@@ -34,32 +34,37 @@ export function useMultiWalletBalance(network: string): MultiWalletBalanceResult
 
   // Check Phantom connection status
   useEffect(() => {
+    const handleConnect = () => {
+      console.log('Phantom wallet connected event');
+      setIsPhantomConnected(true);
+    };
+
+    const handleDisconnect = () => {
+      console.log('Phantom wallet disconnected event');
+      setIsPhantomConnected(false);
+    };
+
     const checkPhantomConnection = () => {
       if (typeof window !== 'undefined' && (window as any)?.phantom?.solana) {
-        const isConnected = (window as any).phantom.solana.isConnected;
+        const phantom = (window as any).phantom.solana;
+        const isConnected = phantom.isConnected;
         console.log('Phantom connection status:', isConnected);
         setIsPhantomConnected(isConnected);
-        
-        // Listen for connection events
-        (window as any).phantom.solana.on('connect', () => {
-          console.log('Phantom wallet connected event');
-          setIsPhantomConnected(true);
-        });
 
-        (window as any).phantom.solana.on('disconnect', () => {
-          console.log('Phantom wallet disconnected event');
-          setIsPhantomConnected(false);
-        });
+        // Listen for connection events
+        phantom.on('connect', handleConnect);
+        phantom.on('disconnect', handleDisconnect);
       }
     };
 
     checkPhantomConnection();
-    
+
     // Cleanup event listeners on unmount
     return () => {
       if (typeof window !== 'undefined' && (window as any)?.phantom?.solana) {
-        (window as any).phantom.solana.removeAllListeners('connect');
-        (window as any).phantom.solana.removeAllListeners('disconnect');
+        const phantom = (window as any).phantom.solana;
+        phantom.off('connect', handleConnect);
+        phantom.off('disconnect', handleDisconnect);
       }
     };
   }, []);
@@ -82,7 +87,7 @@ export function useMultiWalletBalance(network: string): MultiWalletBalanceResult
   useEffect(() => {
     async function fetchSolanaBalance() {
       console.log('fetchSolanaBalance called with:', { network, isPhantomConnected });
-      
+
       if (network !== 'solana') {
         console.log('Network is not solana, skipping');
         setPhantomBalance(null);
@@ -103,7 +108,7 @@ export function useMultiWalletBalance(network: string): MultiWalletBalanceResult
 
       const actuallyConnected = phantom.isConnected;
       console.log('Phantom actual connection status:', actuallyConnected);
-      
+
       if (!actuallyConnected) {
         console.log('Phantom wallet not connected, skipping balance fetch');
         setPhantomBalance(null);
@@ -139,7 +144,7 @@ export function useMultiWalletBalance(network: string): MultiWalletBalanceResult
 
         const data = await response.json();
         console.log('Solana RPC response:', data);
-        
+
         if (data.error) {
           throw new Error(data.error.message);
         }
