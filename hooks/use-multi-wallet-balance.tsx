@@ -5,7 +5,7 @@ import { useAccount, useBalance } from 'wagmi';
 import { formatUnits } from 'viem';
 
 // USDC contract address on Ethereum sepolia testnet  
-const USDC_CONTRACT_ADDRESS = '0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238' as const;
+const USDC_CONTRACT_ADDRESS = process.env.NEXT_PUBLIC_USDC_CONTRACT_ADDRESS || '';
 
 interface TokenBalance {
   balance: string | null;
