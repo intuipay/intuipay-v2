@@ -10,6 +10,7 @@ export function IntuipayLogo() {
         width={121}
         height={24}
       />
+      <h1 className="sr-only">Intuipay</h1>
     </Link>
   )
 }

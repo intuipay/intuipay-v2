@@ -20,9 +20,11 @@ export function SiteHeader() {
   return (
     <header className="sticky top-0 z-50 w-full border-b border-neutral-mediumgray/50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="w-full max-w-7xl mx-auto px-12 md:px-10 flex h-16 items-center justify-between ">
-        <IntuipayLogo />
+        <div className="flex-1">
+          <IntuipayLogo />
+        </div>
 
-        <nav className="hidden md:flex items-center gap-4">
+        <nav className="hidden md:flex items-center gap-4 w-min flex-none">
           {navLinks.map((link) => (
             <Link
               key={link.label}
@@ -34,7 +36,7 @@ export function SiteHeader() {
           ))}
         </nav>
 
-        <div className="hidden md:flex items-center space-x-4">
+        <div className="flex-1 hidden md:flex items-center justify-end space-x-4">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" size="sm">
