@@ -3,12 +3,13 @@ import type { Metadata, ResolvingMetadata } from 'next'
 import { SiteHeader } from '@/components/site-header'
 import { SiteFooter } from '@/components/site-footer'
 import ProjectDetailClientLayout from './project-detail-client-layout' // New Client Component
-import type { ProjectDataType } from './project-data'
 import { getProjectDetail, getDonations, getUpdates, getUpdatesCount } from '@/lib/data'
-import { Donations, Updates } from '@/types'
+import { Donations, ProjectInfo, Updates } from '@/types'
+
+export const runtime = 'edge';
 
 // Simulate fetching project data by slug (replace with actual data fetching)
-async function getProjectDetailById(slug: string): Promise<ProjectDataType> {
+async function getProjectDetailById(slug: string): Promise<ProjectInfo> {
   const detail = await getProjectDetail(slug)
   return detail
 }
@@ -27,7 +28,7 @@ async function getUpdatesCountById(projectId: string): Promise<any> {
 }
 
 // Simulate fetching similar projects (replace with actual logic)
-async function getSimilarProjects(currentProjectSlug: string): Promise<any[]> {
+async function getSimilarProjects(currentProjectSlug: string): Promise<ProjectInfo[]> {
   // Filter out the current project or fetch genuinely similar ones
   return [
     {
