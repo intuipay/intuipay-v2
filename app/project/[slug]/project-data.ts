@@ -48,36 +48,38 @@ export type UniversityData = {
 }
 
 export type ProjectDataType = {
-  slug: string
-  title: string
-  subtitle: string
-  heroImageUrl: string
-  category: string
-  location: string
-  projectType: string
-  donationAccepts: string
-  university: UniversityData
-  funding: {
-    current: number
-    goal: number
-  }
-  backers: number
-  daysLeft: number
-  contact: {
-    email: string
-    website: string
-    github: string
-    twitter: string
-  }
-  overview: string
-  missionStatement: string
-  whyDonate: Array<{ title: string; text: string }>
-  risksChallenges: Array<{ title: string; text: string }>
-  faqLink: string
-  tags: string[]
-  updatesCount: number
-  updates: ProjectUpdate[]
-  donations: ProjectDonation[]
+  id: string;
+  accepts: string;
+  amount: string;
+  banner: string;
+  banners: string;
+  campaign: string;
+  category: string;
+  description: string;
+  email: string;
+  end_at: string;
+  github: string;
+  goal_amount: string;
+  location: string;
+  org_contact: string;
+  org_description: string;
+  org_location: string;
+  org_logo: string;
+  org_name: string;
+  org_slug: string;
+  org_type: string;
+  org_website: string;
+  project_name: string;
+  qrcode: string;
+  social_x: string;
+  status: string;
+  tags: string;
+  tags_1: string;
+  type: string;
+  wallet_address: string;
+  website: string;
+  backers: string;
+  twitter: string
 }
 
 // Type for similar project cards (simplified)

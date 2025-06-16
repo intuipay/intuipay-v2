@@ -89,7 +89,8 @@ export default function ProjectList({ data, page, pageSize, total }: ProjectList
               onChange={(e) => setSearch(e.target.value)}
             />
             <Button
-              className="bg-action-blue hover:bg-action-blue/90 w-15 h-15 px-5 bg-blue-btn rounded-full absolute right-0 top-0"
+              type="submit"
+              className="bg-action-blue hover:bg-action-blue/90 w-15 h-15 px-5 bg-primary rounded-full absolute right-0 top-0"
             >
               <Search className="h-5 w-5 text-primary-foreground" />
               <span className="sr-only">Search</span>
@@ -97,7 +98,7 @@ export default function ProjectList({ data, page, pageSize, total }: ProjectList
           </form>
           <Button
             variant="outline"
-            className="px-9 h-15 text-sm md:text-xl flex items-center rounded-full"
+            className="flex-none px-9 h-15 text-sm md:text-xl flex items-center rounded-full"
             type="button"
             onClick={() => setIsFilterDrawerOpen(true)}
           >
