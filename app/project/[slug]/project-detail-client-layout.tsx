@@ -30,6 +30,7 @@ import { AboutTab } from '@/components/project-detail-tabs/about-tab'
 import { UpdatesTab } from '@/components/project-detail-tabs/updates-tab'
 import { DonationsTab } from '@/components/project-detail-tabs/donations-tab'
 
+import type { ProjectDataType } from './project-data'
 import { Donations, ProjectInfo, Updates } from '@/types'
 import { useMemo } from 'react'
 import { enumToKeyLabel } from '@/lib/utils'
@@ -37,7 +38,7 @@ import { ProjectCategories, ProjectTypes } from '@/data'
 import { ProjectDonationMethods } from '@/data'
 
 type ProjectDetailClientLayoutProps = {
-  project: ProjectInfo
+  project: ProjectDataType
   similarProjects: ProjectInfo[]
   donations: Donations
   updates: Updates

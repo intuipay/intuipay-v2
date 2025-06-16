@@ -3,14 +3,17 @@ import type { Metadata, ResolvingMetadata } from 'next'
 import { SiteHeader } from '@/components/site-header'
 import { SiteFooter } from '@/components/site-footer'
 import ProjectDetailClientLayout from './project-detail-client-layout' // New Client Component
-import { getProjectDetail, getDonations, getUpdates, getUpdatesCount } from '@/lib/data'
+import { getProjectDetail, getDonations, getUpdates, getUpdatesCount, getProjects } from '@/lib/data'
 import { Donations, ProjectInfo, Updates } from '@/types'
 
 export const runtime = 'edge';
 
 // Simulate fetching project data by slug (replace with actual data fetching)
+// 异步函数，根据slug获取项目详情
 async function getProjectDetailById(slug: string): Promise<ProjectInfo> {
+  // 调用getProjectDetail函数，传入slug参数，获取项目详情
   const detail = await getProjectDetail(slug)
+  // 返回项目详情
   return detail
 }
 
@@ -27,49 +30,15 @@ async function getUpdatesCountById(projectId: string): Promise<any> {
   return updateCount
 }
 
-// Simulate fetching similar projects (replace with actual logic)
-async function getSimilarProjects(currentProjectSlug: string): Promise<ProjectInfo[]> {
-  // Filter out the current project or fetch genuinely similar ones
-  return [
-    {
-      id: 'quantumleap-ai', // Example, ensure this is not the current project
-      slug: 'quantumleap-ai',
-      title: 'QuantumLeap AI',
-      description:
-        'Developing next-generation AI algorithms using quantum computing principles for complex problem solving.',
-      universityName: 'ArtCenter College',
-      imageUrl: '/placeholder-xg1ua.png',
-      totalRaised: 876543.21,
-    },
-    {
-      id: 'biosynth-ethics',
-      slug: 'biosynth-ethics',
-      title: 'BioSynth Ethics',
-      description: 'Exploring the ethical implications of synthetic biology and AI in creating novel life forms.',
-      universityName: 'UCLA',
-      imageUrl: '/placeholder-qtpze.png',
-      totalRaised: 500000.0,
-    },
-    {
-      id: 'ai-climate-model',
-      slug: 'ai-climate-model',
-      title: 'AI Climate Model',
-      description: 'Advanced AI modeling for predicting climate change impacts with higher accuracy.',
-      universityName: 'Stanford University',
-      imageUrl: '/abstract-climate-change-ai-model-4.png',
-      totalRaised: 750000.0,
-    },
-  ].filter((p) => p.slug !== currentProjectSlug) // Basic filter
-}
 
 // Dynamic Metadata Generation for SEO
 type Props = {
-  params: { id: string }
+  params: { slug: string }
 }
 
 export async function generateMetadata({ params }: Props, parent: ResolvingMetadata): Promise<Metadata> {
-  const { id } = await params;
-  const project = await getProjectDetailById(id)
+  const { slug } = await params;
+  const project = await getProjectDetailById(slug)
 
   if (!project) {
     // Optionally, return metadata for a "not found" page
@@ -104,7 +73,8 @@ export default async function ProjectDetailPageServer({ params }: { params: { sl
   const { slug } = await params;
   const project = await getProjectDetailById(slug)
   const donations: Donations = await getDonationsById(project.id, 1)
-  const similarProjects = await getSimilarProjects(slug) // TODO
+  const similarProjects = await getProjects(1, 4, '');
+  console.log('similarProjects: ', similarProjects);
   const updates = await getUpdatesById(project.id, 1)
   console.log('updates: ', updates);
   const updatesCount = await getUpdatesCountById(project.id)
