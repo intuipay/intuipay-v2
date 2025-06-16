@@ -465,7 +465,7 @@ export enum ProjectDonationMethods {
   All = 0,
   Crypto = 1,
   Cash = 2,
-  CryptoCash = 3,
+  'Crypto & Cash' = 3,
 }
 
 export enum ProjectTypes {
