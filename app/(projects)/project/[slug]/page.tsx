@@ -79,7 +79,7 @@ export default async function ProjectDetailPageServer({ params }: { params: { sl
     '',
     'id',
     'desc',
-    { 
+    {
       category: project.category,
       progress: 0,
       location: '',
@@ -98,17 +98,11 @@ export default async function ProjectDetailPageServer({ params }: { params: { sl
     // import { notFound } from 'next/navigation';
     // notFound();
     return (
-      <div className="flex flex-col min-h-screen bg-neutral-white text-neutral-text">
-        <SiteHeader />
-        <main className="flex-grow flex items-center justify-center">
-          <div className="text-center">
-            <h1 className="text-4xl font-bold mb-4">Project Not Found</h1>
-            <p className="text-lg text-neutral-darkgray">
-              Sorry, we couldn&apos;t find the project you&apos;re looking for.
-            </p>
-          </div>
-        </main>
-        <SiteFooter />
+      <div className="text-center">
+        <h1 className="text-4xl font-bold mb-4">Project Not Found</h1>
+        <p className="text-lg text-neutral-darkgray">
+          Sorry, we couldn&apos;t find the project you&apos;re looking for.
+        </p>
       </div>
     )
   }
