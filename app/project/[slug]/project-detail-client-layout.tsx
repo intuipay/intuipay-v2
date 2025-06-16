@@ -57,7 +57,7 @@ export default function ProjectDetailClientLayout({ project, similarProjects, do
   return (
     <div className="flex flex-col min-h-screen bg-neutral-white text-neutral-text">
       <SiteHeader />
-      <main className="flex-grow py-20 mx-auto">
+      <main className="w-full max-w-7xl mx-auto px-12 md:px-10 flex-grow py-20">
         <div className="container">
           <div className="text-center mb-8">
             <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4">{project.project_name}</h1>
