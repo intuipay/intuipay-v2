@@ -65,7 +65,7 @@ export default function DonationStep1({
   // wagmi hooks
   const { address, isConnected, connector } = useAccount();
   const { connect, connectors, isPending, error: connectError } = useConnect();
-  const { disconnect } = useDisconnect();  const chainId = useChainId();
+  const { disconnect } = useDisconnect(); const chainId = useChainId();
   const [isPhantomConnected, setIsPhantomConnected] = useState(false);
 
   // Get wallet balances for all supported tokens
@@ -85,27 +85,32 @@ export default function DonationStep1({
   useEffect(() => {
     // 确保在客户端执行
     if (typeof window !== 'undefined' && (window as any).phantom?.solana) {
-      if ((window as any).phantom.solana.isConnected) {
+      const phantom = (window as any).phantom.solana;
+      if (phantom.isConnected) {
         console.log('Phantom wallet is already connected');
         setIsPhantomConnected(true);
         setSelectedWallet('phantom');
       }
-      // 监听连接事件
-      // TODO: 这里要判断只监听一次
-      console.log('Setting up Phantom wallet connection listener');
-      (window as any).phantom.solana.on('connect', () => {
+      const handleConnect = () => {
         console.log('Phantom wallet connected');
         setIsPhantomConnected(true);
         setSelectedWallet('phantom');
         setError('');
-      });
-
-      // 监听断开连接事件
-      (window as any).phantom.solana.on('disconnect', () => {
+      };
+      const handleDisconnect = () => {
         console.log('Phantom wallet disconnected');
         setIsPhantomConnected(false);
         setSelectedWallet('');
-      });
+      };
+      console.log('Setting up Phantom wallet connection listener');
+      phantom.on('connect', handleConnect);
+      phantom.on('disconnect', handleDisconnect);
+      // Cleanup function to remove event listeners
+      return () => {
+        console.log('Cleaning up Phantom wallet event listeners');
+        phantom.off('connect', handleConnect);
+        phantom.off('disconnect', handleDisconnect);
+      };
     }
   }, []);
   // Clear selected wallet when network changes if the wallet is not compatible

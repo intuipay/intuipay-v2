@@ -55,10 +55,13 @@ export function useMultiWalletBalance(network: string): MultiWalletBalanceResult
 
     checkPhantomConnection();
     
-    // Also check periodically in case the connection state changes
-    const interval = setInterval(checkPhantomConnection, 1000);
-    
-    return () => clearInterval(interval);
+    // Cleanup event listeners on unmount
+    return () => {
+      if (typeof window !== 'undefined' && (window as any)?.phantom?.solana) {
+        (window as any).phantom.solana.removeAllListeners('connect');
+        (window as any).phantom.solana.removeAllListeners('disconnect');
+      }
+    };
   }, []);
 
   // Wagmi balance hook for Ethereum (USDC)
