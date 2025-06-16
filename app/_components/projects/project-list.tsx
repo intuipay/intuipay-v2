@@ -47,11 +47,24 @@ export default function ProjectList({ data, page, pageSize, total }: ProjectList
     searchParams.set('search', search);
     searchParams.set('order_by', orderBy);
     searchParams.set('order_dir', orderDir);
-    searchParams.set('category', filter.category.toString());
-    searchParams.set('progress', filter.progress.toString());
-    searchParams.set('location', filter.location);
-    searchParams.set('donation_methods', filter.donationMethods.toString());
-    searchParams.set('project_type', filter.projectType.toString());
+    if (filter.category) {
+      searchParams.set('category', filter.category.toString());
+    }
+    if (filter.progress) {
+      searchParams.set('progress', filter.progress.toString());
+    }
+    if (filter.location) {
+      searchParams.set('location', filter.location);
+    }
+    if (filter.donationMethods) {
+      searchParams.set('donation_methods', filter.donationMethods.toString());
+    }
+    if (filter.projectType) {
+      searchParams.set('project_type', filter.projectType.toString());
+    }
+    if (filter.excludes) {
+      searchParams.set('excludes', filter.excludes.toString());
+    }
     router.push(`${location.pathname}?${searchParams.toString()}`);
   }
 

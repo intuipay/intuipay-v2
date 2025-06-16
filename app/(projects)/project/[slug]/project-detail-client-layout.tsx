@@ -53,7 +53,7 @@ export default function ProjectDetailClientLayout({ project, similarProjects, do
     const headings = [];
 
     while ((match = regex.exec(markdownString)) !== null) {
-      headings.push(match[1]);
+      headings.push(match[ 1 ]);
     }
 
     return headings;
@@ -234,7 +234,7 @@ export default function ProjectDetailClientLayout({ project, similarProjects, do
             {titles.map((item) => (
               <li key={item}>
                 <a
-                  href={`#`}
+                  href={'#'}
                   className="text-sm font-semibold text-neutral-darkgray hover:text-action-blue hover:border-l-2 border-blue-btn pl-2"
                 >
                   {item}
@@ -247,7 +247,7 @@ export default function ProjectDetailClientLayout({ project, similarProjects, do
 
 
 
-      <section className="mt-16 pt-12 border-t border-neutral-mediumgray/50">
+      {similarProjects.length > 0 && <section className="mt-16 pt-12 border-t border-neutral-mediumgray/50">
         <div className="flex justify-between items-center mb-8">
           <h2 className="text-xl sm:text-2xl md:text-3xl">Similar Projects</h2>
           <Button variant="default" className="bg-neutral-text hover:bg-neutral-text/90">
@@ -259,7 +259,7 @@ export default function ProjectDetailClientLayout({ project, similarProjects, do
             <ProjectCard key={p.id} project={p} />
           ))}
         </div>
-      </section>
+      </section>}
     </div>
   )
 }
