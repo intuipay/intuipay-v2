@@ -12,5 +12,6 @@ WHERE `status`=1 AND `p`.`deleted_at` IS NULL
   AND IF(${accepts} > 0, `accepts` = ${accepts}, 1)
   AND IF(${type} > 0, `type` = ${type}, 1)
   AND IF(${progress}, `amount` / `goal_amount` > ${progress}, 1)
+  AND IF(${excludes} > 0, `p`.`id`!= (${excludes}), 1)
 ORDER BY ${order_by}, ${order_dir}
 LIMIT ${start}, ${pagesize};

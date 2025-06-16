@@ -258,6 +258,13 @@
         "description": ""
       },
       {
+        "name": "excludes",
+        "type": "integer",
+        "required": 0,
+        "default": "",
+        "description": ""
+      },
+      {
         "name": "order_by",
         "type": "string",
         "required": 1,
