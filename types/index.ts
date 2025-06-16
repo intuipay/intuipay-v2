@@ -112,16 +112,35 @@ export type DonationInfo = {
 
 export type ProjectInfo = {
   id: string;
-  project_name: string;
-  project_slug: string;
-  description: string;
+  accepts: string;
+  amount: string;
   banner: string;
-  amount: number;
-  goal_amount: number;
+  banners: string;
+  campaign: string;
+  category: string;
+  description: string;
+  email: string;
   end_at: string;
+  github: string;
+  goal_amount: string;
+  location: string;
+  org_contact: string;
+  org_description: string;
+  org_location: string;
+  org_logo: string;
   org_name: string;
   org_slug: string;
-  org_logo: string;
+  org_type: string;
+  org_website: string;
+  project_name: string;
+  qrcode: string;
+  social_x: string;
+  status: string;
+  tags: string;
+  tags_1: string;
+  type: string;
+  wallet_address: string;
+  website: string;
 }
 
 export type ProjectFilter = {
@@ -131,3 +150,27 @@ export type ProjectFilter = {
   donationMethods: ProjectDonationMethods;
   projectType: ProjectTypes;
 }
+
+export type Donation = {
+  amount: string;
+  country: string;
+  currency: string;
+  first_name: string;
+  last_name: string;
+  method: string;
+}
+
+export type Donations = Donation[]
+
+export type Update = {
+  id: number;
+  projectId: number;
+  title: string;
+  content: string;
+  thumbnail: string | null;
+  createdAt: Date;
+  updatedAt: Date;
+  status: number | null;
+}
+
+export type Updates = Update[];

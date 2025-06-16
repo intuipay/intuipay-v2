@@ -23,6 +23,7 @@ export default async function ProjectsPage({ searchParams }: Props) {
     getProjects(pageNumber, pageSizeNumber, search, order_by, order_dir),
     getProjectCount(),
   ]);
+  console.log('projects', projects)
 
   return (
     <ProjectList

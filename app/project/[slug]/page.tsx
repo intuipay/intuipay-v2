@@ -3,26 +3,27 @@ import type { Metadata, ResolvingMetadata } from 'next'
 import { SiteHeader } from '@/components/site-header'
 import { SiteFooter } from '@/components/site-footer'
 import ProjectDetailClientLayout from './project-detail-client-layout' // New Client Component
-import { projectData as mockProjectData } from './project-data-mock' // Mock data source
 import type { ProjectDataType } from './project-data'
+import { getProjectDetail, getDonations, getUpdates, getUpdatesCount } from '@/lib/data'
+import { Donations, Updates } from '@/types'
 
 // Simulate fetching project data by slug (replace with actual data fetching)
-async function getProjectBySlug(slug: string): Promise<ProjectDataType | null> {
-  // In a real app, you'd fetch from your database or API
-  // For now, we'll find it in the mock data if the slug matches, otherwise return the first mock.
-  // This is a very basic simulation.
-  if (mockProjectData.slug === slug) {
-    return mockProjectData
-  }
-  // Fallback or error handling if slug not found
-  // For this example, let's return the default mock if no specific slug matches
-  // or handle it as 'not found' in a real scenario.
-  // For now, we'll just return the mockProjectData as if it's the one for any slug.
-  // You should implement proper slug-based fetching.
-  console.warn(
-    `Mock data fetching: Returning default project for slug "${slug}". Implement actual slug-based fetching.`,
-  )
-  return mockProjectData
+async function getProjectDetailById(slug: string): Promise<ProjectDataType> {
+  const detail = await getProjectDetail(slug)
+  return detail
+}
+
+async function getDonationsById(projectId: string, page: number): Promise<Donations> {
+  const donations = await getDonations(projectId, page)
+  return donations
+}
+async function getUpdatesById(projectId: string, page: number): Promise<Updates> {
+  const updates = await getUpdates(projectId, page)
+  return updates
+}
+async function getUpdatesCountById(projectId: string): Promise<any> {
+  const updateCount = await getUpdatesCount(projectId)
+  return updateCount
 }
 
 // Simulate fetching similar projects (replace with actual logic)
@@ -62,12 +63,12 @@ async function getSimilarProjects(currentProjectSlug: string): Promise<any[]> {
 
 // Dynamic Metadata Generation for SEO
 type Props = {
-  params: { slug: string }
+  params: { id: string }
 }
 
 export async function generateMetadata({ params }: Props, parent: ResolvingMetadata): Promise<Metadata> {
-  const slug = params.slug
-  const project = await getProjectBySlug(slug)
+  const { id } = await params;
+  const project = await getProjectDetailById(id)
 
   if (!project) {
     // Optionally, return metadata for a "not found" page
@@ -78,17 +79,17 @@ export async function generateMetadata({ params }: Props, parent: ResolvingMetad
   }
 
   return {
-    title: `${project.title} | Intuipay`,
-    description: project.subtitle || project.overview.substring(0, 160), // Use subtitle or truncated overview
+    title: `${project.project_name} | Intuipay`,
+    description: project.description,
     openGraph: {
-      title: project.title,
-      description: project.subtitle || project.overview.substring(0, 160),
+      title: project.project_name,
+      description: project.description,
       images: [
         {
-          url: project.heroImageUrl || '/hero-image.jpeg', // Ensure you have a fallback
+          url: project.banner || '/hero-image.jpeg', // Ensure you have a fallback
           width: 1200,
           height: 630,
-          alt: project.title,
+          alt: project.project_name,
         },
       ],
       type: 'article', // Or 'website' depending on the content
@@ -99,8 +100,14 @@ export async function generateMetadata({ params }: Props, parent: ResolvingMetad
 
 // This is the main Server Component for the page
 export default async function ProjectDetailPageServer({ params }: { params: { slug: string } }) {
-  const project = await getProjectBySlug(params.slug)
-  const similarProjects = await getSimilarProjects(params.slug)
+  const { slug } = await params;
+  const project = await getProjectDetailById(slug)
+  const donations: Donations = await getDonationsById(project.id, 1)
+  const similarProjects = await getSimilarProjects(slug) // TODO
+  const updates = await getUpdatesById(project.id, 1)
+  console.log('updates: ', updates);
+  const updatesCount = await getUpdatesCountById(project.id)
+  console.log('updatesCount: ', updatesCount);
 
   if (!project) {
     // Handle project not found (e.g., return a 404 page or a specific component)
@@ -123,5 +130,5 @@ export default async function ProjectDetailPageServer({ params }: { params: { sl
     )
   }
 
-  return <ProjectDetailClientLayout project={project} similarProjects={similarProjects} />
+  return <ProjectDetailClientLayout project={project} similarProjects={similarProjects} donations={donations} updates={updates} updatesCount={updatesCount} />
 }

@@ -7,46 +7,54 @@ import { Mail, MapPin, Link2, ExternalLink, Linkedin, Instagram, Twitter, Youtub
 import type { ProjectDataType } from '@/app/project/[slug]/project-data'
 
 type AboutTabProps = {
-  university: ProjectDataType['university']
+  project: ProjectDataType
 }
 
-export function AboutTab({ university }: AboutTabProps) {
+export function AboutTab({ project }: AboutTabProps) {
+  const {
+    org_logo,
+    org_name,
+    org_description,
+    email,
+    org_location,
+    org_website,
+  } = project;
   return (
     <section>
       <h2 className="text-xl sm:text-2xl font-semibold mb-4">About this organization</h2>
       <div className="flex items-center mb-4">
         <Avatar className="h-12 w-12 mr-4">
-          <AvatarImage src={university.logoUrl || '/placeholder.svg'} alt={university.name} />
-          <AvatarFallback>{university.name.substring(0, 2)}</AvatarFallback>
+          <AvatarImage src={org_logo} alt={org_name} />
+          <AvatarFallback>{org_name.substring(0, 2)}</AvatarFallback>
         </Avatar>
-        <h3 className="text-xl font-semibold">{university.name}</h3>
+        <h3 className="text-xl font-semibold">{org_name}</h3>
       </div>
-      <p className="text-neutral-darkgray leading-relaxed mb-6">{university.description}</p>
+      <p className="text-neutral-darkgray leading-relaxed mb-6">{org_description}</p>
 
       <div className="space-y-2 mb-6 text-sm">
         <Link
-          href={`mailto:${university.contactEmail}`}
+          href={`mailto:${email}`}
           className="flex items-center text-neutral-darkgray hover:text-action-blue"
         >
           <Mail className="w-4 h-4 mr-2" /> Contact Us
         </Link>
         <p className="flex items-center text-neutral-darkgray">
-          <MapPin className="w-4 h-4 mr-2" /> {university.location}
+          <MapPin className="w-4 h-4 mr-2" /> {org_location}
         </p>
         <Link
-          href={university.website}
+          href={org_website}
           target="_blank"
           rel="noopener noreferrer"
           className="flex items-center text-neutral-darkgray hover:text-action-blue"
         >
-          <Link2 className="w-4 h-4 mr-2" /> {university.website} <ExternalLink className="w-3 h-3 ml-1" />
+          <Link2 className="w-4 h-4 mr-2" /> {org_website} <ExternalLink className="w-3 h-3 ml-1" />
         </Link>
       </div>
 
       <div className="flex space-x-3 mb-6">
-        {university.socials.linkedin && (
+        {(
           <Link
-            href={university.socials.linkedin}
+            href=''
             target="_blank"
             rel="noopener noreferrer"
             aria-label="LinkedIn"
@@ -55,9 +63,9 @@ export function AboutTab({ university }: AboutTabProps) {
             <Linkedin className="w-5 h-5" />
           </Link>
         )}
-        {university.socials.instagram && (
+        {(
           <Link
-            href={university.socials.instagram}
+            href=''
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Instagram"
@@ -66,9 +74,9 @@ export function AboutTab({ university }: AboutTabProps) {
             <Instagram className="w-5 h-5" />
           </Link>
         )}
-        {university.socials.twitter && (
+        {(
           <Link
-            href={university.socials.twitter}
+            href=''
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Twitter"
@@ -77,9 +85,9 @@ export function AboutTab({ university }: AboutTabProps) {
             <Twitter className="w-5 h-5" />
           </Link>
         )}
-        {university.socials.youtube && (
+        {(
           <Link
-            href={university.socials.youtube}
+            href={''}
             target="_blank"
             rel="noopener noreferrer"
             aria-label="YouTube"
@@ -88,9 +96,9 @@ export function AboutTab({ university }: AboutTabProps) {
             <Youtube className="w-5 h-5" />
           </Link>
         )}
-        {university.socials.facebook && (
+        {(
           <Link
-            href={university.socials.facebook}
+            href={''}
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Facebook"
@@ -101,15 +109,19 @@ export function AboutTab({ university }: AboutTabProps) {
         )}
       </div>
 
-      {university.aboutImage && (
-        <div className="relative aspect-video rounded-lg overflow-hidden shadow-md">
-          <Image
-            src={university.aboutImage || '/placeholder.svg'}
-            alt={`About ${university.name}`}
-            fill
-            className="object-cover"
-          />
-        </div>
+      {project.banners.length && (
+        Array.isArray(project.banners) && project.banners.map((banner: string) => {
+          return (
+            <div className="relative aspect-video rounded-lg overflow-hidden shadow-md">
+              <Image
+                src={banner}
+                alt={`About ${org_name}`}
+                fill
+                className="object-cover"
+              />
+            </div>
+          )
+        })
       )}
     </section>
   )

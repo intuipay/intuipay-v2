@@ -1,6 +1,6 @@
 import { cache } from 'react';
 import { fetchTidb } from '@/services/fetch-tidb';
-import { DonationProject, ProjectFilter, ProjectInfo } from '@/types';
+import { DonationProject, ProjectFilter, ProjectInfo, Donation, Donations, Update, Updates } from '@/types';
 import { ProjectCategories, ProjectDonationMethods, ProjectTypes } from '@/data';
 
 type CountResult = {
@@ -55,7 +55,35 @@ export const getProjectCount = cache(async function getProjectCount() {
   return data[ 0 ].count;
 });
 
-export const getProjectBySlug = cache(async function getDonationProjectBySlug(slug: string) {
-  const data = await fetchTidb<ProjectInfo>(`/donation_project_detailed?slug=${slug}`);
+export const getProjectDetail = cache(async function getProjectDetail(id: string) {
+  const data = await fetchTidb<ProjectInfo>(`/project_detailed?slug=${id}`);
   return data[ 0 ];
+});
+
+export const getDonations = cache(async function getDonations(projectId: string, page: number, pageSize = 20, order: string = 'id'): Promise<Donations> {
+  const searchParams = new URLSearchParams();
+  searchParams.set('project_id', projectId);
+  searchParams.set('start', ((page - 1) * pageSize).toString());
+  searchParams.set('pagesize', pageSize.toString());
+  searchParams.set('order', order);
+  console.log('searchParams.toString()', searchParams.toString())
+  const data = await fetchTidb<Donation>(`/project_donations?${searchParams.toString()}`);
+  return data;
+});
+
+
+export const getUpdates = cache(async function getUpdates(projectId: string, page: number, pageSize = 20, order: string = 'id'): Promise<Updates> {
+  const searchParams = new URLSearchParams();
+  searchParams.set('project_id', projectId);
+  searchParams.set('start', ((page - 1) * pageSize).toString());
+  searchParams.set('pagesize', pageSize.toString());
+  const data = await fetchTidb<Update>(`/project_updates?${searchParams.toString()}`);
+  return data;
+});
+
+export const getUpdatesCount = cache(async function getUpdatesCount(projectId: string) {
+  const searchParams = new URLSearchParams();
+  searchParams.set('project_id', projectId);
+  const data = await fetchTidb<CountResult>(`/project_updates_count?${searchParams.toString()}`);
+  return data[ 0 ].count;
 });
