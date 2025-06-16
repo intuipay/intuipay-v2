@@ -1,4 +1,4 @@
-import ProjectList from '../_components/projects/project-list';
+import ProjectList from '@/app/_components/projects/project-list';
 import { getProjectCount, getProjects } from '@/lib/data';
 
 export const runtime = 'edge';
