@@ -7,7 +7,14 @@ type CountResult = {
   count: number;
 }
 
-export const getProjects = cache(async function getProjects(page: number, pageSize: number, search: string, orderBy: string = 'id', orderDir: string = 'desc', filter?: ProjectFilter) {
+export const getProjects = cache(async function getProjects(
+  page: number,
+  pageSize: number,
+  search: string,
+  orderBy: string = 'id',
+  orderDir: string = 'desc',
+  filter?: ProjectFilter,
+) {
   const searchParams = new URLSearchParams();
   searchParams.set('start', ((page - 1) * pageSize).toString());
   searchParams.set('pagesize', pageSize.toString());
@@ -16,19 +23,19 @@ export const getProjects = cache(async function getProjects(page: number, pageSi
   if (search) {
     searchParams.set('search', `%${search}%`);
   }
-  if (filter && filter.category !== ProjectCategories.All) {
+  if (filter?.category) {
     searchParams.set('category', filter.category.toString());
   }
-  if (filter && filter.progress !== 0) {
+  if (filter?.progress && filter.progress !== 0) {
     searchParams.set('progress', filter.progress.toString());
   }
-  if (filter && filter.location) {
+  if (filter?.location) {
     searchParams.set('location', filter.location);
   }
-  if (filter && filter.donationMethods !== ProjectDonationMethods.All) {
+  if (filter?.donationMethods) {
     searchParams.set('accepts', filter.donationMethods.toString());
   }
-  if (filter && filter.projectType !== ProjectTypes.All) {
+  if (filter?.projectType) {
     searchParams.set('type', filter.projectType.toString());
   }
   const data = await fetchTidb<ProjectInfo>(`/projects?${searchParams.toString()}`);

@@ -2,6 +2,7 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
+import { marked } from 'marked'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Mail, MapPin, Link2, ExternalLink, Linkedin, Instagram, Twitter, Youtube, Facebook } from 'lucide-react'
 import type { ProjectDataType } from '@/app/project/[slug]/project-data'
@@ -29,7 +30,9 @@ export function AboutTab({ project }: AboutTabProps) {
         </Avatar>
         <h3 className="text-xl font-semibold">{org_name}</h3>
       </div>
-      <p className="text-neutral-darkgray leading-relaxed mb-6">{org_description}</p>
+      <article className="text-neutral-darkgray leading-relaxed mb-6 prose"
+        dangerouslySetInnerHTML={{ __html: marked.parse(org_description) }}
+      />
 
       <div className="space-y-2 mb-6 text-sm">
         <Link

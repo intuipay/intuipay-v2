@@ -22,6 +22,7 @@ import {
   Twitter,
   ShieldCheck,
   ExternalLink,
+  Icon,
 } from 'lucide-react'
 
 import { CampaignTab } from '@/components/project-detail-tabs/campaign-tab'
@@ -29,21 +30,23 @@ import { AboutTab } from '@/components/project-detail-tabs/about-tab'
 import { UpdatesTab } from '@/components/project-detail-tabs/updates-tab'
 import { DonationsTab } from '@/components/project-detail-tabs/donations-tab'
 
-import type { ProjectDataType } from './project-data'
-import { Donations, Updates } from '@/types'
+import { Donations, ProjectInfo, Updates } from '@/types'
 import { useMemo } from 'react'
+import { enumToKeyLabel } from '@/lib/utils'
+import { ProjectCategories, ProjectTypes } from '@/data'
+import { ProjectDonationMethods } from '@/data'
 
 type ProjectDetailClientLayoutProps = {
-  project: ProjectDataType
-  similarProjects: any[] // Define a more specific type if available
+  project: ProjectInfo
+  similarProjects: ProjectInfo[]
   donations: Donations
   updates: Updates
   updatesCount: number
 }
 
 export default function ProjectDetailClientLayout({ project, similarProjects, donations, updates, updatesCount }: ProjectDetailClientLayoutProps) {
-  console.log('project: ', project);
-  const fundingPercentage = (parseInt(project.amount) || 0 / parseInt(project.goal_amount) || 1) * 100
+  const isMovie = project.banner.includes('youtube.com') || project.banner.includes('youtu.be');
+  const socialLinks = project.social_links ? JSON.parse(project.social_links as string) : {};
 
   const tocItems = [
     { id: 'overview', label: 'Overview' },
@@ -74,23 +77,25 @@ export default function ProjectDetailClientLayout({ project, similarProjects, do
                   className="object-cover"
                   priority // Good for LCP element
                 />
-                <div className="absolute inset-0 flex items-center justify-center bg-black/30">
-                  <PlayCircle className="w-16 h-16 text-white/80 hover:text-white cursor-pointer" />
-                </div>
+                {isMovie && (
+                  <div className="absolute inset-0 flex items-center justify-center bg-black/30">
+                    <PlayCircle className="w-16 h-16 text-white/80 hover:text-white cursor-pointer" />
+                  </div>
+                )}
               </div>
 
               <div className="flex flex-wrap gap-x-8 gap-y-2 text-sm text-neutral-darkgray mb-6">
                 <span className="flex items-center">
-                  <FlaskConical className="w-4 h-4 mr-1.5 text-intuipay-blue" /> {project.category}
+                  <FlaskConical className="w-4 h-4 mr-1.5 text-intuipay-blue" /> {enumToKeyLabel(ProjectCategories)[ project.category ]}
                 </span>
                 <span className="flex items-center">
                   <MapPin className="w-4 h-4 mr-1.5 text-intuipay-blue" /> {project.location}
                 </span>
                 <span className="flex items-center">
-                  <Landmark className="w-4 h-4 mr-1.5 text-intuipay-blue" /> {project.type}
+                  <Landmark className="w-4 h-4 mr-1.5 text-intuipay-blue" /> {enumToKeyLabel(ProjectTypes)[ project.type ]}
                 </span>
                 <span className="flex items-center">
-                  <Coins className="w-4 h-4 mr-1.5 text-intuipay-blue" /> {project.accepts}
+                  <Coins className="w-4 h-4 mr-1.5 text-intuipay-blue" /> {enumToKeyLabel(ProjectDonationMethods)[ project.accepts ]}
                 </span>
               </div>
 
@@ -150,7 +155,11 @@ export default function ProjectDetailClientLayout({ project, similarProjects, do
                   <p className="text-sm text-neutral-darkgray mb-2">
                     pledged of ${project.goal_amount.toLocaleString()}
                   </p>
-                  <Progress value={fundingPercentage} className="h-2 [&>div]:bg-action-blue" />
+                  <Progress
+                    value={parseInt(project.amount)}
+                    max={parseInt(project.goal_amount)}
+                    className="h-2 [&>div]:bg-action-blue"
+                  />
                 </div>
                 <div className="flex text-center">
                   <div className='flex-1 text-left'>
@@ -186,14 +195,21 @@ export default function ProjectDetailClientLayout({ project, similarProjects, do
                     <Github className="w-4 h-4 mr-2" /> <span className="text-blue-btn">{project.github}</span>
                     {project.github && <ExternalLink className="w-3 h-3 ml-1" />}
                   </Link>
-                  <Link
-                    href={`https://twitter.com/${project.twitter}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center text-neutral-darkgray hover:text-action-blue"
-                  >
-                    <Twitter className="w-4 h-4 mr-2" /> <span className="text-blue-btn">{project.twitter && '@'}{project.twitter}</span>
-                  </Link>
+                  {
+                    socialLinks && (
+                      Object.entries(socialLinks).map(([key, value]) => (
+                        <Link
+                          href={value as string}
+                          key={key}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center text-neutral-darkgray hover:text-action-blue"
+                        >
+                          <span className="text-blue-btn">{key}</span>
+                        </Link>
+                      ))
+                    )
+                  }
                 </div>
                 <Button size="lg" className="w-full bg-action-blue hover:bg-action-blue/90 text-base py-3">
                   Donate Now

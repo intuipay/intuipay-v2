@@ -84,7 +84,7 @@ export type ProjectInfo = {
   org_website: string;
   project_name: string;
   qrcode: string;
-  social_x: string;
+  social_links: string | Record<string, string>;
   status: string;
   tags: string;
   tags_1: string;
@@ -94,11 +94,11 @@ export type ProjectInfo = {
 }
 
 export type ProjectFilter = {
-  category: ProjectCategories;
-  progress: number;
-  location: string;
-  donationMethods: ProjectDonationMethods;
-  projectType: ProjectTypes;
+  category?: ProjectCategories;
+  progress?: number;
+  location?: string;
+  donationMethods?: ProjectDonationMethods;
+  projectType?: ProjectTypes;
 }
 
 export type Donation = {
