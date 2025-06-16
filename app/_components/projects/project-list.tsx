@@ -31,6 +31,7 @@ const SortOptions = [
 export default function ProjectList({ data, page, pageSize, total }: ProjectListProps) {
   const router = useRouter();
   const [isFilterDrawerOpen, setIsFilterDrawerOpen] = useState(false);
+  const [query, setQuery] = useState('');
   const [search, setSearch] = useState('');
   const [sortBy, setSortBy] = useState(SortOptions[ 0 ].value);
   const [filter, setFilter] = useState<ProjectFilter>({
@@ -54,14 +55,19 @@ export default function ProjectList({ data, page, pageSize, total }: ProjectList
     router.push(`${location.pathname}?${searchParams.toString()}`);
   }
 
+  function handleSearch(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setQuery(search);
+  }
+
   useEffect(() => {
     switch (sortBy) {
-      case 'newest': updateSearchAndSort(search, 'id', 'desc', filter); break;
-      case 'oldest': updateSearchAndSort(search, 'id', 'asc', filter); break;
-      case 'most-raised': updateSearchAndSort(search, 'goal_amount', 'desc', filter); break;
-      case 'ending-soon': updateSearchAndSort(search, 'end_date', 'asc', filter); break;
+      case 'newest': updateSearchAndSort(query, 'id', 'desc', filter); break;
+      case 'oldest': updateSearchAndSort(query, 'id', 'asc', filter); break;
+      case 'most-raised': updateSearchAndSort(query, 'goal_amount', 'desc', filter); break;
+      case 'ending-soon': updateSearchAndSort(query, 'end_date', 'asc', filter); break;
     }
-  }, [sortBy, search, filter]);
+  }, [sortBy, query, filter]);
 
   return <>
     {/* Hero Section */}
@@ -74,7 +80,7 @@ export default function ProjectList({ data, page, pageSize, total }: ProjectList
           All projects on Intuipay are verified academic research initiatives from accredited universities and institutions, ensuring every donation supports real, impactful science.
         </p>
         <div className="flex w-full mt-auto gap-12">
-          <div className="flex-grow relative drop-shadow-custom1">
+          <form className="flex-grow relative drop-shadow-custom1" onSubmit={handleSearch}>
             <Input
               type="search"
               placeholder="Search"
@@ -83,13 +89,12 @@ export default function ProjectList({ data, page, pageSize, total }: ProjectList
               onChange={(e) => setSearch(e.target.value)}
             />
             <Button
-              type="submit"
               className="bg-action-blue hover:bg-action-blue/90 w-15 h-15 px-5 bg-blue-btn rounded-full absolute right-0 top-0"
             >
               <Search className="h-5 w-5 text-primary-foreground" />
               <span className="sr-only">Search</span>
             </Button>
-          </div>
+          </form>
           <Button
             variant="outline"
             className="px-9 h-15 text-sm md:text-xl flex items-center rounded-full"
