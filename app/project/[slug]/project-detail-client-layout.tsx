@@ -70,13 +70,13 @@ export default function ProjectDetailClientLayout({ project, similarProjects, do
     <div className="flex flex-col min-h-screen bg-neutral-white text-neutral-text">
       <SiteHeader />
       <main className="w-full max-w-7xl mx-auto px-12 md:px-10 flex-grow py-20">
-        <div className="container">
+        <div className="container mx-auto">
           <div className="text-center mb-8">
-            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4">{project.project_name}</h1>
-            <p className="text-black text-md sm:text-lg md:text-xl text-neutral-darkgray">{project.description}</p>
+            <h1 className="text-3xl sm:text-3xl font-bold mb-4">{project.project_name}</h1>
+            <p className="text-black text-xl sm:text-lg md:text-xl text-neutral-darkgray">{project.description}</p>
           </div>
 
-          <div className="flex flex-col lg:flex-row gap-8 lg:gap-12">
+          <div className="flex flex-col xl:flex-row gap-8 lg:gap-12">
             <div className="lg:w-2/3">
               <div className="relative aspect-video rounded-lg overflow-hidden mb-6 shadow-lg">
                 <Image
@@ -110,8 +110,8 @@ export default function ProjectDetailClientLayout({ project, similarProjects, do
             </div>
 
             {/* Right Column (Sticky Sidebar) */}
-            <div className="lg:w-1/3 lg:top-24 self-start">
-              <div className="border border-neutral-mediumgray/50 rounded-lg p-6 space-y-6">
+            <div className="xl:w-1/3 lg:sticky lg:top-24 self-start w-full">
+              <div className="rounded-lg p-6 space-y-6">
                 <div className="flex items-center">
                   <Avatar className="h-10 w-10 mr-3">
                     <AvatarImage src={project.org_logo || '/placeholder.svg'} alt={project.org_name} />
@@ -190,14 +190,14 @@ export default function ProjectDetailClientLayout({ project, similarProjects, do
                     )
                   }
                 </div>
-                <Button size="lg" className="w-full bg-action-blue hover:bg-action-blue/90 text-base py-3">
+                <Button size="lg" className="w-1/2 sm:w-full h-14 bg-primary hover:bg-action-blue/90 text-base py-3 rounded-full fixed bottom-8 left-1/2 -translate-x-1/2 sm:left-0 sm:translate-x-0 z-50 sm:static">
                   Donate Now
                 </Button>
               </div>
             </div>
           </div>
 
-          <div className="flex">
+          <div className="flex mt-10">
             <Tabs defaultValue={tab} className="mb-8 lg:w-2/3" onValueChange={(val) => { setTab(val) }}>
               <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4">
                 <TabsTrigger value="campaign" className="py-2.5">
@@ -236,7 +236,7 @@ export default function ProjectDetailClientLayout({ project, similarProjects, do
               </TabsContent>
             </Tabs>
 
-            {tab === 'campaign' && <div className="pt-4">
+            {tab === 'campaign' && <div className="pt-16 hidden lg:block">
               <ul className="space-y-2">
                 {titles.map((item) => (
                   <li key={item}>
@@ -252,10 +252,8 @@ export default function ProjectDetailClientLayout({ project, similarProjects, do
             </div>}
           </div>
 
-
-
-          <section className="mt-16 pt-12 border-t border-neutral-mediumgray/50">
-            <div className="flex justify-between items-center mb-8">
+          <section className="mt-16">
+            <div className="h-12 flex justify-between items-center mb-8">
               <h2 className="text-xl sm:text-2xl md:text-3xl">Similar Projects</h2>
               <Button variant="default" className="bg-neutral-text hover:bg-neutral-text/90">
                 <Link href="/projects?category=similar" className='bg-black text-white text-xl py-3 px-6 rounded-lg'>Check more</Link>
