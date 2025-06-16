@@ -1,5 +1,7 @@
 'use client'
+
 import Link from 'next/link'
+import { marked } from 'marked'
 import { Badge } from '@/components/ui/badge'
 import type { ProjectDataType } from '@/app/project/[slug]/project-data'
 
@@ -10,11 +12,11 @@ type CampaignTabProps = {
 export function CampaignTab({ project }: CampaignTabProps) {
   return (
     <>
-      <section id="overview" className="mb-8 scroll-mt-20">
-        <p className="text-neutral-darkgray leading-relaxed mb-4">{project.campaign}</p>
-      </section>
+      <article id="overview" className="mb-8 scroll-mt-20 prose"
+        dangerouslySetInnerHTML={{ __html: marked.parse(project.campaign) }}
+      />
       <p className="text-sm text-neutral-darkgray mb-13 mt-5">
-        Questions about this project?{" "}
+        Questions about this project?{' '}
         <Link href='/faq' className="text-action-blue hover:underline">
           Check out the FAQ
         </Link>

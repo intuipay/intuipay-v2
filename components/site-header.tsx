@@ -19,7 +19,7 @@ export function SiteHeader() {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-neutral-mediumgray/50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container flex h-16 items-center justify-between lg:px-30 px-12">
+      <div className="w-full max-w-7xl mx-auto px-12 md:px-10 flex h-16 items-center justify-between ">
         <IntuipayLogo />
 
         <nav className="hidden md:flex items-center gap-4">

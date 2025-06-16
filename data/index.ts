@@ -440,6 +440,16 @@ export const PaymentMethodsOther: PaymentMethod[] = [
 export const Networks = getNetworkDropdownOptions();
 export const Wallets = getWalletDropdownOptions();
 
+export enum OrginzationType {
+  Business = 1,
+  NonProfit = 2,
+  Government = 3,
+  Academic = 4,
+  Philanthropic = 5,
+  Personal = 6,
+  Other = 100,
+}
+
 export enum ProjectCategories {
   All = 0,
   Animals = 1,
@@ -448,6 +458,7 @@ export enum ProjectCategories {
   'Health & Medical' = 4,
   Education = 5,
   Environment = 6,
+  Technology = 7,
 }
 
 export enum ProjectDonationMethods {
