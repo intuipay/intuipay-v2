@@ -177,51 +177,51 @@ export default function DonationStep4({
     setMessage('');
 
     // Solana transaction
-    if (window?.phantom?.solana && window.phantom.solana.isConnected) {
-      setIsSolanaTransaction(true);
-      try {
-        const instructions = [
-          SystemProgram.transfer({
-            fromPubkey: window.phantom.solana.publicKey,
-            toPubkey: new PublicKey(universitySolanaDevnetAddress),
-            lamports: info.amount * LAMPORTS_PER_SOL,
-          }),
-        ];
+    if (info.network === 'solana') {
+      if (window?.phantom?.solana && window.phantom.solana.isConnected) {
+        setIsSolanaTransaction(true);
+        try {
+          const instructions = [
+            SystemProgram.transfer({
+              fromPubkey: window.phantom.solana.publicKey,
+              toPubkey: new PublicKey(universitySolanaDevnetAddress),
+              lamports: info.amount * LAMPORTS_PER_SOL,
+            }),
+          ];
+          const connection = new Connection(clusterApiUrl("devnet"));
+          // get latest `blockhash`
+          let blockhash = await connection.getLatestBlockhash().then((res) => res.blockhash);
+          // create v0 compatible message
+          const messageV0 = new TransactionMessage({
+            payerKey: window.phantom.solana.publicKey,
+            recentBlockhash: blockhash,
+            instructions,
+          }).compileToV0Message();
+          // make a versioned transaction
+          const transactionV0 = new VersionedTransaction(messageV0);
 
-        const connection = new Connection(clusterApiUrl("devnet"));
-
-        // get latest `blockhash`
-        let blockhash = await connection.getLatestBlockhash().then((res) => res.blockhash);
-
-        // create v0 compatible message
-        const messageV0 = new TransactionMessage({
-          payerKey: window.phantom.solana.publicKey,
-          recentBlockhash: blockhash,
-          instructions,
-        }).compileToV0Message();
-
-        // make a versioned transaction
-        const transactionV0 = new VersionedTransaction(messageV0);
-        
-        console.log('transactionMessage', transactionV0);
-
-        const result = await window.phantom.solana.signAndSendTransaction(transactionV0);
-        console.log('solana tx result', result);
-
-        if (result?.signature) {
-          // Set transaction hash for UI display
-          setSolanaTransactionHash(result.signature);
-          // Transaction successful, save to database
-          await saveDonationToDatabase(result.signature, window.phantom.solana.publicKey.toString());
-        } else {
-          setMessage('Transaction failed: No signature returned');
+          console.log('transactionMessage', transactionV0);
+          const result = await window.phantom.solana.signAndSendTransaction(transactionV0);
+          console.log('solana tx result', result);
+          if (result?.signature) {
+            // Set transaction hash for UI display
+            setSolanaTransactionHash(result.signature);
+            // Transaction successful, save to database
+            await saveDonationToDatabase(result.signature, window.phantom.solana.publicKey.toString());
+          } else {
+            setMessage('Transaction failed: No signature returned');
+            setIsSubmitting(false);
+          }
+        } catch (e) {
+          setMessage(`Solana transaction failed: ${getReadableErrorMessage(e)}`);
           setIsSubmitting(false);
         }
-      } catch (e) {
-        setMessage(`Solana transaction failed: ${getReadableErrorMessage(e)}`);
+        return;
+      } else {
+        setMessage('Phantom wallet is not connected');
         setIsSubmitting(false);
+        return;
       }
-      return;
     }
 
     // Ethereum transaction
@@ -286,10 +286,9 @@ export default function DonationStep4({
         {(writeData || solanaTransactionHash) && (
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mt-4 w-full">
             <div className="flex items-center gap-3 mb-2">
-              <div className={`h-3 w-3 rounded-full ${
-                isSolanaTransaction 
-                  ? (solanaTransactionHash ? 'bg-green-600' : 'bg-blue-600')
-                  : (isConfirmed ? 'bg-green-600' : isConfirming ? 'bg-yellow-500' : 'bg-blue-600')
+              <div className={`h-3 w-3 rounded-full ${isSolanaTransaction
+                ? (solanaTransactionHash ? 'bg-green-600' : 'bg-blue-600')
+                : (isConfirmed ? 'bg-green-600' : isConfirming ? 'bg-yellow-500' : 'bg-blue-600')
                 }`}></div>
               <span className="font-medium text-blue-800">Transaction Status</span>
             </div>
@@ -307,12 +306,11 @@ export default function DonationStep4({
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-gray-600">Status:</span>
-                <span className={`font-medium ${
-                  isSolanaTransaction 
-                    ? (solanaTransactionHash ? 'text-green-600' : 'text-blue-600')
-                    : (isConfirming ? 'text-yellow-600' : isConfirmed ? 'text-green-600' : 'text-blue-600')
+                <span className={`font-medium ${isSolanaTransaction
+                  ? (solanaTransactionHash ? 'text-green-600' : 'text-blue-600')
+                  : (isConfirming ? 'text-yellow-600' : isConfirmed ? 'text-green-600' : 'text-blue-600')
                   }`}>
-                  {isSolanaTransaction 
+                  {isSolanaTransaction
                     ? (solanaTransactionHash ? 'Confirmed ✓' : 'Pending')
                     : (isConfirming ? 'Confirming...' : isConfirmed ? 'Confirmed ✓' : 'Pending')
                   }
@@ -352,9 +350,9 @@ export default function DonationStep4({
           isSolanaTransaction
             ? (solanaTransactionHash ? "Saving..." : isSubmitting ? "Sending Transaction..." : "Donate")
             : (isWritePending ? "Sending Transaction..." :
-                isConfirming ? "Confirming..." :
-                  isConfirmed ? "Saving..." :
-                    "Donate")
+              isConfirming ? "Confirming..." :
+                isConfirmed ? "Saving..." :
+                  "Donate")
         }
         goToPreviousStep={goToPreviousStep}
         isLoading={isSubmitting || isWritePending || isConfirming}
