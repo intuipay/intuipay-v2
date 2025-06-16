@@ -9,12 +9,11 @@ import { DonationInfo, DonationProject } from '@/types';
 import { clsx } from 'clsx';
 import DonationStep1 from '@/app/_components/donate/step1';
 import DonationStep2 from '@/app/_components/donate/step2';
-import DonationStep3 from '@/app/_components/donate/step3';
 import DonationStep4 from '@/app/_components/donate/step4';
 import DonationStep5 from '@/app/_components/donate/step5';
 import { createDonationInfo } from '@/utils';
 
-type Step = 'initialization' | 'contracts' | 'payment' | 'confirm' | 'complete'
+type Step = 'initialization' | 'contacts' | 'payment' | 'complete'
 type Props = {
   project: DonationProject;
   slug: string;
@@ -23,9 +22,8 @@ type Props = {
 // Steps configuration
 const steps = [
   { id: 'initialization', label: 'Initialization' },
-  { id: 'contracts', label: 'Contracts' },
+  { id: 'contacts', label: 'Contacts' },
   { id: 'payment', label: 'Payment' },
-  { id: 'confirm', label: 'Confirm' },
   { id: 'complete', label: 'Complete' },
 ];
 // Slide animation variants
@@ -61,26 +59,24 @@ export default function DonationPageComp({
   const [slideDirection, setSlideDirection] = useState<'right' | 'left'>('right')
   // Form state
   const [info, setInfo] = useState<DonationInfo>(createDonationInfo(project.id));
-
   // Step navigation
   const goToNextStep = () => {
     setSlideDirection('right')
-    if (currentStep === 'initialization') setCurrentStep('contracts')
-    else if (currentStep === 'contracts') setCurrentStep('payment')
-    else if (currentStep === 'payment') setCurrentStep('confirm')
-    else  if (currentStep === 'confirm') setCurrentStep('complete')
+    if (currentStep === 'initialization') setCurrentStep('contacts')
+    else if (currentStep === 'contacts') setCurrentStep('payment')
+    else  if (currentStep === 'payment') setCurrentStep('complete')
   }
   const goToPreviousStep = () => {
     setSlideDirection('left')
-    if (currentStep === 'contracts') setCurrentStep('initialization')
-    else if (currentStep === 'payment') setCurrentStep('contracts')
-    else if (currentStep === 'confirm') setCurrentStep('payment')
+    if (currentStep === 'contacts') setCurrentStep('initialization')
+    else if (currentStep === 'payment') setCurrentStep('contacts')
   }
 
   function resetForm() {
     setSlideDirection('left')
     setCurrentStep('initialization')
     setInfo(createDonationInfo(project.id));
+    updateInfo({ network: 'ethereum', wallet: '' });
   }
   function updateInfo(newInfo: Partial<DonationInfo>) {
     setInfo((prev) => ({
@@ -112,7 +108,7 @@ export default function DonationPageComp({
         <div className="mb-4 py-4">
           <div className={clsx('grid grid-cols-4 items-center justify-between mb-2')}>
             {steps.map((step, index) => (
-              index === 3 ? null : <div key={step.id} className="flex items-center">
+              <div key={step.id} className="flex items-center">
                 <div className={clsx(
                   'h-0.5 flex-1',
                   index === 0 ? 'bg-gradient-to-r from-white to-blue-600'
@@ -146,7 +142,7 @@ export default function DonationPageComp({
           </div>
           <div className="grid grid-cols-4 text-center text-sm font-medium">
             {steps.map((step, index) => (
-              index === 3 ? null : <span
+              <span
                 key={step.id}
                 className={`${index <= currentStepIndex ? 'text-blue-600' : 'text-black/40'}`}
               >
@@ -173,23 +169,21 @@ export default function DonationPageComp({
               paymentMethod={info.currency}
               setAmount={value => updateInfo({ amount: value })}
               setPaymentMethod={value => updateInfo({ currency: value })}
+              network={info.network}
+              setNetwork={value => updateInfo({ network: value })}
+              selectedWallet={info.wallet}
+              setSelectedWallet={value => updateInfo({ wallet: value })}
             />}
 
             {/* Contracts Step */}
-            {currentStep === 'contracts' && <DonationStep2
+            {currentStep === 'contacts' && <DonationStep2
               goToNextStep={goToNextStep}
               goToPreviousStep={goToPreviousStep}
               info={info}
               setInfo={updateInfo}
             />}
 
-            {/* Payment Step */}
-            {currentStep === 'payment' && <DonationStep3
-              goToNextStep={goToNextStep}
-              goToPreviousStep={goToPreviousStep}
-            />}
-
-            {currentStep === 'confirm' && <DonationStep4
+            {currentStep === 'payment' && <DonationStep4
               goToNextStep={goToNextStep}
               goToPreviousStep={goToPreviousStep}
               info={info}

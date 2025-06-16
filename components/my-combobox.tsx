@@ -17,6 +17,8 @@ type Props = {
   onChange: (value: string) => void;
   options: DropdownItemProps[];
   value?: string;
+  showBalance?: boolean;
+  balances?: { [key: string]: { balance: string | null; isLoading: boolean; error: string | null } };
 }
 type ComboboxProps = {
   symbolKey?: keyof DropdownItemProps;
@@ -34,6 +36,8 @@ export default function MyCombobox({
   labelKey = 'label',
   onChange,
   options,
+  showBalance = false,
+  balances = {},
   symbolKey = 'icon',
   value,
   valueKey = 'value',
@@ -109,7 +113,7 @@ export default function MyCombobox({
         {filteredOptions.map((option, index) => (
           <ComboboxOption
             className={clsx(
-              'flex items-center gap-3 px-4 h-12 cursor-pointer',
+              'flex items-center justify-between px-4 h-12 cursor-pointer',
               value === option[ valueKey ] ? 'bg-blue-50 hover:bg-blue-100' : 'hover:bg-blue-50',
             )}
             disabled={disabled}
@@ -127,6 +131,31 @@ export default function MyCombobox({
               />}
               {option[ labelKey ]}
             </div>
+            {showBalance && (
+              <div className="text-sm text-gray-600 font-medium">
+                {(() => {
+                  const optionValue = option[valueKey] as string;
+                  const balance = balances[optionValue];
+                  if (!balance) return null;
+                  
+                  if (balance.isLoading) {
+                    return <span className="text-gray-400">Loading...</span>;
+                  }
+                  if (balance.error) {
+                    return <span className="text-red-400">Error</span>;
+                  }
+                  if (balance.balance) {
+                    const symbol = optionValue.toUpperCase();
+                    return (
+                      <span className="text-green-600">
+                        {parseFloat(balance.balance).toFixed(4)} {symbol}
+                      </span>
+                    );
+                  }
+                  return <span className="text-gray-400">0.0000 {optionValue.toUpperCase()}</span>;
+                })()}
+              </div>
+            )}
           </ComboboxOption>
         ))}
         {!filteredOptions.length && <div className="flex items-center gap-3 px-4 h-12">

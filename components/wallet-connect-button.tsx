@@ -5,14 +5,12 @@ import Image from 'next/image'
 import { clsx } from 'clsx'
 
 interface WalletConnectButtonProps {
-  onConnect?: () => void
   className?: string
   isSelected?: boolean
   onClick?: () => void
 }
 
 export function WalletConnectButton({
-  onConnect,
   className = '',
   isSelected = false,
   onClick
@@ -23,17 +21,6 @@ export function WalletConnectButton({
     if (onClick) {
       onClick()
     }
-
-    // Open WalletConnect modal using AppKit instance
-    if (typeof window !== 'undefined' && (window as any).appkit) {
-      try {
-        (window as any).appkit.open()
-      } catch (error) {
-        console.error('Failed to open WalletConnect modal:', error)
-      }
-    }
-
-    onConnect?.()
   }
 
   return (
