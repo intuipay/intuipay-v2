@@ -46,6 +46,19 @@ export default function ProjectDetailClientLayout({ project, similarProjects, do
   const socialLinks = project.social_links ? JSON.parse(project.social_links as string) : {};
   const [tab, setTab] = useState('campaign')
 
+  function extractSecondLevelHeadings(markdownString: string) {
+    //匹配二级标题
+    const regex = /^#{2,3}\s+(.+)/gm;
+    let match;
+    const headings = [];
+
+    while ((match = regex.exec(markdownString)) !== null) {
+      headings.push(match[1]);
+    }
+
+    return headings;
+  }
+  const titles = extractSecondLevelHeadings(project.campaign)
 
   const daysLeft = useMemo(() => Math.floor((new Date(project.end_at).getTime() - Date.now()) / (1000 * 60 * 60 * 24)), [project])
 
@@ -90,7 +103,7 @@ export default function ProjectDetailClientLayout({ project, similarProjects, do
         </div>
 
         {/* Right Column (Sticky Sidebar) */}
-        <div className="lg:w-1/3 lg:top-24 self-start">
+        <div className="lg:w-1/3 lg:sticky lg:top-24 self-start">
           <div className="border border-neutral-mediumgray/50 rounded-lg p-6 space-y-6">
             <div className="flex items-center">
               <Avatar className="h-10 w-10 mr-3">
@@ -216,7 +229,7 @@ export default function ProjectDetailClientLayout({ project, similarProjects, do
           </TabsContent>
         </Tabs>
 
-        {tab === 'campaign' && <div className="pt-4">
+        {tab === 'campaign' && <div className="pt-4 px-6">
           <ul className="space-y-2">
             {titles.map((item) => (
               <li key={item}>
