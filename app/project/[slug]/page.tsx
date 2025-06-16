@@ -73,7 +73,19 @@ export default async function ProjectDetailPageServer({ params }: { params: { sl
   const { slug } = await params;
   const project = await getProjectDetailById(slug)
   const donations: Donations = await getDonationsById(project.id, 1)
-  const similarProjects = await getProjects(1, 4, '');
+  const similarProjects = await getProjects(
+    1,
+    3,
+    '',
+    'id',
+    'desc',
+    { 
+      category: project.category,
+      progress: 0,
+      location: '',
+      donationMethods: 0,
+      projectType: 0,
+     });
   console.log('similarProjects: ', similarProjects);
   const updates = await getUpdatesById(project.id, 1)
   console.log('updates: ', updates);
