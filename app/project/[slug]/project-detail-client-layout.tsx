@@ -30,14 +30,15 @@ import { AboutTab } from '@/components/project-detail-tabs/about-tab'
 import { UpdatesTab } from '@/components/project-detail-tabs/updates-tab'
 import { DonationsTab } from '@/components/project-detail-tabs/donations-tab'
 
+import type { ProjectDataType } from './project-data'
 import { Donations, ProjectInfo, Updates } from '@/types'
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { enumToKeyLabel } from '@/lib/utils'
 import { ProjectCategories, ProjectTypes } from '@/data'
 import { ProjectDonationMethods } from '@/data'
 
 type ProjectDetailClientLayoutProps = {
-  project: ProjectInfo
+  project: ProjectDataType
   similarProjects: ProjectInfo[]
   donations: Donations
   updates: Updates
@@ -47,13 +48,21 @@ type ProjectDetailClientLayoutProps = {
 export default function ProjectDetailClientLayout({ project, similarProjects, donations, updates, updatesCount }: ProjectDetailClientLayoutProps) {
   const isMovie = project.banner.includes('youtube.com') || project.banner.includes('youtu.be');
   const socialLinks = project.social_links ? JSON.parse(project.social_links as string) : {};
+  const [tab, setTab] = useState('campaign')
 
-  const tocItems = [
-    { id: 'overview', label: 'Overview' },
-    { id: 'mission-statement', label: 'Mission Statement' },
-    { id: 'why-donate', label: `Why donate to ${project.project_name}?` }, // Made dynamic
-    { id: 'risks-challenges', label: 'Risks & Challenges' },
-  ]
+  function extractSecondLevelHeadings(markdownString: string) {
+    //匹配二级标题
+    const regex = /\*\*(.+?)\*\*/g;
+    let match;
+    const headings = [];
+
+    while ((match = regex.exec(markdownString)) !== null) {
+      headings.push(match[1]);
+    }
+
+    return headings;
+  }
+  const titles = extractSecondLevelHeadings(project.campaign)
 
   const daysLeft = useMemo(() => Math.floor((new Date(project.end_at).getTime() - Date.now()) / (1000 * 60 * 60 * 24)), [project])
 
@@ -98,48 +107,10 @@ export default function ProjectDetailClientLayout({ project, similarProjects, do
                   <Coins className="w-4 h-4 mr-1.5 text-intuipay-blue" /> {enumToKeyLabel(ProjectDonationMethods)[ project.accepts ]}
                 </span>
               </div>
-
-              <Tabs defaultValue="campaign" className="mb-8">
-                <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4">
-                  <TabsTrigger value="campaign" className="py-2.5">
-                    Campaign
-                  </TabsTrigger>
-                  <TabsTrigger value="about" className="py-2.5">
-                    About
-                  </TabsTrigger>
-                  <TabsTrigger value="updates" className="py-2.5 relative">
-                    Updates
-                    {updatesCount > 0 && (
-                      <Badge
-                        variant="default"
-                        className="absolute -top-1 -right-1 text-xs px-1.5 py-0.5 bg-action-blue text-white"
-                      >
-                        {updatesCount}
-                      </Badge>
-                    )}
-                  </TabsTrigger>
-                  <TabsTrigger value="donations" className="py-2.5">
-                    Donations
-                  </TabsTrigger>
-                </TabsList>
-
-                <TabsContent value="campaign" className="pt-6">
-                  <CampaignTab project={project} />
-                </TabsContent>
-                <TabsContent value="about" className="pt-6">
-                  <AboutTab project={project} />
-                </TabsContent>
-                <TabsContent value="updates" className="pt-6">
-                  <UpdatesTab updates={updates} />
-                </TabsContent>
-                <TabsContent value="donations" className="pt-6">
-                  <DonationsTab donations={donations} />
-                </TabsContent>
-              </Tabs>
             </div>
 
             {/* Right Column (Sticky Sidebar) */}
-            <div className="lg:w-1/3 lg:sticky lg:top-24 self-start">
+            <div className="lg:w-1/3 lg:top-24 self-start">
               <div className="border border-neutral-mediumgray/50 rounded-lg p-6 space-y-6">
                 <div className="flex items-center">
                   <Avatar className="h-10 w-10 mr-3">
@@ -222,23 +193,66 @@ export default function ProjectDetailClientLayout({ project, similarProjects, do
                 <Button size="lg" className="w-full bg-action-blue hover:bg-action-blue/90 text-base py-3">
                   Donate Now
                 </Button>
-                <div className="pt-4 border-t border-neutral-mediumgray/30">
-                  <ul className="space-y-2">
-                    {tocItems.map((item) => (
-                      <li key={item.id}>
-                        <a
-                          href={`#${item.id}`}
-                          className="text-sm text-neutral-darkgray hover:text-action-blue hover:underline"
-                        >
-                          {item.label}
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
               </div>
             </div>
           </div>
+
+          <div className="flex">
+            <Tabs defaultValue={tab} className="mb-8 lg:w-2/3" onValueChange={(val) => { setTab(val) }}>
+              <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4">
+                <TabsTrigger value="campaign" className="py-2.5">
+                  Campaign
+                </TabsTrigger>
+                <TabsTrigger value="about" className="py-2.5">
+                  About
+                </TabsTrigger>
+                <TabsTrigger value="updates" className="py-2.5 relative">
+                  Updates
+                  {updatesCount > 0 && (
+                    <Badge
+                      variant="default"
+                      className="absolute -top-1 -right-1 text-xs px-1.5 py-0.5 bg-action-blue text-white"
+                    >
+                      {updatesCount}
+                    </Badge>
+                  )}
+                </TabsTrigger>
+                <TabsTrigger value="donations" className="py-2.5">
+                  Donations
+                </TabsTrigger>
+              </TabsList>
+
+              <TabsContent value="campaign" className="pt-6">
+                <CampaignTab project={project} />
+              </TabsContent>
+              <TabsContent value="about" className="pt-6">
+                <AboutTab project={project} />
+              </TabsContent>
+              <TabsContent value="updates" className="pt-6">
+                <UpdatesTab updates={updates} />
+              </TabsContent>
+              <TabsContent value="donations" className="pt-6">
+                <DonationsTab donations={donations} />
+              </TabsContent>
+            </Tabs>
+
+            {tab === 'campaign' && <div className="pt-4">
+              <ul className="space-y-2">
+                {titles.map((item) => (
+                  <li key={item}>
+                    <a
+                      href={`#`}
+                      className="text-sm font-semibold text-neutral-darkgray hover:text-action-blue hover:border-l-2 border-blue-btn pl-2"
+                    >
+                      {item}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>}
+          </div>
+
+
 
           <section className="mt-16 pt-12 border-t border-neutral-mediumgray/50">
             <div className="flex justify-between items-center mb-8">
