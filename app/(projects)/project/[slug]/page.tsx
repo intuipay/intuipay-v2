@@ -1,7 +1,5 @@
 // This is now a SERVER COMPONENT by default
 import type { Metadata, ResolvingMetadata } from 'next'
-import { SiteHeader } from '@/components/site-header'
-import { SiteFooter } from '@/components/site-footer'
 import ProjectDetailClientLayout from './project-detail-client-layout' // New Client Component
 import { getProjectDetail, getDonations, getUpdates, getUpdatesCount, getProjects } from '@/lib/data'
 import { Donations, ProjectInfo, Updates } from '@/types'
