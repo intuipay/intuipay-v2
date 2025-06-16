@@ -30,12 +30,12 @@ import { UpdatesTab } from '@/components/project-detail-tabs/updates-tab'
 import { DonationsTab } from '@/components/project-detail-tabs/donations-tab'
 
 import type { ProjectDataType } from './project-data'
-import { Donations, Updates } from '@/types'
+import { Donations, ProjectInfo, Updates } from '@/types'
 import { useMemo } from 'react'
 
 type ProjectDetailClientLayoutProps = {
   project: ProjectDataType
-  similarProjects: any[] // Define a more specific type if available
+  similarProjects: ProjectInfo[]
   donations: Donations
   updates: Updates
   updatesCount: number
