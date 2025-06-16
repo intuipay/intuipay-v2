@@ -22,19 +22,19 @@ export function AboutTab({ project }: AboutTabProps) {
   } = project;
   return (
     <section>
-      <h2 className="text-xl sm:text-2xl font-semibold mb-4">About this organization</h2>
-      <div className="flex items-center mb-4">
+      <h2 className="text-3xl mb-14">About this organization</h2>
+      <div className="flex items-center mb-10">
         <Avatar className="h-12 w-12 mr-4">
           <AvatarImage src={org_logo} alt={org_name} />
           <AvatarFallback>{org_name.substring(0, 2)}</AvatarFallback>
         </Avatar>
         <h3 className="text-xl font-semibold">{org_name}</h3>
       </div>
-      <article className="text-neutral-darkgray leading-relaxed mb-6 prose"
+      <article className="text-neutral-darkgray leading-relaxed mb-10 prose"
         dangerouslySetInnerHTML={{ __html: marked.parse(org_description) }}
       />
 
-      <div className="space-y-2 mb-6 text-sm">
+      <div className="space-y-2 mb-10 text-sm">
         <Link
           href={`mailto:${email}`}
           className="flex items-center text-neutral-darkgray hover:text-action-blue"

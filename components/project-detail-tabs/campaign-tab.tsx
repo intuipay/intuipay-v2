@@ -13,7 +13,7 @@ export function CampaignTab({ project }: CampaignTabProps) {
   const tags = project.tags ? JSON.parse(project.tags) : [];
   return (
     <>
-      <article id="overview" className="mb-8 scroll-mt-20 prose"
+      <article className="mb-8 scroll-mt-20 prose"
         dangerouslySetInnerHTML={{ __html: marked.parse(project.campaign) }}
       />
       <p className="text-neutral-darkgray mb-13 mt-5">
