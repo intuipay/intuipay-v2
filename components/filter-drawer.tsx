@@ -70,7 +70,7 @@ export function FilterDrawer({ isOpen, onOpenChange, filter, setFilter }: Filter
               <RadioGroup
                 defaultValue="all-cat"
                 className="space-y-2 max-h-50 overflow-y-auto"
-                value={filter.category.toString()}
+                value={filter.category?.toString()}
                 onValueChange={(value) => setFilter({ ...filter, category: Number(value) })}
               >
                 {Object.entries(ProjectCategories).map(([label, id]) => (
@@ -91,7 +91,7 @@ export function FilterDrawer({ isOpen, onOpenChange, filter, setFilter }: Filter
               className="border-b py-5" icon={Smile} title="Progress">
               <div className="mt-2">
                 <Slider
-                  defaultValue={[filter.progress]}
+                  defaultValue={[filter.progress ?? 0]}
                   max={100}
                   step={1}
                   className="[&>span:first-child]:h-1 [&>span:first-child]:bg-action-blue [&>span:first-child_span]:bg-action-blue [&>span:first-child_span]:border-action-blue [&>span:first-child_span]:ring-offset-background [&>span:first-child_span]:focus-visible:ring-action-blue/50"
@@ -163,7 +163,7 @@ export function FilterDrawer({ isOpen, onOpenChange, filter, setFilter }: Filter
               <RadioGroup
                 defaultValue="all-dm"
                 className="space-y-2"
-                value={filter.donationMethods}
+                value={filter.donationMethods?.toString()}
                 onValueChange={(value) => setFilter({ ...filter, donationMethods: value })}
               >
                 {Object.entries(ProjectDonationMethods).map(([label, id]) => (
@@ -188,7 +188,7 @@ export function FilterDrawer({ isOpen, onOpenChange, filter, setFilter }: Filter
               <RadioGroup
                 defaultValue="all-pt"
                 className="space-y-2"
-                value={filter.projectType}
+                value={filter.projectType?.toString()}
                 onValueChange={(value) => setFilter({ ...filter, projectType: value })}
               >
                 {Object.entries(ProjectTypes).map(([label, id]) => (
