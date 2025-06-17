@@ -10,8 +10,12 @@ type Props = {
   paymentMethodList: PaymentMethod[];
   paymentMethodOtherList: PaymentMethod[];
   transferRate: TransferRate;
+  // 添加 wagmi 状态
+  isWagmiReady: boolean;
 
   updateAllMethods: (source: string, target: string, amt: number) => Promise<void>;
+  // 添加设置 wagmi 状态的方法
+  setWagmiReady: (ready: boolean) => void;
 }
 
 const useStore = create<Props>((set, get) => {
@@ -148,9 +152,12 @@ const useStore = create<Props>((set, get) => {
       usdRate: 1,
       usdTargetRate: 1,
     },
+    isWagmiReady: false, // 初始化 wagmi 状态
 
     updateAllMethods,
-  }
+    // 添加设置 wagmi 状态的方法
+    setWagmiReady: (ready: boolean) => set({ isWagmiReady: ready }),
+  };
 });
 
 export default useStore;
