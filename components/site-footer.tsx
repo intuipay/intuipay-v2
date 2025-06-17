@@ -10,9 +10,10 @@ const socialLinks = [
 
 export function SiteFooter() {
   return (
-    <footer className="w-full max-w-7xl mx-auto border-t border-neutral-mediumgray/50 bg-background">
+    <footer className="w-full max-w-7xl px-12 md:px-10 mx-auto bg-background">
+      <div className='border-t border-neutral-mediumgray/50'></div>
       <div className="h-13 mb-16 flex flex-col md:flex-row justify-between items-center md:items-end text-center md:text-left">
-        <p className="text-xs text-neutral-darkgray mb-4 md:mb-0 text-[#737373] sm:mt-8">
+        <p className="text-xs text-neutral-darkgray mb-4 md:mb-0 text-[#737373] mt-8">
           &copy; {new Date().getFullYear()} Intuipay Holding PTE. LTD. All rights reserved.
         </p>
         <div className="flex space-x-4">
