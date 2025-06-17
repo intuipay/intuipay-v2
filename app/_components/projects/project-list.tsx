@@ -82,6 +82,12 @@ export default function ProjectList({ data, page, pageSize, total }: ProjectList
     }
   }, [sortBy, query, filter]);
 
+  useEffect(() => {
+    if (!search) {
+      setQuery('');
+    }
+  }, [search]);
+
   return <>
     {/* Hero Section */}
     <section className="flex flex-col-reverse gap-16 items-stretch lg:flex-row w-full lg:py-21 bg-gradient-to-b from-intuipay-lighterblue/20 via-neutral-white to-neutral-white mb-20">

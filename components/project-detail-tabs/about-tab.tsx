@@ -112,7 +112,7 @@ export function AboutTab({ project }: AboutTabProps) {
         )}
       </div>
 
-      {project.banners.length && (
+      {project.banners.length > 0 && (
         Array.isArray(project.banners) && project.banners.map((banner: string) => {
           return (
             <div className="relative aspect-video rounded-lg overflow-hidden shadow-md">

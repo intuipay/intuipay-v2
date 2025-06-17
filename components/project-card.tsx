@@ -8,7 +8,7 @@ type ProjectCardProps = {
 }
 
 export function ProjectCard({ project }: ProjectCardProps) {
-  const progress = Math.round(parseInt(project.amount) / parseInt(project.goal_amount) * 1000) / 10;
+  const progress = Math.round(project.amount / project.goal_amount * 1000) / 10;
   const daysLeft = Math.ceil((new Date(project.end_at).getTime() - Date.now()) / 1000 / 60 / 60 / 24);
 
   return (
@@ -32,15 +32,16 @@ export function ProjectCard({ project }: ProjectCardProps) {
         </CardHeader>
         <CardContent className="flex-grow">
           <div className="flex items-center text-xs gap-2">
-            <div className="p-1 rounded-full border">
+            {project.org_logo && <div className="p-1 rounded-full border">
               <Image
-                className="block size-6"
+                className="block size-6 rounded-full"
                 src={project.org_logo}
                 alt={project.org_name}
                 width={24}
                 height={24}
               />
             </div>
+            }
             <span>{project.org_name}</span>
           </div>
         </CardContent>
@@ -48,7 +49,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
           <div className="flex justify-between items-center">
             <span className="text-xs text-neutral-darkgray">Total Raised</span>
             <span className="text-base font-bold text-neutral-text text-ellipsis">
-              $ {project.goal_amount?.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+              $ {(project.goal_amount / 100).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
             </span>
           </div>
           <p className="text-sm text-black mt-4 hidden opacity-0 group-hover:block group-hover:opacity-60 transition-opacity duration-800">{daysLeft} days left • {progress}% founded</p>
