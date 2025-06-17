@@ -1,17 +1,22 @@
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
 import MyCombobox from '@/components/my-combobox';
 import { DropdownItemProps } from '@/types';
 import { ChangeEvent, useState, useEffect, FormEvent, useCallback } from 'react';
 import CtaFooter from '@/app/_components/donate/cta-footer';
 import { clsx } from 'clsx';
 import Image from 'next/image';
-import { Networks, Wallets } from '@/data';
 import { WalletConnectButton } from '@/components/wallet-connect-button';
 import { useAccount, useConnect, useDisconnect, useChainId } from 'wagmi';
-import { appkit } from '@/lib/appkit';
+import { appkit, addNetworkToMetaMask } from '@/lib/appkit';
 import { useMultiWalletBalance } from '@/hooks/use-multi-wallet-balance';
+import {
+  BLOCKCHAIN_CONFIG,
+  getNetworkDropdownOptions,
+  getSupportedWallets,
+  getCurrencyDropdownOptions,
+  isCurrencyCompatibleWithNetwork
+} from '@/config/blockchain';
 
 type Props = {
   amount: number | '';
@@ -19,62 +24,87 @@ type Props = {
   paymentMethod: string;
   setAmount: (value: number | '') => void;
   setPaymentMethod: (value: string) => void;
-  network: string;
-  setNetwork: (value: string) => void;
   selectedWallet: string;
   setSelectedWallet: (value: string) => void;
+  network: string;
+  setNetwork: (network: string) => void;
 }
 
-const PaymentMethods: DropdownItemProps[] = [
-  {
-    icon: 'usdc',
-    label: 'USD Coin (USDC) ERC-20',
-    value: 'usdc',
-  },
-  {
-    icon: 'solana',
-    label: 'Solana (SOL)',
-    value: 'sol',
-  },
-];
 export default function DonationStep1({
   amount,
   goToNextStep,
   paymentMethod,
   setAmount,
   setPaymentMethod,
-  network,
-  setNetwork,
   selectedWallet,
   setSelectedWallet,
+  network,
+  setNetwork,
 }: Props) {
   const [dollar, setDollar] = useState<number | ''>(amount);
-  const [error, setError] = useState<string>('');
-
-  // Filter payment methods based on selected network
-  const getFilteredPaymentMethods = (): DropdownItemProps[] => {
-    if (network === 'ethereum') {
-      return PaymentMethods.filter(method => method.value === 'usdc');
-    } else if (network === 'solana') {
-      return PaymentMethods.filter(method => method.value === 'sol');
-    }
-    // If no network selected, show all payment methods
-    return PaymentMethods;
-  };
+  const [error, setError] = useState<string>('');  // 获取配置数据
+  const networkOptions = getNetworkDropdownOptions();
+  const allWallets = Object.values(BLOCKCHAIN_CONFIG.wallets);
 
   // wagmi hooks
   const { address, isConnected, connector } = useAccount();
   const { connect, connectors, isPending, error: connectError } = useConnect();
-  const { disconnect } = useDisconnect(); const chainId = useChainId();
+  const { disconnect } = useDisconnect();
+  const chainId = useChainId();
   const [isPhantomConnected, setIsPhantomConnected] = useState(false);
+
+  // 根据 chainId 获取对应的网络ID
+  const getNetworkIdByChainId = (chainId: number): string | null => {
+    const networkEntry = Object.entries(BLOCKCHAIN_CONFIG.networks).find(([_, config]) => {
+      return config.chainId === chainId;
+    });
+    return networkEntry ? networkEntry[0] : null;
+  };
+
+  // 如果是重新刷新页面，对于 evm 钱包来说，连接还在，所以可以恢复出连接的网络来
+  // 但是phantom solana钱包，刷新页面后 window.phantom.solana.isConnected 就变为 false 了，等于是已经断开了连接
+  // 所以如果之前连上了 phantom 钱包，刷新页面后，连接状态会丢，此时网络展示默认的 ethereum sepolia
+  useEffect(() => {
+    if (isConnected && chainId) {
+      const connectedNetworkId = getNetworkIdByChainId(chainId);
+      if (connectedNetworkId && connectedNetworkId !== network) {
+        console.log('Syncing to connected network:', connectedNetworkId);
+        setNetwork(connectedNetworkId);
+      }
+    }
+  }, [isConnected, chainId, network]);
+
+  // 确保网络不为空的兜底机制
+  useEffect(() => {
+    if (!network && networkOptions.length > 0) {
+      const defaultNetwork = networkOptions[0].value || '';
+      console.log('Setting fallback network:', defaultNetwork);
+      setNetwork(defaultNetwork);
+    }
+  }, [network, networkOptions]);
+  // 获取当前网络配置
+  const currentNetwork = BLOCKCHAIN_CONFIG.networks[network as keyof typeof BLOCKCHAIN_CONFIG.networks];
+
+  // Filter payment methods based on selected network
+  const getFilteredPaymentMethods = (): DropdownItemProps[] => {
+    if (!network) return [];
+    const result = getCurrencyDropdownOptions(network);
+    console.log('filtered payment methods:', result, network);
+    return result;
+  };
+  // Filter wallets based on selected network
+  const getFilteredWallets = (): typeof allWallets => {
+    if (!network) return allWallets;
+    return getSupportedWallets(network);
+  };
 
   // Get wallet balances for all supported tokens
   const { balances, refreshBalances } = useMultiWalletBalance(network);
 
   const handleDisconnect = useCallback(() => {
-    if ((window as any)?.phantom?.solana) {
+    if (window?.phantom?.solana) {
       console.log('Disconnecting Phantom wallet');
-      (window as any).phantom.solana.disconnect();
+      window.phantom.solana.disconnect();
       setIsPhantomConnected(false);
       setSelectedWallet('');
     }
@@ -84,8 +114,8 @@ export default function DonationStep1({
 
   useEffect(() => {
     // 确保在客户端执行
-    if (typeof window !== 'undefined' && (window as any).phantom?.solana) {
-      const phantom = (window as any).phantom.solana;
+    if (typeof window !== 'undefined' && window.phantom?.solana) {
+      const phantom = window.phantom.solana;
       if (phantom.isConnected) {
         console.log('Phantom wallet is already connected');
         setIsPhantomConnected(true);
@@ -113,60 +143,27 @@ export default function DonationStep1({
       };
     }
   }, []);
-  // Clear selected wallet when network changes if the wallet is not compatible
-  useEffect(() => {
-    if (selectedWallet) {
-      const isWalletCompatible = (() => {
-        if (network === 'ethereum') {
-          return ['metamask', 'wallet-connect', 'coinbase'].includes(selectedWallet);
-        } else if (network === 'solana') {
-          return selectedWallet === 'phantom';
-        }
-        return true;
-      })();
-
-      console.log('isWalletCompatible:', isWalletCompatible, 'for network:', network, 'and selectedWallet:', selectedWallet);
-
-      if (!isWalletCompatible) {
-        console.log('Clearing selected wallet due to network change');
-        setSelectedWallet('');
-        // Disconnect if currently connected
-        if (isConnected || isPhantomConnected) {
-          handleDisconnect();
-        }
-      }
-    }
-  }, [network, selectedWallet, isConnected, isPhantomConnected, handleDisconnect, setSelectedWallet]);
-  // Clear selected payment method when network changes if the payment method is not compatible
   useEffect(() => {
     if (network && !paymentMethod) {
       const filteredMethods = getFilteredPaymentMethods();
       if (filteredMethods.length === 1 && filteredMethods[0].value) {
         setPaymentMethod(filteredMethods[0].value);
       }
-    } else if (paymentMethod) {
-      const isPaymentMethodCompatible = (() => {
-        if (network === 'ethereum') {
-          return paymentMethod === 'usdc';
-        } else if (network === 'solana') {
-          return paymentMethod === 'sol';
-        }
-        return true;
-      })();
+    } else if (paymentMethod && network) {
+      const isCompatible = isCurrencyCompatibleWithNetwork(paymentMethod, network);
 
-      if (!isPaymentMethodCompatible) {
+      if (!isCompatible) {
         setPaymentMethod('');
       }
     }
-  }, [network, paymentMethod, setPaymentMethod]);
+  }, [network, paymentMethod]); // 移除 setPaymentMethod 依赖
 
   const connectorMap = {
     metamask: connectors.find(c => c.id === 'metaMaskSDK' || c.id === 'io.metamask'),
     coinbase: connectors.find(c => c.id === 'coinbaseWalletSDK'),
     'wallet-connect': connectors.find(c => c.id === 'walletConnect'),
   };
-
-  // Monitor connection state changes
+  // 刷新页面后，自动根据 wagmi 连接，恢复出之前选中的钱包
   useEffect(() => {
     if (isConnected && address && connector) {
       setError('');
@@ -195,6 +192,51 @@ export default function DonationStep1({
     }
   }, [connectError]);
 
+  // 获取网络对应的 Chain ID
+  const getChainIdForNetwork = (networkId: string): number | null => {
+    switch (networkId) {
+      case 'ethereum-mainnet':
+        return 1;
+      case 'ethereum-sepolia':
+        return 11155111;
+      case 'pharos-testnet':
+        return 688688;
+      default:
+        return null;
+    }
+  };
+
+  // 切换到指定网络的函数
+  const switchToTargetNetwork = async (networkId: string) => {
+    const targetChainId = getChainIdForNetwork(networkId);
+    if (!targetChainId) {
+      throw new Error(`Unsupported network: ${networkId}`);
+    }
+
+    if (typeof window === 'undefined' || !window.ethereum) {
+      throw new Error('MetaMask is not available');
+    }
+
+    const ethereum = window.ethereum as any;
+
+    try {
+      // 如果是 Pharos Testnet，需要先添加网络
+      if (networkId === 'pharos-testnet') {
+        await addNetworkToMetaMask(networkId);
+      } else {
+        // 对于其他网络，直接切换
+        await ethereum.request({
+          method: 'wallet_switchEthereumChain',
+          params: [{ chainId: `0x${targetChainId.toString(16)}` }],
+        });
+      }
+    } catch (error: any) {
+      if (error.code === 4001) {
+        throw new Error('User rejected network switch');
+      }
+      throw error;
+    }
+  };
   const handleConnect = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!selectedWallet || isPending) return;
@@ -215,8 +257,27 @@ export default function DonationStep1({
 
       if (selectedWallet === 'phantom') {
         // handle phantom wallet connection to solana
-        (window as any)?.phantom?.solana.connect();
+        window?.phantom?.solana?.connect();
         return;
+      }
+
+      // 对于 EVM 钱包，先检查并切换到目标网络
+      const currentNetworkConfig = BLOCKCHAIN_CONFIG.networks[network as keyof typeof BLOCKCHAIN_CONFIG.networks];
+      if (currentNetworkConfig?.type === 'ethereum') {
+        const targetChainId = getChainIdForNetwork(network);
+
+        if (targetChainId) {
+          console.log(`Attempting to switch to network: ${network} (Chain ID: ${targetChainId})`);
+
+          try {
+            await switchToTargetNetwork(network);
+            console.log(`Successfully switched to ${network}`);
+          } catch (networkError: any) {
+            console.error('Failed to switch network:', networkError);
+            setError(`Failed to switch to ${currentNetworkConfig.name}: ${networkError.message}`);
+            return;
+          }
+        }
       }
 
       // Handle other wallets using wagmi connectors
@@ -262,41 +323,48 @@ export default function DonationStep1({
             <p className="text-red-600 text-sm">{error}</p>
           </div>
         )}
-
         {/* Network Selection */}
         <div className="space-y-2">
           <Label className="text-sm font-semibold text-black/50">Network</Label>
-          <MyCombobox
-            className="rounded-lg h-12"
-            iconClass="top-3"
-            iconPath="logo"
-            options={Networks}
-            onChange={setNetwork}
-            value={network}
-          />
+          {(isConnected || isPhantomConnected) ? (
+            <div className="flex items-center justify-between p-3 border rounded-lg bg-gray-50">
+              <div className="flex items-center gap-3">
+                <Image
+                  src={`/images/logo/${currentNetwork?.icon || 'ethereum'}.svg`}
+                  width={24}
+                  height={24}
+                  className="size-6"
+                  alt={currentNetwork?.name || 'Network'}
+                  loading="lazy"
+                />
+                <span className="font-medium">{currentNetwork?.name || network}</span>
+              </div>
+              <span className="text-sm text-gray-500">Connected</span>
+            </div>
+          ) : (
+            <MyCombobox
+              className="rounded-lg h-12"
+              iconClass="top-3"
+              iconPath="logo"
+              options={networkOptions}
+              onChange={setNetwork}
+              value={network}
+            />
+          )}
         </div>
         {/* Wallet Selection */}
         <div className="space-y-2">
           <Label className="text-sm font-semibold text-black/50">Select Wallet</Label>
           {(!isConnected && !isPhantomConnected) ? (
             <div className="grid sm:grid-cols-2 gap-2.5 sm:gap-y-6">
-              {Wallets.filter(wallet => {
-                // Filter wallets based on selected network
-                if (network === 'ethereum') {
-                  return ['metamask', 'wallet-connect', 'coinbase'].includes(wallet.value || '');
-                } else if (network === 'solana') {
-                  return wallet.value === 'phantom';
-                }
-                // If no network selected, show all wallets
-                return true;
-              }).map(wallet => {
+              {getFilteredWallets().map(wallet => {
                 // Handle WalletConnect separately
-                if (wallet.value === 'wallet-connect') {
+                if (wallet.id === 'wallet-connect') {
                   return (
                     <WalletConnectButton
-                      key={wallet.value}
-                      isSelected={selectedWallet === wallet.value}
-                      onClick={() => setSelectedWallet(wallet.value || '')}
+                      key={wallet.id}
+                      isSelected={selectedWallet === wallet.id}
+                      onClick={() => setSelectedWallet(wallet.id)}
                     />
                   )
                 }
@@ -306,27 +374,27 @@ export default function DonationStep1({
                   <label
                     className={clsx(
                       'flex items-center p-3 gap-3 border rounded-lg cursor-pointer',
-                      { 'bg-blue-50 border-blue-500': selectedWallet === wallet.value },
+                      { 'bg-blue-50 border-blue-500': selectedWallet === wallet.id },
                     )}
-                    key={wallet.value}
+                    key={wallet.id}
                   >
                     <input
-                      checked={selectedWallet === wallet.value}
+                      checked={selectedWallet === wallet.id}
                       className="hidden"
                       name="wallet"
                       type="radio"
                       onChange={event => setSelectedWallet(event.target.value)}
-                      value={wallet.value}
+                      value={wallet.id}
                     />
                     <Image
                       src={`/images/logo/${wallet.icon}.svg`}
                       width={24}
                       height={24}
                       className="size-6"
-                      alt={wallet.label || ''}
+                      alt={wallet.name}
                       loading="lazy"
                     />
-                    <span className="font-medium">{wallet.label}</span>
+                    <span className="font-medium">{wallet.name}</span>
                   </label>
                 )
               })}
@@ -335,15 +403,15 @@ export default function DonationStep1({
             <div className="flex items-center justify-between p-3 border rounded-lg bg-gray-50">
               <div className="flex items-center gap-3">
                 <Image
-                  src={`/images/logo/${Wallets.find(w => w.value === selectedWallet)?.icon}.svg`}
+                  src={`/images/logo/${allWallets.find(w => w.id === selectedWallet)?.icon}.svg`}
                   width={24}
                   height={24}
                   className="size-6"
-                  alt={Wallets.find(w => w.value === selectedWallet)?.label || ''}
+                  alt={allWallets.find(w => w.id === selectedWallet)?.name || ''}
                   loading="lazy"
                 />
                 <span className="font-medium">
-                  {Wallets.find(w => w.value === selectedWallet)?.label}
+                  {allWallets.find(w => w.id === selectedWallet)?.name}
                 </span>
               </div>
               <button
@@ -371,19 +439,19 @@ export default function DonationStep1({
             balances={balances}
           />
         </div>
-
         {/* Amount Input */}
         <div className="space-y-2">
           <Label className="text-sm font-semibold text-black/50">Amount</Label>
-          <div className="flex items-center border border-black/10 rounded-lg focus-within:outline focus-within:outline-1 focus-within:outline-blue-400">
+          <div className={`flex items-center border border-black/10 rounded-lg focus-within:outline focus-within:outline-1 focus-within:outline-blue-400 ${!(isConnected || isPhantomConnected) ? 'bg-gray-50' : ''}`}>
             <Input
               className="text-sm h-12 flex-1 px-4 focus:outline-none"
               hasRing={false}
               min="0"
               onChange={onAmountChange}
-              placeholder="1.0"
+              placeholder={!(isConnected || isPhantomConnected) ? "Connect wallet first" : "1.0"}
               type="number"
               value={amount}
+              disabled={!(isConnected || isPhantomConnected)}
             />
             <div className="text-sm w-fit flex-none px-4">
               {paymentMethod} ≈ $
@@ -393,9 +461,10 @@ export default function DonationStep1({
               hasRing={false}
               min="0"
               onChange={onDollarChange}
-              placeholder="1.00"
+              placeholder={!(isConnected || isPhantomConnected) ? "Connect wallet first" : "1.00"}
               type="number"
               value={dollar}
+              disabled={!(isConnected || isPhantomConnected)}
             />
           </div>
         </div>

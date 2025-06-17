@@ -5,10 +5,18 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import omit from 'lodash-es/omit';
 import { DonationMethodType, DonationStatus } from '@/constants/donation';
 import CtaFooter from '@/app/_components/donate/cta-footer';
-import { useAccount, useChainId, useWriteContract, useWaitForTransactionReceipt } from 'wagmi';
-import { mainnet, sepolia } from 'wagmi/chains';
+import { useAccount, useChainId, useWriteContract, useWaitForTransactionReceipt, useSendTransaction } from 'wagmi';
 import { parseUnits } from 'viem';
 import { TransactionMessage, VersionedTransaction, LAMPORTS_PER_SOL, SystemProgram, Connection, PublicKey, clusterApiUrl } from '@solana/web3.js';
+import { createTransferInstruction, getAssociatedTokenAddress, TOKEN_PROGRAM_ID, ASSOCIATED_TOKEN_PROGRAM_ID } from '@solana/spl-token';
+import { 
+  BLOCKCHAIN_CONFIG,
+  getUniversityWalletAddress,
+  getCurrencyNetworkConfig,
+  getExplorerUrl,
+  formatAddress,
+  convertToSmallestUnit
+} from '@/config/blockchain';
 
 type Props = {
   goToPreviousStep: () => void;
@@ -25,9 +33,12 @@ export default function DonationStep4({
   const [message, setMessage] = useState<string>('');
   const [solanaTransactionHash, setSolanaTransactionHash] = useState<string>('');
   const [isSolanaTransaction, setIsSolanaTransaction] = useState<boolean>(false);
-  const usdcContractAddress = process.env.NEXT_PUBLIC_USDC_CONTRACT_ADDRESS || ''; // Read from environment variable
-  const universityAddress = '0xE62868F9Ae622aa11aff94DB30091B9De20AEf86'; // TODO: fetch from api
-  const universitySolanaDevnetAddress = 'Ft7m7qrY3spLNKo6aMAHMArAT3oLSSy4DnJ3y3SF1DP1'; // Solana Devnet address for the university
+  
+  // 动态获取配置
+  const networkConfig = BLOCKCHAIN_CONFIG.networks[info.network as keyof typeof BLOCKCHAIN_CONFIG.networks];
+  const currencyConfig = BLOCKCHAIN_CONFIG.currencies[info.currency as keyof typeof BLOCKCHAIN_CONFIG.currencies];
+  const currencyNetworkConfig = getCurrencyNetworkConfig(info.currency, info.network);
+  const universityAddress = getUniversityWalletAddress(info.network);
 
   // USDC合约ABI (ERC-20标准)
   const usdcAbi = [
@@ -56,23 +67,35 @@ export default function DonationStep4({
       stateMutability: 'view'
     }
   ] as const;
-
   // wagmi hooks
   const { address, isConnected } = useAccount();
   const chainId = useChainId();
 
-  // 写入合约钩子
+  // 写入合约钩子（用于 ERC-20 代币）
   const { writeContract, data: writeData, isPending: isWritePending, error: writeError } = useWriteContract();
 
-  // 等待交易确认钩子
+  // 发送交易钩子（用于原生代币）
+  const { sendTransaction, data: sendData, isPending: isSendPending, error: sendError } = useSendTransaction();
+
+  // 等待交易确认钩子（合约交易）
   const {
     isLoading: isConfirming,
     isSuccess: isConfirmed,
     error: confirmError
   } = useWaitForTransactionReceipt({
     hash: writeData,
+  });
+
+  // 等待交易确认钩子（原生代币交易）
+  const {
+    isLoading: isSendConfirming,
+    isSuccess: isSendConfirmed,
+    error: sendConfirmError
+  } = useWaitForTransactionReceipt({
+    hash: sendData,
   });  // 监听交易确认状态
   useEffect(() => {
+    // 处理合约交易（ERC-20 代币）
     if (isConfirmed && writeData) {
       // 交易确认成功，保存到数据库
       saveDonationToDatabase(writeData);
@@ -85,21 +108,28 @@ export default function DonationStep4({
       setMessage(getReadableErrorMessage(writeError));
       setIsSubmitting(false);
     }
-  }, [isConfirmed, confirmError, writeError, writeData]);
-  // Get explorer URL for transaction
-  const getExplorerUrl = (txHash: string) => {
-    if (isSolanaTransaction) {
-      return `https://explorer.solana.com/tx/${txHash}?cluster=devnet`;
+
+    // 处理原生代币交易
+    if (isSendConfirmed && sendData) {
+      // 交易确认成功，保存到数据库
+      saveDonationToDatabase(sendData);
     }
-    const baseUrl = chainId === mainnet.id
-      ? 'https://etherscan.io/tx/'
-      : 'https://sepolia.etherscan.io/tx/';
-    return `${baseUrl}${txHash}`;
+    if (sendConfirmError) {
+      setMessage(`Transaction failed: ${getReadableErrorMessage(sendConfirmError)}`);
+      setIsSubmitting(false);
+    }
+    if (sendError) {
+      setMessage(getReadableErrorMessage(sendError));
+      setIsSubmitting(false);
+    }
+  }, [isConfirmed, confirmError, writeError, writeData, isSendConfirmed, sendConfirmError, sendError, sendData]);// Get explorer URL for transaction
+  const getTransactionExplorerUrl = (txHash: string) => {
+    return getExplorerUrl(info.network, txHash);
   };
 
   // Format address display
-  const formatAddress = (address: string) => {
-    return `${address.slice(0, 6)}...${address.slice(-4)}`;
+  const formatTransactionAddress = (address: string) => {
+    return formatAddress(address);
   };
 
   // 处理用户友好的错误信息
@@ -122,13 +152,9 @@ export default function DonationStep4({
 
     return errorMessage;
   };
+  
   function convertAmountBasedOnCurrency(amount: number, currency: string): number {
-    if (currency.toUpperCase() === 'USDC') {
-      return amount * 1000000; // USDC has 6 decimal places
-    } else if (currency.toUpperCase() === 'SOL') {
-      return amount * LAMPORTS_PER_SOL; // SOL has 9 decimal places, but we use LAMPORTS_PER_SOL for transfer
-    }
-    return amount; // Default case, no conversion
+    return Number(convertToSmallestUnit(amount, currency));
   }
   // 保存捐赠数据到数据库
   async function saveDonationToDatabase(transactionHash: string, walletAddress?: string) {
@@ -166,48 +192,143 @@ export default function DonationStep4({
       setIsSubmitting(false);
     }
   }
-
   async function doSubmit() {
     // Check donation amount validity
     if (!info.amount || info.amount <= 0) {
       setMessage('Invalid donation amount');
       return;
     }
+
+    // Check configuration validity
+    if (!networkConfig) {
+      setMessage('Invalid network configuration');
+      return;
+    }
+
+    if (!currencyConfig) {
+      setMessage('Invalid currency configuration');
+      return;
+    }
+
+    if (!universityAddress) {
+      setMessage('University wallet address not found for this network');
+      return;
+    }
+
     setIsSubmitting(true);
     setMessage('');
-
     // Solana transaction
-    if (info.network === 'solana') {
-      if (window?.phantom?.solana && window.phantom.solana.isConnected) {
+    if (networkConfig.type === 'solana') {
+      const phantom = window?.phantom?.solana;
+      if (phantom && phantom.isConnected) {
         setIsSolanaTransaction(true);
         try {
-          const instructions = [
-            SystemProgram.transfer({
-              fromPubkey: window.phantom.solana.publicKey,
-              toPubkey: new PublicKey(universitySolanaDevnetAddress),
-              lamports: info.amount * LAMPORTS_PER_SOL,
-            }),
-          ];
-          const connection = new Connection(clusterApiUrl("devnet"));
+          const connection = new Connection(networkConfig.rpcUrl || clusterApiUrl("devnet"));
+          let instructions = [];
+
+          // 根据代币类型构造不同的交易指令
+          if (currencyNetworkConfig?.isNative) {
+            // SOL 原生代币转账
+            console.log('Creating SOL native transfer instruction');
+            instructions = [
+              SystemProgram.transfer({
+                fromPubkey: phantom.publicKey,
+                toPubkey: new PublicKey(universityAddress),
+                lamports: Math.floor(info.amount * Math.pow(10, currencyConfig.decimals)),
+              }),
+            ];
+          } else if (currencyNetworkConfig?.contractAddress) {
+            // SPL Token 转账（如 USDC）
+            console.log('Creating SPL Token transfer instruction for:', currencyConfig.symbol);
+            
+            const mintAddress = new PublicKey(currencyNetworkConfig.contractAddress);
+            const fromWallet = phantom.publicKey;
+            const toWallet = new PublicKey(universityAddress);
+            
+            // 获取或创建发送者的关联代币账户
+            const fromTokenAccount = await getAssociatedTokenAddress(
+              mintAddress,
+              fromWallet,
+              false,
+              TOKEN_PROGRAM_ID,
+              ASSOCIATED_TOKEN_PROGRAM_ID
+            );
+            
+            // 获取或创建接收者的关联代币账户
+            const toTokenAccount = await getAssociatedTokenAddress(
+              mintAddress,
+              toWallet,
+              false,
+              TOKEN_PROGRAM_ID,
+              ASSOCIATED_TOKEN_PROGRAM_ID
+            );
+
+            // 检查接收者的代币账户是否存在
+            const toTokenAccountInfo = await connection.getAccountInfo(toTokenAccount);
+            
+            // 如果接收者的代币账户不存在，需要先创建
+            if (!toTokenAccountInfo) {
+              console.log('Creating associated token account for recipient');
+              const { createAssociatedTokenAccountInstruction } = await import('@solana/spl-token');
+              instructions.push(
+                createAssociatedTokenAccountInstruction(
+                  fromWallet, // payer
+                  toTokenAccount, // associatedToken
+                  toWallet, // owner
+                  mintAddress, // mint
+                  TOKEN_PROGRAM_ID,
+                  ASSOCIATED_TOKEN_PROGRAM_ID
+                )
+              );
+            }
+
+            // 计算转账金额（转换为代币的最小单位）
+            const transferAmount = Math.floor(info.amount * Math.pow(10, currencyConfig.decimals));
+            
+            console.log('SPL Token transfer details:', {
+              fromTokenAccount: fromTokenAccount.toString(),
+              toTokenAccount: toTokenAccount.toString(),
+              amount: transferAmount,
+              decimals: currencyConfig.decimals
+            });
+
+            // 创建转账指令
+            instructions.push(
+              createTransferInstruction(
+                fromTokenAccount, // source
+                toTokenAccount, // destination
+                fromWallet, // owner
+                transferAmount, // amount
+                [],
+                TOKEN_PROGRAM_ID
+              )
+            );
+          } else {
+            throw new Error('Invalid token configuration: no contract address or native flag');
+          }
+
           // get latest `blockhash`
           let blockhash = await connection.getLatestBlockhash().then((res) => res.blockhash);
+          
           // create v0 compatible message
           const messageV0 = new TransactionMessage({
-            payerKey: window.phantom.solana.publicKey,
+            payerKey: phantom.publicKey,
             recentBlockhash: blockhash,
             instructions,
           }).compileToV0Message();
+          
           // make a versioned transaction
           const transactionV0 = new VersionedTransaction(messageV0);
 
-          console.log('transactionMessage', transactionV0);
-          const result = await window.phantom.solana.signAndSendTransaction(transactionV0);
-          console.log('solana tx result', result);
+          console.log('Solana transaction created:', transactionV0);
+          const result = await phantom.signAndSendTransaction(transactionV0);
+          console.log('Solana transaction result:', result);
+          
           if (result?.signature) {
             // Set transaction hash for UI display
             setSolanaTransactionHash(result.signature);
             // Transaction successful, save to database
-            await saveDonationToDatabase(result.signature, window.phantom.solana.publicKey.toString());
+            await saveDonationToDatabase(result.signature, phantom.publicKey.toString());
           } else {
             setMessage('Transaction failed: No signature returned');
             setIsSubmitting(false);
@@ -222,9 +343,7 @@ export default function DonationStep4({
         setIsSubmitting(false);
         return;
       }
-    }
-
-    // Ethereum transaction
+    }    // Ethereum transaction
     setIsSolanaTransaction(false);
     if (!isConnected || !address) {
       setMessage('Please connect your wallet first');
@@ -232,15 +351,10 @@ export default function DonationStep4({
       return;
     }
 
-    // 检查网络是否支持 (这里假设 USDC 合约在 mainnet 或 sepolia 上)
-    if (chainId !== mainnet.id && chainId !== sepolia.id) {
-      setMessage('Please switch to Ethereum Mainnet or Sepolia Testnet');
-      return;
-    }
-
-    // 检查捐赠金额是否有效
-    if (!info.amount || info.amount <= 0) {
-      setMessage('Invalid donation amount');
+    // 检查网络链ID是否匹配
+    if (networkConfig.chainId && chainId !== networkConfig.chainId) {
+      setMessage(`Please switch to ${networkConfig.name}`);
+      setIsSubmitting(false);
       return;
     }
 
@@ -248,16 +362,29 @@ export default function DonationStep4({
     setMessage('');
 
     try {
-      // 将捐赠金额转换为 USDC 的最小单位 (6位小数)
-      const amount = parseUnits(info.amount.toString(), 6);
-
-      // 发起 USDC 转账交易
-      writeContract({
-        address: usdcContractAddress as `0x${string}`,
-        abi: usdcAbi,
-        functionName: 'transfer',
-        args: [universityAddress as `0x${string}`, amount],
-      });
+      // 将捐赠金额转换为代币的最小单位
+      const amount = parseUnits(info.amount.toString(), currencyConfig.decimals);      // 根据代币类型发送不同的交易
+      if (currencyNetworkConfig?.isNative) {
+        // 原生代币交易（ETH, PHRS 等）
+        console.log('Sending native token transaction');
+        sendTransaction({
+          to: universityAddress as `0x${string}`,
+          value: amount,
+        });
+      } else if (currencyNetworkConfig?.contractAddress) {
+        // ERC-20 代币交易
+        console.log('Sending ERC-20 token transaction');
+        writeContract({
+          address: currencyNetworkConfig.contractAddress as `0x${string}`,
+          abi: usdcAbi,
+          functionName: 'transfer',
+          args: [universityAddress as `0x${string}`, amount],
+        });
+      } else {
+        setMessage('Invalid token configuration: no contract address or native flag');
+        setIsSubmitting(false);
+        return;
+      }
 
     } catch (e) {
       setMessage(getReadableErrorMessage(e));
@@ -292,16 +419,15 @@ export default function DonationStep4({
                 }`}></div>
               <span className="font-medium text-blue-800">Transaction Status</span>
             </div>
-            <div className="space-y-2 text-sm">
-              <div className="flex items-center justify-between">
+            <div className="space-y-2 text-sm">              <div className="flex items-center justify-between">
                 <span className="text-gray-600">Transaction Hash:</span>
                 <a
-                  href={getExplorerUrl(isSolanaTransaction ? solanaTransactionHash : writeData!)}
+                  href={getTransactionExplorerUrl(isSolanaTransaction ? solanaTransactionHash : writeData!)}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="font-mono text-blue-600 text-xs hover:text-blue-800 underline"
                 >
-                  {formatAddress(isSolanaTransaction ? solanaTransactionHash : writeData!)}
+                  {formatTransactionAddress(isSolanaTransaction ? solanaTransactionHash : writeData!)}
                 </a>
               </div>
               <div className="flex items-center justify-between">
@@ -349,16 +475,16 @@ export default function DonationStep4({
         buttonLabel={
           isSolanaTransaction
             ? (solanaTransactionHash ? "Saving..." : isSubmitting ? "Sending Transaction..." : "Donate")
-            : (isWritePending ? "Sending Transaction..." :
-              isConfirming ? "Confirming..." :
-                isConfirmed ? "Saving..." :
+            : (isWritePending || isSendPending ? "Sending Transaction..." :
+              isConfirming || isSendConfirming ? "Confirming..." :
+                isConfirmed || isSendConfirmed ? "Saving..." :
                   "Donate")
         }
         goToPreviousStep={goToPreviousStep}
-        isLoading={isSubmitting || isWritePending || isConfirming}
+        isLoading={isSubmitting || isWritePending || isSendPending || isConfirming || isSendConfirming}
         isSubmittable={
           (window?.phantom?.solana?.isConnected && !isSubmitting) ||
-          (!isSubmitting && !isWritePending && !isConfirming && isConnected)
+          (!isSubmitting && !isWritePending && !isSendPending && !isConfirming && !isSendConfirming && isConnected)
         }
         onSubmit={doSubmit}
       />
