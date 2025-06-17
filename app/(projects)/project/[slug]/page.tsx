@@ -7,12 +7,8 @@ import { ProjectCategories } from '@/data';
 
 export const runtime = 'edge';
 
-// Simulate fetching project data by slug (replace with actual data fetching)
-// 异步函数，根据slug获取项目详情
 async function getProjectDetailById(slug: string): Promise<ProjectInfo> {
-  // 调用getProjectDetail函数，传入slug参数，获取项目详情
   const detail = await getProjectDetail(slug)
-  // 返回项目详情
   return detail
 }
 

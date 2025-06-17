@@ -76,7 +76,7 @@ export function SiteHeader() {
       </div>
 
       {mobileMenuOpen && (
-        <div className="md:hidden absolute top-16 left-0 right-0 bg-background shadow-lg py-4 z-40">
+        <div className="md:hidden absolute top-16 left-0 right-0 bg-background shadow-lg py-4 px-5 z-40">
           <div className="container flex flex-col space-y-4">
             {navLinks.map((link) => (
               <Link
