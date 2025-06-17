@@ -15,6 +15,7 @@ export function SiteFooter() {
       <div className="h-13 mb-16 flex flex-col md:flex-row justify-between items-center md:items-end text-center md:text-left">
         <p className="text-xs text-neutral-darkgray mb-4 md:mb-0 text-[#737373] mt-8">
           &copy; {new Date().getFullYear()} Intuipay Holding PTE. LTD. All rights reserved.
+          <span className="text-neutral-darkgray ms-2">v{process.env.NEXT_PUBLIC_APP_VERSION}</span>
         </p>
         <div className="flex space-x-4">
           {socialLinks.map((social) => (

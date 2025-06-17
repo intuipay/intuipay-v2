@@ -446,8 +446,8 @@ export enum OrginzationType {
   Government = 3,
   Academic = 4,
   Philanthropic = 5,
-  Personal = 6,
-  Other = 100,
+  Personal = 100,
+  Other = 200,
 }
 
 export enum ProjectCategories {

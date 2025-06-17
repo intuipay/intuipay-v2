@@ -26,7 +26,6 @@ import { AboutTab } from '@/components/project-detail-tabs/about-tab'
 import { UpdatesTab } from '@/components/project-detail-tabs/updates-tab'
 import { DonationsTab } from '@/components/project-detail-tabs/donations-tab'
 
-import type { ProjectDataType } from './project-data'
 import { Donations, ProjectInfo, Updates } from '@/types'
 import { useMemo, useState } from 'react'
 import { enumToKeyLabel } from '@/lib/utils'
@@ -34,7 +33,7 @@ import { ProjectCategories, ProjectTypes } from '@/data'
 import { ProjectDonationMethods } from '@/data'
 
 type ProjectDetailClientLayoutProps = {
-  project: ProjectDataType
+  project: ProjectInfo
   similarProjects: ProjectInfo[]
   donations: Donations
   updates: Updates
@@ -117,11 +116,11 @@ export default function ProjectDetailClientLayout({ project, similarProjects, do
             <div>
               <p className="text-2xl sm:text-3xl font-bold mb-2">${project.amount.toLocaleString() || 0}</p>
               <p className="text-sm text-neutral-darkgray mb-2">
-                pledged of ${project.goal_amount.toLocaleString()}
+                pledged of ${(project.goal_amount / 100).toLocaleString()}
               </p>
               <Progress
-                value={parseInt(project.amount)}
-                max={parseInt(project.goal_amount)}
+                value={project.amount}
+                max={project.goal_amount}
                 className="h-2 [&>div]:bg-action-blue"
               />
             </div>
@@ -244,8 +243,6 @@ export default function ProjectDetailClientLayout({ project, similarProjects, do
           </ul>
         </div>}
       </div>
-
-
 
       {similarProjects.length > 0 && <section className="mt-16 pt-12 border-t border-neutral-mediumgray/50">
         <div className="flex justify-between items-center mb-8">

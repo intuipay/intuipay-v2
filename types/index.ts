@@ -114,7 +114,7 @@ export type ProjectInfo = {
   id: number;
   project_slug: string;
   accepts: string;
-  amount: string;
+  amount: number;
   banner: string;
   banners: string;
   campaign: string;
@@ -123,7 +123,7 @@ export type ProjectInfo = {
   email: string;
   end_at: string;
   github: string;
-  goal_amount: string;
+  goal_amount: number;
   location: string;
   org_contact: string;
   org_description: string;
@@ -141,6 +141,7 @@ export type ProjectInfo = {
   type: ProjectTypes;
   wallet_address: string;
   website: string;
+  backers: number
 }
 
 export type ProjectFilter = {
