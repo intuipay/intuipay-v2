@@ -35,13 +35,11 @@ const PaymentMethods: DropdownItemProps[] = [
 ];
 
 export default function Step1NoWagmi({
-  amount,
   paymentMethod,
   setPaymentMethod,
   network,
   setNetwork,
   selectedWallet,
-  setSelectedWallet,
 }: Props) {
   return (
     <form>
