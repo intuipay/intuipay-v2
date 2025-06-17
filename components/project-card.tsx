@@ -14,7 +14,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
   return (
     <Link
       href={`/project/${project.project_slug}`}
-      className="block hover:shadow-lg transition-shadow duration-800 rounded-lg h-100 drop-shadow-custom1"
+      className="block hover:shadow-lg transition-shadow duration-800 rounded-lg h-107 drop-shadow-custom1"
     >
       <Card className="group overflow-hidden flex flex-col h-full border-transparent hover:border-action-blue/50 transition-colors">
         <div className="relative w-full aspect-video group-hover:aspect-[5/2] transition-all duration-800">
