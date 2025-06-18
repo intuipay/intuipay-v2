@@ -154,7 +154,7 @@ export type ProjectFilter = {
 }
 
 export type Donation = {
-  amount: string;
+  amount: number;
   country: string;
   currency: string;
   first_name: string;
@@ -170,8 +170,8 @@ export type Update = {
   title: string;
   content: string;
   thumbnail: string | null;
-  createdAt: Date;
-  updatedAt: Date;
+  created_at: string;
+  updated_at: string;
   status: number | null;
 }
 

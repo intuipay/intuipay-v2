@@ -1,33 +1,49 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { Users } from 'lucide-react'
-import { Donations } from '@/types'
+import { Donation } from '@/types'
 
 type DonationsTabProps = {
-  donations: Donations
+  projectId: number;
 }
 
-export function DonationsTab({ donations }: DonationsTabProps) {
-  console.log('donations: ', donations);
+export function DonationsTab({ projectId }: DonationsTabProps) {
   const [donationSort, setDonationSort] = useState<'newest' | 'top'>('newest')
+  const [donations, setDonations] = useState<Donation[]>([]);
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [page, setPage] = useState(1);
+  const [total, setTotal] = useState(0);
 
-  const sortedDonations = [...donations].sort((a, b) => {
-    if (donationSort === 'top') {
-      // Assuming amountUSD is a string like "$46,494.89", need to parse it
-      const amountA = Number.parseFloat(a.amountUSD.replace(/[^0-9.-]+/g, ''))
-      const amountB = Number.parseFloat(b.amountUSD.replace(/[^0-9.-]+/g, ''))
-      return amountB - amountA // Sort descending for "top"
-    }
-    // For "newest", assuming data is already somewhat sorted or rely on original order
-    // If timeAgo is like "38 mins ago", "1 hr ago", "06/12/25", parsing is complex.
-    // For robust "newest" sorting, you'd need a proper date object for each donation.
-    // For now, we'll keep the original order for "newest" or reverse it if it's oldest first.
-    // This example doesn't implement complex date parsing for sorting.
-    return 0 // Default: no change for "newest" based on current data
-  })
+  async function fetchDonations() {
+    if (isLoading) return;
+
+    setIsLoading(true);
+    const searchParams = new URLSearchParams();
+    searchParams.set('order_by', donationSort === 'newest' ? 'id' : 'amount');
+    searchParams.set('start', ((page - 1) * 20).toString());
+    searchParams.set('pagesize', '20');
+    const response = await fetch(`/api/project/${projectId}/donations?${searchParams.toString()}`);
+    const data = await response.json();
+    setDonations(data.data);
+    setIsLoaded(true);
+    setIsLoading(false);
+  };
+
+  useEffect(() => {
+    fetchDonations();
+  }, [donationSort, projectId]);
+
+  if (isLoaded && donations.length === 0) {
+    return <p className="text-center text-gray-500 py-4">No donations yet for this project.</p>
+  }
+
+  if (isLoading) {
+    return <p className="text-center text-gray-500 py-4">Loading...</p>
+  }
 
   return (
     <>
@@ -49,64 +65,60 @@ export function DonationsTab({ donations }: DonationsTabProps) {
       </div>
 
       <div className="space-y-4">
-        {sortedDonations && sortedDonations.length > 0 ? (
-          sortedDonations.map((donation, index) => (
-            // 没有id，暂时用index
-            <div key={index} className="py-4 border-b border-neutral-mediumgray/30 last:border-b-0"> 
-              <div className="grid grid-cols-1 sm:grid-cols-12 gap-x-4 gap-y-2 items-center text-sm">
-                <div className="sm:col-span-3 flex items-center">
-                  <Avatar className="h-9 w-9 mr-3">
-                    <AvatarFallback>
-                      <Users className="w-4 h-4 text-neutral-darkgray" />
-                    </AvatarFallback>
-                  </Avatar>
-                  <div>
-                    <p className="font-medium text-neutral-text">{donation.first_name + donation.last_name}</p>
-                    {/* 没有相关字段，先注释 */}
-                    {/* <p className="text-xs text-neutral-darkgray">{donation.timeAgo}</p> */}
-                  </div>
-                </div>
-                <div className="sm:col-span-3 text-left sm:text-left">
-                  <div className="flex items-center">
-                    {/* 没有相关字段，先注释 */}
-                    {/* {typeof donation.currencyIcon === 'function' ? (
-                      <donation.currencyIcon />
-                    ) : (
-                      <donation.currencyIcon className="w-4 h-4 mr-1 text-neutral-darkgray" />
-                    )} */}
-                    <span className="ml-1 font-medium text-neutral-text">
-                      {donation.amount} {donation.currency}
-                    </span>
-                  </div>
+        {donations.map((donation, index) => (
+          // 没有id，暂时用index
+          <div key={index} className="py-4 border-b border-neutral-mediumgray/30 last:border-b-0">
+            <div className="grid grid-cols-1 sm:grid-cols-12 gap-x-4 gap-y-2 items-center text-sm">
+              <div className="sm:col-span-3 flex items-center">
+                <Avatar className="h-9 w-9 mr-3">
+                  <AvatarFallback>
+                    <Users className="w-4 h-4 text-neutral-darkgray" />
+                  </AvatarFallback>
+                </Avatar>
+                <div>
+                  <p className="font-medium text-neutral-text">{donation.first_name + donation.last_name}</p>
                   {/* 没有相关字段，先注释 */}
-                  {/* <p className="text-xs text-neutral-darkgray">${donation.amountUSD}</p> */}
-                </div>
-                <div className="sm:col-span-3 text-left sm:text-left">
-                  <p className="text-xs text-neutral-darkgray mb-0.5">Donate from</p>
-                  <div className="flex items-center">
-                    {/* 没有相关字段，先注释 */}
-                    {/* <span className="mr-1.5 text-base">{donation.countryFlag}</span> */}
-                    <span className="text-neutral-text">{donation.country}</span>
-                  </div>
-                </div>
-                <div className="sm:col-span-3 text-left sm:text-left">
-                  <p className="text-xs text-neutral-darkgray mb-0.5">Donate via</p>
-                  {/* 没有相关字段，先注释 */}
-                  {/* <div className="flex items-center">
-                    {typeof donation.paymentIcon === 'function' ? (
-                      <donation.paymentIcon />
-                    ) : (
-                      <donation.paymentIcon className="w-4 h-4 mr-1.5 text-neutral-darkgray" />
-                    )}
-                    <span className="text-neutral-text">{donation.paymentMethod}</span>
-                  </div> */}
+                  {/* <p className="text-xs text-neutral-darkgray">{donation.timeAgo}</p> */}
                 </div>
               </div>
+              <div className="sm:col-span-3 text-left sm:text-left">
+                <div className="flex items-center">
+                  {/* 没有相关字段，先注释 */}
+                  {/* {typeof donation.currencyIcon === 'function' ? (
+                    <donation.currencyIcon />
+                  ) : (
+                    <donation.currencyIcon className="w-4 h-4 mr-1 text-neutral-darkgray" />
+                  )} */}
+                  <span className="ml-1 font-medium text-neutral-text">
+                    {donation.amount} {donation.currency}
+                  </span>
+                </div>
+                {/* 没有相关字段，先注释 */}
+                {/* <p className="text-xs text-neutral-darkgray">${donation.amountUSD}</p> */}
+              </div>
+              <div className="sm:col-span-3 text-left sm:text-left">
+                <p className="text-xs text-neutral-darkgray mb-0.5">Donate from</p>
+                <div className="flex items-center">
+                  {/* 没有相关字段，先注释 */}
+                  {/* <span className="mr-1.5 text-base">{donation.countryFlag}</span> */}
+                  <span className="text-neutral-text">{donation.country}</span>
+                </div>
+              </div>
+              <div className="sm:col-span-3 text-left sm:text-left">
+                <p className="text-xs text-neutral-darkgray mb-0.5">Donate via</p>
+                {/* 没有相关字段，先注释 */}
+                {/* <div className="flex items-center">
+                  {typeof donation.paymentIcon === 'function' ? (
+                    <donation.paymentIcon />
+                  ) : (
+                    <donation.paymentIcon className="w-4 h-4 mr-1.5 text-neutral-darkgray" />
+                  )}
+                  <span className="text-neutral-text">{donation.paymentMethod}</span>
+                </div> */}
+              </div>
             </div>
-          ))
-        ) : (
-          <p>No donations yet for this project.</p>
-        )}
+          </div>
+        ))}
       </div>
     </>
   )

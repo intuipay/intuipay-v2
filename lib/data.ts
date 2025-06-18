@@ -67,7 +67,16 @@ export const getProjectCount = cache(async function getProjectCount() {
 
 export const getProjectDetail = cache(async function getProjectDetail(slug: string) {
   const data = await fetchTidb<ProjectInfo>(`/project_detailed?slug=${slug}`);
-  return data[ 0 ];
+  const {
+    amount,
+    goal_amount,
+    ...rest
+  } = data[ 0 ];
+  return {
+    ...rest,
+    amount: Number(amount),
+    goal_amount: Number(goal_amount),
+  };
 });
 
 export const getDonations = cache(async function getDonations(projectId: number, page: number, pageSize = 20, order: string = 'id'): Promise<Donations> {
