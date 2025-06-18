@@ -26,11 +26,11 @@ export function ProjectCard({ project }: ProjectCardProps) {
             loading="lazy"
           />
         </div>
-        <CardHeader>
-          <CardTitle className="text-base sm:text-lg text-neutral-text">{project.project_name}</CardTitle>
-          <p className="text-xs text-black/70 text-neutral-darkgray mt-1 line-clamp-1 group-hover:line-clamp-2">{project.description}</p>
+        <CardHeader className="min-h-20">
+          <CardTitle className="text-lg text-neutral-text">{project.project_name}</CardTitle>
+          <p className="tex-base text-black/70 text-neutral-darkgray mt-1 line-clamp-1 group-hover:line-clamp-2">{[project.description, project.description, project.description, project.description, project.description].join('')}</p>
         </CardHeader>
-        <CardContent className="flex-grow">
+        <CardContent>
           <div className="flex items-center text-xs gap-2">
             {project.org_logo && <div className="p-1 rounded-full border">
               <Image
@@ -45,14 +45,15 @@ export function ProjectCard({ project }: ProjectCardProps) {
             <span>{project.org_name}</span>
           </div>
         </CardContent>
-        <CardFooter className="mx-5 pt-4 border-t border-neutral-mediumgray/30 whitespace-nowrap overflow-hidden">
+        <div className='w-auto h-px mx-5 bg-line-gray'></div>
+        <CardFooter className="whitespace-nowrap overflow-hidden flex-grow group-hover:pb-0">
           <div className="flex justify-between items-center">
             <span className="text-xs text-neutral-darkgray">Total Raised</span>
             <span className="text-base font-bold text-neutral-text text-ellipsis">
               $ {(project.goal_amount / 100).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
             </span>
           </div>
-          <p className="text-sm text-black mt-4 hidden opacity-0 group-hover:block group-hover:opacity-60 transition-opacity duration-800">{daysLeft} days left • {progress}% founded</p>
+          <p className="group-hover:block absolute bottom-4 text-sm text-black mt-4 hidden opacity-0 group-hover:opacity-60 transition-opacity">{daysLeft} days left • {progress}% founded</p>
         </CardFooter>
       </Card>
     </Link>
