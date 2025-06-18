@@ -113,6 +113,7 @@ export type DonationInfo = {
 export type ProjectInfo = {
   id: number;
   project_slug: string;
+  project_subtitle: string;
   accepts: string;
   amount: number;
   banner: string;

@@ -58,9 +58,9 @@ export default function ProjectDetailClientLayout({ project, similarProjects }: 
 
   return (
     <div className="container">
-      <div className="text-center mb-8">
-        <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4">{project.project_name}</h1>
-        <p className="text-black text-md sm:text-lg md:text-xl text-neutral-darkgray">{project.description}</p>
+      <div className="text-center mb-10">
+        <h1 className="text-3xl font-semibold mb-4">{project.project_name}</h1>
+        <p className="text-xl text-black/60">{project.project_subtitle || project.description}</p>
       </div>
 
       <div className="flex flex-col lg:flex-row gap-8 lg:gap-12">
@@ -113,7 +113,6 @@ export default function ProjectDetailClientLayout({ project, similarProjects }: 
               <p className="text-sm text-neutral-darkgray mb-2">
                 pledged of ${(project.goal_amount / 100).toLocaleString()}
               </p>
-              <p>{JSON.stringify(project.goal_amount)}</p>
               <Progress
                 value={project.amount}
                 max={project.goal_amount}
@@ -130,7 +129,7 @@ export default function ProjectDetailClientLayout({ project, similarProjects }: 
                 <p className="text-xs text-neutral-darkgray">days left</p>
               </div>
             </div>
-            <div className="space-y-2 text-sm grid grid-cols-2">
+            <div className="text-sm grid grid-cols-2 gap-4">
               <Link
                 href={`mailto:${project.email}`}
                 className="flex items-center gap-1 text-neutral-darkgray hover:text-action-blue"
@@ -143,7 +142,7 @@ export default function ProjectDetailClientLayout({ project, similarProjects }: 
                 rel="noopener noreferrer"
                 className="flex items-center gap-1 text-neutral-darkgray hover:text-action-blue"
               >
-                <Link2 className="w-4 h-4" /> <span className="text-primary">{project.website}</span>
+                <Link2 className="w-4 h-4" /> <span className="text-primary">{project.website.replace(/^https?:\/\//, '')}</span>
               </Link>
               {project.github && <Link
                 href={`https://github.com/${project.github}`}
