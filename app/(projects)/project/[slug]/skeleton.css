@@ -1,0 +1,61 @@
+/* SkeletonScreen.css */
+.skeleton-line {
+  background-color: #e0e0e0;
+  height: 16px;
+  margin-bottom: 10px;
+  border-radius: 4px;
+  animation: pulse 1.5s infinite;
+}
+
+.skeleton-circle {
+  width: 24px;
+  height: 24px;
+  background-color: #e0e0e0;
+  border-radius: 50%;
+  margin-right: 10px;
+  animation: pulse 1.5s infinite;
+}
+
+.skeleton-image {
+  width: 100%;
+  height: 200px;
+  background-color: #e0e0e0;
+  border-radius: 8px;
+  animation: pulse 1.5s infinite;
+}
+
+.skeleton-button {
+  width: 100%;
+  height: 48px;
+  background-color: #e0e0e0;
+  border-radius: 8px;
+  animation: pulse 1.5s infinite;
+}
+
+.skeleton-tabs {
+  height: 40px;
+  background-color: #e0e0e0;
+  border-radius: 8px;
+  animation: pulse 1.5s infinite;
+}
+
+.skeleton-card {
+  width: 100%;
+  height: 200px;
+  background-color: #e0e0e0;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
+  100% {
+    opacity: 1;
+  }
+}
