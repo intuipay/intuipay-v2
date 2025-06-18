@@ -1,6 +1,5 @@
-'use client' // This is now the top-level CLIENT COMPONENT for this page's content
+'use client'
 
-import { useEffect } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { ProjectCard } from '@/components/project-card'
@@ -28,7 +27,6 @@ import { useMemo, useState } from 'react'
 import { enumToKeyLabel } from '@/lib/utils'
 import { ProjectCategories, ProjectTypes } from '@/data'
 import { ProjectDonationMethods } from '@/data'
-import { fetchTidb } from '@/services/fetch-tidb'
 
 
 type ProjectDetailClientLayoutProps = {
