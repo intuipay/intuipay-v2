@@ -165,7 +165,7 @@ export function FilterDrawer({ isOpen, onOpenChange, filter, setFilter }: Filter
               <RadioGroup
                 defaultValue="all-dm"
                 className="space-y-4"
-                value={filter.donationMethods}
+                value={filter.donationMethods.toString()}
                 onValueChange={(value) => setFilter({ ...filter, donationMethods: value })}
               >
                 {Object.entries(ProjectDonationMethods).map(([label, id]) => (
@@ -190,7 +190,7 @@ export function FilterDrawer({ isOpen, onOpenChange, filter, setFilter }: Filter
               <RadioGroup
                 defaultValue="all-pt"
                 className="space-y-4"
-                value={filter.projectType}
+                value={filter.projectType.toString()}
                 onValueChange={(value) => setFilter({ ...filter, projectType: value })}
               >
                 {Object.entries(ProjectTypes).map(([label, id]) => (
