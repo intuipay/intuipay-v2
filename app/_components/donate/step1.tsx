@@ -18,6 +18,26 @@ import {
   isCurrencyCompatibleWithNetwork
 } from '@/config/blockchain';
 
+// 钱包官网链接
+const WALLET_INSTALL_LINKS = {
+  metamask: 'https://metamask.io/download/',
+  phantom: 'https://phantom.app/download'
+};
+
+// 检测钱包是否已安装
+const isWalletInstalled = (walletId: string): boolean => {
+  if (typeof window === 'undefined') return false;
+
+  switch (walletId) {
+    case 'metamask':
+      return !!(window as any).ethereum?.isMetaMask;
+    case 'phantom':
+      return !!(window as any).phantom?.solana;
+    default:
+      return true; // wallet-connect 和 coinbase 总是可用的
+  }
+};
+
 type Props = {
   amount: number | '';
   goToNextStep: () => void;
@@ -244,6 +264,16 @@ export default function DonationStep1({
     setError('');
 
     try {
+      // 检查钱包是否已安装（对于需要浏览器插件的钱包）
+      if (selectedWallet === 'metamask' || selectedWallet === 'phantom') {
+        if (!isWalletInstalled(selectedWallet)) {
+          const installUrl = WALLET_INSTALL_LINKS[selectedWallet as keyof typeof WALLET_INSTALL_LINKS];
+          window.open(installUrl, '_blank');
+          setError(`Please install ${selectedWallet === 'metamask' ? 'MetaMask' : 'Phantom'} wallet first`);
+          return;
+        }
+      }
+
       // Disconnect if already connected to another wallet
       if (isConnected) {
         disconnect();
