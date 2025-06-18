@@ -178,7 +178,7 @@ export default function ProjectList({ data, page, pageSize, total }: ProjectList
       ))}
     </div>
 
-    <div className="flex justify-evenly lg:justify-between items-center flex-col lg:flex-row w-full h-full bg-blue-search my-20 py-8 px-6 sm:px-8 lg:px-11">
+    <div className="flex justify-evenly lg:justify-between items-center flex-col lg:flex-row w-full h-full bg-background-gray my-20 py-16 px-12 sm:px-8 lg:px-11">
       <Image
         src="/images/laptop.svg"
         alt="laptop"
@@ -189,7 +189,7 @@ export default function ProjectList({ data, page, pageSize, total }: ProjectList
       />
       <section className="lg:ml-16">
         <h2 className="font-bold mb-4 sm:text-4xl text-3xl">Have A Project That Needs Support?</h2>
-        <p className="mb-8 font-medium text-black/50">We&apos;re building a platform to support groundbreaking, university-affiliated research. If you&apos;re leading a verified academic or institutional project, you can share it here and start receiving donations.</p>
+        <p className="mb-8 font-normal text-black/50">We&apos;re building a platform to support groundbreaking, university-affiliated research. If you&apos;re leading a verified academic or institutional project, you can share it here and start receiving donations.</p>
         <Button className="w-60 h-14 border-neutral-mediumgray text-base rounded-full text-white font-semibold">
           Create project
         </Button>

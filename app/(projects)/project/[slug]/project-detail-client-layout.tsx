@@ -1,5 +1,6 @@
 'use client' // This is now the top-level CLIENT COMPONENT for this page's content
 
+import { useEffect } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { ProjectCard } from '@/components/project-card'
@@ -9,10 +10,6 @@ import { Progress } from '@/components/ui/progress'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import {
-  FlaskConical,
-  MapPin,
-  Landmark,
-  Coins,
   PlayCircle,
   Mail,
   Link2,
@@ -31,6 +28,8 @@ import { useMemo, useState } from 'react'
 import { enumToKeyLabel } from '@/lib/utils'
 import { ProjectCategories, ProjectTypes } from '@/data'
 import { ProjectDonationMethods } from '@/data'
+import { fetchTidb } from '@/services/fetch-tidb'
+
 
 type ProjectDetailClientLayoutProps = {
   project: ProjectInfo;
@@ -85,16 +84,16 @@ export default function ProjectDetailClientLayout({ project, similarProjects }: 
 
           <div className="flex flex-wrap gap-x-8 gap-y-2 text-sm text-neutral-darkgray mb-6">
             <span className="flex items-center">
-              <FlaskConical className="w-4 h-4 mr-1.5 text-intuipay-blue" /> {enumToKeyLabel(ProjectCategories)[ project.category ]}
+              <img src='/images/project/FlaskConical.svg' alt="FlaskConical" className="w-4 h-4 mr-1.5"/> {enumToKeyLabel(ProjectCategories)[ project.category ]}
             </span>
             <span className="flex items-center">
-              <MapPin className="w-4 h-4 mr-1.5 text-intuipay-blue" /> {project.location}
+              <img src='/images/project/MapPin.svg' alt="MapPin" className="w-4 h-4 mr-1.5"/> {project.location}
             </span>
             <span className="flex items-center">
-              <Landmark className="w-4 h-4 mr-1.5 text-intuipay-blue" /> {enumToKeyLabel(ProjectTypes)[ project.type ]}
+              <img src='/images/project/Landmark.svg' alt="Landmark" className="w-4 h-4 mr-1.5"/> {enumToKeyLabel(ProjectTypes)[ project.type ]}
             </span>
             <span className="flex items-center">
-              <Coins className="w-4 h-4 mr-1.5 text-intuipay-blue" /> {enumToKeyLabel(ProjectDonationMethods)[ project.accepts ]}
+              <img src='/images/project/Coin.svg' alt="Coin" className="w-4 h-4 mr-1.5"/> {enumToKeyLabel(ProjectDonationMethods)[ project.accepts ]}
             </span>
           </div>
         </div>
@@ -138,7 +137,7 @@ export default function ProjectDetailClientLayout({ project, similarProjects }: 
                 href={`mailto:${project.email}`}
                 className="flex items-center gap-1 text-neutral-darkgray hover:text-action-blue"
               >
-                <Mail className="w-4 h-4" /> <span className="text-blue-btn">{project.email}</span>
+                <Mail className="w-4 h-4" /> <span className="text-primary">{project.email}</span>
               </Link>
               <Link
                 href={project.website || ''}
@@ -146,7 +145,7 @@ export default function ProjectDetailClientLayout({ project, similarProjects }: 
                 rel="noopener noreferrer"
                 className="flex items-center gap-1 text-neutral-darkgray hover:text-action-blue"
               >
-                <Link2 className="w-4 h-4" /> <span className="text-blue-btn">{project.website}</span>
+                <Link2 className="w-4 h-4" /> <span className="text-primary">{project.website}</span>
               </Link>
               {project.github && <Link
                 href={`https://github.com/${project.github}`}
@@ -154,7 +153,7 @@ export default function ProjectDetailClientLayout({ project, similarProjects }: 
                 rel="noopener noreferrer"
                 className="flex items-center gap-1 text-neutral-darkgray hover:text-action-blue"
               >
-                <Github className="w-4 h-4" /> <span className="text-blue-btn">{project.github}</span>
+                <Github className="w-4 h-4" /> <span className="text-primary">{project.github}</span>
                 {project.github && <ExternalLink className="w-3 h-3 ml-1" />}
               </Link>}
               {
@@ -175,7 +174,7 @@ export default function ProjectDetailClientLayout({ project, similarProjects }: 
                         height={14}
                         loading="lazy"
                       />
-                      <span className="text-blue-btn">{key}</span>
+                      <span className="text-primary">{key}</span>
                     </Link>
                   ))
                 )
@@ -199,10 +198,10 @@ export default function ProjectDetailClientLayout({ project, similarProjects }: 
             </TabsTrigger>
             <TabsTrigger value="updates" className="py-2.5 relative">
               Updates
-              {updatesCount > 0 && (
+              {(
                 <Badge
                   variant="default"
-                  className="absolute -top-1 -right-1 text-xs px-1.5 py-0.5 bg-action-blue text-white"
+                  className="absolute -top-1 -right-1 text-xs px-1.5 py-0.5 bg-secondary text-primary rounded-1"
                 >
                   {updatesCount}
                 </Badge>

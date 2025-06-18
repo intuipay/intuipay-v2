@@ -25,13 +25,14 @@ const config: Config = {
       colors: {
         blue: {
           50: "#f0f7ff",
-          'search': '#F5F5F7',
-          'btn': '#2461F2',
         },
         pink: {
           50: "#fff0f7",
         },
-        background: "hsl(var(--background))",
+        background: {
+          DEFAULT: "hsl(var(--background))",
+          gray: "#F5F5F7",
+        },
         foreground: "hsl(var(--foreground))",
         card: {
           DEFAULT: "hsl(var(--card))",
