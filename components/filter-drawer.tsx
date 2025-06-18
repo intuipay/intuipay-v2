@@ -10,7 +10,6 @@ import { Slider } from '@/components/ui/slider'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { FlaskConical, Smile, MapPin, Coins, Landmark, X } from 'lucide-react'
-import { useRouter } from 'next/navigation'
 import { ProjectCategories, ProjectDonationMethods, ProjectTypes } from '@/data'
 import { ProjectFilter } from '@/types'
 
@@ -22,10 +21,14 @@ type FilterDrawerProps = {
 }
 
 export function FilterDrawer({ isOpen, onOpenChange, filter, setFilter }: FilterDrawerProps) {
-  const router = useRouter();
-
   function doClearAll() {
-    router.push('/projects');
+    setFilter({
+    category: ProjectCategories.All,
+    progress: 0,
+    location: '',
+    donationMethods: ProjectDonationMethods.All,
+    projectType: ProjectTypes.All,
+    })
   }
 
   return (
@@ -49,18 +52,18 @@ export function FilterDrawer({ isOpen, onOpenChange, filter, setFilter }: Filter
           </div>
         </SheetHeader>
 
-        <ScrollArea className="flex-grow px-6 py-4">
-          <div className="flex justify-end">
+        <ScrollArea className="flex-grow px-6 py-8">
+          <div className="flex justify-end pt-3">
             <Button
               variant="link"
-              className="text-sm text-blue-btn p-0 h-auto"
+              className="text-sm text-primary p-0 h-auto"
               onClick={doClearAll}
               type="button"
             >
               CLEAR ALL
             </Button>
           </div>
-          <div className="space-y-8">
+          <div className="space-y-3">
             {/* Category Section */}
             <FilterSection
               className="border-b py-5"
@@ -69,8 +72,8 @@ export function FilterDrawer({ isOpen, onOpenChange, filter, setFilter }: Filter
             >
               <RadioGroup
                 defaultValue="all-cat"
-                className="space-y-2 max-h-50 overflow-y-auto"
-                value={filter.category?.toString()}
+                className="space-y-4 max-h-50 overflow-y-auto"
+                value={filter.category.toString()}
                 onValueChange={(value) => setFilter({ ...filter, category: Number(value) })}
               >
                 {Object.entries(ProjectCategories).map(([label, id]) => (
@@ -91,7 +94,7 @@ export function FilterDrawer({ isOpen, onOpenChange, filter, setFilter }: Filter
               className="border-b py-5" icon={Smile} title="Progress">
               <div className="mt-2">
                 <Slider
-                  defaultValue={[filter.progress ?? 0]}
+                  value={[filter.progress]}
                   max={100}
                   step={1}
                   className="[&>span:first-child]:h-1 [&>span:first-child]:bg-action-blue [&>span:first-child_span]:bg-action-blue [&>span:first-child_span]:border-action-blue [&>span:first-child_span]:ring-offset-background [&>span:first-child_span]:focus-visible:ring-action-blue/50"
@@ -112,7 +115,6 @@ export function FilterDrawer({ isOpen, onOpenChange, filter, setFilter }: Filter
             >
               <div className="space-y-3">
                 <Select
-                  defaultValue="country-all"
                   value={filter.location}
                   onValueChange={(value) => setFilter({ ...filter, location: value })}
                 >
@@ -162,8 +164,8 @@ export function FilterDrawer({ isOpen, onOpenChange, filter, setFilter }: Filter
             >
               <RadioGroup
                 defaultValue="all-dm"
-                className="space-y-2"
-                value={filter.donationMethods?.toString()}
+                className="space-y-4"
+                value={filter.donationMethods}
                 onValueChange={(value) => setFilter({ ...filter, donationMethods: value })}
               >
                 {Object.entries(ProjectDonationMethods).map(([label, id]) => (
@@ -187,8 +189,8 @@ export function FilterDrawer({ isOpen, onOpenChange, filter, setFilter }: Filter
             >
               <RadioGroup
                 defaultValue="all-pt"
-                className="space-y-2"
-                value={filter.projectType?.toString()}
+                className="space-y-4"
+                value={filter.projectType}
                 onValueChange={(value) => setFilter({ ...filter, projectType: value })}
               >
                 {Object.entries(ProjectTypes).map(([label, id]) => (
