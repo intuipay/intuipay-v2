@@ -26,24 +26,22 @@ import { AboutTab } from '@/components/project-detail-tabs/about-tab'
 import { UpdatesTab } from '@/components/project-detail-tabs/updates-tab'
 import { DonationsTab } from '@/components/project-detail-tabs/donations-tab'
 
-import { Donations, ProjectInfo, Updates } from '@/types'
+import { ProjectInfo } from '@/types'
 import { useMemo, useState } from 'react'
 import { enumToKeyLabel } from '@/lib/utils'
 import { ProjectCategories, ProjectTypes } from '@/data'
 import { ProjectDonationMethods } from '@/data'
 
 type ProjectDetailClientLayoutProps = {
-  project: ProjectInfo
-  similarProjects: ProjectInfo[]
-  donations: Donations
-  updates: Updates
-  updatesCount: number
+  project: ProjectInfo;
+  similarProjects: ProjectInfo[];
 }
 
-export default function ProjectDetailClientLayout({ project, similarProjects, donations, updates, updatesCount }: ProjectDetailClientLayoutProps) {
+export default function ProjectDetailClientLayout({ project, similarProjects }: ProjectDetailClientLayoutProps) {
   const isMovie = project.banner.includes('youtube.com') || project.banner.includes('youtu.be');
   const socialLinks = project.social_links ? JSON.parse(project.social_links as string) : {};
-  const [tab, setTab] = useState('campaign')
+  const [tab, setTab] = useState('campaign');
+  const [updatesCount, setUpdatesCount] = useState(0);
 
   function extractSecondLevelHeadings(markdownString: string) {
     //匹配二级标题
@@ -118,6 +116,7 @@ export default function ProjectDetailClientLayout({ project, similarProjects, do
               <p className="text-sm text-neutral-darkgray mb-2">
                 pledged of ${(project.goal_amount / 100).toLocaleString()}
               </p>
+              <p>{JSON.stringify(project.goal_amount)}</p>
               <Progress
                 value={project.amount}
                 max={project.goal_amount}
@@ -221,10 +220,10 @@ export default function ProjectDetailClientLayout({ project, similarProjects, do
             <AboutTab project={project} />
           </TabsContent>
           <TabsContent value="updates" className="pt-6">
-            <UpdatesTab updates={updates} />
+            <UpdatesTab projectId={project.id} onUpdate={setUpdatesCount} />
           </TabsContent>
           <TabsContent value="donations" className="pt-6">
-            <DonationsTab donations={donations} />
+            <DonationsTab projectId={project.id} />
           </TabsContent>
         </Tabs>
 

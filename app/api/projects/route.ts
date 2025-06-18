@@ -3,8 +3,12 @@ import { fetchTidb } from '@/services/fetch-tidb';
 export const runtime = 'edge';
 
 export async function GET(req: Request) {
+  const { searchParams } = new URL(req.url);
   const url = new URL('/donation_projects');
-  const { order_by = 'id', order_dir = 'asc', start = 0, pagesize = 20 } = req.query;
+  const order_by = searchParams.get('order_by') || 'id';
+  const order_dir = searchParams.get('order_dir') || 'asc';
+  const start = searchParams.get('start') || '0';
+  const pagesize = searchParams.get('pagesize') || '20';
   url.searchParams.set('order_by', order_by);
   url.searchParams.set('order_dir', order_dir);
   url.searchParams.set('start', start);
