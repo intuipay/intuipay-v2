@@ -28,7 +28,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
         </div>
         <CardHeader className="min-h-20">
           <CardTitle className="text-lg text-neutral-text">{project.project_name}</CardTitle>
-          <p className="text-base text-black/70 text-neutral-darkgray mt-1 line-clamp-1 group-hover:line-clamp-2">{[project.description, project.description, project.description, project.description, project.description].join('')}</p>
+          <p className="text-base text-black/70 text-neutral-darkgray mt-1 line-clamp-1 group-hover:line-clamp-2">{project.project_subtitle || project.description}</p>
         </CardHeader>
         <CardContent>
           <div className="flex items-center text-xs gap-2">
