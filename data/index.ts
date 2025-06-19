@@ -434,38 +434,8 @@ export const PaymentMethodsOther: PaymentMethod[] = [
   },
 ];
 
-export const Networks: DropdownItemProps[] = [
-  {
-    icon: 'ethereum',
-    label: 'Ethereum',
-    value: 'ethereum',
-  },
-  {
-    icon: 'solana',
-    label: 'Solana',
-    value: 'solana',
-  }
-];
+// 为了保持向后兼容，使用新的区块链配置系统
+import { getNetworkDropdownOptions, getWalletDropdownOptions } from '@/config/blockchain';
 
-export const Wallets: DropdownItemProps[] = [
-  {
-    icon: 'metamask',
-    label: 'MetaMask',
-    value: 'metamask',
-  },
-  {
-    icon: 'wallet-connect',
-    label: 'WalletConnect',
-    value: 'wallet-connect',
-  },
-  {
-    icon: 'phantom',
-    label: 'Phantom',
-    value: 'phantom',
-  },
-  {
-    icon: 'coinbase',
-    label: 'Coinbase Wallet',
-    value: 'coinbase',
-  },
-];
+export const Networks = getNetworkDropdownOptions();
+export const Wallets = getWalletDropdownOptions();

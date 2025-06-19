@@ -48,7 +48,6 @@ export function WalletConnectButton({
         loading="lazy"
       />
       <span className="font-medium">WalletConnect</span>
-      <span className="text-sm text-gray-500">Detected</span>
     </label>
   )
 }

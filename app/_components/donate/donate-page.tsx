@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo, useState, lazy } from 'react'
+import { useMemo, useState, lazy, useEffect } from 'react'
 import { CircleDotIcon, HeadsetIcon } from 'lucide-react'
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion';
@@ -9,13 +9,14 @@ import { DonationInfo, DonationProject } from '@/types';
 import { clsx } from 'clsx';
 import Step1NoWagmi from '@/app/_components/donate/step1-no-wagmi';
 import DonationStep2 from '@/app/_components/donate/step2';
+import DonationStep4 from '@/app/_components/donate/step4';
 import DonationStep5 from '@/app/_components/donate/step5';
 import { createDonationInfo } from '@/utils';
 import { useWagmiReady } from '@/components/providers/web3-provider';
+import { getNetworkDropdownOptions } from '@/config/blockchain';
 
 // 动态导入包含 wagmi hooks 的组件，否则会在服务端执行，因为edge runtime的原因出现500报错
 const DonationStep1 = lazy(() => import('@/app/_components/donate/step1'));
-const DonationStep4 = lazy(() => import('@/app/_components/donate/step4'));
 
 type Step = 'initialization' | 'contacts' | 'payment' | 'complete'
 type Props = {
@@ -61,13 +62,31 @@ export default function DonationPageComp({
   // State
   const [currentStep, setCurrentStep] = useState<Step>('initialization')
   const [slideDirection, setSlideDirection] = useState<'right' | 'left'>('right')
-  // Form state
   const [info, setInfo] = useState<DonationInfo>(createDonationInfo(project.id));
+  
+  // Network state management
+  const [network, setNetwork] = useState<string>(() => {
+    const networkOptions = getNetworkDropdownOptions();
+    const firstNetwork = networkOptions.length > 0 ? networkOptions[0].value || '' : '';
+
+    return firstNetwork;
+  });
+
+  useEffect(() => {
+    updateInfo({ network });
+  }, [network]);
+
+  // Dollar amount state (for real-time USD conversion)
+  const [dollar, setDollar] = useState<number | null>(info.amount || 0);
     // Check if wagmi is ready
   const isWagmiReady = useWagmiReady();
   
-  // 添加调试日志
-  console.log('📊 donate-page.tsx - isWagmiReady:', isWagmiReady);
+  // Combined network setter that updates both local state and info
+  const handleSetNetwork = (newNetwork: string) => {
+    setNetwork(newNetwork);
+    updateInfo({ network: newNetwork });
+  };
+  
   // Step navigation
   const goToNextStep = () => {
     setSlideDirection('right')
@@ -80,12 +99,10 @@ export default function DonationPageComp({
     if (currentStep === 'contacts') setCurrentStep('initialization')
     else if (currentStep === 'payment') setCurrentStep('contacts')
   }
-
   function resetForm() {
     setSlideDirection('left')
     setCurrentStep('initialization')
     setInfo(createDonationInfo(project.id));
-    updateInfo({ network: 'ethereum', wallet: '' });
   }
   function updateInfo(newInfo: Partial<DonationInfo>) {
     setInfo((prev) => ({
@@ -170,7 +187,8 @@ export default function DonationPageComp({
             exit={slideDirection === 'right' ? 'exitToLeft' : 'exitToRight'}
             variants={slideVariants}
             transition={{ type: 'tween', duration: 0.3 }}
-          >            {/* Initialization Step */}
+          >
+            {/* Initialization Step */}
             {currentStep === 'initialization' && (
               isWagmiReady ? (
                 <DonationStep1
@@ -179,10 +197,15 @@ export default function DonationPageComp({
                     paymentMethod={info.currency}
                     setAmount={value => updateInfo({ amount: value })}
                     setPaymentMethod={value => updateInfo({ currency: value })}
-                    network={info.network}
-                    setNetwork={value => updateInfo({ network: value })}
                     selectedWallet={info.wallet}
                     setSelectedWallet={value => updateInfo({ wallet: value })}
+                    network={network}
+                    setNetwork={handleSetNetwork}
+                    dollar={dollar}
+                    setDollar={value => {
+                      setDollar(value);
+                      updateInfo({ dollar: typeof value === 'number' ? value : null });
+                    }}
                   />
               ) : (
                 <Step1NoWagmi
@@ -191,10 +214,15 @@ export default function DonationPageComp({
                   paymentMethod={info.currency}
                   setAmount={value => updateInfo({ amount: value })}
                   setPaymentMethod={value => updateInfo({ currency: value })}
-                  network={info.network}
-                  setNetwork={value => updateInfo({ network: value })}
                   selectedWallet={info.wallet}
                   setSelectedWallet={value => updateInfo({ wallet: value })}
+                  network={network}
+                  setNetwork={handleSetNetwork}
+                  dollar={dollar}
+                  setDollar={value => {
+                    setDollar(value);
+                    updateInfo({ dollar: typeof value === 'number' ? value : null });
+                  }}
                 />
               )
             )}
