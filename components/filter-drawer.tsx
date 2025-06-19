@@ -100,10 +100,6 @@ export function FilterDrawer({ isOpen, onOpenChange, filter, setFilter }: Filter
                   className="[&>span:first-child]:h-1 [&>span:first-child]:bg-action-blue [&>span:first-child_span]:bg-action-blue [&>span:first-child_span]:border-action-blue [&>span:first-child_span]:ring-offset-background [&>span:first-child_span]:focus-visible:ring-action-blue/50"
                   onValueChange={(value) => setFilter({ ...filter, progress: value[ 0 ] })}
                 />
-                <div className="flex justify-between text-xs text-neutral-darkgray mt-2">
-                  <span>0%</span>
-                  <span>100%</span>
-                </div>
               </div>
             </FilterSection>
 
@@ -165,7 +161,7 @@ export function FilterDrawer({ isOpen, onOpenChange, filter, setFilter }: Filter
               <RadioGroup
                 defaultValue="all-dm"
                 className="space-y-4"
-                value={filter.donationMethods}
+                value={filter.donationMethods.toString()}
                 onValueChange={(value) => setFilter({ ...filter, donationMethods: value })}
               >
                 {Object.entries(ProjectDonationMethods).map(([label, id]) => (
@@ -190,7 +186,7 @@ export function FilterDrawer({ isOpen, onOpenChange, filter, setFilter }: Filter
               <RadioGroup
                 defaultValue="all-pt"
                 className="space-y-4"
-                value={filter.projectType}
+                value={filter.projectType.toString()}
                 onValueChange={(value) => setFilter({ ...filter, projectType: value })}
               >
                 {Object.entries(ProjectTypes).map(([label, id]) => (

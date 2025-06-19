@@ -82,6 +82,9 @@ const config: Config = {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        line: {
+          'gray': '#D9D9D9',
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
