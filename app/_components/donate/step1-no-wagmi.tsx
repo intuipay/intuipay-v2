@@ -14,6 +14,7 @@ import {
   isWalletCompatibleWithNetwork,
   isCurrencyCompatibleWithNetwork
 } from '@/config/blockchain';
+import { useExchangeRates } from '@/hooks/use-exchange-rates';
 
 type Props = {
   amount: number | '';
@@ -25,6 +26,8 @@ type Props = {
   setSelectedWallet: (value: string) => void;
   network: string;
   setNetwork: (network: string) => void;
+  dollar: number | null;
+  setDollar: (value: number | null) => void;
 }
 
 export default function Step1NoWagmi({
@@ -36,14 +39,24 @@ export default function Step1NoWagmi({
   setSelectedWallet,
   network,
   setNetwork,
-}: Props) {
-  const [dollar, setDollar] = useState<number | ''>(amount);  // 获取配置数据
+  dollar,
+  setDollar,
+}: Props) {  // 获取配置数据
   const networkOptions = getNetworkDropdownOptions();
   const allWallets = Object.values(BLOCKCHAIN_CONFIG.wallets);
 
+  // 汇率管理
+  const { 
+    rates, 
+    loading: ratesLoading, 
+    error: ratesError, 
+    toUSD, 
+    fromUSD, 
+    hasRates 
+  } = useExchangeRates(network);
+
   // Filter payment methods based on selected network
   const getFilteredPaymentMethods = (): DropdownItemProps[] => {
-    console.log('getFilteredPaymentMethods', network)
     if (!network) return [];
     return getCurrencyDropdownOptions(network);
   };
@@ -75,28 +88,56 @@ export default function Step1NoWagmi({
       if (!isCompatible) {
         setSelectedWallet('');
       }
+    }  }, [network, selectedWallet]); // 移除 setSelectedWallet 依赖
+
+  // 当支付方式改变时，重新计算汇率转换
+  useEffect(() => {
+    if (paymentMethod && hasRates(paymentMethod) && typeof amount === 'number' && amount > 0) {
+      const usdValue = toUSD(amount, paymentMethod);
+      setDollar(Math.round(usdValue * 100) / 100);
     }
-  }, [network, selectedWallet]); // 移除 setSelectedWallet 依赖
+  }, [paymentMethod, hasRates, amount, toUSD]);
 
   // update Amount value based on amount and payment method
   function onAmountChange(event: ChangeEvent<HTMLInputElement>) {
     const input = event.target as HTMLInputElement;
     const value = input.value ? Number(input.value) : '';
     setAmount(value);
-    setDollar(value);
+    
+    // 使用真实汇率转换为美元金额
+    if (value && paymentMethod && hasRates(paymentMethod)) {
+      const usdValue = toUSD(value, paymentMethod);
+      setDollar(Math.round(usdValue * 100) / 100); // 保留两位小数
+    } else {
+      setDollar(value);
+    }
   }
 
-  // update USDC value based on dollar and payment method
+  // update crypto amount based on dollar and payment method
   function onDollarChange(event: ChangeEvent<HTMLInputElement>) {
     const input = event.target as HTMLInputElement;
     const value = input.value ? Number(input.value) : '';
     setDollar(value);
-    setAmount(value);
+    
+    // 使用真实汇率转换为加密货币金额
+    if (value && paymentMethod && hasRates(paymentMethod)) {
+      const cryptoValue = fromUSD(value, paymentMethod);
+      setAmount(Math.round(cryptoValue * 1000000) / 1000000); // 保留6位小数
+    } else {
+      setAmount(value);
+    }
   }
   return (
-    <form>
-      <div className="space-y-6 pt-8">
+    <form>      <div className="space-y-6 pt-8">
         <h2 className="text-xl font-semibold text-center text-black">Make your donation today</h2>
+        {/* Exchange rate error */}
+        {ratesError && (
+          <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
+            <p className="text-yellow-600 text-sm">
+              汇率获取失败: {ratesError}，将使用备用汇率进行估算
+            </p>
+          </div>
+        )}
         {/* Network Selection */}
         <div className="space-y-2">
           <Label className="text-sm font-semibold text-black/50">Network</Label>
@@ -174,9 +215,11 @@ export default function Step1NoWagmi({
               placeholder="1.0"
               type="number"
               value={amount}
-            />
-            <div className="text-sm w-fit flex-none px-4">
+            />            <div className="text-sm w-fit flex-none px-4 flex items-center gap-1">
               {paymentMethod} ≈ $
+              {ratesLoading && (
+                <span className="inline-block w-3 h-3 border-2 border-gray-300 border-t-blue-500 rounded-full animate-spin"></span>
+              )}
             </div>
             <Input
               className="text-sm h-12 flex-1 px-4 focus:outline-none"

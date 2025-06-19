@@ -62,14 +62,19 @@ export default function DonationPageComp({
   // State
   const [currentStep, setCurrentStep] = useState<Step>('initialization')
   const [slideDirection, setSlideDirection] = useState<'right' | 'left'>('right')
-  // Form state
   const [info, setInfo] = useState<DonationInfo>(createDonationInfo(project.id));
   
   // Network state management
   const [network, setNetwork] = useState<string>(() => {
     const networkOptions = getNetworkDropdownOptions();
-    return networkOptions.length > 0 ? networkOptions[0].value || '' : '';
+    const firstNetwork = networkOptions.length > 0 ? networkOptions[0].value || '' : '';
+
+    updateInfo({ network: firstNetwork }); // 从可用的网络列表取第一个，设置network
+    return firstNetwork;
   });
+
+  // Dollar amount state (for real-time USD conversion)
+  const [dollar, setDollar] = useState<number | null>(info.amount || 0);
     // Check if wagmi is ready
   const isWagmiReady = useWagmiReady();
   
@@ -101,6 +106,11 @@ export default function DonationPageComp({
       ...prev,
       ...newInfo,
     }));
+    
+    // 如果更新的信息包含 dollar 字段，同时更新本地 dollar 状态
+    if ('dollar' in newInfo && newInfo.dollar) {
+      setDollar(newInfo.dollar);
+    }
   }
 
   // Get current step index
@@ -193,6 +203,11 @@ export default function DonationPageComp({
                     setSelectedWallet={value => updateInfo({ wallet: value })}
                     network={network}
                     setNetwork={handleSetNetwork}
+                    dollar={dollar}
+                    setDollar={value => {
+                      setDollar(value);
+                      updateInfo({ dollar: typeof value === 'number' ? value : null });
+                    }}
                   />
               ) : (
                 <Step1NoWagmi
@@ -205,6 +220,11 @@ export default function DonationPageComp({
                   setSelectedWallet={value => updateInfo({ wallet: value })}
                   network={network}
                   setNetwork={handleSetNetwork}
+                  dollar={dollar}
+                  setDollar={value => {
+                    setDollar(value);
+                    updateInfo({ dollar: typeof value === 'number' ? value : null });
+                  }}
                 />
               )
             )}

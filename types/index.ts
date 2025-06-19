@@ -81,7 +81,8 @@ export type TiDBDataServiceResponse<T> = {
 export type DonationInfo = {
   address1: string;
   address2?: string;
-  amount: number | '';
+  amount: number | ''; // crypto 金额，整数，很多0
+  dollar: number | null; // 调用汇率接口换算出当时的美元金额
   city: string;
   company_name?: string;
   country: string;
