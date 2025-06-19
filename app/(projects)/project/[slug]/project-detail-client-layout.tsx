@@ -101,10 +101,14 @@ export default function ProjectDetailClientLayout({ project, similarProjects }: 
           <div className="border border-neutral-mediumgray/50 rounded-lg p-6 space-y-6">
             <div className="flex items-center">
               <Avatar className="h-10 w-10 mr-3">
-                <AvatarImage src={project.org_logo || '/placeholder.svg'} alt={project.org_name} />
-                <AvatarFallback>
-                  <ShieldCheck className="w-5 h-5 text-intuipay-blue" />
-                </AvatarFallback>
+                {
+                  project.org_logo ?
+                  <AvatarImage src={project.org_logo} alt={project.org_name} /> :
+                  <AvatarFallback>
+                    {project.org_name.slice(0, 1).toUpperCase()}
+                  </AvatarFallback>
+                }
+
               </Avatar>
               <span className="font-semibold text-lg">{project.org_name}</span>
             </div>

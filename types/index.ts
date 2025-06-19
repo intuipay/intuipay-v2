@@ -149,8 +149,8 @@ export type ProjectFilter = {
   category: ProjectCategories;
   progress: number;
   location: string;
-  donationMethods: ProjectDonationMethods;
-  projectType: ProjectTypes;
+  donationMethods: ProjectDonationMethods | string;
+  projectType: ProjectTypes | string;
   excludes?: number;
 }
 
