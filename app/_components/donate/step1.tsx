@@ -112,7 +112,6 @@ export default function DonationStep1({
   // Filter payment methods based on selected network
   const getFilteredPaymentMethods = (): DropdownItemProps[] => {
     if (!network) return [];
-    // TODO: setInfo 还有 network 那里
     const result = getCurrencyDropdownOptions(network);
     console.log('filtered payment methods:', result, network);
     return result;
@@ -123,7 +122,7 @@ export default function DonationStep1({
     return getSupportedWallets(network);
   };
   // Get wallet balances for all supported tokens
-  const { balances, refreshBalances } = useMultiWalletBalance(network);
+  const { balances } = useMultiWalletBalance(network);
 
   // 汇率管理
   const { 
@@ -348,7 +347,7 @@ export default function DonationStep1({
   // update Dollar value based on amount and payment method
   function onAmountChange(event: ChangeEvent<HTMLInputElement>) {
     const input = event.target as HTMLInputElement;
-    const value = input.value ? Number(input.value) : '';
+    const value = input.value ? Number(input.value) : 0;
     setAmount(value);
     
     // 使用真实汇率转换为美元金额
@@ -363,7 +362,7 @@ export default function DonationStep1({
   // update crypto amount based on dollar and payment method
   function onDollarChange(event: ChangeEvent<HTMLInputElement>) {
     const input = event.target as HTMLInputElement;
-    const value = input.value ? Number(input.value) : '';
+    const value = input.value ? Number(input.value) : 0;
     setDollar(value);
     
     // 使用真实汇率转换为加密货币金额
@@ -387,7 +386,7 @@ export default function DonationStep1({
         {ratesError && (
           <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
             <p className="text-yellow-600 text-sm">
-              汇率获取失败: {ratesError}，将使用备用汇率进行估算
+              fetch rate failed: {ratesError}，use fallback rate instead.
             </p>
           </div>
         )}
@@ -520,7 +519,8 @@ export default function DonationStep1({
               type="number"
               value={amount}
               disabled={!(isConnected || isPhantomConnected)}
-            />            <div className="text-sm w-fit flex-none px-4 flex items-center gap-1">
+            />
+            <div className="text-sm w-fit flex-none px-4 flex items-center gap-1">
               {paymentMethod} ≈ $
               {ratesLoading && (
                 <span className="inline-block w-3 h-3 border-2 border-gray-300 border-t-blue-500 rounded-full animate-spin"></span>
@@ -533,7 +533,7 @@ export default function DonationStep1({
               onChange={onDollarChange}
               placeholder={!(isConnected || isPhantomConnected) ? "Connect wallet first" : "1.00"}
               type="number"
-              value={dollar}
+              value={dollar || 0}
               disabled={!(isConnected || isPhantomConnected)}
             />
           </div>
