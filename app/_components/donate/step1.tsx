@@ -2,7 +2,7 @@ import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import MyCombobox from '@/components/my-combobox';
 import { DropdownItemProps } from '@/types';
-import { ChangeEvent, useState, useEffect, FormEvent, useCallback } from 'react';
+import { ChangeEvent, useState, useEffect, FormEvent, useCallback, useRef } from 'react';
 import CtaFooter from '@/app/_components/donate/cta-footer';
 import { clsx } from 'clsx';
 import Image from 'next/image';
@@ -75,7 +75,7 @@ export default function DonationStep1({
   const { disconnect } = useDisconnect();
   const chainId = useChainId();
   const [isPhantomConnected, setIsPhantomConnected] = useState(false);
-
+  
   // 根据 chainId 获取对应的网络ID
   const getNetworkIdByChainId = (chainId: number): string | null => {
     const networkEntry = Object.entries(BLOCKCHAIN_CONFIG.networks).find(([_, config]) => {
@@ -201,7 +201,9 @@ export default function DonationStep1({
     metamask: connectors.find(c => c.id === 'metaMaskSDK' || c.id === 'io.metamask'),
     coinbase: connectors.find(c => c.id === 'coinbaseWalletSDK'),
     'wallet-connect': connectors.find(c => c.id === 'walletConnect'),
-  };  // 刷新页面后，自动根据 wagmi 连接，恢复出之前选中的钱包
+  };
+  
+  // 刷新页面后，自动根据 wagmi 连接，恢复出之前选中的钱包
   useEffect(() => {
     if (isConnected && address && connector) {
       setError('');
@@ -213,7 +215,7 @@ export default function DonationStep1({
       setSelectedWallet(walletName);
     }
   }, [isConnected, address, connector, chainId]);
-
+  
   // Monitor connection errors
   useEffect(() => {
     if (connectError) {
@@ -224,6 +226,11 @@ export default function DonationStep1({
         setError('User rejected the connection request');
       } else if (connectError.message.includes('Already processing')) {
         setError('Request is already being processed, please check your wallet');
+      } else if (connectError.message.includes('Connector already connected')) {
+        // 这种情况下通常意味着钱包已经连接，不应该显示错误
+        console.log('Connector already connected, clearing error state');
+        setError('');
+        return;
       } else {
         setError(`Connection failed: ${connectError.message}`);
       }
@@ -278,6 +285,7 @@ export default function DonationStep1({
       }
     }
   };
+  
   const handleConnect = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!selectedWallet || isPending) return;
@@ -298,8 +306,9 @@ export default function DonationStep1({
       // 获取目标连接器
       const targetConnector = connectorMap[selectedWallet as keyof typeof connectorMap];
 
+      console.log('debug connected state', isConnected, connector, targetConnector);
       // 检查是否已经连接到相同的钱包连接器
-      if (isConnected && connector && targetConnector) {
+      if (connector && targetConnector) {
         // 如果已经连接到相同的连接器，只需要检查网络切换
         if (connector.id === targetConnector.id) {
           console.log('Already connected to the same wallet, checking network...');
@@ -336,8 +345,15 @@ export default function DonationStep1({
         appkit.open();
         return;
       }
+      
+      // Handle Phantom wallet for Solana
       if (selectedWallet === 'phantom') {
-        // handle phantom wallet connection to solana
+        if (window?.phantom?.solana?.isConnected) {
+          console.log('Phantom wallet is already connected');
+          setIsPhantomConnected(true);
+          setSelectedWallet('phantom');
+          return;
+        }
         window?.phantom?.solana?.connect();
         return;
       }
@@ -367,7 +383,7 @@ export default function DonationStep1({
       console.log(`Connecting to ${selectedWallet} wallet...`);
       connect({ connector: targetConnector });
     } catch (error: any) {
-      console.error('Wallet connection failed:', error);
+      console.log('Wallet connection failed:', error);
       setError(`Connection failed: ${error.message || 'Unknown error'}`);
     }
   };
