@@ -97,14 +97,6 @@ export default function DonationStep1({
     }
   }, [isConnected, chainId, network]);
 
-  // 确保网络不为空的兜底机制
-  useEffect(() => {
-    if (!network && networkOptions.length > 0) {
-      const defaultNetwork = networkOptions[0].value || '';
-      console.log('Setting fallback network:', defaultNetwork);
-      setNetwork(defaultNetwork);
-    }
-  }, [network, networkOptions]);
   // 获取当前网络配置
   const currentNetwork = BLOCKCHAIN_CONFIG.networks[network as keyof typeof BLOCKCHAIN_CONFIG.networks];
 
@@ -112,7 +104,6 @@ export default function DonationStep1({
   const getFilteredPaymentMethods = (): DropdownItemProps[] => {
     if (!network) return [];
     const result = getCurrencyDropdownOptions(network);
-    console.log('filtered payment methods:', result, network);
     return result;
   };
   // Filter wallets based on selected network

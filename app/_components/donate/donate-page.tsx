@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo, useState, lazy, useCallback } from 'react'
+import { useMemo, useState, lazy, useEffect } from 'react'
 import { CircleDotIcon, HeadsetIcon } from 'lucide-react'
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion';
@@ -69,9 +69,12 @@ export default function DonationPageComp({
     const networkOptions = getNetworkDropdownOptions();
     const firstNetwork = networkOptions.length > 0 ? networkOptions[0].value || '' : '';
 
-    updateInfo({ network: firstNetwork }); // 从可用的网络列表取第一个，设置network
     return firstNetwork;
   });
+
+  useEffect(() => {
+    updateInfo({ network });
+  }, [network]);
 
   // Dollar amount state (for real-time USD conversion)
   const [dollar, setDollar] = useState<number | null>(info.amount || 0);
@@ -106,11 +109,6 @@ export default function DonationPageComp({
       ...prev,
       ...newInfo,
     }));
-    
-    // 如果更新的信息包含 dollar 字段，同时更新本地 dollar 状态
-    if ('dollar' in newInfo && newInfo.dollar) {
-      setDollar(newInfo.dollar);
-    }
   }
 
   // Get current step index

@@ -22,8 +22,6 @@ export function useMultiWalletBalance(network: string): MultiWalletBalanceResult
   const [isPhantomConnected, setIsPhantomConnected] = useState(false);
   const [refreshTrigger, setRefreshTrigger] = useState(0);
 
-  console.log('useMultiWalletBalance called with:', { network, address, isConnected });
-
   // Manual refresh function
   const refreshBalances = () => {
     console.log('Manually refreshing balances');
@@ -72,18 +70,10 @@ export function useMultiWalletBalance(network: string): MultiWalletBalanceResult
   const isEVMNetwork = currentNetwork?.type === 'ethereum';
   const isSolanaNetwork = currentNetwork?.type === 'solana';
 
-  console.log('Network analysis:', { 
-    network, 
-    currentNetwork: currentNetwork?.name, 
-    isEVMNetwork, 
-    isSolanaNetwork 
-  });
   // 获取当前网络支持的所有代币
   const supportedCurrencies = Object.values(BLOCKCHAIN_CONFIG.currencies).filter(currency =>
     currency.networks.some(n => n.networkId === network)
   );
-
-  console.log('Supported currencies for network:', { network, supportedCurrencies: supportedCurrencies.map(c => c.id) });
 
   // 动态创建余额查询 hooks
   const balanceQueries = supportedCurrencies.map(currency => {
@@ -113,8 +103,6 @@ export function useMultiWalletBalance(network: string): MultiWalletBalanceResult
   // Fetch Solana balances (both SOL and SPL tokens like USDC)
   useEffect(() => {
     async function fetchSolanaBalances() {
-      console.log('fetchSolanaBalances called with:', { network, isPhantomConnected, isSolanaNetwork });
-
       if (!isSolanaNetwork) {
         console.log('Network is not solana type, skipping');
         setSolanaBalances({});
@@ -145,7 +133,6 @@ export function useMultiWalletBalance(network: string): MultiWalletBalanceResult
       }
 
       const actuallyConnected = phantom.isConnected;
-      console.log('Phantom actual connection status:', actuallyConnected);
 
       if (!actuallyConnected) {
         console.log('Phantom wallet not connected, skipping balance fetch');
@@ -181,8 +168,6 @@ export function useMultiWalletBalance(network: string): MultiWalletBalanceResult
         if (!publicKey) {
           throw new Error('No public key found');
         }
-
-        console.log('Fetching Solana balances for public key:', publicKey.toString());
 
         const rpcUrl = currentNetwork?.rpcUrl || 'https://api.devnet.solana.com';
         const newBalances: { [key: string]: TokenBalance } = {};
@@ -304,15 +289,6 @@ export function useMultiWalletBalance(network: string): MultiWalletBalanceResult
   // 构建最终的余额对象
   const balances: { [key: string]: TokenBalance } = {};
 
-  console.log('Balance queries result:', balanceQueries.map(q => ({
-    currencyId: q.currencyId,
-    isNative: q.isNative,
-    contractAddress: q.contractAddress,
-    data: q.data ? formatUnits(q.data.value, q.data.decimals) : null,
-    isLoading: q.isLoading,
-    error: q.error?.message
-  })));
-
   // 添加 EVM 网络的代币余额（原生币和 ERC20）
   if (isEVMNetwork) {
     balanceQueries.forEach(query => {
@@ -337,8 +313,6 @@ export function useMultiWalletBalance(network: string): MultiWalletBalanceResult
     // 直接使用 solanaBalances 中的所有余额
     Object.assign(balances, solanaBalances);
   }
-
-  console.log('Final balances:', balances);
 
   return { balances, refreshBalances };
 }

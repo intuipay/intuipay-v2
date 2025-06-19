@@ -123,7 +123,7 @@ class ExchangeRateCache {
   private readonly CACHE_DURATION = 60 * 1000; // 1分钟缓存
 
   async getRates(currencyIds: string[]): Promise<CurrencyRate> {
-    const cacheKey = currencyIds.sort().join(',');
+    const cacheKey =  [...currencyIds].sort().join(',');
     const cached = this.cache.get(cacheKey);
     
     if (cached && Date.now() - cached.timestamp < this.CACHE_DURATION) {

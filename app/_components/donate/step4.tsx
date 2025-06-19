@@ -409,7 +409,7 @@ export default function DonationStep4({
       <div className="flex flex-col items-center justify-center py-5 gap-4">
         <p className="text-base sm:text-xl font-semibold text-gray-900">You are donating</p>
         <p className="text-2xl sm:text-3xl font-semibold text-blue-600">{info.amount} {info.currency}</p>
-        <p className="text-base sm:text-xl font-semibold text-gray-900">~ {info.dollar.toLocaleString()} USD</p>
+        <p className="text-base sm:text-xl font-semibold text-gray-900">~ {(info.dollar ?? 0).toLocaleString()} USD</p>
         {/* 交易状态显示 */}
         {(writeData || solanaTransactionHash) && (
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mt-4 w-full">
@@ -420,7 +420,8 @@ export default function DonationStep4({
                 }`}></div>
               <span className="font-medium text-blue-800">Transaction Status</span>
             </div>
-            <div className="space-y-2 text-sm">              <div className="flex items-center justify-between">
+            <div className="space-y-2 text-sm">
+              <div className="flex items-center justify-between">
                 <span className="text-gray-600">Transaction Hash:</span>
                 <a
                   href={getTransactionExplorerUrl(isSolanaTransaction ? solanaTransactionHash : writeData!)}

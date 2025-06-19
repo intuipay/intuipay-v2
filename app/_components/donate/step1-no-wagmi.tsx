@@ -11,8 +11,6 @@ import {
   getNetworkDropdownOptions,
   getSupportedWallets,
   getCurrencyDropdownOptions,
-  isWalletCompatibleWithNetwork,
-  isCurrencyCompatibleWithNetwork
 } from '@/config/blockchain';
 
 type Props = {
