@@ -306,7 +306,7 @@ export default function DonationStep1({
       // 获取目标连接器
       const targetConnector = connectorMap[selectedWallet as keyof typeof connectorMap];
 
-      console.log('debug connected state', isConnected, connector, targetConnector);
+      // console.log('debug connected state', isConnected, connector, targetConnector);
       // 检查是否已经连接到相同的钱包连接器
       if (connector && targetConnector) {
         // 如果已经连接到相同的连接器，只需要检查网络切换
@@ -367,6 +367,9 @@ export default function DonationStep1({
           try {
             await switchToTargetNetwork(network);
             console.log(`Successfully pre-switched to ${network}`);
+            // switch 网络就代表连上了钱包，所以可以提前 return，不需要再执行下面的 connect 函数，
+            // 否则会报错： "Connector already connected"
+            return;
           } catch (networkError: any) {
             console.error('Failed to pre-switch network:', networkError);
             setError(`Failed to switch to ${currentNetworkConfig.name}: ${networkError.message}`);
