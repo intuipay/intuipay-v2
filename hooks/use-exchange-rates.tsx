@@ -37,7 +37,7 @@ export function useExchangeRates(networkId?: string) {
       setRates(newRates);
       setLastUpdated(new Date());
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : '获取汇率失败';
+      const errorMessage = err instanceof Error ? err.message : 'fetch rates failed';
       setError(errorMessage);
       console.error('Failed to fetch exchange rates:', err);
     } finally {
