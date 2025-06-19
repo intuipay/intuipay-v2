@@ -98,7 +98,7 @@ export function useMultiWalletBalance(network: string): MultiWalletBalanceResult
       token: isNative ? undefined : (contractAddress as `0x${string}` | undefined),
       query: {
         enabled: isConnected && isEVMNetwork && (isNative || !!contractAddress),
-        refetchInterval: 10000,
+        refetchInterval: 20000,
       },
     });
 

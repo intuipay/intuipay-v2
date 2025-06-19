@@ -15,7 +15,6 @@ import {
   getNetworkDropdownOptions,
   getSupportedWallets,
   getCurrencyDropdownOptions,
-  isCurrencyCompatibleWithNetwork
 } from '@/config/blockchain';
 import { useExchangeRates } from '@/hooks/use-exchange-rates';
 
@@ -125,25 +124,38 @@ export default function DonationStep1({
   const { balances } = useMultiWalletBalance(network);
 
   // 汇率管理
-  const { 
-    rates, 
-    loading: ratesLoading, 
-    error: ratesError, 
-    toUSD, 
-    fromUSD, 
-    hasRates 
+  const {
+    rates,
+    loading: ratesLoading,
+    error: ratesError,
+    toUSD,
+    fromUSD,
+    hasRates
   } = useExchangeRates(network);
 
-  const handleDisconnect = useCallback(() => {
-    if (window?.phantom?.solana) {
-      console.log('Disconnecting Phantom wallet');
-      window.phantom.solana.disconnect();
+  const handleDisconnect = useCallback(async () => {
+    try {
+      if (window?.phantom?.solana) {
+        console.log('Disconnecting Phantom wallet');
+        await window.phantom.solana.disconnect();
+        setIsPhantomConnected(false);
+        setSelectedWallet('');
+      }
+
+      if (isConnected) {
+        console.log('Disconnecting wagmi wallet');
+        disconnect();
+      }
+
+      setError('');
+    } catch (error: any) {
+      console.error('Disconnect error:', error);
+      // 即使断开连接失败，也要清除状态
       setIsPhantomConnected(false);
       setSelectedWallet('');
+      setError('');
     }
-    disconnect();
-    setError('');
-  }, [disconnect, setSelectedWallet]);
+  }, [disconnect, setSelectedWallet, isConnected]);
 
   useEffect(() => {
     // 确保在客户端执行
@@ -290,9 +302,40 @@ export default function DonationStep1({
         }
       }
 
-      // Disconnect if already connected to another wallet
-      if (isConnected) {
-        disconnect();
+      // 获取目标连接器
+      const targetConnector = connectorMap[selectedWallet as keyof typeof connectorMap];
+
+      // 检查是否已经连接到相同的钱包连接器
+      if (isConnected && connector && targetConnector) {
+        // 如果已经连接到相同的连接器，只需要检查网络切换
+        if (connector.id === targetConnector.id) {
+          console.log('Already connected to the same wallet, checking network...');
+
+          // 对于 EVM 钱包，检查并切换到目标网络
+          const currentNetworkConfig = BLOCKCHAIN_CONFIG.networks[network as keyof typeof BLOCKCHAIN_CONFIG.networks];
+          if (currentNetworkConfig?.type === 'ethereum') {
+            const targetChainId = getChainIdForNetwork(network);
+            if (targetChainId && chainId !== targetChainId) {
+              try {
+                await switchToTargetNetwork(network);
+                console.log(`Successfully switched to ${network}`);
+              } catch (networkError: any) {
+                console.error('Failed to switch network:', networkError);
+                setError(`Failed to switch to ${currentNetworkConfig.name}: ${networkError.message}`);
+                return;
+              }
+            }
+          }
+          return; // 已连接相同钱包，无需重新连接
+        } else {
+          // 连接到不同的钱包，需要先断开
+          console.log('Disconnecting from current wallet to connect to new one...');
+          await new Promise<void>((resolve) => {
+            disconnect();
+            // 等待断开连接完成
+            setTimeout(resolve, 1000);
+          });
+        }
       }
 
       // Handle WalletConnect specially
@@ -327,12 +370,11 @@ export default function DonationStep1({
       }
 
       // Handle other wallets using wagmi connectors
-      const targetConnector = connectorMap[selectedWallet as keyof typeof connectorMap];
       if (!targetConnector) {
         setError('Unsupported wallet type');
         return;
       }
-
+      console.log(`Connecting to ${selectedWallet} wallet...`);
       connect({ connector: targetConnector });
     } catch (error: any) {
       console.error('Wallet connection failed:', error);
@@ -349,7 +391,7 @@ export default function DonationStep1({
     const input = event.target as HTMLInputElement;
     const value = input.value ? Number(input.value) : 0;
     setAmount(value);
-    
+
     // 使用真实汇率转换为美元金额
     if (value && paymentMethod && hasRates(paymentMethod)) {
       const usdValue = toUSD(value, paymentMethod);
@@ -364,7 +406,7 @@ export default function DonationStep1({
     const input = event.target as HTMLInputElement;
     const value = input.value ? Number(input.value) : 0;
     setDollar(value);
-    
+
     // 使用真实汇率转换为加密货币金额
     if (value && paymentMethod && hasRates(paymentMethod)) {
       const cryptoValue = fromUSD(value, paymentMethod);
@@ -376,7 +418,8 @@ export default function DonationStep1({
   return (
     <form onSubmit={handleConnect}>
       <div className="space-y-6 pt-8">
-        <h2 className="text-xl font-semibold text-center text-black">Make your donation today</h2>        {/* Error message */}
+        <h2 className="text-xl font-semibold text-center text-black">Make your donation today</h2>
+        {/* Error message */}
         {error && (
           <div className="bg-red-50 border border-red-200 rounded-lg p-3">
             <p className="text-red-600 text-sm">{error}</p>
