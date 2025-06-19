@@ -103,6 +103,11 @@ export default function DonationPageComp({
     setSlideDirection('left')
     setCurrentStep('initialization')
     setInfo(createDonationInfo(project.id));
+
+    // 重置表单后，本来应该记住上一次选择的网络，但是因为createDonationInfo清空了所有信息，
+    // 所以从 network 里面找到上一次选中的网络，更新 info
+    setNetwork(network);
+    updateInfo({network})
   }
   function updateInfo(newInfo: Partial<DonationInfo>) {
     setInfo((prev) => ({

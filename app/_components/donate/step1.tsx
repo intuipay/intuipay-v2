@@ -362,7 +362,8 @@ export default function DonationStep1({
       const currentNetworkConfig = BLOCKCHAIN_CONFIG.networks[network as keyof typeof BLOCKCHAIN_CONFIG.networks];
       if (currentNetworkConfig?.type === 'ethereum') {
         const targetChainId = getChainIdForNetwork(network);
-        if (targetChainId) {
+        const walletChainId = await targetConnector?.getChainId?.(); // 当前钱包连的网络
+        if (targetChainId !== walletChainId) {
           console.log(`Pre-switching to target network: ${network} (Chain ID: ${targetChainId})`);
           try {
             await switchToTargetNetwork(network);
