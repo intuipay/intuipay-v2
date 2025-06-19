@@ -210,8 +210,7 @@ export default function DonationStep1({
     metamask: connectors.find(c => c.id === 'metaMaskSDK' || c.id === 'io.metamask'),
     coinbase: connectors.find(c => c.id === 'coinbaseWalletSDK'),
     'wallet-connect': connectors.find(c => c.id === 'walletConnect'),
-  };
-  // 刷新页面后，自动根据 wagmi 连接，恢复出之前选中的钱包
+  };  // 刷新页面后，自动根据 wagmi 连接，恢复出之前选中的钱包
   useEffect(() => {
     if (isConnected && address && connector) {
       setError('');
@@ -346,12 +345,30 @@ export default function DonationStep1({
         appkit.open();
         return;
       }
-
       if (selectedWallet === 'phantom') {
         // handle phantom wallet connection to solana
         window?.phantom?.solana?.connect();
         return;
-      }      // Handle other wallets using wagmi connectors
+      }
+
+      // 未连接钱包，对于 EVM 钱包，先切换到目标网络再连接
+      const currentNetworkConfig = BLOCKCHAIN_CONFIG.networks[network as keyof typeof BLOCKCHAIN_CONFIG.networks];
+      if (currentNetworkConfig?.type === 'ethereum') {
+        const targetChainId = getChainIdForNetwork(network);
+        if (targetChainId) {
+          console.log(`Pre-switching to target network: ${network} (Chain ID: ${targetChainId})`);
+          try {
+            await switchToTargetNetwork(network);
+            console.log(`Successfully pre-switched to ${network}`);
+          } catch (networkError: any) {
+            console.error('Failed to pre-switch network:', networkError);
+            setError(`Failed to switch to ${currentNetworkConfig.name}: ${networkError.message}`);
+            return;
+          }
+        }
+      }
+
+      // Handle other wallets using wagmi connectors
       if (!targetConnector) {
         setError('Unsupported wallet type');
         return;

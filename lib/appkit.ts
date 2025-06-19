@@ -75,42 +75,47 @@ export async function addNetworkToMetaMask(networkId: string) {
 
   // 类型声明
   const ethereum = window.ethereum as any
-
   // 根据网络ID获取链配置
   let chainConfig
   switch (networkId) {
     case 'pharos-testnet':
       chainConfig = {
-        chainId: `0x${pharosTestnet.id.toString(16)}`, // 转换为十六进制
+        chainId: `0x${pharosTestnet.id.toString(16)}`, // 转换为十六进制 (0xa8090)
         chainName: pharosTestnet.name,
-        nativeCurrency: pharosTestnet.nativeCurrency,
-        rpcUrls: pharosTestnet.rpcUrls.default.http,
+        nativeCurrency: {
+          name: pharosTestnet.nativeCurrency.name,
+          symbol: pharosTestnet.nativeCurrency.symbol,
+          decimals: pharosTestnet.nativeCurrency.decimals,
+        },
+        rpcUrls: pharosTestnet.rpcUrls.default.http, // 确保是字符串数组
         blockExplorerUrls: [pharosTestnet.blockExplorers.default.url],
       }
       break
     default:
       throw new Error(`Unsupported network: ${networkId}`)
   }
-
   try {
     // 尝试切换到目标网络
     await ethereum.request({
       method: 'wallet_switchEthereumChain',
       params: [{ chainId: chainConfig.chainId }],
     })
-  } catch (switchError: any) {
-    // 如果网络不存在（错误代码 4902），则添加网络
+  } catch (switchError: any) {    // 如果网络不存在（错误代码 4902），则添加网络
     if (switchError.code === 4902) {
       try {
+        console.log('Adding network with config:', chainConfig)
         await ethereum.request({
           method: 'wallet_addEthereumChain',
           params: [chainConfig],
         })
-      } catch (addError) {
-        throw new Error(`Failed to add network: ${addError}`)
+        // 添加网络成功后，MetaMask 会自动切换到新网络，无需额外操作
+        console.log(`Successfully added and switched to network: ${networkId}`)
+      } catch (addError: any) {
+        console.log('Failed to add network:', addError)
+        console.log('Network config used:', chainConfig)
       }
     } else {
-      throw new Error(`Failed to switch network: ${switchError}`)
+      throw new Error(`Failed to switch network: ${switchError.message || switchError}`)
     }
   }
 }
