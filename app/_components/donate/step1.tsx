@@ -253,7 +253,6 @@ export default function DonationStep1({
         return null;
     }
   };
-
   // 切换到指定网络的函数
   const switchToTargetNetwork = async (networkId: string) => {
     const targetChainId = getChainIdForNetwork(networkId);
@@ -268,21 +267,25 @@ export default function DonationStep1({
     const ethereum = window.ethereum as any;
 
     try {
-      // 如果是 Pharos Testnet，需要先添加网络
-      if (networkId === 'pharos-testnet') {
-        await addNetworkToMetaMask(networkId);
-      } else {
-        // 对于其他网络，直接切换
-        await ethereum.request({
-          method: 'wallet_switchEthereumChain',
-          params: [{ chainId: `0x${targetChainId.toString(16)}` }],
-        });
-      }
+      // 先尝试直接切换到目标网络
+      await ethereum.request({
+        method: 'wallet_switchEthereumChain',
+        params: [{ chainId: `0x${targetChainId.toString(16)}` }],
+      });
     } catch (error: any) {
       if (error.code === 4001) {
         throw new Error('User rejected network switch');
+      } else if (error.code === 4902) {
+        // 网络不存在，需要添加网络
+        // 目前只支持添加 pharos-testnet，其他网络应该已经在 MetaMask 中
+        if (networkId === 'pharos-testnet') {
+          await addNetworkToMetaMask(networkId);
+        } else {
+          throw new Error(`Network ${networkId} is not available in your wallet`);
+        }
+      } else {
+        throw error;
       }
-      throw error;
     }
   };
   const handleConnect = async (event: FormEvent<HTMLFormElement>) => {
@@ -348,28 +351,7 @@ export default function DonationStep1({
         // handle phantom wallet connection to solana
         window?.phantom?.solana?.connect();
         return;
-      }
-
-      // 对于 EVM 钱包，先检查并切换到目标网络
-      const currentNetworkConfig = BLOCKCHAIN_CONFIG.networks[network as keyof typeof BLOCKCHAIN_CONFIG.networks];
-      if (currentNetworkConfig?.type === 'ethereum') {
-        const targetChainId = getChainIdForNetwork(network);
-
-        if (targetChainId) {
-          console.log(`Attempting to switch to network: ${network} (Chain ID: ${targetChainId})`);
-
-          try {
-            await switchToTargetNetwork(network);
-            console.log(`Successfully switched to ${network}`);
-          } catch (networkError: any) {
-            console.error('Failed to switch network:', networkError);
-            setError(`Failed to switch to ${currentNetworkConfig.name}: ${networkError.message}`);
-            return;
-          }
-        }
-      }
-
-      // Handle other wallets using wagmi connectors
+      }      // Handle other wallets using wagmi connectors
       if (!targetConnector) {
         setError('Unsupported wallet type');
         return;
