@@ -82,7 +82,7 @@ export default function PaymentCalculator() {
             value={amount}
           />
           <MyCombobox
-            className="rounded-r-lg"
+            className="rounded-r-lg h-14"
             labelKey="code"
             options={CurrencyList}
             onChange={setCurrency}
