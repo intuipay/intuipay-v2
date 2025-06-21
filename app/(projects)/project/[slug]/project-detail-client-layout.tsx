@@ -82,16 +82,16 @@ export default function ProjectDetailClientLayout({ project, similarProjects }: 
 
           <div className="flex flex-wrap gap-x-8 gap-y-2 text-sm text-neutral-darkgray mb-6">
             <span className="flex items-center">
-              <img src='/images/project/FlaskConical.svg' alt="FlaskConical" className="w-4 h-4 mr-1.5"/> {enumToKeyLabel(ProjectCategories)[ project.category ]}
+              <Image src='/images/project/FlaskConical.svg' alt="FlaskConical" className="w-4 h-4 mr-1.5" width={16} height={16} /> {enumToKeyLabel(ProjectCategories)[ project.category ]}
             </span>
             <span className="flex items-center">
-              <img src='/images/project/MapPin.svg' alt="MapPin" className="w-4 h-4 mr-1.5"/> {project.location}
+              <Image src='/images/project/MapPin.svg' alt="MapPin" className="w-4 h-4 mr-1.5" width={16} height={16} /> {project.location}
             </span>
             <span className="flex items-center">
-              <img src='/images/project/Landmark.svg' alt="Landmark" className="w-4 h-4 mr-1.5"/> {enumToKeyLabel(ProjectTypes)[ project.type ]}
+              <Image src='/images/project/Landmark.svg' alt="Landmark" className="w-4 h-4 mr-1.5" width={16} height={16} /> {enumToKeyLabel(ProjectTypes)[ project.type ]}
             </span>
             <span className="flex items-center">
-              <img src='/images/project/Coin.svg' alt="Coin" className="w-4 h-4 mr-1.5"/> {enumToKeyLabel(ProjectDonationMethods)[ project.accepts ]}
+              <Image src='/images/project/Coin.svg' alt="Coin" className="w-4 h-4 mr-1.5" width={16} height={16} /> {enumToKeyLabel(ProjectDonationMethods)[ project.accepts ]}
             </span>
           </div>
         </div>

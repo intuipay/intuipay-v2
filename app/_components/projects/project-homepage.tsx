@@ -61,7 +61,8 @@ export default function ProjectHomepage({
 
   const [activeFilters, setActiveFilters] = useState<ProjectFilter>(() => ({
     category: initialCategory ? parseInt(initialCategory) as ProjectCategories : ProjectCategories.All,
-    progress: initialProgress ? parseInt(initialProgress) : 0,
+    progressMin: initialProgress ? parseInt(initialProgress) : 0,
+    progressMax: initialProgress ? parseInt(initialProgress) : 100,
     location: initialLocation,
     donationMethods: initialDonationMethods ? parseInt(initialDonationMethods) as ProjectDonationMethods : ProjectDonationMethods.All,
     projectType: initialProjectType ? parseInt(initialProjectType) as ProjectTypes : ProjectTypes.All,
@@ -89,10 +90,15 @@ export default function ProjectHomepage({
     } else {
       params.delete('category');
     }
-    if (activeFilters.progress) {
-      params.set('progress', activeFilters.progress.toString());
+    if (activeFilters.progressMin) {
+      params.set('progress_min', activeFilters.progressMin.toString());
     } else {
-      params.delete('progress');
+      params.delete('progress_min');
+    }
+    if (activeFilters.progressMax) {
+      params.set('progress_max', activeFilters.progressMax.toString());
+    } else {
+      params.delete('progress_max');
     }
     if (activeFilters.location) {
       params.set('location', activeFilters.location);

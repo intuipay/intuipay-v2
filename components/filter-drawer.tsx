@@ -12,6 +12,8 @@ import { ScrollArea } from '@/components/ui/scroll-area'
 import { FlaskConical, Smile, MapPin, Coins, Landmark, X } from 'lucide-react'
 import { ProjectCategories, ProjectDonationMethods, ProjectTypes } from '@/data'
 import { ProjectFilter } from '@/types'
+import { useCallback } from 'react'
+import { debounce } from 'lodash-es'
 
 type FilterDrawerProps = {
   isOpen: boolean
@@ -23,13 +25,21 @@ type FilterDrawerProps = {
 export function FilterDrawer({ isOpen, onOpenChange, filter, setFilter }: FilterDrawerProps) {
   function doClearAll() {
     setFilter({
-    category: ProjectCategories.All,
-    progress: 0,
-    location: '',
-    donationMethods: ProjectDonationMethods.All,
-    projectType: ProjectTypes.All,
-    })
+      category: ProjectCategories.All,
+      progressMin: 0,
+      progressMax: 100,
+      location: '',
+      donationMethods: ProjectDonationMethods.All,
+      projectType: ProjectTypes.All,
+    });
   }
+  // use debounce to set progress
+  const debouncedSetProgress = useCallback(
+    debounce((value: number[]) => {
+      setFilter({ ...filter, progressMin: value[ 0 ], progressMax: value[ 1 ] });
+    }, 1500),
+    [filter, setFilter]
+  );
 
   return (
     <Sheet open={isOpen} onOpenChange={onOpenChange}>
@@ -91,14 +101,19 @@ export function FilterDrawer({ isOpen, onOpenChange, filter, setFilter }: Filter
 
             {/* Progress Section */}
             <FilterSection
-              className="border-b py-5" icon={Smile} title="Progress">
+              className="border-b py-5"
+              icon={Smile}
+              title="Progress"
+            >
               <div className="mt-2">
                 <Slider
-                  value={[filter.progress]}
+                  thumbs={2}
+                  value={[filter.progressMin, filter.progressMax]}
                   max={100}
                   step={1}
                   className="[&>span:first-child]:h-1 [&>span:first-child]:bg-action-blue [&>span:first-child_span]:bg-action-blue [&>span:first-child_span]:border-action-blue [&>span:first-child_span]:ring-offset-background [&>span:first-child_span]:focus-visible:ring-action-blue/50"
-                  onValueChange={(value) => setFilter({ ...filter, progress: value[ 0 ] })}
+                  minStepsBetweenThumbs={1}
+                  onValueChange={(value) => debouncedSetProgress(value)}
                 />
               </div>
             </FilterSection>
