@@ -100,7 +100,7 @@ export type ProjectFilter = {
   location: string;
   donationMethods: ProjectDonationMethods | string;
   projectType: ProjectTypes | string;
-  excludes?: number;
+  excludes?: string[];
 }
 
 export type Donation = {

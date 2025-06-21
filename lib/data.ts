@@ -1,7 +1,6 @@
 import { cache } from 'react';
 import { fetchTidb } from '@/services/fetch-tidb';
 import { Donation, Donations, ProjectFilter, ProjectInfo, Update, Updates } from '@/types';
-import { ProjectCategories, ProjectDonationMethods, ProjectTypes } from '@/data';
 
 type CountResult = {
   count: number;
