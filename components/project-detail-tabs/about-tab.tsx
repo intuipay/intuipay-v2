@@ -115,7 +115,10 @@ export function AboutTab({ project }: AboutTabProps) {
       {project.banners.length > 0 && (
         Array.isArray(project.banners) && project.banners.map((banner: string) => {
           return (
-            <div className="relative aspect-video rounded-lg overflow-hidden shadow-md">
+            <div
+              className="relative aspect-video rounded-lg overflow-hidden shadow-md"
+              key={banner}
+            >
               <Image
                 src={banner}
                 alt={`About ${org_name}`}

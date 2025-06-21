@@ -7,8 +7,10 @@ import { cn } from '@/lib/utils'
 
 const Slider = React.forwardRef<
   React.ElementRef<typeof SliderPrimitive.Root>,
-  React.ComponentPropsWithoutRef<typeof SliderPrimitive.Root>
->(({ className, ...props }, ref) => {
+  React.ComponentPropsWithoutRef<typeof SliderPrimitive.Root> & {
+    thumbs?: number;
+  }
+>(({ className, thumbs = 1, ...props }, ref) => {
   return (
     <SliderPrimitive.Root
       ref={ref}
@@ -21,12 +23,17 @@ const Slider = React.forwardRef<
       <SliderPrimitive.Track className="relative h-2 w-full grow overflow-hidden rounded-full bg-secondary">
         <SliderPrimitive.Range className="absolute h-full bg-primary" />
       </SliderPrimitive.Track>
-      <SliderPrimitive.Thumb
-        className="block h-5 w-5 rounded-full border-2 border-primary bg-background ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
-      />
-      <div className="absolute left-1" style={{ transform: `translate(${Number(props.value) * 3.5}px, -20px)` }}>
-        {props.value}%
-      </div>
+      {Array.from({ length: thumbs }).map((_, index) => (
+        <SliderPrimitive.Thumb
+          key={index}
+          className="block h-5 w-5 rounded-full border-2 border-primary bg-background ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
+        />
+      ))}
+      {Array.from({ length: thumbs }).map((_, index) => (
+        <div className="absolute left-1" style={{ transform: `translate(${Number(props.value?.[ index ] ?? 0) * 3.5}px, -20px)` }} key={index}>
+          {props.value?.[ index ] ?? 0}%
+        </div>
+      ))}
     </SliderPrimitive.Root>
   )
 })

@@ -147,7 +147,8 @@ export type ProjectInfo = {
 
 export type ProjectFilter = {
   category: ProjectCategories;
-  progress: number;
+  progressMin: number;
+  progressMax: number;
   location: string;
   donationMethods: ProjectDonationMethods | string;
   projectType: ProjectTypes | string;
