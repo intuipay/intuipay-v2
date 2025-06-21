@@ -8,14 +8,8 @@ import { Badge } from '@/components/ui/badge'
 import { Progress } from '@/components/ui/progress'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import {
-  PlayCircle,
-  Mail,
-  Link2,
-  Github,
-  ShieldCheck,
-  ExternalLink,
-} from 'lucide-react'
+import { Envelope, Link as LinkIcon, GithubLogo, PlayCircle } from "@phosphor-icons/react";
+
 
 import { CampaignTab } from '@/components/project-detail-tabs/campaign-tab'
 import { AboutTab } from '@/components/project-detail-tabs/about-tab'
@@ -75,7 +69,7 @@ export default function ProjectDetailClientLayout({ project, similarProjects }: 
             />
             {isMovie && (
               <div className="absolute inset-0 flex items-center justify-center bg-black/30">
-                <PlayCircle className="w-16 h-16 text-white/80 hover:text-white cursor-pointer" />
+                <PlayCircle size={64} className="w-16 h-16 text-white/80 hover:text-white cursor-pointer" />
               </div>
             )}
           </div>
@@ -138,7 +132,7 @@ export default function ProjectDetailClientLayout({ project, similarProjects }: 
                 href={`mailto:${project.email}`}
                 className="flex items-center gap-1 text-neutral-darkgray hover:text-action-blue"
               >
-                <Mail className="w-4 h-4" /> <span className="text-primary">{project.email}</span>
+                <Envelope size={16} /> <span className="text-primary">{project.email}</span>
               </Link>
               <Link
                 href={project.website || ''}
@@ -146,7 +140,7 @@ export default function ProjectDetailClientLayout({ project, similarProjects }: 
                 rel="noopener noreferrer"
                 className="flex items-center gap-1 text-neutral-darkgray hover:text-action-blue"
               >
-                <Link2 className="w-4 h-4" /> <span className="text-primary">{project.website.replace(/^https?:\/\//, '')}</span>
+                <LinkIcon size={16} /> <span className="text-primary">{project.website.replace(/^https?:\/\//, '')}</span>
               </Link>
               {project.github && <Link
                 href={`https://github.com/${project.github}`}
@@ -154,8 +148,7 @@ export default function ProjectDetailClientLayout({ project, similarProjects }: 
                 rel="noopener noreferrer"
                 className="flex items-center gap-1 text-neutral-darkgray hover:text-action-blue"
               >
-                <Github className="w-4 h-4" /> <span className="text-primary">{project.github}</span>
-                {project.github && <ExternalLink className="w-3 h-3 ml-1" />}
+                <GithubLogo className="w-4 h-4" /> <span className="text-primary">{project.github}</span>
               </Link>}
               {
                 socialLinks && (

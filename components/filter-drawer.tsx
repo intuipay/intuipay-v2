@@ -9,7 +9,7 @@ import { Label } from '@/components/ui/label'
 import { Slider } from '@/components/ui/slider'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { ScrollArea } from '@/components/ui/scroll-area'
-import { FlaskConical, Smile, MapPin, Coins, Landmark, X } from 'lucide-react'
+import { X, Flask, Smiley, MapPin, Coin, Bank } from "@phosphor-icons/react";
 import { ProjectCategories, ProjectDonationMethods, ProjectTypes } from '@/data'
 import { ProjectFilter } from '@/types'
 import { useCallback } from 'react'
@@ -77,7 +77,7 @@ export function FilterDrawer({ isOpen, onOpenChange, filter, setFilter }: Filter
             {/* Category Section */}
             <FilterSection
               className="border-b py-5"
-              icon={FlaskConical}
+              icon={Flask}
               title="Category"
             >
               <RadioGroup
@@ -101,10 +101,7 @@ export function FilterDrawer({ isOpen, onOpenChange, filter, setFilter }: Filter
 
             {/* Progress Section */}
             <FilterSection
-              className="border-b py-5"
-              icon={Smile}
-              title="Progress"
-            >
+              className="border-b py-5" icon={Smiley} title="Progress">
               <div className="mt-2">
                 <Slider
                   thumbs={2}
@@ -170,7 +167,7 @@ export function FilterDrawer({ isOpen, onOpenChange, filter, setFilter }: Filter
             {/* Donation Methods Section */}
             <FilterSection
               className="border-b py-5"
-              icon={Coins}
+              icon={Coin}
               title="Donation Methods"
             >
               <RadioGroup
@@ -195,7 +192,7 @@ export function FilterDrawer({ isOpen, onOpenChange, filter, setFilter }: Filter
             {/* Project Type Section */}
             <FilterSection
               className="border-b py-5"
-              icon={Landmark}
+              icon={Bank}
               title="Project Type"
             >
               <RadioGroup

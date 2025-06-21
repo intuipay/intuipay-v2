@@ -4,7 +4,17 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { marked } from 'marked'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Mail, MapPin, Link2, ExternalLink, Linkedin, Instagram, Twitter, Youtube, Facebook } from 'lucide-react'
+import {
+  Envelope,
+  MapPin,
+  Link as LinkIcon,
+  ArrowSquareOut,
+  LinkedinLogo,
+  InstagramLogo,
+  TwitterLogo,
+  YoutubeLogo,
+  FacebookLogo
+} from "@phosphor-icons/react";
 import type { ProjectDataType } from '@/app/project/[slug]/project-data'
 
 type AboutTabProps = {
@@ -39,10 +49,10 @@ export function AboutTab({ project }: AboutTabProps) {
           href={`mailto:${email}`}
           className="flex items-center text-neutral-darkgray hover:text-action-blue"
         >
-          <Mail className="w-4 h-4 mr-2" /> Contact Us
+          <Envelope size={16} className="mr-2" /> Contact Us
         </Link>
         <p className="flex items-center text-neutral-darkgray">
-          <MapPin className="w-4 h-4 mr-2" /> {org_location}
+          <MapPin  className="mr-2" /> {org_location}
         </p>
         <Link
           href={org_website}
@@ -50,7 +60,7 @@ export function AboutTab({ project }: AboutTabProps) {
           rel="noopener noreferrer"
           className="flex items-center text-neutral-darkgray hover:text-action-blue"
         >
-          <Link2 className="w-4 h-4 mr-2" /> {org_website} <ExternalLink className="w-3 h-3 ml-1" />
+          <LinkIcon size={16} className="mr-2" /> {org_website} <ArrowSquareOut size={12} className="ml-1" />
         </Link>
       </div>
 
@@ -63,7 +73,7 @@ export function AboutTab({ project }: AboutTabProps) {
             aria-label="LinkedIn"
             className="text-neutral-darkgray hover:text-action-blue"
           >
-            <Linkedin className="w-5 h-5" />
+            <LinkedinLogo size={20} />
           </Link>
         )}
         {(
@@ -74,7 +84,7 @@ export function AboutTab({ project }: AboutTabProps) {
             aria-label="Instagram"
             className="text-neutral-darkgray hover:text-action-blue"
           >
-            <Instagram className="w-5 h-5" />
+            <InstagramLogo size={20} />
           </Link>
         )}
         {(
@@ -85,7 +95,7 @@ export function AboutTab({ project }: AboutTabProps) {
             aria-label="Twitter"
             className="text-neutral-darkgray hover:text-action-blue"
           >
-            <Twitter className="w-5 h-5" />
+            <TwitterLogo size={20} />
           </Link>
         )}
         {(
@@ -96,7 +106,7 @@ export function AboutTab({ project }: AboutTabProps) {
             aria-label="YouTube"
             className="text-neutral-darkgray hover:text-action-blue"
           >
-            <Youtube className="w-5 h-5" />
+            <YoutubeLogo size={20} />
           </Link>
         )}
         {(
@@ -107,7 +117,7 @@ export function AboutTab({ project }: AboutTabProps) {
             aria-label="Facebook"
             className="text-neutral-darkgray hover:text-action-blue"
           >
-            <Facebook className="w-5 h-5" />
+            <FacebookLogo size={20} />
           </Link>
         )}
       </div>
