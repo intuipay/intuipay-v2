@@ -52,7 +52,7 @@ export function AboutTab({ project }: AboutTabProps) {
           <Envelope size={16} className="mr-2" /> Contact Us
         </Link>
         <p className="flex items-center text-neutral-darkgray">
-          <MapPin  className="mr-2" /> {org_location}
+          <MapPin size={16} className="mr-2" /> {org_location}
         </p>
         <Link
           href={org_website}
