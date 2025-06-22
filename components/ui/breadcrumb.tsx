@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { Slot } from '@radix-ui/react-slot'
-import { CaretRight, DotsThree } from "@phosphor-icons/react/dist/ssr";
+import { CaretRightIcon, DotsThreeIcon } from '@phosphor-icons/react';
 
 import { cn } from '@/lib/utils'
 
@@ -83,7 +83,7 @@ const BreadcrumbSeparator = ({
     className={cn('[&>svg]:w-3.5 [&>svg]:h-3.5', className)}
     {...props}
   >
-    {children ?? <CaretRight />}
+    {children ?? <CaretRightIcon />}
   </li>
 )
 BreadcrumbSeparator.displayName = 'BreadcrumbSeparator'
@@ -98,7 +98,7 @@ const BreadcrumbEllipsis = ({
     className={cn('flex h-9 w-9 items-center justify-center', className)}
     {...props}
   >
-    <DotsThree size={16} />
+    <DotsThreeIcon size={16} />
     <span className="sr-only">More</span>
   </span>
 )

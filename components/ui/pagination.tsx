@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { CaretLeft, CaretRight, ArrowsHorizontal } from "@phosphor-icons/react/dist/ssr";
+import { CaretLeftIcon, CaretRightIcon, ArrowsHorizontalIcon } from '@phosphor-icons/react';
 
 import { cn } from '@/lib/utils'
 import { ButtonProps, buttonVariants } from '@/components/ui/button'
@@ -69,7 +69,7 @@ const PaginationPrevious = ({
     className={cn('gap-1 pl-2.5', className)}
     {...props}
   >
-    <CaretLeft size={16} />
+    <CaretLeftIcon size={16} />
     <span>Previous</span>
   </PaginationLink>
 )
@@ -86,7 +86,7 @@ const PaginationNext = ({
     {...props}
   >
     <span>Next</span>
-    <CaretRight size={16} />
+    <CaretRightIcon size={16} />
   </PaginationLink>
 )
 PaginationNext.displayName = 'PaginationNext'
@@ -100,7 +100,7 @@ const PaginationEllipsis = ({
     className={cn('flex h-9 w-9 items-center justify-center', className)}
     {...props}
   >
-    <ArrowsHorizontal size={16} />
+    <ArrowsHorizontalIcon size={16} />
     <span className="sr-only">More pages</span>
   </span>
 )

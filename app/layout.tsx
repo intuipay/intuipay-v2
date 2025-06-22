@@ -1,9 +1,13 @@
 import type React from 'react'
 import type { Metadata, Viewport } from 'next'
 import { Inter } from 'next/font/google'
+import { cn } from '@/lib/utils'
 import './globals.css'
 
-const inter = Inter({ subsets: ['latin'] })
+const inter = Inter({
+  subsets: ['latin'],
+  variable: '--font-sans',
+})
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://intuipay.xyz'),
@@ -69,7 +73,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={cn(
+        'min-h-screen bg-background font-sans antialiased',
+        inter.variable
+      )}>{children}</body>
     </html>
   )
 }

@@ -1,6 +1,7 @@
 import type { Config } from "tailwindcss"
 import daisyui from "daisyui";
 import typography from "@tailwindcss/typography";
+import { fontFamily } from "tailwindcss/defaultTheme";
 
 const config: Config = {
   darkMode: ["class"],
@@ -12,6 +13,9 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        sans: ["var(--font-sans)", ...fontFamily.sans],
+      },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic": "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
@@ -126,6 +130,7 @@ const config: Config = {
         53: '13.25rem',
         '81.5': '20.375rem',
         101: '25.25rem',
+        107: '26.75rem',
         '50dvw': '50dvw',
       },
     },
