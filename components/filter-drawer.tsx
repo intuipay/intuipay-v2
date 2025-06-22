@@ -11,9 +11,11 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { CircleNotchIcon, XIcon, FlaskIcon, MapPinIcon, CoinIcon, BankIcon } from '@phosphor-icons/react';
 import { ProjectCategories, ProjectDonationMethods, ProjectTypes } from '@/data'
+import { Country, ICountry, State, IState } from 'country-state-city';
+import { useEffect, useState, useCallback } from 'react'
 import { ProjectFilter } from '@/types'
-import { useCallback } from 'react'
 import { debounce } from 'lodash-es'
+import { Input } from '@/components/ui/input'
 
 type FilterDrawerProps = {
   isOpen: boolean
@@ -23,23 +25,79 @@ type FilterDrawerProps = {
 }
 
 export function FilterDrawer({ isOpen, onOpenChange, filter, setFilter }: FilterDrawerProps) {
+  const [countries, setCountries] = useState<Partial<ICountry>[]>([]);
+  const [states, setStates] = useState<Partial<IState>[]>([]);
+
+  const [country, setCountry] = useState<string>('');
+  const [selectedState, setSelectedState] = useState<string>('');
+  const [city, setCity] = useState<string>('');
+
   function doClearAll() {
+    setCountry('');
+    setSelectedState('');
+    setCity('');
     setFilter({
       category: ProjectCategories.All,
-      progressMin: 0,
-      progressMax: 100,
       location: '',
       donationMethods: ProjectDonationMethods.All,
       projectType: ProjectTypes.All,
+      progressMin: 0,
+      progressMax: 100,
     });
   }
-  // use debounce to set progress
-  const debouncedSetProgress = useCallback(
-    debounce((value: number[]) => {
-      setFilter({ ...filter, progressMin: value[ 0 ], progressMax: value[ 1 ] });
+  function handleCountryChange(country: string) {
+    setCountry(country);
+    setSelectedState('');
+    setCity('');
+    updateFilter({
+      ...filter,
+      location: getLocation({ newCountry: country }),
+    });
+    const countryCode = countries.find(c => c.name === country)?.isoCode;
+    const filteredStates = State.getStatesOfCountry(countryCode);
+    setStates(filteredStates);
+  }
+  function handleProgressChange(value: number[]) {
+    updateFilter({ ...filter, progressMin: value[ 0 ], progressMax: value[ 1 ] });
+  }
+  function handleStateChange(state: string) {
+    setSelectedState(state);
+    updateFilter({
+      ...filter,
+      location: getLocation({ newState: state }),
+    });
+  }
+  function handleCityChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const city = e.target.value;
+    setCity(city);
+    updateFilter({
+      ...filter,
+      location: getLocation({ newCity: city }),
+    });
+  }
+
+  function getLocation({
+    newCountry = country,
+    newState = selectedState,
+    newCity = city,
+  }: {
+    newCountry?: string;
+    newState?: string;
+    newCity?: string;
+  }) {
+    return `${newCountry}${newState ? '__' + newState : ''}${newCity ? '__' + newCity : ''}%`
+  }
+  const updateFilter = useCallback(
+    debounce((newFilter: Partial<ProjectFilter>) => {
+      setFilter(prevFilter => ({ ...prevFilter, ...newFilter }));
     }, 1500),
-    [filter, setFilter]
+    [setFilter]
   );
+
+  useEffect(() => {
+    const countryList = Country.getAllCountries();
+    setCountries(countryList);
+  }, []);
 
   return (
     <Sheet open={isOpen} onOpenChange={onOpenChange}>
@@ -90,7 +148,7 @@ export function FilterDrawer({ isOpen, onOpenChange, filter, setFilter }: Filter
                 !isNaN(Number(id)) && (
                   <div key={id} className="flex items-center space-x-2">
                     <RadioGroupItem value={id.toString()} id={`category-${id}`} />
-                    <Label htmlFor={`category-${id}`} className="font-normal">
+                    <Label htmlFor={`category-${id}`} className="font-medium">
                       {label}
                     </Label>
                   </div>
@@ -113,7 +171,7 @@ export function FilterDrawer({ isOpen, onOpenChange, filter, setFilter }: Filter
                 step={1}
                 className="[&>span:first-child]:h-1 [&>span:first-child]:bg-action-blue [&>span:first-child_span]:bg-action-blue [&>span:first-child_span]:border-action-blue [&>span:first-child_span]:ring-offset-background [&>span:first-child_span]:focus-visible:ring-action-blue/50"
                 minStepsBetweenThumbs={1}
-                onValueChange={(value) => debouncedSetProgress(value)}
+                onValueChange={handleProgressChange}
               />
             </div>
           </FilterSection>
@@ -126,44 +184,43 @@ export function FilterDrawer({ isOpen, onOpenChange, filter, setFilter }: Filter
           >
             <div className="space-y-4">
               <Select
-                value={filter.location}
-                onValueChange={(value) => setFilter({ ...filter, location: value })}
+                value={country}
+                onValueChange={handleCountryChange}
               >
                 <SelectTrigger className="w-full">
                   <SelectValue placeholder="By Country" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="country-all">All Countries</SelectItem>
-                  <SelectItem value="usa">United States</SelectItem>
-                  <SelectItem value="canada">Canada</SelectItem>
+                  {
+                    countries.map(country => (
+                      <SelectItem key={country.name!} value={country.name!}>{country.name}</SelectItem>
+                    ))
+                  }
                 </SelectContent>
               </Select>
               <Select
-                defaultValue="state-all"
-                disabled
-                value={filter.location}
-                onValueChange={(value) => setFilter({ ...filter, location: value })}
+                disabled={!country}
+                value={selectedState}
+                onValueChange={handleStateChange}
               >
                 <SelectTrigger className="w-full">
                   <SelectValue placeholder="By State" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="state-all">All States</SelectItem>
+                  {
+                    states.map(state => (
+                      <SelectItem key={`${state.name!}-${state.isoCode}`} value={state.name!}>{state.name}</SelectItem>
+                    ))
+                  }
                 </SelectContent>
               </Select>
-              <Select
-                defaultValue="city-all"
-                disabled
-                value={filter.location}
-                onValueChange={(value) => setFilter({ ...filter, location: value })}
-              >
-                <SelectTrigger className="w-full">
-                  <SelectValue placeholder="By City" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="city-all">All Cities</SelectItem>
-                </SelectContent>
-              </Select>
+              <Input
+                className="h-10 border"
+                type="text"
+                placeholder="City"
+                value={city}
+                onChange={handleCityChange}
+              />
             </div>
           </FilterSection>
 
@@ -183,7 +240,7 @@ export function FilterDrawer({ isOpen, onOpenChange, filter, setFilter }: Filter
                 !isNaN(Number(id)) && (
                   <div key={id} className="flex items-center space-x-2">
                     <RadioGroupItem value={id.toString()} id={`donation-method-${id}`} />
-                    <Label htmlFor={`donation-method-${id}`} className="font-normal">
+                    <Label htmlFor={`donation-method-${id}`} className="font-medium">
                       {label}
                     </Label>
                   </div>
@@ -208,7 +265,7 @@ export function FilterDrawer({ isOpen, onOpenChange, filter, setFilter }: Filter
                 !isNaN(Number(id)) && (
                   <div key={id} className="flex items-center space-x-2">
                     <RadioGroupItem value={id.toString()} id={`project-type-${id}`} />
-                    <Label htmlFor={`project-type-${id}`} className="font-normal">
+                    <Label htmlFor={`project-type-${id}`} className="font-medium">
                       {label}
                     </Label>
                   </div>
