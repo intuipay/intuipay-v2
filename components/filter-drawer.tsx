@@ -53,7 +53,7 @@ export function FilterDrawer({ isOpen, onOpenChange, filter, setFilter }: Filter
     setSelectedState('');
     updateFilter({
       ...filter,
-      location: `${country}`
+      location: `${country}%`
     });
     const countryCode = countries.find(c => c.name === country)?.isoCode;
     const filteredStates = State.getStatesOfCountry(countryCode);
@@ -66,13 +66,19 @@ export function FilterDrawer({ isOpen, onOpenChange, filter, setFilter }: Filter
 
   const handleStateChange = (state: string) => {
     setSelectedState(state);
-    updateFilter({ ...filter, location: `${country}${state ? '-' + state : ''}${city ? '-' + city : ''}` });
+    updateFilter({
+      ...filter,
+      location: `${country}${state ? '-' + state : ''}${city ? '-' + city : ''}%`
+    });
   }
 
   const handleCityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const city = e.target.value;
     setCity(city);
-    updateFilter({ ...filter, location: `${country}${selectedState ? '-' + selectedState : ''}${selectedState && city ? '-' + city : ''}` });
+    updateFilter({
+      ...filter,
+      location: `${country}${selectedState ? '-' + selectedState : ''}${selectedState && city ? '-' + city : ''}%`,
+    });
   }
 
   const updateFilter = useCallback(
