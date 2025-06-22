@@ -1,6 +1,6 @@
 {
   "name": "intuipay-waitlist",
-  "version": "0.3.0-marketplace.5",
+  "version": "0.3.0-marketplace.6",
   "private": true,
   "scripts": {
     "dev": "next dev",

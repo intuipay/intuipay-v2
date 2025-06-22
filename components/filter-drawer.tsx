@@ -35,7 +35,6 @@ export function FilterDrawer({ isOpen, onOpenChange, filter, setFilter }: Filter
   function doClearAll() {
     setFilter({
       category: ProjectCategories.All,
-      progress: 0,
       location: '',
       donationMethods: ProjectDonationMethods.All,
       projectType: ProjectTypes.All,
@@ -43,13 +42,6 @@ export function FilterDrawer({ isOpen, onOpenChange, filter, setFilter }: Filter
       progressMax: 100,
     });
   }
-  // use debounce to set progress
-  const debouncedSetProgress = useCallback(
-    debounce((value: number[]) => {
-      setFilter({ ...filter, progressMin: value[ 0 ], progressMax: value[ 1 ] });
-    }, 1500),
-    [filter, setFilter]
-  );
 
   useEffect(() => {
     const countryList = Country.getAllCountries();
@@ -59,7 +51,7 @@ export function FilterDrawer({ isOpen, onOpenChange, filter, setFilter }: Filter
   const handleCountryChange = (country: string) => {
     setCountry(country);
     setSelectedState('');
-    setFilter({
+    updateFilter({
       ...filter,
       location: `${country}`
     });
@@ -68,17 +60,27 @@ export function FilterDrawer({ isOpen, onOpenChange, filter, setFilter }: Filter
     setStates(filteredStates);
   }
 
+  function handleProgressChange(value: number[]) {
+    updateFilter({ ...filter, progressMin: value[ 0 ], progressMax: value[ 1 ] });
+  }
+
   const handleStateChange = (state: string) => {
     setSelectedState(state);
-    setFilter({ ...filter, location: `${country}${state ? '-' + state : ''}${city ? '-' + city : ''}` });
+    updateFilter({ ...filter, location: `${country}${state ? '-' + state : ''}${city ? '-' + city : ''}` });
   }
 
   const handleCityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(111)
     const city = e.target.value;
     setCity(city);
-    setFilter({ ...filter, location: `${country}${selectedState ? '-' + selectedState : ''}${selectedState && city ? '-' + city : ''}` });
+    updateFilter({ ...filter, location: `${country}${selectedState ? '-' + selectedState : ''}${selectedState && city ? '-' + city : ''}` });
   }
+
+  const updateFilter = useCallback(
+    debounce((filter: ProjectFilter) => {
+      setFilter(filter);
+    }, 1500),
+    [setFilter]
+  );
 
   return (
     <Sheet open={isOpen} onOpenChange={onOpenChange}>
@@ -152,7 +154,7 @@ export function FilterDrawer({ isOpen, onOpenChange, filter, setFilter }: Filter
                 step={1}
                 className="[&>span:first-child]:h-1 [&>span:first-child]:bg-action-blue [&>span:first-child_span]:bg-action-blue [&>span:first-child_span]:border-action-blue [&>span:first-child_span]:ring-offset-background [&>span:first-child_span]:focus-visible:ring-action-blue/50"
                 minStepsBetweenThumbs={1}
-                onValueChange={(value) => debouncedSetProgress(value)}
+                onValueChange={handleProgressChange}
               />
             </div>
           </FilterSection>
