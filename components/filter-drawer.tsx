@@ -88,8 +88,8 @@ export function FilterDrawer({ isOpen, onOpenChange, filter, setFilter }: Filter
     return `${newCountry}${newState ? '__' + newState : ''}${newCity ? '__' + newCity : ''}%`
   }
   const updateFilter = useCallback(
-    debounce((filter: ProjectFilter) => {
-      setFilter(filter);
+    debounce((newFilter: Partial<ProjectFilter>) => {
+      setFilter(prevFilter => ({ ...prevFilter, ...newFilter }));
     }, 1500),
     [setFilter]
   );
