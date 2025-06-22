@@ -11,9 +11,11 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { CircleNotchIcon, XIcon, FlaskIcon, MapPinIcon, CoinIcon, BankIcon } from '@phosphor-icons/react';
 import { ProjectCategories, ProjectDonationMethods, ProjectTypes } from '@/data'
+import { Country, ICountry, State, IState } from 'country-state-city';
+import { useEffect, useState, useCallback } from 'react'
 import { ProjectFilter } from '@/types'
-import { useCallback } from 'react'
 import { debounce } from 'lodash-es'
+import { Input } from '@/components/ui/input'
 
 type FilterDrawerProps = {
   isOpen: boolean
@@ -23,14 +25,22 @@ type FilterDrawerProps = {
 }
 
 export function FilterDrawer({ isOpen, onOpenChange, filter, setFilter }: FilterDrawerProps) {
+  const [countries, setCountries] = useState<Partial<ICountry>[]>([]);
+  const [states, setStates] = useState<Partial<IState>[]>([]);
+
+  const [country, setCountry] = useState<string>('');
+  const [selectedState, setSelectedState] = useState<string>('');
+  const [city, setCity] = useState<string>('');
+
   function doClearAll() {
     setFilter({
       category: ProjectCategories.All,
-      progressMin: 0,
-      progressMax: 100,
+      progress: 0,
       location: '',
       donationMethods: ProjectDonationMethods.All,
       projectType: ProjectTypes.All,
+      progressMin: 0,
+      progressMax: 100,
     });
   }
   // use debounce to set progress
@@ -40,6 +50,35 @@ export function FilterDrawer({ isOpen, onOpenChange, filter, setFilter }: Filter
     }, 1500),
     [filter, setFilter]
   );
+
+  useEffect(() => {
+    const countryList = Country.getAllCountries();
+    setCountries(countryList);
+  }, []);
+
+  const handleCountryChange = (country: string) => {
+    setCountry(country);
+    setSelectedState('');
+    setFilter({
+      ...filter,
+      location: `${country}`
+    });
+    const countryCode = countries.find(c => c.name === country)?.isoCode;
+    const filteredStates = State.getStatesOfCountry(countryCode);
+    setStates(filteredStates);
+  }
+
+  const handleStateChange = (state: string) => {
+    setSelectedState(state);
+    setFilter({ ...filter, location: `${country}${state ? '-' + state : ''}${city ? '-' + city : ''}` });
+  }
+
+  const handleCityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    console.log(111)
+    const city = e.target.value;
+    setCity(city);
+    setFilter({ ...filter, location: `${country}${selectedState ? '-' + selectedState : ''}${selectedState && city ? '-' + city : ''}` });
+  }
 
   return (
     <Sheet open={isOpen} onOpenChange={onOpenChange}>
@@ -126,44 +165,44 @@ export function FilterDrawer({ isOpen, onOpenChange, filter, setFilter }: Filter
           >
             <div className="space-y-4">
               <Select
-                value={filter.location}
-                onValueChange={(value) => setFilter({ ...filter, location: value })}
+                value={country}
+                onValueChange={handleCountryChange}
               >
                 <SelectTrigger className="w-full">
                   <SelectValue placeholder="By Country" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="country-all">All Countries</SelectItem>
-                  <SelectItem value="usa">United States</SelectItem>
-                  <SelectItem value="canada">Canada</SelectItem>
+                  {
+                    countries.map(country => (
+                      <SelectItem key={country.name!} value={country.name!}>{country.name}</SelectItem>
+                    ))
+                  }
                 </SelectContent>
               </Select>
               <Select
-                defaultValue="state-all"
-                disabled
-                value={filter.location}
-                onValueChange={(value) => setFilter({ ...filter, location: value })}
+                disabled={!country}
+                value={selectedState}
+                onValueChange={handleStateChange}
               >
                 <SelectTrigger className="w-full">
                   <SelectValue placeholder="By State" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="state-all">All States</SelectItem>
+                  {
+                    states.map((state, index) => (
+                      <SelectItem key={state.name! + state.isoCode + index} value={state.name!}>{state.name}</SelectItem>
+                    ))
+                  }
                 </SelectContent>
               </Select>
-              <Select
-                defaultValue="city-all"
-                disabled
-                value={filter.location}
-                onValueChange={(value) => setFilter({ ...filter, location: value })}
-              >
-                <SelectTrigger className="w-full">
-                  <SelectValue placeholder="By City" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="city-all">All Cities</SelectItem>
-                </SelectContent>
-              </Select>
+
+              <Input
+                className="h-10"
+                type="text"
+                placeholder="City"
+                value={city}
+                onChange={handleCityChange}
+              />
             </div>
           </FilterSection>
 
