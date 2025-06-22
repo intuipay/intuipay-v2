@@ -2,7 +2,7 @@
 
 import { Combobox, ComboboxButton, ComboboxInput, ComboboxOption, ComboboxOptions } from '@headlessui/react';
 import { useEffect, useMemo, useState } from 'react';
-import { ChevronDownIcon, ChevronUpIcon, CircleXIcon } from 'lucide-react';
+import { CaretDown, CaretUp, XCircle } from '@phosphor-icons/react';
 import { clsx } from 'clsx';
 import Image from 'next/image';
 import { DropdownItemProps } from '@/types';
@@ -100,8 +100,8 @@ export default function MyCombobox({
         >
           {({ open }) => (
             open
-              ? <ChevronUpIcon className="size-4 text-gray-400" />
-              : <ChevronDownIcon className="size-4 text-gray-400" />
+              ? <CaretUp size={16} className="text-gray-400" />
+              : <CaretDown size={16} className="text-gray-400" />
           )}
         </ComboboxButton>
       </div>
@@ -159,7 +159,7 @@ export default function MyCombobox({
           </ComboboxOption>
         ))}
         {!filteredOptions.length && <div className="flex items-center gap-3 px-4 h-12">
-          <CircleXIcon className="size-5" />
+          <XCircle size={20} />
           No results found
         </div>}
       </ComboboxOptions>

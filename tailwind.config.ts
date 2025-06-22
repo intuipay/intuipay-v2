@@ -31,6 +31,9 @@ const config: Config = {
         ],
       },
       colors: {
+        icon: {
+          gray: '#A3A3A3',
+        },
         blue: {
           50: "#f0f7ff",
         },
