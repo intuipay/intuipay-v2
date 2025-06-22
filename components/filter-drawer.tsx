@@ -42,51 +42,58 @@ export function FilterDrawer({ isOpen, onOpenChange, filter, setFilter }: Filter
       progressMax: 100,
     });
   }
-
-  useEffect(() => {
-    const countryList = Country.getAllCountries();
-    setCountries(countryList);
-  }, []);
-
-  const handleCountryChange = (country: string) => {
+  function handleCountryChange(country: string) {
     setCountry(country);
     setSelectedState('');
     updateFilter({
       ...filter,
-      location: `${country}%`
+      location: getLocation({ newCountry: country }),
     });
     const countryCode = countries.find(c => c.name === country)?.isoCode;
     const filteredStates = State.getStatesOfCountry(countryCode);
     setStates(filteredStates);
   }
-
   function handleProgressChange(value: number[]) {
     updateFilter({ ...filter, progressMin: value[ 0 ], progressMax: value[ 1 ] });
   }
-
-  const handleStateChange = (state: string) => {
+  function handleStateChange(state: string) {
     setSelectedState(state);
     updateFilter({
       ...filter,
-      location: `${country}${state ? '-' + state : ''}${city ? '-' + city : ''}%`
+      location: getLocation({ newState: state }),
     });
   }
-
-  const handleCityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  function handleCityChange(e: React.ChangeEvent<HTMLInputElement>) {
     const city = e.target.value;
     setCity(city);
     updateFilter({
       ...filter,
-      location: `${country}${selectedState ? '-' + selectedState : ''}${selectedState && city ? '-' + city : ''}%`,
+      location: getLocation({ newCity: city }),
     });
   }
 
+  function getLocation({
+    newCountry = country,
+    newState = selectedState,
+    newCity = city,
+  }: {
+    newCountry?: string;
+    newState?: string;
+    newCity?: string;
+  }) {
+    return `${newCountry}${newState ? '__' + newState : ''}${newCity ? '__' + newCity : ''}%`
+  }
   const updateFilter = useCallback(
     debounce((filter: ProjectFilter) => {
       setFilter(filter);
     }, 1500),
     [setFilter]
   );
+
+  useEffect(() => {
+    const countryList = Country.getAllCountries();
+    setCountries(countryList);
+  }, []);
 
   return (
     <Sheet open={isOpen} onOpenChange={onOpenChange}>
