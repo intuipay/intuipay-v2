@@ -174,7 +174,7 @@ export default function ProjectDetailClientLayout({ project, similarProjects }: 
                 )
               }
             </div>
-            <Button size="lg" className="w-full bg-action-blue hover:bg-action-blue/90 text-base py-3">
+            <Button size="lg" className="w-full rounded-full bg-primary hover:bg-primary/90 text-base py-3">
               Donate Now
             </Button>
           </div>

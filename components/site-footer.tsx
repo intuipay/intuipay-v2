@@ -1,5 +1,4 @@
 import { FacebookLogo, TwitterLogo, InstagramLogo, LinkedinLogo } from "@phosphor-icons/react/dist/ssr";
-
 import Link from 'next/link'
 
 const socialLinks = [
@@ -26,7 +25,7 @@ export function SiteFooter() {
               aria-label={social.name}
               className="text-neutral-darkgray hover:text-intuipay-blue transition-colors"
             >
-              <social.icon className="h-5 w-5" />
+              <social.icon size={20} weight="fill" className="text-icon-gray" />
             </Link>
           ))}
         </div>
