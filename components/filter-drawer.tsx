@@ -208,8 +208,8 @@ export function FilterDrawer({ isOpen, onOpenChange, filter, setFilter }: Filter
                 </SelectTrigger>
                 <SelectContent>
                   {
-                    states.map((state, index) => (
-                      <SelectItem key={state.name! + state.isoCode + index} value={state.name!}>{state.name}</SelectItem>
+                    states.map(state => (
+                      <SelectItem key={`${state.name!}-${state.isoCode}`} value={state.name!}>{state.name}</SelectItem>
                     ))
                   }
                 </SelectContent>
