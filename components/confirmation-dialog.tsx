@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
-import { X, Copy, Check } from 'lucide-react'
+import { X, Copy, Check } from '@phosphor-icons/react';
 import { Dialog, DialogContent } from '@/components/ui/dialog'
 
 interface ConfirmationDialogProps {
@@ -56,7 +56,7 @@ export default function ConfirmationDialog({ open, onOpenChange, email }: Confir
             isMobile ? 'text-gray-700' : ''
           }`}
         >
-          <X className="size-6" />
+          <X size={24} />
           <span className="sr-only">Close</span>
         </button>
 
@@ -93,7 +93,7 @@ export default function ConfirmationDialog({ open, onOpenChange, email }: Confir
                 className="p-4 flex items-center justify-center"
                 aria-label="Copy referral link"
               >
-                {copied ? <Check className="h-4 w-4 text-green-500" /> : <Copy className="h-4 w-4 text-blue-500" />}
+                {copied ? <Check size={16} className="text-green-500" /> : <Copy size={16} className="text-blue-500" />}
               </button>
             </div>
           </div>

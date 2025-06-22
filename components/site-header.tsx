@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { IntuipayLogo } from '@/components/intuipay-logo'
 import { Button } from '@/components/ui/button'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
-import { Globe, ChevronDown, Menu, X } from 'lucide-react'
+import { Globe, CaretDown, List, X } from '@phosphor-icons/react';
 
 const navLinks = [
   { href: '#', label: 'Donate' },
@@ -40,9 +40,9 @@ export function SiteHeader() {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" size="sm">
-                <Globe className="mr-2 h-4 w-4" />
+                <Globe size={16} className="mr-2" />
                 EN
-                <ChevronDown className="ml-1 h-4 w-4" />
+                <CaretDown size={16} className="ml-1" />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
@@ -70,7 +70,7 @@ export function SiteHeader() {
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-label="Toggle menu"
           >
-            {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+            {mobileMenuOpen ? <X size={24} /> : <List size={24} />}
           </Button>
         </div>
       </div>
@@ -91,9 +91,9 @@ export function SiteHeader() {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" className="justify-start">
-                  <Globe className="mr-2 h-4 w-4" />
+                  <Globe size={16} className="mr-2" />
                   EN
-                  <ChevronDown className="ml-1 h-4 w-4" />
+                  <CaretDown size={16} className="ml-1" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent>

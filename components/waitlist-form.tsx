@@ -5,7 +5,7 @@ import React, { useRef } from 'react'
 import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { TriangleAlert } from 'lucide-react'
+import { Warning } from '@phosphor-icons/react';
 import ConfirmationDialog from './confirmation-dialog'
 import { APIResponse } from '@/types';
 import { clsx } from 'clsx';
@@ -132,7 +132,7 @@ export default function WaitlistForm({
           </div>
           {errors.name && (
             <p id="name-error" className="mt-3 text-red-500 text-sm flex items-center">
-              <TriangleAlert className="h-4 w-4 mr-2.5" />
+              <Warning size={16} className="mr-2.5" />
               {errors.name}
             </p>
           )}
@@ -156,7 +156,7 @@ export default function WaitlistForm({
           </div>
           {errors.email && (
             <p id="email-error" className="mt-3 text-red-500 text-sm flex items-center">
-              <TriangleAlert className="h-4 w-4 mr-2.5" />
+              <Warning size={16} className="mr-2.5" />
               {errors.email}
             </p>
           )}

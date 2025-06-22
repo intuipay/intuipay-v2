@@ -1,11 +1,11 @@
-import { Facebook, Twitter, Instagram, Linkedin } from 'lucide-react'
+import { FacebookLogo, TwitterLogo, InstagramLogo, LinkedinLogo } from '@phosphor-icons/react/dist/ssr';
 import Link from 'next/link'
 
 const socialLinks = [
-  { name: 'Facebook', icon: Facebook, href: '#' },
-  { name: 'Twitter', icon: Twitter, href: '#' },
-  { name: 'Instagram', icon: Instagram, href: '#' },
-  { name: 'LinkedIn', icon: Linkedin, href: '#' },
+  { name: 'Facebook', icon: FacebookLogo, href: '#' },
+  { name: 'Twitter', icon: TwitterLogo, href: '#' },
+  { name: 'Instagram', icon: InstagramLogo, href: '#' },
+  { name: 'LinkedIn', icon: LinkedinLogo, href: '#' },
 ]
 
 export function SiteFooter() {
@@ -25,7 +25,7 @@ export function SiteFooter() {
               aria-label={social.name}
               className="text-neutral-darkgray hover:text-intuipay-blue transition-colors"
             >
-              <social.icon className="h-5 w-5" />
+              <social.icon size={20} weight="fill" className="text-icon-gray" />
             </Link>
           ))}
         </div>

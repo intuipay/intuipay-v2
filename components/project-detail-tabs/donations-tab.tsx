@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
-import { Users } from 'lucide-react'
+import { Users } from '@phosphor-icons/react';
 import { Donation } from '@/types'
 
 type DonationsTabProps = {
@@ -72,7 +72,7 @@ export function DonationsTab({ projectId }: DonationsTabProps) {
               <div className="sm:col-span-3 flex items-center">
                 <Avatar className="h-9 w-9 mr-3">
                   <AvatarFallback>
-                    <Users className="w-4 h-4 text-neutral-darkgray" />
+                    <Users size={16} className="text-neutral-darkgray" />
                   </AvatarFallback>
                 </Avatar>
                 <div>

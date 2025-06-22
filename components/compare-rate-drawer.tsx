@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import Image from 'next/image'
-import { XIcon } from 'lucide-react';
+import { X as XIcon } from '@phosphor-icons/react';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 import { Button } from '@/components/ui/button'
 import useStore from '@/store';
@@ -33,7 +33,7 @@ export default function CompareRateDrawer() {
             variant="ghost"
             onClick={() => setOpen(false)}
           >
-            <XIcon className="size-6" />
+            <XIcon size={24} />
           </Button>
         </header>
         <div className="px-8 sm:px-12 mb-8">
