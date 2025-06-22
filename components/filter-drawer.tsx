@@ -148,7 +148,7 @@ export function FilterDrawer({ isOpen, onOpenChange, filter, setFilter }: Filter
                 !isNaN(Number(id)) && (
                   <div key={id} className="flex items-center space-x-2">
                     <RadioGroupItem value={id.toString()} id={`category-${id}`} />
-                    <Label htmlFor={`category-${id}`} className="font-normal">
+                    <Label htmlFor={`category-${id}`} className="font-medium">
                       {label}
                     </Label>
                   </div>
@@ -215,7 +215,7 @@ export function FilterDrawer({ isOpen, onOpenChange, filter, setFilter }: Filter
                 </SelectContent>
               </Select>
               <Input
-                className="h-10"
+                className="h-10 border"
                 type="text"
                 placeholder="City"
                 value={city}
@@ -240,7 +240,7 @@ export function FilterDrawer({ isOpen, onOpenChange, filter, setFilter }: Filter
                 !isNaN(Number(id)) && (
                   <div key={id} className="flex items-center space-x-2">
                     <RadioGroupItem value={id.toString()} id={`donation-method-${id}`} />
-                    <Label htmlFor={`donation-method-${id}`} className="font-normal">
+                    <Label htmlFor={`donation-method-${id}`} className="font-medium">
                       {label}
                     </Label>
                   </div>
@@ -265,7 +265,7 @@ export function FilterDrawer({ isOpen, onOpenChange, filter, setFilter }: Filter
                 !isNaN(Number(id)) && (
                   <div key={id} className="flex items-center space-x-2">
                     <RadioGroupItem value={id.toString()} id={`project-type-${id}`} />
-                    <Label htmlFor={`project-type-${id}`} className="font-normal">
+                    <Label htmlFor={`project-type-${id}`} className="font-medium">
                       {label}
                     </Label>
                   </div>
