@@ -5,7 +5,7 @@ import React, { useRef } from 'react'
 import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Warning } from "@phosphor-icons/react";
+import { Warning } from '@phosphor-icons/react';
 import ConfirmationDialog from './confirmation-dialog'
 import { APIResponse } from '@/types';
 import { clsx } from 'clsx';

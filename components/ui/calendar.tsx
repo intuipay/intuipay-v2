@@ -1,7 +1,7 @@
 'use client'
 
 import * as React from 'react'
-import { CaretLeft, CaretRight } from "@phosphor-icons/react";
+import { CaretLeft, CaretRight } from '@phosphor-icons/react';
 
 import { DayPicker } from 'react-day-picker'
 

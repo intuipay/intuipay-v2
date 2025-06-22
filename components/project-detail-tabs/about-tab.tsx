@@ -14,7 +14,7 @@ import {
   TwitterLogo,
   YoutubeLogo,
   FacebookLogo
-} from "@phosphor-icons/react";
+} from '@phosphor-icons/react';
 import type { ProjectDataType } from '@/app/project/[slug]/project-data'
 
 type AboutTabProps = {

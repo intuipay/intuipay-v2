@@ -8,7 +8,7 @@ import { Badge } from '@/components/ui/badge'
 import { Progress } from '@/components/ui/progress'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Envelope, Link as LinkIcon, GithubLogo, PlayCircle } from "@phosphor-icons/react";
+import { Envelope, Link as LinkIcon, GithubLogo, PlayCircle } from '@phosphor-icons/react';
 
 
 import { CampaignTab } from '@/components/project-detail-tabs/campaign-tab'

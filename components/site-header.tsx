@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { IntuipayLogo } from '@/components/intuipay-logo'
 import { Button } from '@/components/ui/button'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
-import { Globe, CaretDown, List, X } from "@phosphor-icons/react";
+import { Globe, CaretDown, List, X } from '@phosphor-icons/react';
 
 const navLinks = [
   { href: '#', label: 'Donate' },

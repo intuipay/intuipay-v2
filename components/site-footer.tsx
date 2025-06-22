@@ -1,4 +1,4 @@
-import { FacebookLogo, TwitterLogo, InstagramLogo, LinkedinLogo } from "@phosphor-icons/react/dist/ssr";
+import { FacebookLogo, TwitterLogo, InstagramLogo, LinkedinLogo } from '@phosphor-icons/react/dist/ssr';
 import Link from 'next/link'
 
 const socialLinks = [

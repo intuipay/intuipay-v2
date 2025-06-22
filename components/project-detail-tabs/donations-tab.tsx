@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
-import { Users } from "@phosphor-icons/react";
+import { Users } from '@phosphor-icons/react';
 import { Donation } from '@/types'
 
 type DonationsTabProps = {

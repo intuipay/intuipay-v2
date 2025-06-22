@@ -2,7 +2,7 @@
 
 import { Combobox, ComboboxButton, ComboboxInput, ComboboxOption, ComboboxOptions } from '@headlessui/react';
 import { useEffect, useMemo, useState } from 'react';
-import { CaretDown, CaretUp, XCircle } from "@phosphor-icons/react";
+import { CaretDown, CaretUp, XCircle } from '@phosphor-icons/react';
 import { clsx } from 'clsx';
 import Image from 'next/image';
 import { DropdownItemProps } from '@/types';

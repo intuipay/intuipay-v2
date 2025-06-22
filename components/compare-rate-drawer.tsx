@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import Image from 'next/image'
-import { X as XIcon } from "@phosphor-icons/react";
+import { X as XIcon } from '@phosphor-icons/react';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 import { Button } from '@/components/ui/button'
 import useStore from '@/store';

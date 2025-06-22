@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
-import { X, Copy, Check } from "@phosphor-icons/react";
+import { X, Copy, Check } from '@phosphor-icons/react';
 import { Dialog, DialogContent } from '@/components/ui/dialog'
 
 interface ConfirmationDialogProps {
