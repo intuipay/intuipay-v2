@@ -9,10 +9,12 @@ import { Label } from '@/components/ui/label'
 import { Slider } from '@/components/ui/slider'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { ScrollArea } from '@/components/ui/scroll-area'
-import { CircleNotchIcon, XIcon, FlaskIcon, MapPinIcon, CoinIcon, BankIcon } from '@phosphor-icons/react';
+import { X, Flask, Smiley, MapPin, Coin, Bank } from '@phosphor-icons/react';
 import { ProjectCategories, ProjectDonationMethods, ProjectTypes } from '@/data'
 import { ProjectFilter } from '@/types'
-import { useCallback } from 'react'
+import { Country, ICountry, State, IState } from 'country-state-city';
+import { useEffect, useState, useCallback } from 'react'
+import { Input } from '@/components/ui/input'
 import { debounce } from 'lodash-es'
 
 type FilterDrawerProps = {
@@ -23,15 +25,23 @@ type FilterDrawerProps = {
 }
 
 export function FilterDrawer({ isOpen, onOpenChange, filter, setFilter }: FilterDrawerProps) {
+  const [countries, setCountries] = useState<Partial<ICountry>[]>([]);
+  const [states, setStates] = useState<Partial<IState>[]>([]);
+
+  const [country, setCountry] = useState<string>('');
+  const [selectedState, setSelectedState] = useState<string>('');
+  const [city, setCity] = useState<string>('');
+
   function doClearAll() {
     setFilter({
-      category: ProjectCategories.All,
-      progressMin: 0,
-      progressMax: 100,
-      location: '',
-      donationMethods: ProjectDonationMethods.All,
-      projectType: ProjectTypes.All,
-    });
+    category: ProjectCategories.All,
+    progress: 0,
+    location: '',
+    donationMethods: ProjectDonationMethods.All,
+    projectType: ProjectTypes.All,
+    progressMin: 0,
+    progressMax: 100,
+    })
   }
   // use debounce to set progress
   const debouncedSetProgress = useCallback(
@@ -41,20 +51,48 @@ export function FilterDrawer({ isOpen, onOpenChange, filter, setFilter }: Filter
     [filter, setFilter]
   );
 
+  useEffect(() => {
+    const countryList = Country.getAllCountries();
+    setCountries(countryList);
+  }, []);
+
+  const handleCountryChange = (country: string) => {
+    setCountry(country);
+    setSelectedState('');
+    setFilter({
+      ...filter,
+      location: `${country}` // Update location format,
+    });
+    const countryCode = countries.find(c => c.name === country)?.isoCode;
+    const filteredStates = State.getStatesOfCountry(countryCode);
+    setStates(filteredStates);
+  }
+
+  const handleStateChange = (state: string) => {
+    setSelectedState(state);
+    setFilter({ ...filter, location: `${country}${state && '-' + state}${city && '-' + city}` });
+  }
+
+  const handleCityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const city = e.target.value;
+    setCity(city);
+    setFilter({ ...filter, location: `${country}${selectedState && '-' + selectedState}${selectedState && city && '-' + city}` });
+  }
+
   return (
     <Sheet open={isOpen} onOpenChange={onOpenChange}>
       <SheetContent
-        className="w-full md:max-w-md py-7.5 px-8 sm:px-12 flex flex-col gap-8"
+        className="w-full md:max-w-md p-0 flex flex-col"
         side="right"
         onOpenAutoFocus={(e) => e.preventDefault()} // Prevents auto-focus on first element
       >
-        <SheetHeader>
+        <SheetHeader className="px-6 py-4">
           <div className="flex justify-between items-center">
             <SheetTitle className="text-xl font-semibold">Filter</SheetTitle>
-            <div className="flex items-center">
+            <div className="flex items-center space-x-4">
               <SheetClose asChild>
                 <Button variant="ghost" size="icon" className="rounded-full">
-                  <XIcon className="h-5 w-5" />
+                  <X className="h-5 w-5" />
                   <span className="sr-only">Close</span>
                 </Button>
               </SheetClose>
@@ -62,160 +100,159 @@ export function FilterDrawer({ isOpen, onOpenChange, filter, setFilter }: Filter
           </div>
         </SheetHeader>
 
-        <ScrollArea className="flex-grow">
-          <div className="flex justify-end mb-8">
+        <ScrollArea className="flex-grow px-6 py-8">
+          <div className="flex justify-end pt-3">
             <Button
               variant="link"
-              className="text-base font-medium text-primary p-0 h-auto"
+              className="text-sm text-primary p-0 h-auto"
               onClick={doClearAll}
               type="button"
             >
               CLEAR ALL
             </Button>
           </div>
-
-          {/* Category Section */}
-          <FilterSection
-            className="border-b py-5 mb-8"
-            icon={FlaskIcon}
-            title="Category"
-          >
-            <RadioGroup
-              defaultValue="all-cat"
-              className="space-y-4 max-h-50 overflow-y-auto"
-              value={filter.category.toString()}
-              onValueChange={(value) => setFilter({ ...filter, category: Number(value) })}
+          <div className="space-y-3">
+            {/* Category Section */}
+            <FilterSection
+              className="border-b py-5"
+              icon={Flask}
+              title="Category"
             >
-              {Object.entries(ProjectCategories).map(([label, id]) => (
-                !isNaN(Number(id)) && (
-                  <div key={id} className="flex items-center space-x-2">
-                    <RadioGroupItem value={id.toString()} id={`category-${id}`} />
-                    <Label htmlFor={`category-${id}`} className="font-normal">
-                      {label}
-                    </Label>
-                  </div>
-                )
-              ))}
-            </RadioGroup>
-          </FilterSection>
-
-          {/* Progress Section */}
-          <FilterSection
-            className="border-b pt-5 pb-10 mb-8"
-            icon={CircleNotchIcon}
-            title="Progress"
-          >
-            <div className="mt-14">
-              <Slider
-                thumbs={2}
-                value={[filter.progressMin, filter.progressMax]}
-                max={100}
-                step={1}
-                className="[&>span:first-child]:h-1 [&>span:first-child]:bg-action-blue [&>span:first-child_span]:bg-action-blue [&>span:first-child_span]:border-action-blue [&>span:first-child_span]:ring-offset-background [&>span:first-child_span]:focus-visible:ring-action-blue/50"
-                minStepsBetweenThumbs={1}
-                onValueChange={(value) => debouncedSetProgress(value)}
-              />
-            </div>
-          </FilterSection>
-
-          {/* Location Section */}
-          <FilterSection
-            className="border-b py-5 mb-8"
-            icon={MapPinIcon}
-            title="Location"
-          >
-            <div className="space-y-4">
-              <Select
-                value={filter.location}
-                onValueChange={(value) => setFilter({ ...filter, location: value })}
+              <RadioGroup
+                defaultValue="all-cat"
+                className="space-y-4 max-h-50 overflow-y-auto"
+                value={filter.category.toString()}
+                onValueChange={(value) => setFilter({ ...filter, category: Number(value) })}
               >
-                <SelectTrigger className="w-full">
-                  <SelectValue placeholder="By Country" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="country-all">All Countries</SelectItem>
-                  <SelectItem value="usa">United States</SelectItem>
-                  <SelectItem value="canada">Canada</SelectItem>
-                </SelectContent>
-              </Select>
-              <Select
-                defaultValue="state-all"
-                disabled
-                value={filter.location}
-                onValueChange={(value) => setFilter({ ...filter, location: value })}
-              >
-                <SelectTrigger className="w-full">
-                  <SelectValue placeholder="By State" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="state-all">All States</SelectItem>
-                </SelectContent>
-              </Select>
-              <Select
-                defaultValue="city-all"
-                disabled
-                value={filter.location}
-                onValueChange={(value) => setFilter({ ...filter, location: value })}
-              >
-                <SelectTrigger className="w-full">
-                  <SelectValue placeholder="By City" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="city-all">All Cities</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </FilterSection>
+                {Object.entries(ProjectCategories).map(([label, id]) => (
+                  !isNaN(Number(id)) && (
+                    <div key={id} className="flex items-center space-x-2">
+                      <RadioGroupItem value={id.toString()} id={`category-${id}`} />
+                      <Label htmlFor={`category-${id}`} className="font-normal">
+                        {label}
+                      </Label>
+                    </div>
+                  )
+                ))}
+              </RadioGroup>
+            </FilterSection>
 
-          {/* Donation Methods Section */}
-          <FilterSection
-            className="border-b py-5 mb-8"
-            icon={CoinIcon}
-            title="Donation Methods"
-          >
-            <RadioGroup
-              defaultValue="all-dm"
-              className="space-y-4"
-              value={filter.donationMethods.toString()}
-              onValueChange={(value) => setFilter({ ...filter, donationMethods: value })}
+            {/* Progress Section */}
+            <FilterSection
+              className="border-b py-5" icon={Smiley} title="Progress">
+              <div className="mt-2">
+                <Slider
+                  thumbs={2}
+                  value={[filter.progressMin, filter.progressMax]}
+                  max={100}
+                  step={1}
+                  className="[&>span:first-child]:h-1 [&>span:first-child]:bg-action-blue [&>span:first-child_span]:bg-action-blue [&>span:first-child_span]:border-action-blue [&>span:first-child_span]:ring-offset-background [&>span:first-child_span]:focus-visible:ring-action-blue/50"
+                  minStepsBetweenThumbs={1}
+                  onValueChange={(value) => debouncedSetProgress(value)}
+                />
+              </div>
+            </FilterSection>
+
+            {/* Location Section */}
+            <FilterSection
+              className="border-b py-5"
+              icon={MapPin}
+              title="Location"
             >
-              {Object.entries(ProjectDonationMethods).map(([label, id]) => (
-                !isNaN(Number(id)) && (
-                  <div key={id} className="flex items-center space-x-2">
-                    <RadioGroupItem value={id.toString()} id={`donation-method-${id}`} />
-                    <Label htmlFor={`donation-method-${id}`} className="font-normal">
-                      {label}
-                    </Label>
-                  </div>
-                )
-              ))}
-            </RadioGroup>
-          </FilterSection>
+              <div className="space-y-3">
+                <Select
+                  value={country}
+                  onValueChange={handleCountryChange}
+                >
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="By Country" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {
+                      countries.map(country => (
+                        <SelectItem key={country.name!} value={country.name!}>{country.name}</SelectItem>
+                      ))
+                    }
+                  </SelectContent>
+                </Select>
 
-          {/* Project Type Section */}
-          <FilterSection
-            className="py-5"
-            icon={BankIcon}
-            title="Project Type"
-          >
-            <RadioGroup
-              defaultValue="all-pt"
-              className="space-y-4"
-              value={filter.projectType.toString()}
-              onValueChange={(value) => setFilter({ ...filter, projectType: value })}
+                <Select
+                  disabled={!country}
+                  value={selectedState}
+                  onValueChange={handleStateChange}
+                >
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="By State" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {
+                      states.map((state, index) => (
+                        <SelectItem key={state.name! + state.isoCode + index} value={state.name!}>{state.name}</SelectItem>
+                      ))
+                    }
+                  </SelectContent>
+                </Select>
+
+                <Input
+                  className="h-10"
+                  type="text"
+                  placeholder="City"
+                  value={city}
+                  onChange={handleCityChange}
+                />
+              </div>
+            </FilterSection>
+
+            {/* Donation Methods Section */}
+            <FilterSection
+              className="border-b py-5"
+              icon={Coin}
+              title="Donation Methods"
             >
-              {Object.entries(ProjectTypes).map(([label, id]) => (
-                !isNaN(Number(id)) && (
-                  <div key={id} className="flex items-center space-x-2">
-                    <RadioGroupItem value={id.toString()} id={`project-type-${id}`} />
-                    <Label htmlFor={`project-type-${id}`} className="font-normal">
-                      {label}
-                    </Label>
-                  </div>
-                )
-              ))}
-            </RadioGroup>
-          </FilterSection>
+              <RadioGroup
+                defaultValue="all-dm"
+                className="space-y-4"
+                value={filter.donationMethods.toString()}
+                onValueChange={(value) => setFilter({ ...filter, donationMethods: value })}
+              >
+                {Object.entries(ProjectDonationMethods).map(([label, id]) => (
+                  !isNaN(Number(id)) && (
+                    <div key={id} className="flex items-center space-x-2">
+                      <RadioGroupItem value={id.toString()} id={`donation-method-${id}`} />
+                      <Label htmlFor={`donation-method-${id}`} className="font-normal">
+                        {label}
+                      </Label>
+                    </div>
+                  )
+                ))}
+              </RadioGroup>
+            </FilterSection>
+
+            {/* Project Type Section */}
+            <FilterSection
+              className="border-b py-5"
+              icon={Bank}
+              title="Project Type"
+            >
+              <RadioGroup
+                defaultValue="all-pt"
+                className="space-y-4"
+                value={filter.projectType.toString()}
+                onValueChange={(value) => setFilter({ ...filter, projectType: value })}
+              >
+                {Object.entries(ProjectTypes).map(([label, id]) => (
+                  !isNaN(Number(id)) && (
+                    <div key={id} className="flex items-center space-x-2">
+                      <RadioGroupItem value={id.toString()} id={`project-type-${id}`} />
+                      <Label htmlFor={`project-type-${id}`} className="font-normal">
+                        {label}
+                      </Label>
+                    </div>
+                  )
+                ))}
+              </RadioGroup>
+            </FilterSection>
+          </div>
         </ScrollArea>
       </SheetContent>
     </Sheet>
@@ -233,8 +270,8 @@ type FilterSectionProps = {
 function FilterSection({ icon: Icon, title, children, className }: FilterSectionProps) {
   return (
     <div className={className}>
-      <div className="flex items-center gap-2 mb-8">
-        <Icon className="size-6 text-neutral-text" weight="fill" />
+      <div className="flex items-center mb-8">
+        <Icon className="h-5 w-5 mr-2 text-neutral-text" />
         <h3 className="text-md font-medium text-neutral-text">{title}</h3>
       </div>
       {children}

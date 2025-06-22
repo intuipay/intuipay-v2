@@ -98,6 +98,7 @@ export type ProjectFilter = {
   category: ProjectCategories;
   progressMin: number;
   progressMax: number;
+  progress: number;
   location: string;
   donationMethods: ProjectDonationMethods | string;
   projectType: ProjectTypes | string;
