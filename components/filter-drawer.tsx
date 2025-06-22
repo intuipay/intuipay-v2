@@ -9,7 +9,7 @@ import { Label } from '@/components/ui/label'
 import { Slider } from '@/components/ui/slider'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { ScrollArea } from '@/components/ui/scroll-area'
-import { X, Flask, Smiley, MapPin, Coin, Bank } from '@phosphor-icons/react';
+import { CircleNotchIcon, XIcon, FlaskIcon, MapPinIcon, CoinIcon, BankIcon } from '@phosphor-icons/react';
 import { ProjectCategories, ProjectDonationMethods, ProjectTypes } from '@/data'
 import { ProjectFilter } from '@/types'
 import { useCallback } from 'react'
@@ -44,17 +44,17 @@ export function FilterDrawer({ isOpen, onOpenChange, filter, setFilter }: Filter
   return (
     <Sheet open={isOpen} onOpenChange={onOpenChange}>
       <SheetContent
-        className="w-full md:max-w-md p-0 flex flex-col"
+        className="w-full md:max-w-md py-7.5 px-8 sm:px-12 flex flex-col gap-8"
         side="right"
         onOpenAutoFocus={(e) => e.preventDefault()} // Prevents auto-focus on first element
       >
-        <SheetHeader className="px-6 py-4">
+        <SheetHeader>
           <div className="flex justify-between items-center">
             <SheetTitle className="text-xl font-semibold">Filter</SheetTitle>
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center">
               <SheetClose asChild>
                 <Button variant="ghost" size="icon" className="rounded-full">
-                  <X className="h-5 w-5" />
+                  <XIcon className="h-5 w-5" />
                   <span className="sr-only">Close</span>
                 </Button>
               </SheetClose>
@@ -62,158 +62,160 @@ export function FilterDrawer({ isOpen, onOpenChange, filter, setFilter }: Filter
           </div>
         </SheetHeader>
 
-        <ScrollArea className="flex-grow px-6 py-8">
-          <div className="flex justify-end pt-3">
+        <ScrollArea className="flex-grow">
+          <div className="flex justify-end mb-8">
             <Button
               variant="link"
-              className="text-sm text-primary p-0 h-auto"
+              className="text-base font-medium text-primary p-0 h-auto"
               onClick={doClearAll}
               type="button"
             >
               CLEAR ALL
             </Button>
           </div>
-          <div className="space-y-3">
-            {/* Category Section */}
-            <FilterSection
-              className="border-b py-5"
-              icon={Flask}
-              title="Category"
+
+          {/* Category Section */}
+          <FilterSection
+            className="border-b py-5 mb-8"
+            icon={FlaskIcon}
+            title="Category"
+          >
+            <RadioGroup
+              defaultValue="all-cat"
+              className="space-y-4 max-h-50 overflow-y-auto"
+              value={filter.category.toString()}
+              onValueChange={(value) => setFilter({ ...filter, category: Number(value) })}
             >
-              <RadioGroup
-                defaultValue="all-cat"
-                className="space-y-4 max-h-50 overflow-y-auto"
-                value={filter.category.toString()}
-                onValueChange={(value) => setFilter({ ...filter, category: Number(value) })}
+              {Object.entries(ProjectCategories).map(([label, id]) => (
+                !isNaN(Number(id)) && (
+                  <div key={id} className="flex items-center space-x-2">
+                    <RadioGroupItem value={id.toString()} id={`category-${id}`} />
+                    <Label htmlFor={`category-${id}`} className="font-normal">
+                      {label}
+                    </Label>
+                  </div>
+                )
+              ))}
+            </RadioGroup>
+          </FilterSection>
+
+          {/* Progress Section */}
+          <FilterSection
+            className="border-b pt-5 pb-10 mb-8"
+            icon={CircleNotchIcon}
+            title="Progress"
+          >
+            <div className="mt-14">
+              <Slider
+                thumbs={2}
+                value={[filter.progressMin, filter.progressMax]}
+                max={100}
+                step={1}
+                className="[&>span:first-child]:h-1 [&>span:first-child]:bg-action-blue [&>span:first-child_span]:bg-action-blue [&>span:first-child_span]:border-action-blue [&>span:first-child_span]:ring-offset-background [&>span:first-child_span]:focus-visible:ring-action-blue/50"
+                minStepsBetweenThumbs={1}
+                onValueChange={(value) => debouncedSetProgress(value)}
+              />
+            </div>
+          </FilterSection>
+
+          {/* Location Section */}
+          <FilterSection
+            className="border-b py-5 mb-8"
+            icon={MapPinIcon}
+            title="Location"
+          >
+            <div className="space-y-4">
+              <Select
+                value={filter.location}
+                onValueChange={(value) => setFilter({ ...filter, location: value })}
               >
-                {Object.entries(ProjectCategories).map(([label, id]) => (
-                  !isNaN(Number(id)) && (
-                    <div key={id} className="flex items-center space-x-2">
-                      <RadioGroupItem value={id.toString()} id={`category-${id}`} />
-                      <Label htmlFor={`category-${id}`} className="font-normal">
-                        {label}
-                      </Label>
-                    </div>
-                  )
-                ))}
-              </RadioGroup>
-            </FilterSection>
-
-            {/* Progress Section */}
-            <FilterSection
-              className="border-b py-5" icon={Smiley} title="Progress">
-              <div className="mt-2">
-                <Slider
-                  thumbs={2}
-                  value={[filter.progressMin, filter.progressMax]}
-                  max={100}
-                  step={1}
-                  className="[&>span:first-child]:h-1 [&>span:first-child]:bg-action-blue [&>span:first-child_span]:bg-action-blue [&>span:first-child_span]:border-action-blue [&>span:first-child_span]:ring-offset-background [&>span:first-child_span]:focus-visible:ring-action-blue/50"
-                  minStepsBetweenThumbs={1}
-                  onValueChange={(value) => debouncedSetProgress(value)}
-                />
-              </div>
-            </FilterSection>
-
-            {/* Location Section */}
-            <FilterSection
-              className="border-b py-5"
-              icon={MapPin}
-              title="Location"
-            >
-              <div className="space-y-3">
-                <Select
-                  value={filter.location}
-                  onValueChange={(value) => setFilter({ ...filter, location: value })}
-                >
-                  <SelectTrigger className="w-full">
-                    <SelectValue placeholder="By Country" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="country-all">All Countries</SelectItem>
-                    <SelectItem value="usa">United States</SelectItem>
-                    <SelectItem value="canada">Canada</SelectItem>
-                  </SelectContent>
-                </Select>
-                <Select
-                  defaultValue="state-all"
-                  disabled
-                  value={filter.location}
-                  onValueChange={(value) => setFilter({ ...filter, location: value })}
-                >
-                  <SelectTrigger className="w-full">
-                    <SelectValue placeholder="By State" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="state-all">All States</SelectItem>
-                  </SelectContent>
-                </Select>
-                <Select
-                  defaultValue="city-all"
-                  disabled
-                  value={filter.location}
-                  onValueChange={(value) => setFilter({ ...filter, location: value })}
-                >
-                  <SelectTrigger className="w-full">
-                    <SelectValue placeholder="By City" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="city-all">All Cities</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            </FilterSection>
-
-            {/* Donation Methods Section */}
-            <FilterSection
-              className="border-b py-5"
-              icon={Coin}
-              title="Donation Methods"
-            >
-              <RadioGroup
-                defaultValue="all-dm"
-                className="space-y-4"
-                value={filter.donationMethods.toString()}
-                onValueChange={(value) => setFilter({ ...filter, donationMethods: value })}
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="By Country" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="country-all">All Countries</SelectItem>
+                  <SelectItem value="usa">United States</SelectItem>
+                  <SelectItem value="canada">Canada</SelectItem>
+                </SelectContent>
+              </Select>
+              <Select
+                defaultValue="state-all"
+                disabled
+                value={filter.location}
+                onValueChange={(value) => setFilter({ ...filter, location: value })}
               >
-                {Object.entries(ProjectDonationMethods).map(([label, id]) => (
-                  !isNaN(Number(id)) && (
-                    <div key={id} className="flex items-center space-x-2">
-                      <RadioGroupItem value={id.toString()} id={`donation-method-${id}`} />
-                      <Label htmlFor={`donation-method-${id}`} className="font-normal">
-                        {label}
-                      </Label>
-                    </div>
-                  )
-                ))}
-              </RadioGroup>
-            </FilterSection>
-
-            {/* Project Type Section */}
-            <FilterSection
-              className="border-b py-5"
-              icon={Bank}
-              title="Project Type"
-            >
-              <RadioGroup
-                defaultValue="all-pt"
-                className="space-y-4"
-                value={filter.projectType.toString()}
-                onValueChange={(value) => setFilter({ ...filter, projectType: value })}
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="By State" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="state-all">All States</SelectItem>
+                </SelectContent>
+              </Select>
+              <Select
+                defaultValue="city-all"
+                disabled
+                value={filter.location}
+                onValueChange={(value) => setFilter({ ...filter, location: value })}
               >
-                {Object.entries(ProjectTypes).map(([label, id]) => (
-                  !isNaN(Number(id)) && (
-                    <div key={id} className="flex items-center space-x-2">
-                      <RadioGroupItem value={id.toString()} id={`project-type-${id}`} />
-                      <Label htmlFor={`project-type-${id}`} className="font-normal">
-                        {label}
-                      </Label>
-                    </div>
-                  )
-                ))}
-              </RadioGroup>
-            </FilterSection>
-          </div>
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="By City" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="city-all">All Cities</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </FilterSection>
+
+          {/* Donation Methods Section */}
+          <FilterSection
+            className="border-b py-5 mb-8"
+            icon={CoinIcon}
+            title="Donation Methods"
+          >
+            <RadioGroup
+              defaultValue="all-dm"
+              className="space-y-4"
+              value={filter.donationMethods.toString()}
+              onValueChange={(value) => setFilter({ ...filter, donationMethods: value })}
+            >
+              {Object.entries(ProjectDonationMethods).map(([label, id]) => (
+                !isNaN(Number(id)) && (
+                  <div key={id} className="flex items-center space-x-2">
+                    <RadioGroupItem value={id.toString()} id={`donation-method-${id}`} />
+                    <Label htmlFor={`donation-method-${id}`} className="font-normal">
+                      {label}
+                    </Label>
+                  </div>
+                )
+              ))}
+            </RadioGroup>
+          </FilterSection>
+
+          {/* Project Type Section */}
+          <FilterSection
+            className="py-5"
+            icon={BankIcon}
+            title="Project Type"
+          >
+            <RadioGroup
+              defaultValue="all-pt"
+              className="space-y-4"
+              value={filter.projectType.toString()}
+              onValueChange={(value) => setFilter({ ...filter, projectType: value })}
+            >
+              {Object.entries(ProjectTypes).map(([label, id]) => (
+                !isNaN(Number(id)) && (
+                  <div key={id} className="flex items-center space-x-2">
+                    <RadioGroupItem value={id.toString()} id={`project-type-${id}`} />
+                    <Label htmlFor={`project-type-${id}`} className="font-normal">
+                      {label}
+                    </Label>
+                  </div>
+                )
+              ))}
+            </RadioGroup>
+          </FilterSection>
         </ScrollArea>
       </SheetContent>
     </Sheet>
@@ -231,8 +233,8 @@ type FilterSectionProps = {
 function FilterSection({ icon: Icon, title, children, className }: FilterSectionProps) {
   return (
     <div className={className}>
-      <div className="flex items-center mb-8">
-        <Icon className="h-5 w-5 mr-2 text-neutral-text" />
+      <div className="flex items-center gap-2 mb-8">
+        <Icon className="size-6 text-neutral-text" weight="fill" />
         <h3 className="text-md font-medium text-neutral-text">{title}</h3>
       </div>
       {children}

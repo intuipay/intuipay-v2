@@ -30,7 +30,7 @@ const Slider = React.forwardRef<
         />
       ))}
       {Array.from({ length: thumbs }).map((_, index) => (
-        <div className="absolute left-1" style={{ transform: `translate(${Number(props.value?.[ index ] ?? 0) * 3.5}px, -20px)` }} key={index}>
+        <div className="absolute left-1" style={{ transform: `translate(${Number(props.value?.[ index ] ?? 0) * 3.5}px, -1.5rem)` }} key={index}>
           {props.value?.[ index ] ?? 0}%
         </div>
       ))}
