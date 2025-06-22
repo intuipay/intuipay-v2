@@ -33,6 +33,9 @@ export function FilterDrawer({ isOpen, onOpenChange, filter, setFilter }: Filter
   const [city, setCity] = useState<string>('');
 
   function doClearAll() {
+    setCountry('');
+    setSelectedState('');
+    setCity('');
     setFilter({
       category: ProjectCategories.All,
       location: '',
@@ -45,6 +48,7 @@ export function FilterDrawer({ isOpen, onOpenChange, filter, setFilter }: Filter
   function handleCountryChange(country: string) {
     setCountry(country);
     setSelectedState('');
+    setCity('');
     updateFilter({
       ...filter,
       location: getLocation({ newCountry: country }),
@@ -210,7 +214,6 @@ export function FilterDrawer({ isOpen, onOpenChange, filter, setFilter }: Filter
                   }
                 </SelectContent>
               </Select>
-
               <Input
                 className="h-10"
                 type="text"
