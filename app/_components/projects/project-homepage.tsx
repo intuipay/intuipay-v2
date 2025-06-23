@@ -5,7 +5,7 @@ import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
-import { Search, SlidersHorizontal, ArrowUpDown, ChevronDown, CheckIcon } from 'lucide-react'
+import { MagnifyingGlass, Faders, ArrowUp, CaretDown, Check } from '@phosphor-icons/react';
 import { FilterDrawer } from '@/components/filter-drawer'
 import { ProjectFilter } from '@/types'
 import { DropdownMenuRadioGroup, DropdownMenuRadioItem } from '@radix-ui/react-dropdown-menu'
@@ -133,39 +133,39 @@ export default function ProjectHomepage({
   }, [currentSortBy, activeFilters]);
 
   return <>
-    <section className="flex flex-col-reverse gap-16 items-stretch lg:flex-row w-full lg:py-21 bg-gradient-to-b from-intuipay-lighterblue/20 via-neutral-white to-neutral-white mb-20">
+    <section className="flex flex-col-reverse gap-16 items-center lg:flex-row w-full lg:py-21 bg-gradient-to-b from-intuipay-lighterblue/20 via-neutral-white to-neutral-white mb-20">
       <div className="flex-1 flex flex-col gap-4">
-        <h1 className="text-4xl sm:text-5xl font-bold tracking-tight text-center md:text-left">
+        <h1 className="text-4xl sm:text-5xl font-bold tracking-tight text-center lg:text-left">
           Fuel Trusted University-Backed Research
         </h1>
         <p className="text-base font-medium text-neutral-darkgray text-black/50">
           All projects on Intuipay are verified academic research initiatives from accredited universities and institutions, ensuring every donation supports real, impactful science.
         </p>
-        <div className="flex w-full mt-auto gap-12">
+        <div className="flex w-full mt-16">
           <form className="flex-grow relative drop-shadow-custom1" onSubmit={handleSearchSubmit}>
             <Input
               type="search"
               placeholder="Search"
-              className="rounded-full focus:ring-0 focus:border-neutral-mediumgray border border-black/20 text-base bg-neutral-lightgray w-full h-15 ps-6 pe-15"
+              className="rounded-full focus:ring-0 focus:border-neutral-mediumgray border border-black/20 text-base bg-neutral-lightgray w-full h-11 lg:h-15 ps-6 pe-15"
               value={searchQueryInput}
               onChange={(e) => setSearchQueryInput(e.target.value)}
             />
             <Button
               type="submit"
-              className="bg-action-blue hover:bg-action-blue/90 w-15 h-15 px-5 bg-primary rounded-full absolute right-0 top-0"
+              className="bg-action-blue hover:bg-action-blue/90 w-11 h-11 lg:w-15 lg:h-15 bg-primary rounded-full absolute right-0 top-0"
             >
-              <Search className="h-5 w-5 text-primary-foreground" />
+              <MagnifyingGlass className="w-11 h-11 lg:w-15 lg:h-15" color="white" />
               <span className="sr-only">Search</span>
             </Button>
           </form>
           <Button
             variant="outline"
-            className="flex-none px-9 h-15 text-sm md:text-xl flex items-center rounded-full"
+            className="flex-none px-8 h-11 lg:h-15 text-sm md:text-base flex items-center rounded-full ml-4 lg:ml-12"
             type="button"
             onClick={() => setIsFilterDrawerOpen(true)}
           >
             Filter
-            <SlidersHorizontal className="ml-2 h-4 w-4" />
+            <Faders size={16} weight="regular" className="ml-2" />
           </Button>
         </div>
       </div>
@@ -178,18 +178,18 @@ export default function ProjectHomepage({
         height={292}
       />
     </section>
-    <div className="flex flex-col items-center gap-6 lg:flex-row sm:justify-between mb-6 md:mb-8">
+    <div className="flex flex-col items-start md:items-center gap-6 md:flex-row justify-between mb-6 md:mb-8">
       <h2 className="text-lg font-medium sm:text-3xl">
         Explore Projects
       </h2>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-4 w-full md:w-auto justify-between md:justify-normal">
             <span className="text-black/50 whitespace-nowrap">Sort by</span>
-            <Button variant="outline" className="sm:w-40 h-11 border-neutral-mediumgray text-base rounded-full">
-              <ArrowUpDown className="me-2 h-4 w-4" />
+            <Button variant="outline" className="sm:w-40 h-11 border-neutral-mediumgray text-base rounded-full px-6">
+              <ArrowUp size={16} weight="regular" className="me-2" />
               {SortOptions.find((option) => option.value === currentSortBy)?.label}
-              <ChevronDown className="ms-2 h-4 w-4" />
+              <CaretDown size={16} weight="regular" className="ms-2 text-icon-gray" />
             </Button>
           </div>
         </DropdownMenuTrigger>
@@ -207,7 +207,7 @@ export default function ProjectHomepage({
                 className="h-8 flex items-center ps-8 pe-4 relative"
                 value={option.value}
               >
-                {currentSortBy === option.value && <CheckIcon className="h-4 w-4 absolute left-2" />}
+                {currentSortBy === option.value && <Check size={16} weight="regular" className="absolute left-2" />}
                 {option.label}
               </DropdownMenuRadioItem>
             ))}

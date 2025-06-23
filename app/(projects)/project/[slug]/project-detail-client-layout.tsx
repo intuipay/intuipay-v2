@@ -181,7 +181,7 @@ export default function ProjectDetailClientLayout({ project, similarProjects }: 
         </div>
       </div>
 
-      <div className="flex">
+      <div className="flex gap-12">
         <Tabs defaultValue={tab} className="mb-8 lg:w-2/3" onValueChange={(val) => { setTab(val) }}>
           <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4">
             <TabsTrigger value="campaign" className="py-2.5">
@@ -206,27 +206,27 @@ export default function ProjectDetailClientLayout({ project, similarProjects }: 
             </TabsTrigger>
           </TabsList>
 
-          <TabsContent value="campaign" className="pt-6">
+          <TabsContent value="campaign" className="mt-14">
             <CampaignTab project={project} />
           </TabsContent>
-          <TabsContent value="about" className="pt-6">
+          <TabsContent value="about" className="mt-14">
             <AboutTab project={project} />
           </TabsContent>
-          <TabsContent value="updates" className="pt-6">
+          <TabsContent value="updates" className="mt-14">
             <UpdatesTab projectId={project.id} onUpdate={setUpdatesCount} />
           </TabsContent>
-          <TabsContent value="donations" className="pt-6">
+          <TabsContent value="donations" className="mt-14">
             <DonationsTab projectId={project.id} />
           </TabsContent>
         </Tabs>
 
-        {tab === 'campaign' && <div className="pt-4 px-6">
+        {tab === 'campaign' && <div className='mt-24 flex-1'>
           <ul className="space-y-2">
             {titles.map((item) => (
               <li key={item}>
                 <a
                   href={'#'}
-                  className="text-sm font-semibold text-neutral-darkgray hover:text-action-blue hover:border-l-2 border-blue-btn pl-2"
+                  className="text-sm font-semibold text-neutral-darkgray border-transparent border-l-2 hover:border-primary pl-2"
                 >
                   {item}
                 </a>
