@@ -21,7 +21,7 @@ export default function DonationStep5({
 
       <div className="text-center space-y-2">
         <h1 className="text-xl font-semibold text-gray-900">
-          Thank you for your support! Your are the {index} backer now.
+          Thank you for your support! You are the {index} backer now.
         </h1>
       </div>
 
