@@ -133,7 +133,7 @@ export default function ProjectHomepage({
   }, [currentSortBy, activeFilters]);
 
   return <>
-    <section className="flex flex-col-reverse gap-16 items-center lg:flex-row w-full lg:py-21 bg-gradient-to-b from-intuipay-lighterblue/20 via-neutral-white to-neutral-white mb-20">
+    <section className="flex flex-col-reverse gap-16 items-center lg:items-stretch lg:flex-row w-full lg:py-21 bg-gradient-to-b from-intuipay-lighterblue/20 via-neutral-white to-neutral-white mb-20">
       <div className="flex-1 flex flex-col gap-4">
         <h1 className="text-4xl sm:text-5xl font-bold tracking-tight text-center lg:text-left">
           Fuel Trusted University-Backed Research
@@ -141,7 +141,7 @@ export default function ProjectHomepage({
         <p className="text-base font-medium text-neutral-darkgray text-black/50">
           All projects on Intuipay are verified academic research initiatives from accredited universities and institutions, ensuring every donation supports real, impactful science.
         </p>
-        <div className="flex w-full mt-16">
+        <div className="flex w-full mt-auto gap-4 lg:gap-12">
           <form className="flex-grow relative drop-shadow-custom1" onSubmit={handleSearchSubmit}>
             <Input
               type="search"
@@ -154,13 +154,13 @@ export default function ProjectHomepage({
               type="submit"
               className="bg-action-blue hover:bg-action-blue/90 w-11 h-11 lg:w-15 lg:h-15 bg-primary rounded-full absolute right-0 top-0"
             >
-              <MagnifyingGlass className="w-11 h-11 lg:w-15 lg:h-15" color="white" />
+              <MagnifyingGlass className="w-6 h-6 lg:w-8 lg:h-8" color="white" />
               <span className="sr-only">Search</span>
             </Button>
           </form>
           <Button
             variant="outline"
-            className="flex-none px-8 h-11 lg:h-15 text-sm md:text-base flex items-center rounded-full ml-4 lg:ml-12"
+            className="flex-none px-8 h-11 lg:h-15 text-sm md:text-base flex items-center rounded-full"
             type="button"
             onClick={() => setIsFilterDrawerOpen(true)}
           >
