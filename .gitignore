@@ -28,5 +28,5 @@ next-env.d.ts
 
 .idea
 .wrangler
-
 bun.lock
+.DS_Store

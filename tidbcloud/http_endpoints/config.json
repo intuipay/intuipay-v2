@@ -1,0 +1,545 @@
+[
+  {
+    "name": "/donation_project",
+    "description": "",
+    "method": "GET",
+    "endpoint": "/donation_project",
+    "data_source": {
+      "cluster_id": 10914349176033975536
+    },
+    "params": [
+      {
+        "name": "slug",
+        "type": "string",
+        "required": 1,
+        "default": "",
+        "description": ""
+      }
+    ],
+    "settings": {
+      "timeout": 30000,
+      "row_limit": 1000,
+      "cache_enabled": 0,
+      "cache_ttl": 0,
+      "enable_pagination": 0
+    },
+    "tag": "Default",
+    "batch_operation": 0,
+    "sql_file": "sql/GET-donation_project.sql",
+    "type": "sql_endpoint",
+    "return_type": "json"
+  },
+  {
+    "name": "/donation",
+    "description": "",
+    "method": "POST",
+    "endpoint": "/donation",
+    "data_source": {
+      "cluster_id": 10914349176033975536
+    },
+    "params": [
+      {
+        "name": "project_id",
+        "type": "number",
+        "required": 1,
+        "default": "",
+        "description": ""
+      },
+      {
+        "name": "first_name",
+        "type": "string",
+        "required": 0,
+        "default": "",
+        "description": ""
+      },
+      {
+        "name": "last_name",
+        "type": "string",
+        "required": 0,
+        "default": "",
+        "description": ""
+      },
+      {
+        "name": "company_name",
+        "type": "string",
+        "required": 0,
+        "default": "",
+        "description": ""
+      },
+      {
+        "name": "address1",
+        "type": "string",
+        "required": 0,
+        "default": "",
+        "description": ""
+      },
+      {
+        "name": "address2",
+        "type": "string",
+        "required": 0,
+        "default": "",
+        "description": ""
+      },
+      {
+        "name": "country",
+        "type": "string",
+        "required": 0,
+        "default": "",
+        "description": ""
+      },
+      {
+        "name": "state",
+        "type": "string",
+        "required": 0,
+        "default": "",
+        "description": ""
+      },
+      {
+        "name": "city",
+        "type": "string",
+        "required": 0,
+        "default": "",
+        "description": ""
+      },
+      {
+        "name": "zip",
+        "type": "string",
+        "required": 0,
+        "default": "",
+        "description": ""
+      },
+      {
+        "name": "email",
+        "type": "string",
+        "required": 0,
+        "default": "",
+        "description": ""
+      },
+      {
+        "name": "account",
+        "type": "number",
+        "required": 0,
+        "default": "",
+        "description": ""
+      },
+      {
+        "name": "currency",
+        "type": "string",
+        "required": 1,
+        "default": "",
+        "description": ""
+      },
+      {
+        "name": "tx_hash",
+        "type": "string",
+        "required": 1,
+        "default": "",
+        "description": ""
+      },
+      {
+        "name": "method",
+        "type": "number",
+        "required": 1,
+        "default": "",
+        "description": ""
+      },
+      {
+        "name": "status",
+        "type": "number",
+        "required": 1,
+        "default": "",
+        "description": ""
+      },
+      {
+        "name": "has_tax_invoice",
+        "type": "boolean",
+        "required": 0,
+        "default": "",
+        "description": ""
+      },
+      {
+        "name": "is_anonymous",
+        "type": "boolean",
+        "required": 0,
+        "default": "",
+        "description": ""
+      },
+      {
+        "name": "note",
+        "type": "string",
+        "required": 0,
+        "default": "",
+        "description": ""
+      },
+      {
+        "name": "amount",
+        "type": "number",
+        "required": 1,
+        "default": "",
+        "description": ""
+      },
+      {
+        "name": "wallet",
+        "type": "string",
+        "required": 0,
+        "default": "",
+        "description": ""
+      },
+      {
+        "name": "wallet_address",
+        "type": "string",
+        "required": 1,
+        "default": "",
+        "description": ""
+      }
+    ],
+    "settings": {
+      "timeout": 30000,
+      "row_limit": 1000,
+      "cache_enabled": 0,
+      "cache_ttl": 0,
+      "enable_pagination": 0
+    },
+    "tag": "Default",
+    "batch_operation": 0,
+    "sql_file": "sql/POST-donation.sql",
+    "type": "sql_endpoint",
+    "return_type": "json"
+  },
+  {
+    "name": "/projects",
+    "description": "",
+    "method": "GET",
+    "endpoint": "/projects",
+    "data_source": {
+      "cluster_id": 10914349176033975536
+    },
+    "params": [
+      {
+        "name": "search",
+        "type": "string",
+        "required": 0,
+        "default": "",
+        "description": ""
+      },
+      {
+        "name": "category",
+        "type": "integer",
+        "required": 0,
+        "default": "",
+        "description": ""
+      },
+      {
+        "name": "location",
+        "type": "string",
+        "required": 0,
+        "default": "",
+        "description": ""
+      },
+      {
+        "name": "accepts",
+        "type": "integer",
+        "required": 0,
+        "default": "",
+        "description": ""
+      },
+      {
+        "name": "type",
+        "type": "integer",
+        "required": 0,
+        "default": "",
+        "description": ""
+      },
+      {
+        "name": "progress",
+        "type": "number",
+        "required": 0,
+        "default": "",
+        "description": ""
+      },
+      {
+        "name": "excludes",
+        "type": "integer",
+        "required": 0,
+        "default": "",
+        "description": ""
+      },
+      {
+        "name": "order_by",
+        "type": "string",
+        "required": 1,
+        "default": "",
+        "description": ""
+      },
+      {
+        "name": "order_dir",
+        "type": "string",
+        "required": 1,
+        "default": "",
+        "description": "",
+        "enum": "desc, asc"
+      },
+      {
+        "name": "start",
+        "type": "integer",
+        "required": 1,
+        "default": "",
+        "description": ""
+      },
+      {
+        "name": "pagesize",
+        "type": "integer",
+        "required": 1,
+        "default": "",
+        "description": ""
+      }
+    ],
+    "settings": {
+      "timeout": 30000,
+      "row_limit": 1000,
+      "cache_enabled": 0,
+      "cache_ttl": 0,
+      "enable_pagination": 0
+    },
+    "tag": "Default",
+    "batch_operation": 0,
+    "sql_file": "sql/GET-projects.sql",
+    "type": "sql_endpoint",
+    "return_type": "json"
+  },
+  {
+    "name": "/project_updates",
+    "description": "",
+    "method": "GET",
+    "endpoint": "/project_updates",
+    "data_source": {
+      "cluster_id": 10914349176033975536
+    },
+    "params": [
+      {
+        "name": "project_id",
+        "type": "integer",
+        "required": 1,
+        "default": "",
+        "description": ""
+      },
+      {
+        "name": "start_date",
+        "type": "string",
+        "required": 0,
+        "default": "",
+        "description": ""
+      },
+      {
+        "name": "start",
+        "type": "integer",
+        "required": 1,
+        "default": "",
+        "description": ""
+      },
+      {
+        "name": "pagesize",
+        "type": "integer",
+        "required": 1,
+        "default": "",
+        "description": ""
+      }
+    ],
+    "settings": {
+      "timeout": 30000,
+      "row_limit": 1000,
+      "cache_enabled": 0,
+      "cache_ttl": 0,
+      "enable_pagination": 0
+    },
+    "tag": "Default",
+    "batch_operation": 0,
+    "sql_file": "sql/GET-project_updates.sql",
+    "type": "sql_endpoint",
+    "return_type": "json"
+  },
+  {
+    "name": "/project_donations",
+    "description": "",
+    "method": "GET",
+    "endpoint": "/project_donations",
+    "data_source": {
+      "cluster_id": 10914349176033975536
+    },
+    "params": [
+      {
+        "name": "project_id",
+        "type": "integer",
+        "required": 1,
+        "default": "",
+        "description": ""
+      },
+      {
+        "name": "order",
+        "type": "string",
+        "required": 0,
+        "default": "id",
+        "description": "",
+        "enum": "id,amount"
+      },
+      {
+        "name": "start",
+        "type": "integer",
+        "required": 1,
+        "default": "",
+        "description": ""
+      },
+      {
+        "name": "pagesize",
+        "type": "integer",
+        "required": 1,
+        "default": "",
+        "description": ""
+      }
+    ],
+    "settings": {
+      "timeout": 30000,
+      "row_limit": 1000,
+      "cache_enabled": 0,
+      "cache_ttl": 0,
+      "enable_pagination": 0
+    },
+    "tag": "Default",
+    "batch_operation": 0,
+    "sql_file": "sql/GET-project_donations.sql",
+    "type": "sql_endpoint",
+    "return_type": "json"
+  },
+  {
+    "name": "/project_detailed",
+    "description": "",
+    "method": "GET",
+    "endpoint": "/project_detailed",
+    "data_source": {
+      "cluster_id": 10914349176033975536
+    },
+    "params": [
+      {
+        "name": "slug",
+        "type": "string",
+        "required": 1,
+        "default": "",
+        "description": ""
+      }
+    ],
+    "settings": {
+      "timeout": 30000,
+      "row_limit": 1000,
+      "cache_enabled": 0,
+      "cache_ttl": 0,
+      "enable_pagination": 0
+    },
+    "tag": "Default",
+    "batch_operation": 0,
+    "sql_file": "sql/GET-project_detailed.sql",
+    "type": "sql_endpoint",
+    "return_type": "json"
+  },
+  {
+    "name": "/projects_count",
+    "description": "",
+    "method": "GET",
+    "endpoint": "/projects_count",
+    "data_source": {
+      "cluster_id": 10914349176033975536
+    },
+    "params": [
+      {
+        "name": "search",
+        "type": "string",
+        "required": 0,
+        "default": "",
+        "description": ""
+      },
+      {
+        "name": "category",
+        "type": "integer",
+        "required": 0,
+        "default": "",
+        "description": ""
+      },
+      {
+        "name": "location",
+        "type": "string",
+        "required": 0,
+        "default": "",
+        "description": ""
+      },
+      {
+        "name": "accepts",
+        "type": "integer",
+        "required": 0,
+        "default": "",
+        "description": ""
+      },
+      {
+        "name": "type",
+        "type": "integer",
+        "required": 0,
+        "default": "",
+        "description": ""
+      },
+      {
+        "name": "progress",
+        "type": "number",
+        "required": 0,
+        "default": "",
+        "description": ""
+      }
+    ],
+    "settings": {
+      "timeout": 30000,
+      "row_limit": 1000,
+      "cache_enabled": 0,
+      "cache_ttl": 0,
+      "enable_pagination": 0
+    },
+    "tag": "Default",
+    "batch_operation": 0,
+    "sql_file": "sql/GET-projects_count.sql",
+    "type": "sql_endpoint",
+    "return_type": "json"
+  },
+  {
+    "name": "/project_updates_count",
+    "description": "",
+    "method": "GET",
+    "endpoint": "/project_updates_count",
+    "data_source": {
+      "cluster_id": 10914349176033975536
+    },
+    "params": [
+      {
+        "name": "project_id",
+        "type": "integer",
+        "required": 1,
+        "default": "",
+        "description": ""
+      },
+      {
+        "name": "start_date",
+        "type": "string",
+        "required": 0,
+        "default": "",
+        "description": ""
+      }
+    ],
+    "settings": {
+      "timeout": 30000,
+      "row_limit": 1000,
+      "cache_enabled": 0,
+      "cache_ttl": 0,
+      "enable_pagination": 0
+    },
+    "tag": "Default",
+    "batch_operation": 0,
+    "sql_file": "sql/GET-project_updates_count.sql",
+    "type": "sql_endpoint",
+    "return_type": "json"
+  }
+]
