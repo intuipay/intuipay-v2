@@ -211,7 +211,7 @@ export default function DonationStep2({
           id="email"
           name="email"
           onChange={event => setInfo({ email: event.target.value })}
-          placeholder={'Email address' + isAnonymous ? '' : ' *'}
+          placeholder={`Email address${isAnonymous ? '' : ' *'}`}
           required={!isAnonymous}
           type="email"
           value={info.email}
