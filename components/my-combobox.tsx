@@ -117,7 +117,7 @@ export default function MyCombobox({
               value === option[ valueKey ] ? 'bg-blue-50 hover:bg-blue-100' : 'hover:bg-blue-50',
             )}
             disabled={disabled}
-            key={index}
+            key={option[valueKey]}
             value={option}
           >
             <div className="flex items-center gap-3">
