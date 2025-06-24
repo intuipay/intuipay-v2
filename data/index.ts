@@ -1,4 +1,4 @@
-import {Currency, PaymentMethod, University} from "@/types";
+import {Currency, DropdownItemProps, PaymentMethod, University} from "@/types";
 
 export const CurrencyList: Currency[] = [
   {
@@ -433,3 +433,9 @@ export const PaymentMethodsOther: PaymentMethod[] = [
     currency: ['CNY'],
   },
 ];
+
+// 为了保持向后兼容，使用新的区块链配置系统
+import { getNetworkDropdownOptions, getWalletDropdownOptions } from '@/config/blockchain';
+
+export const Networks = getNetworkDropdownOptions();
+export const Wallets = getWalletDropdownOptions();

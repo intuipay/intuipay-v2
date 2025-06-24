@@ -20,7 +20,7 @@ export default function PaymentCalculator() {
     const countries = uniq(UniversityList.map(item => item.country));
     return CurrencyList.filter(item => countries.includes(item.country));
   }, []);
-  const univercities = useMemo(() => {
+  const universities = useMemo(() => {
     return UniversityList.filter(item => item.country === toCountry);
   }, [toCountry]);
   const fromCurrency = useMemo(() => {
@@ -39,9 +39,11 @@ export default function PaymentCalculator() {
           Paying From
         </label>
         <MyCombobox
+          labelKey="country"
           options={CurrencyList}
           onChange={setFromCountry}
           value={fromCountry}
+          valueKey="country"
         />
       </div>
 
@@ -50,14 +52,17 @@ export default function PaymentCalculator() {
           Institution Destination
         </label>
         <MyCombobox
+          labelKey="country"
           options={toCountries}
           onChange={setToCountry}
           value={toCountry}
+          valueKey="country"
         />
         <MyCombobox
           iconPath="university"
           iconExtension="png"
-          options={univercities}
+          labelKey="name"
+          options={universities}
           onChange={setUniversity}
           value={university}
           valueKey="name"
@@ -77,7 +82,8 @@ export default function PaymentCalculator() {
             value={amount}
           />
           <MyCombobox
-            className="rounded-r-lg"
+            className="rounded-r-lg h-14"
+            labelKey="code"
             options={CurrencyList}
             onChange={setCurrency}
             value={currency}

@@ -9,42 +9,55 @@ import { DropdownItemProps } from '@/types';
 
 type Props = {
   className?: string;
+  disabled?: boolean;
   hasIcon?: boolean;
+  iconClass?: string;
   iconPath?: string;
   iconExtension?: string;
   onChange: (value: string) => void;
   options: DropdownItemProps[];
-  symbolKey?: string;
   value?: string;
-  valueKey?: 'country' | 'code' | 'name';
+  showBalance?: boolean;
+  balances?: { [key: string]: { balance: string | null; isLoading: boolean; error: string | null } };
+}
+type ComboboxProps = {
+  symbolKey?: keyof DropdownItemProps;
+  valueKey?: keyof DropdownItemProps;
+  labelKey?: keyof DropdownItemProps;
 }
 
 export default function MyCombobox({
-  className = 'rounded-lg',
+  className = 'rounded-lg h-14',
+  disabled,
   hasIcon = true,
+  iconClass = 'top-4',
   iconPath = 'country',
   iconExtension = 'svg',
+  labelKey = 'label',
   onChange,
   options,
-  symbolKey = '',
+  showBalance = false,
+  balances = {},
+  symbolKey = 'icon',
   value,
-  valueKey = 'country',
-}: Props) {
+  valueKey = 'value',
+}: Props & ComboboxProps) {
   const [selected, setSelected] = useState<DropdownItemProps>(options.find(item => item[ valueKey ] === value) || options[ 0 ]);
   const [query, setQuery] = useState<string>('');
   const filteredOptions = useMemo(() => {
-    return query === ''
-      ? options
-      : options.filter((item) => {
-        return item[ valueKey ].toLowerCase().includes(query.toLowerCase());
-      });
-  }, [query, options, valueKey]);
+    if (query === '') return options;
+
+    const theQuery = query.trim().toLowerCase();
+    return options.filter((item) => {
+      return (item[ labelKey ] as string).toLowerCase().includes(theQuery);
+    });
+  }, [labelKey, query, options]);
 
   function doUpdate(value: DropdownItemProps) {
     if (!value) return;
 
     setSelected(value);
-    onChange(value[ valueKey ]);
+    onChange(value[ valueKey ] as string);
   }
 
   useEffect(() => {
@@ -64,23 +77,27 @@ export default function MyCombobox({
     >
       <div className="relative">
         {hasIcon && (query
-          ? <div className="absolute size-6 rounded-full bg-primary top-4 left-4" />
+          ? <div className={clsx('absolute size-6 rounded-full bg-primary left-4', iconClass)} />
           : <Image
-              src={`/images/${iconPath}/${selected.icon}.${iconExtension}`}
+              src={`/images/${iconPath}/${selected[ symbolKey ]}.${iconExtension}`}
               width={24}
               height={24}
-              className="size-6 absolute top-4 left-4"
-              alt={selected.country}
+              className={clsx('size-6 absolute left-4', iconClass)}
+              alt={selected[ labelKey ] || ''}
               loading="lazy"
             />
         )}
         <ComboboxInput
-          className={clsx('w-full ps-12 pe-4 border h-14 font-semibold', className)}
+          className={clsx('w-full ps-12 pe-4 border font-semibold', className)}
+          disabled={disabled}
           aria-label="Select country"
-          displayValue={(item: DropdownItemProps) => `${symbolKey ? `${item[ symbolKey ]} ` : ''}${item[ valueKey ]}`}
+          displayValue={(item: DropdownItemProps) => item[ labelKey ] as string}
           onChange={(event) => setQuery(event.target.value)}
         />
-        <ComboboxButton className="group absolute inset-y-0 right-0 px-4">
+        <ComboboxButton
+          className="group absolute inset-y-0 right-0 px-4"
+          disabled={disabled}
+        >
           {({ open }) => (
             open
               ? <ChevronUpIcon className="size-4 text-gray-400" />
@@ -93,27 +110,52 @@ export default function MyCombobox({
         transition
         className="w-(--input-width) border rounded-lg bg-white space-y-1"
       >
-        {filteredOptions.map(option => (
+        {filteredOptions.map((option, index) => (
           <ComboboxOption
             className={clsx(
-              'flex items-center gap-3 px-4 h-12 cursor-pointer',
+              'flex items-center justify-between px-4 h-12 cursor-pointer',
               value === option[ valueKey ] ? 'bg-blue-50 hover:bg-blue-100' : 'hover:bg-blue-50',
             )}
-            key={option[ valueKey ]}
+            disabled={disabled}
+            key={option[valueKey]}
             value={option}
           >
             <div className="flex items-center gap-3">
               {hasIcon && <Image
-                src={`/images/${iconPath}/${option.icon}.${iconExtension}`}
+                src={`/images/${iconPath}/${option[ symbolKey ]}.${iconExtension}`}
                 width={24}
                 height={24}
                 className="w-6 h-6 block"
-                alt={option[ valueKey ]}
+                alt={option[ valueKey ] || ''}
                 loading="lazy"
               />}
-              {symbolKey && <span className="text-gray-500">{option[ symbolKey ]}</span>}
-              {option[ valueKey ]}
+              {option[ labelKey ]}
             </div>
+            {showBalance && (
+              <div className="text-sm text-gray-600 font-medium">
+                {(() => {
+                  const optionValue = option[valueKey] as string;
+                  const balance = balances[optionValue];
+                  if (!balance) return null;
+                  
+                  if (balance.isLoading) {
+                    return <span className="text-gray-400">Loading...</span>;
+                  }
+                  if (balance.error) {
+                    return <span className="text-red-400">Error</span>;
+                  }
+                  if (balance.balance) {
+                    const symbol = optionValue.toUpperCase();
+                    return (
+                      <span className="text-green-600">
+                        {parseFloat(balance.balance).toFixed(4)} {symbol}
+                      </span>
+                    );
+                  }
+                  return <span className="text-gray-400">0.0000 {optionValue.toUpperCase()}</span>;
+                })()}
+              </div>
+            )}
           </ComboboxOption>
         ))}
         {!filteredOptions.length && <div className="flex items-center gap-3 px-4 h-12">

@@ -15,6 +15,14 @@ const config: Config = {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic": "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
+      borderRadius: {
+        lg: "var(--radius)",
+        md: "calc(var(--radius) - 2px)",
+        sm: "calc(var(--radius) - 4px)",
+      },
+      boxShadow: {
+        footer: "0 -14px 14px #28303E05, 0 -55px 22px #28303E02",
+      },
       colors: {
         blue: {
           50: "#f0f7ff",
@@ -73,11 +81,6 @@ const config: Config = {
           ring: "hsl(var(--sidebar-ring))",
         },
       },
-      borderRadius: {
-        lg: "var(--radius)",
-        md: "calc(var(--radius) - 2px)",
-        sm: "calc(var(--radius) - 4px)",
-      },
       keyframes: {
         "accordion-down": {
           from: {
@@ -104,8 +107,10 @@ const config: Config = {
         '7.5': '1.875rem',
         13: '3.25rem',
         15: '3.75rem',
+        17: '4.25rem',
         22: '5.5rem',
         25: '6.25rem',
+        30: '7.5rem',
         '81.5': '20.375rem',
         107: '26.75rem',
         '50dvw': '50dvw',
