@@ -13,7 +13,7 @@ import DonationStep4 from '@/app/_components/donate/step4';
 import DonationStep5 from '@/app/_components/donate/step5';
 import { createDonationInfo } from '@/utils';
 import { useWagmiReady } from '@/components/providers/web3-provider';
-import { getNetworkDropdownOptions } from '@/config/blockchain';
+import { getNetworkDropdownOptions, getNetworkDropdownOptionsFromProject } from '@/config/blockchain';
 
 // 动态导入包含 wagmi hooks 的组件，否则会在服务端执行，因为edge runtime的原因出现500报错
 const DonationStep1 = lazy(() => import('@/app/_components/donate/step1'));
@@ -63,10 +63,9 @@ export default function DonationPageComp({
   const [currentStep, setCurrentStep] = useState<Step>('initialization')
   const [slideDirection, setSlideDirection] = useState<'right' | 'left'>('right')
   const [info, setInfo] = useState<DonationInfo>(createDonationInfo(project.id));
-  
   // Network state management
   const [network, setNetwork] = useState<string>(() => {
-    const networkOptions = getNetworkDropdownOptions();
+    const networkOptions = getNetworkDropdownOptionsFromProject(project); // 从project里面读出支持的网络列表
     const firstNetwork = networkOptions.length > 0 ? networkOptions[0].value || '' : '';
 
     return firstNetwork;
@@ -211,7 +210,8 @@ export default function DonationPageComp({
                       setDollar(value);
                       updateInfo({ dollar: typeof value === 'number' ? value : null });
                     }}
-                  />
+                    project={project}
+                />
               ) : (
                 <Step1NoWagmi
                   amount={info.amount}
@@ -228,6 +228,7 @@ export default function DonationPageComp({
                     setDollar(value);
                     updateInfo({ dollar: typeof value === 'number' ? value : null });
                   }}
+                  project={project}
                 />
               )
             )}
@@ -244,6 +245,7 @@ export default function DonationPageComp({
               goToNextStep={goToNextStep}
               goToPreviousStep={goToPreviousStep}
               info={info}
+              project={project}
             />}
 
             {/* Complete Step */}

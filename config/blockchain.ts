@@ -311,6 +311,51 @@ export function getCurrencyDropdownOptions(networkId?: string): DropdownItemProp
 }
 
 /**
+ * 根据项目配置获取网络下拉框选项
+ */
+export function getNetworkDropdownOptionsFromProject(project: any): DropdownItemProps[] {
+    if (!project?.networks || !Array.isArray(project.networks)) {
+        // 如果项目没有配置网络，则返回默认的所有网络
+        console.warn('Project does not have networks configured, returning all networks.', project);
+        return getNetworkDropdownOptions();
+    }
+
+    return project.networks
+        .map((networkId: string) => {
+            const network = BLOCKCHAIN_CONFIG.networks[networkId as keyof typeof BLOCKCHAIN_CONFIG.networks];
+            if (!network) return null;
+            return {
+                icon: network.icon,
+                label: network.name,
+                value: network.id,
+            };
+        })
+        .filter(Boolean) as DropdownItemProps[];
+}
+
+/**
+ * 根据项目配置获取货币下拉框选项
+ */
+export function getCurrencyDropdownOptionsFromProject(project: any, networkId: string): DropdownItemProps[] {
+    if (!project?.tokens || !project.tokens[networkId]) {
+        // 如果项目没有配置代币，则返回该网络的默认代币
+        return getCurrencyDropdownOptions(networkId);
+    }
+
+    return project.tokens[networkId]
+        .map((currencyId: string) => {
+            const currency = BLOCKCHAIN_CONFIG.currencies[currencyId as keyof typeof BLOCKCHAIN_CONFIG.currencies];
+            if (!currency) return null;
+            return {
+                icon: currency.icon,
+                label: `${currency.name} (${currency.symbol})`,
+                value: currency.id,
+            };
+        })
+        .filter(Boolean) as DropdownItemProps[];
+}
+
+/**
  * 获取交易浏览器URL
  */
 export function getExplorerUrl(networkId: string, txHash: string): string {
@@ -362,4 +407,29 @@ export function convertToSmallestUnit(amount: number, currencyId: string): bigin
         // 其他代币使用10^decimals
         return BigInt(Math.floor(amount * Math.pow(10, currency.decimals)));
     }
+}
+
+/**
+ * 从项目配置获取指定网络的钱包地址
+ */
+export function getWalletAddressFromProject(project: any, networkId: string): string | null {
+    if (!project?.wallets || !project.wallets[networkId]) {
+        return null;
+    }
+    
+    // 简单格式：每个网络一个钱包地址
+    return project.wallets[networkId];
+}
+
+/**
+ * 获取项目在指定网络上的钱包地址（如果没有项目配置，则使用默认的大学钱包地址）
+ */
+export function getProjectWalletAddress(project: any, networkId: string): string | null {
+    // 优先使用项目配置的钱包地址
+    const projectWallet = getWalletAddressFromProject(project, networkId);
+    if (projectWallet) {
+        return projectWallet;
+    }
+    
+    throw new Error(`No wallet address configured for network ${networkId} in project.`);
 }
