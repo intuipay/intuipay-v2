@@ -8,10 +8,11 @@ import { clsx } from 'clsx';
 import Image from 'next/image';
 import { 
   BLOCKCHAIN_CONFIG,
-  getNetworkDropdownOptions,
+  getNetworkDropdownOptionsFromProject,
   getSupportedWallets,
-  getCurrencyDropdownOptions,
+  getCurrencyDropdownOptionsFromProject,
 } from '@/config/blockchain';
+import { DonationProject } from '@/types';
 
 type Props = {
   amount: number | '';
@@ -25,6 +26,7 @@ type Props = {
   setNetwork: (network: string) => void;
   dollar: number | null;
   setDollar: (value: number | null) => void;
+  project: DonationProject;
 }
 
 export default function Step1NoWagmi({
@@ -36,15 +38,16 @@ export default function Step1NoWagmi({
   network,
   setNetwork,
   setDollar,
+  project,
 }: Props) {
-  // 获取配置数据
-  const networkOptions = getNetworkDropdownOptions();
+  // 获取配置数据 - 从项目配置中获取
+  const networkOptions = getNetworkDropdownOptionsFromProject(project);
   const allWallets = Object.values(BLOCKCHAIN_CONFIG.wallets);
 
   // Filter payment methods based on selected network
   const getFilteredPaymentMethods = (): DropdownItemProps[] => {
     if (!network) return [];
-    return getCurrencyDropdownOptions(network);
+    return getCurrencyDropdownOptionsFromProject(project, network);
   };
 
   // Filter wallets based on selected network

@@ -69,6 +69,11 @@ export type DonationProject = {
   updated_at: string;
   vault_account_id: string;
   wallet_address: string;
+  
+  // 新增字段
+  networks?: string[]; // 支持的区块链网络列表
+  tokens?: Record<string, string[]>; // 每个网络支持的代币列表
+  wallets?: Record<string, string>; // 每个网络的收款钱包地址，格式：{ "ethereum-sepolia": "0x123...", "solana-devnet": "ABC..." }
 }
 
 export type TiDBDataServiceResponse<T> = {

@@ -12,11 +12,12 @@ import { appkit, addNetworkToMetaMask } from '@/lib/appkit';
 import { useMultiWalletBalance } from '@/hooks/use-multi-wallet-balance';
 import {
   BLOCKCHAIN_CONFIG,
-  getNetworkDropdownOptions,
+  getNetworkDropdownOptionsFromProject,
   getSupportedWallets,
-  getCurrencyDropdownOptions,
+  getCurrencyDropdownOptionsFromProject,
 } from '@/config/blockchain';
 import { useExchangeRates } from '@/hooks/use-exchange-rates';
+import { DonationProject } from '@/types';
 
 // 钱包官网链接
 const WALLET_INSTALL_LINKS = {
@@ -50,6 +51,7 @@ type Props = {
   setNetwork: (network: string) => void;
   dollar: number | null;
   setDollar: (value: number | null) => void;
+  project: DonationProject;
 }
 
 export default function DonationStep1({
@@ -64,9 +66,11 @@ export default function DonationStep1({
   setNetwork,
   dollar,
   setDollar,
+  project,
 }: Props) {
-  const [error, setError] = useState<string>('');// 获取配置数据
-  const networkOptions = getNetworkDropdownOptions();
+  const [error, setError] = useState<string>('');
+  // 获取配置数据 - 从项目配置中获取
+  const networkOptions = getNetworkDropdownOptionsFromProject(project);
   const allWallets = Object.values(BLOCKCHAIN_CONFIG.wallets);
 
   // wagmi hooks
@@ -99,11 +103,10 @@ export default function DonationStep1({
 
   // 获取当前网络配置
   const currentNetwork = BLOCKCHAIN_CONFIG.networks[network as keyof typeof BLOCKCHAIN_CONFIG.networks];
-
   // Filter payment methods based on selected network
   const getFilteredPaymentMethods = (): DropdownItemProps[] => {
     if (!network) return [];
-    const result = getCurrencyDropdownOptions(network);
+    const result = getCurrencyDropdownOptionsFromProject(project, network);
     return result;
   };
   // Filter wallets based on selected network

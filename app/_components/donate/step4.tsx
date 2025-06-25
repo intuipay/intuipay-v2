@@ -11,34 +11,37 @@ import { TransactionMessage, VersionedTransaction, LAMPORTS_PER_SOL, SystemProgr
 import { createTransferInstruction, getAssociatedTokenAddress, TOKEN_PROGRAM_ID, ASSOCIATED_TOKEN_PROGRAM_ID } from '@solana/spl-token';
 import { 
   BLOCKCHAIN_CONFIG,
-  getUniversityWalletAddress,
+  getProjectWalletAddress,
   getCurrencyNetworkConfig,
   getExplorerUrl,
   formatAddress,
   convertToSmallestUnit
 } from '@/config/blockchain';
+import { DonationProject } from '@/types';
 
 type Props = {
   goToPreviousStep: () => void;
   goToNextStep: () => void;
   info: DonationInfo;
+  project: DonationProject;
 }
 
 export default function DonationStep4({
   goToPreviousStep,
   goToNextStep,
   info,
+  project,
 }: Props) {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [message, setMessage] = useState<string>('');
   const [solanaTransactionHash, setSolanaTransactionHash] = useState<string>('');
   const [isSolanaTransaction, setIsSolanaTransaction] = useState<boolean>(false);
-  
   // 动态获取配置
   const networkConfig = BLOCKCHAIN_CONFIG.networks[info.network as keyof typeof BLOCKCHAIN_CONFIG.networks];
   const currencyConfig = BLOCKCHAIN_CONFIG.currencies[info.currency as keyof typeof BLOCKCHAIN_CONFIG.currencies];
   const currencyNetworkConfig = getCurrencyNetworkConfig(info.currency, info.network);
-  const universityAddress = getUniversityWalletAddress(info.network);
+  // 从项目配置中读出收款钱包，配置不对的话会报错
+  const recipientAddress = getProjectWalletAddress(project, info.network);
 
   // USDC合约ABI (ERC-20标准)
   const usdcAbi = [
@@ -209,9 +212,8 @@ export default function DonationStep4({
       setMessage('Invalid currency configuration');
       return;
     }
-
-    if (!universityAddress) {
-      setMessage('University wallet address not found for this network');
+    if (!recipientAddress) {
+      setMessage('Project wallet address not found for this network');
       return;
     }
 
@@ -233,7 +235,7 @@ export default function DonationStep4({
             instructions = [
               SystemProgram.transfer({
                 fromPubkey: phantom.publicKey,
-                toPubkey: new PublicKey(universityAddress),
+                toPubkey: new PublicKey(recipientAddress),
                 lamports: Math.floor(info.amount * Math.pow(10, currencyConfig.decimals)),
               }),
             ];
@@ -243,7 +245,7 @@ export default function DonationStep4({
             
             const mintAddress = new PublicKey(currencyNetworkConfig.contractAddress);
             const fromWallet = phantom.publicKey;
-            const toWallet = new PublicKey(universityAddress);
+            const toWallet = new PublicKey(recipientAddress);
             
             // 获取或创建发送者的关联代币账户
             const fromTokenAccount = await getAssociatedTokenAddress(
@@ -366,9 +368,9 @@ export default function DonationStep4({
       const amount = parseUnits(info.amount.toString(), currencyConfig.decimals);      // 根据代币类型发送不同的交易
       if (currencyNetworkConfig?.isNative) {
         // 原生代币交易（ETH, PHRS 等）
-        console.log('Sending native token transaction');
+        // console.log('Sending native token transaction');
         sendTransaction({
-          to: universityAddress as `0x${string}`,
+          to: recipientAddress as `0x${string}`,
           value: amount,
         });
       } else if (currencyNetworkConfig?.contractAddress) {
@@ -378,7 +380,7 @@ export default function DonationStep4({
           address: currencyNetworkConfig.contractAddress as `0x${string}`,
           abi: usdcAbi,
           functionName: 'transfer',
-          args: [universityAddress as `0x${string}`, amount],
+          args: [recipientAddress as `0x${string}`, amount],
         });
       } else {
         setMessage('Invalid token configuration: no contract address or native flag');
