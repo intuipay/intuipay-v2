@@ -25,9 +25,10 @@ import { ProjectDonationMethods } from '@/data'
 type ProjectDetailClientLayoutProps = {
   project: ProjectInfo;
   similarProjects: ProjectInfo[];
+  slug: string;
 }
 
-export default function ProjectDetailClientLayout({ project, similarProjects }: ProjectDetailClientLayoutProps) {
+export default function ProjectDetailClientLayout({ project, similarProjects, slug }: ProjectDetailClientLayoutProps) {
   const isMovie = project.banner.includes('youtube.com') || project.banner.includes('youtu.be');
   const socialLinks = project.social_links ? JSON.parse(project.social_links as string) : {};
   const [tab, setTab] = useState('campaign');
@@ -179,7 +180,7 @@ export default function ProjectDetailClientLayout({ project, similarProjects }: 
               size="lg"
             >
               <Link
-                href={`/donate/${project.project_slug}`}
+                href={`https://intuipay.xyz/donate/${slug}`}
                 target="_blank"
               >
                 Donate Now

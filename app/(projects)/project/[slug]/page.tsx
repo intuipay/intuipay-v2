@@ -83,6 +83,7 @@ export default async function ProjectDetailPageServer({ params }: { params: { sl
     <ProjectDetailClientLayout
       project={project}
       similarProjects={similarProjects}
+      slug={slug}
     />
   )
 }
