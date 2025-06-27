@@ -25,7 +25,7 @@ export async function generateMetadata({
     title: project.project_name,
     description: project.description,
     openGraph: {
-      title: project.project_name,
+      title: `Donate to ${project.project_name}`,
       description: project.description,
       images: [
         {
