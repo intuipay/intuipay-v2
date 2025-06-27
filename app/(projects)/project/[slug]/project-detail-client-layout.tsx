@@ -8,8 +8,7 @@ import { Badge } from '@/components/ui/badge'
 import { Progress } from '@/components/ui/progress'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Envelope, Link as LinkIcon, GithubLogo, PlayCircle } from '@phosphor-icons/react';
-
+import { EnvelopeIcon, LinkIcon, GithubLogoIcon, PlayCircleIcon } from '@phosphor-icons/react';
 
 import { CampaignTab } from '@/components/project-detail-tabs/campaign-tab'
 import { AboutTab } from '@/components/project-detail-tabs/about-tab'
@@ -69,7 +68,7 @@ export default function ProjectDetailClientLayout({ project, similarProjects }: 
             />
             {isMovie && (
               <div className="absolute inset-0 flex items-center justify-center bg-black/30">
-                <PlayCircle size={64} className="w-16 h-16 text-white/80 hover:text-white cursor-pointer" />
+                <PlayCircleIcon size={64} className="w-16 h-16 text-white/80 hover:text-white cursor-pointer" />
               </div>
             )}
           </div>
@@ -132,7 +131,7 @@ export default function ProjectDetailClientLayout({ project, similarProjects }: 
                 href={`mailto:${project.email}`}
                 className="flex items-center gap-1 text-neutral-darkgray hover:text-action-blue"
               >
-                <Envelope size={16} /> <span className="text-primary">{project.email}</span>
+                <EnvelopeIcon size={16} /> <span className="text-primary">{project.email}</span>
               </Link>
               <Link
                 href={project.website || ''}
@@ -148,7 +147,7 @@ export default function ProjectDetailClientLayout({ project, similarProjects }: 
                 rel="noopener noreferrer"
                 className="flex items-center gap-1 text-neutral-darkgray hover:text-action-blue"
               >
-                <GithubLogo className="w-4 h-4" /> <span className="text-primary">{project.github}</span>
+                <GithubLogoIcon size={16} /> <span className="text-primary">{project.github}</span>
               </Link>}
               {
                 socialLinks && (
@@ -174,8 +173,17 @@ export default function ProjectDetailClientLayout({ project, similarProjects }: 
                 )
               }
             </div>
-            <Button size="lg" className="w-full rounded-full bg-primary hover:bg-primary/90 text-base py-3">
-              Donate Now
+            <Button
+              asChild
+              className="w-full rounded-full bg-primary hover:bg-primary/90 text-base py-3"
+              size="lg"
+            >
+              <Link
+                href={`/donate/${project.project_slug}`}
+                target="_blank"
+              >
+                Donate Now
+              </Link>
             </Button>
           </div>
         </div>
