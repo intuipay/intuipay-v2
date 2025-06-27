@@ -2,6 +2,7 @@ import type React from 'react'
 import { Button } from '@/components/ui/button';
 import BackButton from '@/components/back-button';
 import { Web3Provider } from '@/components/providers/web3-provider';
+import { getDonationProjectBySlug } from '@/lib/data';
 
 export const runtime = 'edge';
 
@@ -13,7 +14,8 @@ export default async function DonateLayout({
   params: Promise<{slug: string}>
 }) {
   const slug = (await params).slug;
-  const pageTitle = 'Support';
+  const project = await getDonationProjectBySlug(slug);
+  const pageTitle = project?.project_name || 'Support';
   return (
     <Web3Provider>
       <div className="min-h-screen bg-gray-50 lg:bg-gray-100">
