@@ -5,6 +5,9 @@ export const runtime = 'edge';
 export async function POST(req: Request) {
   const json = await req.json();
   try {
+    // TODO: verify tx is valid before save to db
+    // 要区分 evm 和 solana 的 tx
+
     const data = await fetchTidb<{ id: number }>('/donation', 'POST', json);
     return new Response(
       JSON.stringify({

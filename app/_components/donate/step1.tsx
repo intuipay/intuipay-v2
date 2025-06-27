@@ -318,7 +318,7 @@ export default function DonationStep1({
 
           // 对于 EVM 钱包，检查并切换到目标网络
           const currentNetworkConfig = BLOCKCHAIN_CONFIG.networks[network as keyof typeof BLOCKCHAIN_CONFIG.networks];
-          if (currentNetworkConfig?.type === 'ethereum') {
+          if (currentNetworkConfig?.type === 'evm') {
             const targetChainId = getChainIdForNetwork(network);
             if (targetChainId && chainId !== targetChainId) {
               try {
@@ -363,7 +363,7 @@ export default function DonationStep1({
 
       // 未连接钱包，对于 EVM 钱包，先切换到目标网络再连接
       const currentNetworkConfig = BLOCKCHAIN_CONFIG.networks[network as keyof typeof BLOCKCHAIN_CONFIG.networks];
-      if (currentNetworkConfig?.type === 'ethereum') {
+      if (currentNetworkConfig?.type === 'evm') {
         const targetChainId = getChainIdForNetwork(network);
         const walletChainId = await targetConnector?.getChainId?.(); // 当前钱包连的网络
         if (targetChainId !== walletChainId) {

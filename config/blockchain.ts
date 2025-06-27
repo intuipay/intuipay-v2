@@ -9,7 +9,7 @@ export interface NetworkConfig {
     rpcUrl?: string; // Solana RPC URL
     explorerUrl: string;
     explorerName: string;
-    type: 'ethereum' | 'solana'; // 网络类型
+    type: 'evm' | 'solana'; // 网络类型
 }
 
 // 钱包配置
@@ -53,7 +53,7 @@ export const BLOCKCHAIN_CONFIG = {
             chainId: 11155111,
             explorerUrl: 'https://sepolia.etherscan.io',
             explorerName: 'Etherscan',
-            type: 'ethereum',
+            type: 'evm',
         } as NetworkConfig,
         'ethereum-mainnet': {
             id: 'ethereum-mainnet',
@@ -62,7 +62,7 @@ export const BLOCKCHAIN_CONFIG = {
             chainId: 1,
             explorerUrl: 'https://etherscan.io',
             explorerName: 'Etherscan',
-            type: 'ethereum',
+            type: 'evm',
         } as NetworkConfig,
         'solana-devnet': {
             id: 'solana-devnet',
@@ -90,7 +90,7 @@ export const BLOCKCHAIN_CONFIG = {
             rpcUrl: 'https://api.zan.top/node/v1/pharos/testnet/e3d694bd610c4a11a98b15b2296236c3',
             explorerUrl: 'https://testnet.pharosscan.xyz',
             explorerName: 'Pharos Testnet Explorer',
-            type: 'ethereum',
+            type: 'evm',
         } as NetworkConfig,
     },
 
