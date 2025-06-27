@@ -10,6 +10,7 @@ export interface NetworkConfig {
     explorerUrl: string;
     explorerName: string;
     type: 'evm' | 'solana'; // 网络类型
+    fundsDividerContract?: string; // 手续费分配合约地址
 }
 
 // 钱包配置
@@ -55,6 +56,7 @@ export const BLOCKCHAIN_CONFIG = {
             explorerUrl: 'https://sepolia.etherscan.io',
             explorerName: 'Etherscan',
             type: 'evm',
+            fundsDividerContract: '0xfEeC3028Af62B78E0D54F650063E1800Ac7Dfd98',
         } as NetworkConfig,
         'ethereum-mainnet': {
             id: 'ethereum-mainnet',
@@ -65,6 +67,7 @@ export const BLOCKCHAIN_CONFIG = {
             explorerUrl: 'https://etherscan.io',
             explorerName: 'Etherscan',
             type: 'evm',
+            // fundsDividerContract: '', // TODO: Deploy contract on mainnet
         } as NetworkConfig,
         'solana-devnet': {
             id: 'solana-devnet',
@@ -93,6 +96,7 @@ export const BLOCKCHAIN_CONFIG = {
             explorerUrl: 'https://testnet.pharosscan.xyz',
             explorerName: 'Pharos Testnet Explorer',
             type: 'evm',
+            // fundsDividerContract: '', // TODO: Deploy contract on pharos testnet
         } as NetworkConfig,
     },
 
@@ -434,4 +438,12 @@ export function getProjectWalletAddress(project: any, networkId: string): string
     }
 
     throw new Error(`No wallet address configured for network ${networkId} in project.`);
+}
+
+/**
+ * 获取指定网络的手续费分配合约地址
+ */
+export function getFundsDividerContract(networkId: string): string | null {
+    const network = BLOCKCHAIN_CONFIG.networks[networkId as keyof typeof BLOCKCHAIN_CONFIG.networks];
+    return network?.fundsDividerContract || null;
 }

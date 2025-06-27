@@ -15,9 +15,11 @@ import {
   getCurrencyNetworkConfig,
   getExplorerUrl,
   formatAddress,
-  convertToSmallestUnit
+  convertToSmallestUnit,
+  getFundsDividerContract
 } from '@/config/blockchain';
 import { DonationProject } from '@/types';
+import IntuipayFundsDividerABI from '@/lib/IntuipayFundsDivider.abi.json';
 
 type Props = {
   goToPreviousStep: () => void;
@@ -381,27 +383,64 @@ export default function DonationStep4({
 
     try {
       // 将捐赠金额转换为代币的最小单位
-      const amount = parseUnits(info.amount.toString(), currencyConfig.decimals);      // 根据代币类型发送不同的交易
-      if (currencyNetworkConfig?.isNative) {
-        // 原生代币交易（ETH, PHRS 等）
-        // console.log('Sending native token transaction');
-        sendTransaction({
-          to: recipientAddress as `0x${string}`,
-          value: amount,
-        });
-      } else if (currencyNetworkConfig?.contractAddress) {
-        // ERC-20 代币交易
-        console.log('Sending ERC-20 token transaction');
-        writeContract({
-          address: currencyNetworkConfig.contractAddress as `0x${string}`,
-          abi: usdcAbi,
-          functionName: 'transfer',
-          args: [recipientAddress as `0x${string}`, amount],
-        });
+      const amount = parseUnits(info.amount.toString(), currencyConfig.decimals);
+      
+      // 检查是否使用手续费分配合约
+      const fundsDividerContract = getFundsDividerContract(info.network);
+
+      if (fundsDividerContract) {
+        // 使用手续费分配合约转账
+        console.log('Using funds divider contract for transaction');
+        
+        if (currencyNetworkConfig?.isNative) {
+          // 原生代币通过合约转账
+          writeContract({
+            address: fundsDividerContract as `0x${string}`,
+            abi: IntuipayFundsDividerABI,
+            functionName: 'divideNativeTransfer',
+            args: [recipientAddress as `0x${string}`],
+            value: amount,
+          });
+        } else if (currencyNetworkConfig?.contractAddress) {
+          // ERC-20 代币通过合约转账
+          writeContract({
+            address: fundsDividerContract as `0x${string}`,
+            abi: IntuipayFundsDividerABI,
+            functionName: 'divideERC20Transfer',
+            args: [
+              currencyNetworkConfig.contractAddress as `0x${string}`,
+              recipientAddress as `0x${string}`,
+              amount
+            ],
+          });
+        } else {
+          setMessage('Invalid token configuration: no contract address or native flag');
+          setIsSubmitting(false);
+          return;
+        }
       } else {
-        setMessage('Invalid token configuration: no contract address or native flag');
-        setIsSubmitting(false);
-        return;
+        // 直接转账（原有逻辑）
+        if (currencyNetworkConfig?.isNative) {
+          // 原生代币交易（ETH, PHRS 等）
+          console.log('Sending native token transaction');
+          sendTransaction({
+            to: recipientAddress as `0x${string}`,
+            value: amount,
+          });
+        } else if (currencyNetworkConfig?.contractAddress) {
+          // ERC-20 代币交易
+          console.log('Sending ERC-20 token transaction');
+          writeContract({
+            address: currencyNetworkConfig.contractAddress as `0x${string}`,
+            abi: usdcAbi,
+            functionName: 'transfer',
+            args: [recipientAddress as `0x${string}`, amount],
+          });
+        } else {
+          setMessage('Invalid token configuration: no contract address or native flag');
+          setIsSubmitting(false);
+          return;
+        }
       }
 
     } catch (e) {
