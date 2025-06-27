@@ -9,7 +9,7 @@ import { useAccount, useChainId, useWriteContract, useWaitForTransactionReceipt,
 import { parseUnits } from 'viem';
 import { TransactionMessage, VersionedTransaction, LAMPORTS_PER_SOL, SystemProgram, Connection, PublicKey, clusterApiUrl } from '@solana/web3.js';
 import { createTransferInstruction, getAssociatedTokenAddress, TOKEN_PROGRAM_ID, ASSOCIATED_TOKEN_PROGRAM_ID } from '@solana/spl-token';
-import { 
+import {
   BLOCKCHAIN_CONFIG,
   getProjectWalletAddress,
   getCurrencyNetworkConfig,
@@ -155,7 +155,7 @@ export default function DonationStep4({
 
     return errorMessage;
   };
-  
+
   function convertAmountBasedOnCurrency(amount: number, currency: string): number {
     return Number(convertToSmallestUnit(amount, currency));
   }
@@ -181,12 +181,28 @@ export default function DonationStep4({
       });
 
       if (!response.ok) {
-        setMessage('Error saving donation: ' + response.statusText);
+        const errorData = await response.json().catch(() => ({ message: response.statusText }));
+        const errorMessage = errorData.message || response.statusText;
+
+        // 检查是否是交易验证错误
+        if (errorMessage.includes('Transaction validation failed')) {
+          setMessage(`Transaction verification failed: ${errorMessage.replace('Transaction validation failed:', '').trim()}`);
+        } else {
+          setMessage('Error saving donation: ' + errorMessage);
+        }
         setIsSubmitting(false);
         return;
       }
 
-      const { data } = (await response.json()) as APIResponse<number>;
+      const { data, validation } = (await response.json()) as APIResponse<number> & {
+        validation?: { verified: boolean; tx_details?: any }
+      };
+
+      // 显示验证成功的信息
+      if (validation?.verified) {
+        console.log('Transaction verified successfully:', validation.tx_details);
+      }
+
       info.id = data;
       setIsSubmitting(false);
       goToNextStep();
@@ -242,11 +258,11 @@ export default function DonationStep4({
           } else if (currencyNetworkConfig?.contractAddress) {
             // SPL Token 转账（如 USDC）
             console.log('Creating SPL Token transfer instruction for:', currencyConfig.symbol);
-            
+
             const mintAddress = new PublicKey(currencyNetworkConfig.contractAddress);
             const fromWallet = phantom.publicKey;
             const toWallet = new PublicKey(recipientAddress);
-            
+
             // 获取或创建发送者的关联代币账户
             const fromTokenAccount = await getAssociatedTokenAddress(
               mintAddress,
@@ -255,7 +271,7 @@ export default function DonationStep4({
               TOKEN_PROGRAM_ID,
               ASSOCIATED_TOKEN_PROGRAM_ID
             );
-            
+
             // 获取或创建接收者的关联代币账户
             const toTokenAccount = await getAssociatedTokenAddress(
               mintAddress,
@@ -267,7 +283,7 @@ export default function DonationStep4({
 
             // 检查接收者的代币账户是否存在
             const toTokenAccountInfo = await connection.getAccountInfo(toTokenAccount);
-            
+
             // 如果接收者的代币账户不存在，需要先创建
             if (!toTokenAccountInfo) {
               console.log('Creating associated token account for recipient');
@@ -286,7 +302,7 @@ export default function DonationStep4({
 
             // 计算转账金额（转换为代币的最小单位）
             const transferAmount = Math.floor(info.amount * Math.pow(10, currencyConfig.decimals));
-            
+
             console.log('SPL Token transfer details:', {
               fromTokenAccount: fromTokenAccount.toString(),
               toTokenAccount: toTokenAccount.toString(),
@@ -311,21 +327,21 @@ export default function DonationStep4({
 
           // get latest `blockhash`
           let blockhash = await connection.getLatestBlockhash().then((res) => res.blockhash);
-          
+
           // create v0 compatible message
           const messageV0 = new TransactionMessage({
             payerKey: phantom.publicKey,
             recentBlockhash: blockhash,
             instructions,
           }).compileToV0Message();
-          
+
           // make a versioned transaction
           const transactionV0 = new VersionedTransaction(messageV0);
 
           console.log('Solana transaction created:', transactionV0);
           const result = await phantom.signAndSendTransaction(transactionV0);
           console.log('Solana transaction result:', result);
-          
+
           if (result?.signature) {
             // Set transaction hash for UI display
             setSolanaTransactionHash(result.signature);

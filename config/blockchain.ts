@@ -51,6 +51,7 @@ export const BLOCKCHAIN_CONFIG = {
             name: 'Ethereum Sepolia',
             icon: 'ethereum',
             chainId: 11155111,
+            rpcUrl: 'https://sepolia.infura.io/v3/3f0a3b8ee4134ebcb0947ecb057dcba5', // Joey's personal project
             explorerUrl: 'https://sepolia.etherscan.io',
             explorerName: 'Etherscan',
             type: 'evm',
@@ -60,6 +61,7 @@ export const BLOCKCHAIN_CONFIG = {
             name: 'Ethereum Mainnet',
             icon: 'ethereum',
             chainId: 1,
+            rpcUrl: 'https://eth.llamarpc.com',
             explorerUrl: 'https://etherscan.io',
             explorerName: 'Etherscan',
             type: 'evm',
@@ -416,7 +418,7 @@ export function getWalletAddressFromProject(project: any, networkId: string): st
     if (!project?.wallets || !project.wallets[networkId]) {
         return null;
     }
-    
+
     // 简单格式：每个网络一个钱包地址
     return project.wallets[networkId];
 }
@@ -430,6 +432,6 @@ export function getProjectWalletAddress(project: any, networkId: string): string
     if (projectWallet) {
         return projectWallet;
     }
-    
+
     throw new Error(`No wallet address configured for network ${networkId} in project.`);
 }
