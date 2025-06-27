@@ -1,19 +1,16 @@
 import { cache } from 'react';
 import { fetchTidb } from '@/services/fetch-tidb';
-import { DonationProject, ProjectFilter, ProjectInfo, Donation, Donations, Update, Updates } from '@/types';
-import { ProjectCategories, ProjectDonationMethods, ProjectTypes } from '@/data';
+import { ProjectInfo, ProjectFilter, Donation, Donations, Update, Updates } from '@/types';
 
 type CountResult = {
   count: number;
 }
 
 export const getDonationProjectBySlug = cache(async function getDonationProjectBySlug(slug: string) {
-
-  const data = await fetchTidb<DonationProject>(`/donation_project?slug=${slug}`);
-  const project = data[0];
+  const data = await fetchTidb<ProjectInfo>(`/donation_project?slug=${slug}`);
+  const project = data[ 0 ];
 
   project.project_slug = slug; // 确保 slug 正确
-
   // tidb endpoint返回的是string，所以需要手动转为json
   project.networks = JSON.parse((project.networks as unknown) as string);
   project.tokens = JSON.parse((project.tokens as unknown) as string);

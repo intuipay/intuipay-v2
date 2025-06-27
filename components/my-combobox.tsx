@@ -117,7 +117,7 @@ export default function MyCombobox({
               value === option[ valueKey ] ? 'bg-blue-50 hover:bg-blue-100' : 'hover:bg-blue-50',
             )}
             disabled={disabled}
-            key={option[valueKey]}
+            key={option[ valueKey ]}
             value={option}
           >
             <div className="flex items-center gap-3">
@@ -134,8 +134,8 @@ export default function MyCombobox({
             {showBalance && (
               <div className="text-sm text-gray-600 font-medium">
                 {(() => {
-                  const optionValue = option[valueKey] as string;
-                  const balance = balances[optionValue];
+                  const optionValue = option[ valueKey ] as string;
+                  const balance = balances[ optionValue ];
                   if (!balance) return null;
                   
                   if (balance.isLoading) {

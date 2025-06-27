@@ -1,4 +1,4 @@
-export enum DonationProjectStatus {
+export enum ProjectStatus {
   Draft,
   Review,
   Rejected,
@@ -14,11 +14,6 @@ export enum DonationProjectStatus {
   PaymentRefunded,
   PaymentCancelled,
   Archived = 100,
-}
-
-export enum DonationMethodType {
-  Crypto = 1,
-  Fiat = 2,
 }
 
 export enum DonationStatus {

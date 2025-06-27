@@ -3,7 +3,8 @@ import { APIResponse, DonationInfo } from '@/types';
 import { useState, useEffect } from 'react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import omit from 'lodash-es/omit';
-import { DonationMethodType, DonationStatus } from '@/constants/donation';
+import { DonationStatus } from '@/data/project';
+import { ProjectDonationMethods } from '@/data';
 import CtaFooter from '@/app/_components/donate/cta-footer';
 import { useAccount, useChainId, useWriteContract, useWaitForTransactionReceipt, useSendTransaction } from 'wagmi';
 import { parseUnits } from 'viem';
@@ -18,7 +19,7 @@ import {
   convertToSmallestUnit,
   getFundsDividerContract
 } from '@/config/blockchain';
-import { DonationProject } from '@/types';
+import { ProjectInfo } from '@/types';
 import IntuipayFundsDividerABI from '@/lib/IntuipayFundsDivider.abi.json';
 import ERC20_ABI from '@/lib/erc20.abi.json';
 
@@ -26,7 +27,7 @@ type Props = {
   goToPreviousStep: () => void;
   goToNextStep: () => void;
   info: DonationInfo;
-  project: DonationProject;
+  project: ProjectInfo;
 }
 
 export default function DonationStep4({
@@ -40,8 +41,8 @@ export default function DonationStep4({
   const [solanaTransactionHash, setSolanaTransactionHash] = useState<string>('');
   const [isSolanaTransaction, setIsSolanaTransaction] = useState<boolean>(false);
   // 动态获取配置
-  const networkConfig = BLOCKCHAIN_CONFIG.networks[info.network as keyof typeof BLOCKCHAIN_CONFIG.networks];
-  const currencyConfig = BLOCKCHAIN_CONFIG.currencies[info.currency as keyof typeof BLOCKCHAIN_CONFIG.currencies];
+  const networkConfig = BLOCKCHAIN_CONFIG.networks[ info.network as keyof typeof BLOCKCHAIN_CONFIG.networks ];
+  const currencyConfig = BLOCKCHAIN_CONFIG.currencies[ info.currency as keyof typeof BLOCKCHAIN_CONFIG.currencies ];
   const currencyNetworkConfig = getCurrencyNetworkConfig(info.currency, info.network);
   // 从项目配置中读出收款钱包，配置不对的话会报错
   const recipientAddress = getProjectWalletAddress(project, info.network);
@@ -218,7 +219,7 @@ export default function DonationStep4({
           has_tax_invoice: Number(info.has_tax_invoice),
           is_anonymous: Number(info.is_anonymous),
           account: '',
-          method: DonationMethodType.Crypto,
+          method: ProjectDonationMethods.Crypto,
           status: DonationStatus.Successful,
           tx_hash: transactionHash,
           wallet_address: walletAddress || address || '',
@@ -287,7 +288,7 @@ export default function DonationStep4({
       if (phantom && phantom.isConnected) {
         setIsSolanaTransaction(true);
         try {
-          const connection = new Connection(networkConfig.rpcUrl || clusterApiUrl("devnet"));
+          const connection = new Connection(networkConfig.rpcUrl || clusterApiUrl('devnet'));
           let instructions = [];
 
           // 根据代币类型构造不同的交易指令

@@ -5,7 +5,7 @@ import { CircleDotIcon, HeadsetIcon } from 'lucide-react'
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link'
-import { DonationInfo, DonationProject } from '@/types';
+import { DonationInfo, ProjectInfo } from '@/types';
 import { clsx } from 'clsx';
 import Step1NoWagmi from '@/app/_components/donate/step1-no-wagmi';
 import DonationStep2 from '@/app/_components/donate/step2';
@@ -20,7 +20,7 @@ const DonationStep1 = lazy(() => import('@/app/_components/donate/step1'));
 
 type Step = 'initialization' | 'contacts' | 'payment' | 'complete'
 type Props = {
-  project: DonationProject;
+  project: ProjectInfo;
   slug: string;
 }
 
@@ -66,7 +66,7 @@ export default function DonationPageComp({
   // Network state management
   const [network, setNetwork] = useState<string>(() => {
     const networkOptions = getNetworkDropdownOptionsFromProject(project); // 从project里面读出支持的网络列表
-    const firstNetwork = networkOptions.length > 0 ? networkOptions[0].value || '' : '';
+    const firstNetwork = networkOptions.length > 0 ? networkOptions[ 0 ].value || '' : '';
 
     return firstNetwork;
   });
@@ -79,13 +79,13 @@ export default function DonationPageComp({
   const [dollar, setDollar] = useState<number | null>(info.amount || 0);
     // Check if wagmi is ready
   const isWagmiReady = useWagmiReady();
-  
+
   // Combined network setter that updates both local state and info
   const handleSetNetwork = (newNetwork: string) => {
     setNetwork(newNetwork);
     updateInfo({ network: newNetwork });
   };
-  
+
   // Step navigation
   const goToNextStep = () => {
     setSlideDirection('right')
@@ -106,7 +106,7 @@ export default function DonationPageComp({
     // 重置表单后，本来应该记住上一次选择的网络，但是因为createDonationInfo清空了所有信息，
     // 所以从 network 里面找到上一次选中的网络，更新 info
     setNetwork(network);
-    updateInfo({network})
+    updateInfo({ network })
   }
   function updateInfo(newInfo: Partial<DonationInfo>) {
     setInfo((prev) => ({
