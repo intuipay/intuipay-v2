@@ -1,7 +1,7 @@
 import { fetchTidb } from '@/services/fetch-tidb';
 import { validateDonationTransaction } from '@/services/transaction-validator';
 import { getProjectWalletAddress, BLOCKCHAIN_CONFIG } from '@/config/blockchain';
-import { getDonationProjectById } from '@/lib/data';
+import { getDonationProjectBySlug } from '@/lib/data';
 
 export const runtime = 'edge';
 
@@ -10,25 +10,25 @@ export async function POST(req: Request) {
 
   try {
     // 验证必要的字段
-    if (!json.tx_hash || !json.network || !json.currency || !json.amount || !json.project_id) {
+    if (!json.tx_hash || !json.network || !json.currency || !json.amount || !json.project_slug) {
       return new Response(
         JSON.stringify({
           code: 1,
-          message: 'Missing required fields: tx_hash, network, currency, amount, or project_id',
+          message: 'Missing required fields: tx_hash, network, currency, amount, or project_slug',
         }),
         { status: 400 },
       );
     }
 
     // 验证交易哈希
-    const { tx_hash, network, currency, amount, wallet_address, project_id } = json;
+    const { tx_hash, network, currency, amount, wallet_address, project_slug } = json;
 
     // 获取项目钱包地址
     let project_wallet: string | undefined;
 
     try {
-      // 使用已有的函数通过 project_id 获取项目信息
-      const project = await getDonationProjectById(project_id);
+      // 使用已有的函数通过 project_slug 获取项目信息
+      const project = await getDonationProjectBySlug(project_slug);
       if (project && project.wallets) {
         project_wallet = project.wallets[network];
       }

@@ -221,6 +221,7 @@ export default function DonationStep4({
           status: DonationStatus.Successful,
           tx_hash: transactionHash,
           wallet_address: walletAddress || address || '',
+          project_slug: project.project_slug,
         }),
       });
 
