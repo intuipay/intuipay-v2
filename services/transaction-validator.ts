@@ -1,4 +1,4 @@
-import { BLOCKCHAIN_CONFIG } from '@/config/blockchain';
+import { BLOCKCHAIN_CONFIG, getFundsDividerContract } from '@/config/blockchain';
 
 export interface TransactionValidationResult {
     isValid: boolean;
@@ -153,7 +153,7 @@ async function validateEvmTransaction(
         }
 
         // 验证交易详情
-        const validation = validateEvmTransactionDetails(tx, expectedTo, expectedAmount, expectedFrom);
+        const validation = validateEvmTransactionDetails(tx, expectedTo, expectedAmount, expectedFrom, networkId);
 
         return {
             isValid: validation.isValid,
@@ -183,7 +183,8 @@ function validateEvmTransactionDetails(
     tx: any,
     expectedTo?: string,
     expectedAmount?: string,
-    expectedFrom?: string
+    expectedFrom?: string,
+    networkId?: string
 ): { isValid: boolean; error?: string } {
     // 检查交易是否确认
     if (!tx.blockNumber || tx.blockNumber === '0x0') {
@@ -192,8 +193,20 @@ function validateEvmTransactionDetails(
 
     // 检查接收方地址（如果提供）
     if (expectedTo && tx.to?.toLowerCase() !== expectedTo.toLowerCase()) {
-        console.log('tx detail', tx.to, expectedTo);
-        return { isValid: false, error: 'Transaction recipient address mismatch' };
+        // 如果期望地址是项目钱包，但实际接收地址是合约，检查是否使用了手续费分配合约
+        if (networkId) {
+            const fundsDividerContract = getFundsDividerContract(networkId);
+            if (fundsDividerContract && tx.to?.toLowerCase() === fundsDividerContract.toLowerCase()) {
+                // 通过合约转账是有效的
+                console.log('Transaction validated through funds divider contract');
+            } else {
+                console.log('tx detail', tx.to, expectedTo);
+                return { isValid: false, error: 'Transaction recipient address mismatch' };
+            }
+        } else {
+            console.log('tx detail', tx.to, expectedTo);
+            return { isValid: false, error: 'Transaction recipient address mismatch' };
+        }
     }
 
     // 检查发送方地址（如果提供）
@@ -405,13 +418,24 @@ export async function validateDonationTransaction(
         };
     }
 
+    // 确定期望的接收地址
+    let expectedToAddress = project_wallet;
+    
+    // 检查是否使用手续费分配合约
+    const fundsDividerContract = getFundsDividerContract(networkId);
+    if (fundsDividerContract) {
+        // 如果配置了手续费分配合约，期望的接收地址应该是合约地址
+        expectedToAddress = fundsDividerContract;
+        console.log('Using funds divider contract for validation:', fundsDividerContract);
+    }
+
     // 首先进行基本的交易验证
     const basicValidation = await validateTransaction(
         networkId,
         txHash,
-        project_wallet, // 期望的接收地址
-        undefined,      // 先不验证金额，后面单独处理
-        wallet_address  // 期望的发送地址
+        expectedToAddress,  // 使用计算出的期望接收地址
+        undefined,          // 先不验证金额，后面单独处理
+        wallet_address      // 期望的发送地址
     );
 
     if (!basicValidation.isValid) {
