@@ -601,6 +601,20 @@
         "required": 1,
         "default": "",
         "description": ""
+      },
+      {
+        "name": "start",
+        "type": "integer",
+        "required": 0,
+        "default": "0",
+        "description": ""
+      },
+      {
+        "name": "pagesize",
+        "type": "integer",
+        "required": 0,
+        "default": "20",
+        "description": ""
       }
     ],
     "settings": {
