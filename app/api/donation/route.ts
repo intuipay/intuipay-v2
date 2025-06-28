@@ -95,7 +95,6 @@ export async function POST(req: Request) {
         data: data[0].id,
         validation: {
           verified: true,
-          tx_details: validationResult.txDetails,
         },
       }),
       { status: 201 },

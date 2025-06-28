@@ -240,12 +240,12 @@ export default function DonationStep4({
       }
 
       const { data, validation } = (await response.json()) as APIResponse<number> & {
-        validation?: { verified: boolean; tx_details?: any }
+        validation?: { verified: boolean }
       };
 
       // 显示验证成功的信息
       if (validation?.verified) {
-        console.log('Transaction verified successfully:', validation.tx_details);
+        console.log('Transaction verified successfully:');
       }
 
       info.id = data;
