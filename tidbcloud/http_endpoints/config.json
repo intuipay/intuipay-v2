@@ -590,9 +590,9 @@
       },
       {
         "name": "status",
-        "type": "string",
+        "type": "integer",
         "required": 0,
-        "default": "",
+        "default": "0",
         "description": ""
       },
       {
