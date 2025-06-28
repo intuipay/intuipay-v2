@@ -267,30 +267,30 @@
       {
         "name": "order_by",
         "type": "string",
-        "required": 1,
-        "default": "",
+        "required": 0,
+        "default": "id",
         "description": ""
       },
       {
         "name": "order_dir",
         "type": "string",
-        "required": 1,
-        "default": "",
+        "required": 0,
+        "default": "desc",
         "description": "",
         "enum": "desc, asc"
       },
       {
         "name": "start",
         "type": "integer",
-        "required": 1,
-        "default": "",
+        "required": 0,
+        "default": "0",
         "description": ""
       },
       {
         "name": "pagesize",
         "type": "integer",
-        "required": 1,
-        "default": "",
+        "required": 0,
+        "default": "9",
         "description": ""
       }
     ],
