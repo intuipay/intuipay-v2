@@ -17,7 +17,10 @@ export const getDonationProjectBySlug = cache(async function getDonationProjectB
 
 export const getDonationProjectById = cache(async function getDonationProjectById(id: number) {
 
+  // TODO: 目前 tidb 不支持 id 查询，还是得改为 slug 查询
+  console.log('getDonationProjectById', id);
   const data = await fetchTidb<DonationProject>(`/donation_project?id=${id}`);
+  console.log('getDonationProjectById data', data)
   const project = data[0];
 
   // tidb endpoint返回的是string，所以需要手动转为json

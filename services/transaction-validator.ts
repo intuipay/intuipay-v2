@@ -159,74 +159,155 @@ function validateEvmTransactionDetails(
         return { isValid: false, error: 'Transaction sender address mismatch' };
     }
 
-    // 先尝试解析 ERC-20 交易信息
-    let isERC20Transfer = false;
-    let erc20To: string | null = null;
-    let erc20Amount: bigint | null = null;
+    // 如果没有提供期望的接收地址，只做基本验证
+    if (!expectedTo) {
+        return { isValid: true };
+    }
 
+    // 获取合约地址用于判断交易类型
+    const fundsDividerContract = networkId ? getFundsDividerContract(networkId) : null;
+    
+    // 根据实际的 to 地址判断交易类型
+    const actualTo = tx.to?.toLowerCase();
+    const expectedToLower = expectedTo.toLowerCase();
+
+    // 情况1: 交易直接发送到期望的地址（大学钱包地址）
+    if (actualTo === expectedToLower) {
+        console.log('Direct transfer to university wallet detected');
+        // 直接转账到大学钱包，验证原生货币金额
+        if (expectedAmount !== undefined && tx.value !== expectedAmount) {
+            return { isValid: false, error: `Native currency amount mismatch. Expected ${expectedAmount}, but got ${tx.value}` };
+        }
+        return { isValid: true };
+    }
+
+    // 情况2: 通过 fundsDivider 合约转账
+    if (fundsDividerContract && actualTo === fundsDividerContract.toLowerCase()) {
+        console.log('FundsDivider contract transfer detected');
+        return validateFundsDividerTransaction(tx, expectedTo, expectedAmount, expectedFrom);
+    }
+
+    // 情况3: ERC20 代币转账（tx.to 是 ERC20 合约地址）
     if (tx.input && tx.input !== '0x' && tx.input.length > 10) {
-        try {
-            const decoded = decodeFunctionData({
-                abi: ERC20_ABI,
-                data: tx.input,
-            });
-
-            if (decoded.functionName === 'transfer') {
-                isERC20Transfer = true;
-                const [to, amount] = decoded.args as [string, bigint];
-                erc20To = to;
-                erc20Amount = amount;
-            } else if (decoded.functionName === 'transferFrom') {
-                isERC20Transfer = true;
-                const [, to, amount] = decoded.args as [string, string, bigint];
-                erc20To = to;
-                erc20Amount = amount;
-            }
-        } catch (error) {
-            console.warn('Failed to parse ERC-20 function data:', error);
+        console.log('Potential ERC20 transfer detected');
+        const erc20Validation = validateERC20Transfer(tx, expectedTo, expectedAmount);
+        if (erc20Validation.isValid || erc20Validation.error !== 'Not an ERC20 transfer') {
+            return erc20Validation;
         }
     }
 
-    // 检查金额（如果提供）
-    if (expectedAmount !== undefined) {
-        if (isERC20Transfer && erc20Amount !== null) {
-            // ERC-20 代币转账，使用解析出的金额
-            if (erc20Amount !== expectedAmount) {
-                return { isValid: false, error: `ERC-20 token amount mismatch. Expected ${expectedAmount}, but got ${erc20Amount}` };
-            }
-        } else if (!isERC20Transfer) {
-            // 原生代币转账，检查 value 字段
-            if (tx.value !== expectedAmount) {
-                return { isValid: false, error: `Native currency amount mismatch. Expected ${expectedAmount}, but got ${tx.value}` };
-            }
-        }
-    }
+    // 如果都不匹配，返回地址不匹配错误
+    return { isValid: false, error: `Transaction recipient address mismatch. Expected: ${expectedTo}, but transaction was sent to: ${tx.to}` };
+}
 
-    // 检查接收方地址（如果提供）
-    if (expectedTo) {
-        if (isERC20Transfer && erc20To) {
-            // ERC-20 转账，使用解析出的接收方地址
-            if (erc20To.toLowerCase() !== expectedTo.toLowerCase()) {
-                return { isValid: false, error: `ERC-20 transaction recipient address mismatch, expected: ${expectedTo}, got: ${erc20To}` };
-            }
-        } else if (!tx.to || tx.to.toLowerCase() !== expectedTo.toLowerCase()) {
-            // 原生代币转账或合约调用，检查交易的 to 字段
+/**
+ * 验证 ERC20 代币转账
+ */
+function validateERC20Transfer(
+    tx: Transaction,
+    expectedTo: string,
+    expectedAmount?: bigint
+): { isValid: boolean; error?: string } {
+    try {
+        const decoded = decodeFunctionData({
+            abi: ERC20_ABI,
+            data: tx.input,
+        });
+
+        let erc20To: string | null = null;
+        let erc20Amount: bigint | null = null;
+
+        if (decoded.functionName === 'transfer') {
+            const [to, amount] = decoded.args as [string, bigint];
+            erc20To = to;
+            erc20Amount = amount;
+        } else if (decoded.functionName === 'transferFrom') {
+            const [, to, amount] = decoded.args as [string, string, bigint];
+            erc20To = to;
+            erc20Amount = amount;
+        } else {
+            return { isValid: false, error: 'Not an ERC20 transfer' };
+        }
+
+        // 验证接收方地址
+        if (erc20To?.toLowerCase() !== expectedTo.toLowerCase()) {
+            return { isValid: false, error: `ERC20 recipient address mismatch. Expected: ${expectedTo}, got: ${erc20To}` };
+        }
+
+        // 验证金额
+        if (expectedAmount !== undefined && erc20Amount !== expectedAmount) {
+            return { isValid: false, error: `ERC20 amount mismatch. Expected: ${expectedAmount}, got: ${erc20Amount}` };
+        }
+
+        return { isValid: true };
+
+    } catch (error) {
+        return { isValid: false, error: 'Not an ERC20 transfer' };
+    }
+}
+
+/**
+ * 验证通过 FundsDivider 合约的转账
+ */
+function validateFundsDividerTransaction(
+    tx: Transaction,
+    expectedTo: string,
+    expectedAmount?: bigint,
+    expectedFrom?: string
+): { isValid: boolean; error?: string } {
+    try {
+        const decoded = decodeFunctionData({
+            abi: FUNDS_DIVIDER_ABI,
+            data: tx.input,
+        });
+
+        console.log('FundsDivider function called:', decoded.functionName);
+
+        // 验证发送方地址（如果提供）
+        if (expectedFrom && tx.from.toLowerCase() !== expectedFrom.toLowerCase()) {
+            return { isValid: false, error: `FundsDivider transaction sender address mismatch. Expected: ${expectedFrom}, got: ${tx.from}` };
+        }
+
+        if (decoded.functionName === 'divideNativeTransfer') {
+            // 原生货币通过合约转账
+            const [recipient] = decoded.args as [string];
             
-            // 如果期望地址是项目钱包，但实际接收地址是合约，检查是否使用了手续费分配合约
-            if (networkId && tx.to) {
-                const fundsDividerContract = getFundsDividerContract(networkId);
-                if (fundsDividerContract && tx.to.toLowerCase() === fundsDividerContract.toLowerCase()) {
-                    // TODO: 这里也需要校验交易的参数，不能因为调用了合约就信任参数
-                    // 通过合约转账是有效的
-                    return { isValid: true };
-                }
+            // 验证最终受益人地址
+            if (recipient.toLowerCase() !== expectedTo.toLowerCase()) {
+                return { isValid: false, error: `FundsDivider recipient address mismatch. Expected: ${expectedTo}, got: ${recipient}` };
             }
-            
-            return { isValid: false, error: 'Transaction recipient address mismatch' };
-        }
-    }
 
-    return { isValid: true };
+            // 验证交易金额（tx.value 应该是总金额，包括手续费）
+            if (expectedAmount !== undefined && tx.value !== expectedAmount) {
+                return { isValid: false, error: `FundsDivider native transfer amount mismatch. Expected: ${expectedAmount}, got: ${tx.value}` };
+            }
+
+            return { isValid: true };
+
+        } else if (decoded.functionName === 'divideERC20Transfer') {
+            // ERC20 代币通过合约转账
+            const [tokenContract, recipient, amount] = decoded.args as [string, string, bigint];
+            
+            // 验证最终受益人地址
+            if (recipient.toLowerCase() !== expectedTo.toLowerCase()) {
+                return { isValid: false, error: `FundsDivider ERC20 recipient address mismatch. Expected: ${expectedTo}, got: ${recipient}` };
+            }
+
+            // 验证转账金额
+            if (expectedAmount !== undefined && amount !== expectedAmount) {
+                return { isValid: false, error: `FundsDivider ERC20 transfer amount mismatch. Expected: ${expectedAmount}, got: ${amount}` };
+            }
+
+            console.log(`FundsDivider ERC20 transfer: ${amount} tokens to ${recipient} via contract ${tokenContract}`);
+            return { isValid: true };
+
+        } else {
+            return { isValid: false, error: `Unknown FundsDivider function: ${decoded.functionName}` };
+        }
+
+    } catch (error) {
+        return { isValid: false, error: `Failed to decode FundsDivider transaction: ${error instanceof Error ? error.message : String(error)}` };
+    }
 }
 
 /**

@@ -6,6 +6,6 @@ import tsconfigPaths from 'vite-tsconfig-paths'
 export default defineConfig({
     plugins: [tsconfigPaths(), react()],
     test: {
-        testTimeout: 10000, // 设置测试超时时间为10秒
+        testTimeout: 30000, // 设置测试超时时间为30秒
     }
 })

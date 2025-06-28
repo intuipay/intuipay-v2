@@ -55,6 +55,10 @@ export default function DonationStep4({
   // 发送交易钩子（用于原生代币）
   const { sendTransaction, data: sendData, isPending: isSendPending, error: sendError } = useSendTransaction();
 
+  // 状态管理：是否正在进行两步 ERC-20 授权流程
+  const [isApprovingERC20, setIsApprovingERC20] = useState<boolean>(false);
+  const [approvalTxHash, setApprovalTxHash] = useState<string>('');
+
   // 等待交易确认钩子（合约交易）
   const {
     isLoading: isConfirming,
@@ -73,17 +77,36 @@ export default function DonationStep4({
     hash: sendData,
   });  // 监听交易确认状态
   useEffect(() => {
-    // 处理合约交易（ERC-20 代币）
+    // 处理合约交易确认
     if (isConfirmed && writeData) {
-      // 交易确认成功，保存到数据库
-      saveDonationToDatabase(writeData);
+      if (isApprovingERC20) {
+        // 这是授权交易的确认
+        console.log('ERC-20 approval confirmed, proceeding with transfer');
+        setApprovalTxHash(writeData);
+        setIsApprovingERC20(false);
+        // 授权完成后，执行实际的转账
+        proceedWithERC20Transfer();
+      } else {
+        // 这是实际转账交易的确认，保存到数据库
+        saveDonationToDatabase(writeData);
+      }
     }
     if (confirmError) {
-      setMessage(`Transaction failed: ${getReadableErrorMessage(confirmError)}`);
+      if (isApprovingERC20) {
+        setMessage(`Approval failed: ${getReadableErrorMessage(confirmError)}`);
+        setIsApprovingERC20(false);
+      } else {
+        setMessage(`Transaction failed: ${getReadableErrorMessage(confirmError)}`);
+      }
       setIsSubmitting(false);
     }
     if (writeError) {
-      setMessage(getReadableErrorMessage(writeError));
+      if (isApprovingERC20) {
+        setMessage(`Approval failed: ${getReadableErrorMessage(writeError)}`);
+        setIsApprovingERC20(false);
+      } else {
+        setMessage(getReadableErrorMessage(writeError));
+      }
       setIsSubmitting(false);
     }
 
@@ -100,7 +123,13 @@ export default function DonationStep4({
       setMessage(getReadableErrorMessage(sendError));
       setIsSubmitting(false);
     }
-  }, [isConfirmed, confirmError, writeError, writeData, isSendConfirmed, sendConfirmError, sendError, sendData]);// Get explorer URL for transaction
+  }, [
+    isConfirmed, confirmError, writeError, writeData, 
+    isSendConfirmed, sendConfirmError, sendError, sendData,
+    isApprovingERC20
+  ]);
+  
+  // Get explorer URL for transaction
   const getTransactionExplorerUrl = (txHash: string) => {
     return getExplorerUrl(info.network, txHash);
   };
@@ -133,6 +162,46 @@ export default function DonationStep4({
 
   function convertAmountBasedOnCurrency(amount: number, currency: string): number {
     return Number(convertToSmallestUnit(amount, currency));
+  }
+
+  // 执行 ERC-20 转账（在授权完成后调用）
+  async function proceedWithERC20Transfer() {
+    try {
+      const amount = parseUnits(info.amount.toString(), currencyConfig.decimals);
+      const fundsDividerContract = getFundsDividerContract(info.network);
+      
+      if (!currencyNetworkConfig?.contractAddress) {
+        setMessage('Invalid token configuration: no contract address');
+        setIsSubmitting(false);
+        return;
+      }
+      
+      if (fundsDividerContract) {
+        console.log('Proceeding with ERC-20 transfer through contract');
+        writeContract({
+          address: fundsDividerContract as `0x${string}`,
+          abi: IntuipayFundsDividerABI,
+          functionName: 'divideERC20Transfer',
+          args: [
+            currencyNetworkConfig.contractAddress as `0x${string}`,
+            recipientAddress as `0x${string}`,
+            amount
+          ],
+        });
+      } else {
+        // 直接转账
+        console.log('Proceeding with direct ERC-20 transfer');
+        writeContract({
+          address: currencyNetworkConfig.contractAddress as `0x${string}`,
+          abi: ERC20_ABI,
+          functionName: 'transfer',
+          args: [recipientAddress as `0x${string}`, amount],
+        });
+      }
+    } catch (e) {
+      setMessage(getReadableErrorMessage(e));
+      setIsSubmitting(false);
+    }
   }
   // 保存捐赠数据到数据库
   async function saveDonationToDatabase(transactionHash: string, walletAddress?: string) {
@@ -375,16 +444,16 @@ export default function DonationStep4({
             value: amount,
           });
         } else if (currencyNetworkConfig?.contractAddress) {
-          // ERC-20 代币通过合约转账
+          // ERC-20 代币通过合约转账 - 需要先授权
+          console.log('Starting ERC-20 transfer process with approval');
+          setIsApprovingERC20(true);
+          
+          // 第一步：授权合约使用用户的代币
           writeContract({
-            address: fundsDividerContract as `0x${string}`,
-            abi: IntuipayFundsDividerABI,
-            functionName: 'divideERC20Transfer',
-            args: [
-              currencyNetworkConfig.contractAddress as `0x${string}`,
-              recipientAddress as `0x${string}`,
-              amount
-            ],
+            address: currencyNetworkConfig.contractAddress as `0x${string}`,
+            abi: ERC20_ABI,
+            functionName: 'approve',
+            args: [fundsDividerContract as `0x${string}`, amount],
           });
         } else {
           setMessage('Invalid token configuration: no contract address or native flag');
@@ -441,39 +510,52 @@ export default function DonationStep4({
         <p className="text-2xl sm:text-3xl font-semibold text-blue-600">{info.amount} {info.currency}</p>
         <p className="text-base sm:text-xl font-semibold text-gray-900">~ {(info.dollar ?? 0).toLocaleString()} USD</p>
         {/* 交易状态显示 */}
-        {(writeData || solanaTransactionHash) && (
+        {(writeData || solanaTransactionHash || isApprovingERC20) && (
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mt-4 w-full">
             <div className="flex items-center gap-3 mb-2">
-              <div className={`h-3 w-3 rounded-full ${isSolanaTransaction
-                ? (solanaTransactionHash ? 'bg-green-600' : 'bg-blue-600')
-                : (isConfirmed ? 'bg-green-600' : isConfirming ? 'bg-yellow-500' : 'bg-blue-600')
+              <div className={`h-3 w-3 rounded-full ${
+                isSolanaTransaction
+                  ? (solanaTransactionHash ? 'bg-green-600' : 'bg-blue-600')
+                  : isApprovingERC20 
+                    ? 'bg-yellow-500'
+                    : (isConfirmed ? 'bg-green-600' : isConfirming ? 'bg-yellow-500' : 'bg-blue-600')
                 }`}></div>
               <span className="font-medium text-blue-800">Transaction Status</span>
             </div>
             <div className="space-y-2 text-sm">
-              <div className="flex items-center justify-between">
-                <span className="text-gray-600">Transaction Hash:</span>
-                <a
-                  href={getTransactionExplorerUrl(isSolanaTransaction ? solanaTransactionHash : writeData!)}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="font-mono text-blue-600 text-xs hover:text-blue-800 underline"
-                >
-                  {formatTransactionAddress(isSolanaTransaction ? solanaTransactionHash : writeData!)}
-                </a>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-gray-600">Status:</span>
-                <span className={`font-medium ${isSolanaTransaction
-                  ? (solanaTransactionHash ? 'text-green-600' : 'text-blue-600')
-                  : (isConfirming ? 'text-yellow-600' : isConfirmed ? 'text-green-600' : 'text-blue-600')
-                  }`}>
-                  {isSolanaTransaction
-                    ? (solanaTransactionHash ? 'Confirmed ✓' : 'Pending')
-                    : (isConfirming ? 'Confirming...' : isConfirmed ? 'Confirmed ✓' : 'Pending')
-                  }
-                </span>
-              </div>
+              {isApprovingERC20 && (
+                <div className="text-yellow-600 mb-2">
+                  Step 1/2: Approving token spending permission...
+                </div>
+              )}
+              {(writeData || solanaTransactionHash) && (
+                <>
+                  <div className="flex items-center justify-between">
+                    <span className="text-gray-600">Transaction Hash:</span>
+                    <a
+                      href={getTransactionExplorerUrl(isSolanaTransaction ? solanaTransactionHash : writeData!)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="font-mono text-blue-600 text-xs hover:text-blue-800 underline"
+                    >
+                      {formatTransactionAddress(isSolanaTransaction ? solanaTransactionHash : writeData!)}
+                    </a>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-gray-600">Status:</span>
+                    <span className={`font-medium ${
+                      isSolanaTransaction
+                        ? (solanaTransactionHash ? 'text-green-600' : 'text-blue-600')
+                        : (isConfirming ? 'text-yellow-600' : isConfirmed ? 'text-green-600' : 'text-blue-600')
+                      }`}>
+                      {isSolanaTransaction
+                        ? (solanaTransactionHash ? 'Confirmed ✓' : 'Pending')
+                        : (isConfirming ? 'Confirming...' : isConfirmed ? 'Confirmed ✓' : 'Pending')
+                      }
+                    </span>
+                  </div>
+                </>
+              )}
               {!isSolanaTransaction && isConfirming && (
                 <div className="text-xs text-gray-500 mt-2">
                   Please wait while the transaction is being confirmed on the blockchain...
@@ -507,16 +589,17 @@ export default function DonationStep4({
         buttonLabel={
           isSolanaTransaction
             ? (solanaTransactionHash ? "Saving..." : isSubmitting ? "Sending Transaction..." : "Donate")
-            : (isWritePending || isSendPending ? "Sending Transaction..." :
-              isConfirming || isSendConfirming ? "Confirming..." :
-                isConfirmed || isSendConfirmed ? "Saving..." :
-                  "Donate")
+            : (isApprovingERC20 ? "Approving..." :
+               isWritePending || isSendPending ? "Sending Transaction..." :
+               isConfirming || isSendConfirming ? "Confirming..." :
+               isConfirmed || isSendConfirmed ? "Saving..." :
+               "Donate")
         }
         goToPreviousStep={goToPreviousStep}
-        isLoading={isSubmitting || isWritePending || isSendPending || isConfirming || isSendConfirming}
+        isLoading={isSubmitting || isWritePending || isSendPending || isConfirming || isSendConfirming || isApprovingERC20}
         isSubmittable={
           (window?.phantom?.solana?.isConnected && !isSubmitting) ||
-          (!isSubmitting && !isWritePending && !isSendPending && !isConfirming && !isSendConfirming && isConnected)
+          (!isSubmitting && !isWritePending && !isSendPending && !isConfirming && !isSendConfirming && !isApprovingERC20 && isConnected)
         }
         onSubmit={doSubmit}
       />
