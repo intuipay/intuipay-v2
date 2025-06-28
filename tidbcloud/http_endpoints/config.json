@@ -678,7 +678,7 @@
     "name": "admin /my-project",
     "description": "",
     "method": "DELETE",
-    "endpoint": "/admin/my_project",
+    "endpoint": "/admin/delete_my_project",
     "data_source": {
       "cluster_id": 10914349176033975536
     },
@@ -707,7 +707,7 @@
     },
     "tag": "Default",
     "batch_operation": 0,
-    "sql_file": "sql/DELETE-admin-my_project.sql",
+    "sql_file": "sql/DELETE-admin-delete_my_project.sql",
     "type": "sql_endpoint",
     "return_type": "json"
   }
