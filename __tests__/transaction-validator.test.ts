@@ -112,7 +112,7 @@ describe("Transaction Validator Tests", () => {
         it("should reject invalid EVM transaction hash format", async () => {
             const result = await validateTransaction('ethereum-sepolia', 'invalid-hash');
             expect(result.isValid).toBe(false);
-            expect(result.error).toContain('RPC Error');
+            expect(result.error).toContain('Invalid parameters were provided to the RPC method');
         });
 
         it("should reject invalid Solana transaction hash format", async () => {
@@ -588,7 +588,7 @@ describe("Transaction Validator Tests", () => {
             );
             console.log('Wrong network test:', result);
             expect(result.isValid).toBe(false);
-            expect(result.error).toContain('RPC Error');
+            expect(result.error).toContain('Invalid parameters were provided to the RPC method');
         });
 
         it("should detect case manipulation attacks", async () => {

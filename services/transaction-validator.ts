@@ -1,9 +1,8 @@
 import { BLOCKCHAIN_CONFIG, getFundsDividerContract } from '@/config/blockchain';
-import { decodeFunctionData, parseAbi } from 'viem';
+import { decodeFunctionData, parseAbi, createPublicClient, http, type Transaction } from 'viem';
 import ERC20_ABI from '@/lib/erc20.abi.json';
 import FUNDS_DIVIDER_ABI from '@/lib/IntuipayFundsDivider.abi.json';
-import { Connection, PublicKey, clusterApiUrl } from '@solana/web3.js';
-import { TOKEN_PROGRAM_ID } from '@solana/spl-token';
+import { Connection, PublicKey } from '@solana/web3.js';
 
 export interface TransactionValidationResult {
     isValid: boolean;
@@ -39,32 +38,13 @@ export async function checkRpcHealth(networkId: string): Promise<{ healthy: bool
             }
             rpcUrl = network.rpcUrl;
 
-            // 调用 eth_blockNumber 检查连接
-            const response = await fetch(rpcUrl, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    jsonrpc: '2.0',
-                    method: 'eth_blockNumber',
-                    params: [],
-                    id: 1,
-                }),
+            // 使用 viem 客户端检查连接
+            const client = createPublicClient({
+                transport: http(rpcUrl)
             });
 
-            if (!response.ok) {
-                return { healthy: false, error: `HTTP ${response.status}: ${response.statusText}` };
-            }
-
-            const data = await response.json();
-
-            if (data.error) {
-                return { healthy: false, error: `RPC Error: ${data.error.message}` };
-            }
-
-            const blockNumber = parseInt(data.result, 16);
-            return { healthy: true, blockNumber };
+            const blockNumber = await client.getBlockNumber();
+            return { healthy: true, blockNumber: Number(blockNumber) };
 
         } else if (network.type === 'solana') {
             rpcUrl = network.rpcUrl || '';
@@ -105,39 +85,29 @@ async function validateEvmTransaction(
     }
 
     try {
-        // 使用 RPC 接口验证交易
         const rpcUrl = network.rpcUrl;
         if (!rpcUrl) {
             return { isValid: false, error: 'RPC URL not configured for network' };
         }
 
-        const rpcResponse = await fetch(rpcUrl, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                jsonrpc: '2.0',
-                method: 'eth_getTransactionByHash',
-                params: [txHash],
-                id: 1,
-            }),
+        // 使用 viem 创建公共客户端
+        const client = createPublicClient({
+            transport: http(rpcUrl)
         });
 
-        if (!rpcResponse.ok) {
-            return { isValid: false, error: `Failed to fetch transaction from ${networkId} RPC` };
-        }
+        // 获取交易信息
+        const tx = await client.getTransaction({
+            hash: txHash as `0x${string}`,
+        });
 
-        const rpcData = await rpcResponse.json();
-
-        if (rpcData.error) {
-            return { isValid: false, error: `RPC Error: ${rpcData.error.message}` };
-        }
-
-        const tx = rpcData.result;
         if (!tx) {
             return { isValid: false, error: `Transaction not found on ${networkId}` };
         }
+
+        // 获取交易收据以确认状态
+        const receipt = await client.getTransactionReceipt({
+            hash: txHash as `0x${string}`,
+        });
 
         // 验证交易详情
         const validation = validateEvmTransactionDetails(tx, expectedTo, expectedAmount, expectedFrom, networkId);
@@ -148,15 +118,20 @@ async function validateEvmTransaction(
             txDetails: {
                 hash: tx.hash,
                 from: tx.from,
-                to: tx.to,
-                value: BigInt(tx.value || '0'), // 转换为 bigint
-                input: tx.input, // 添加 input 数据用于 ERC-20 解析
-                status: tx.blockNumber && tx.blockNumber !== '0x0' ? 'confirmed' : 'pending',
-                blockNumber: parseInt(tx.blockNumber || '0', 16),
+                to: tx.to || undefined,
+                value: tx.value,
+                input: tx.input,
+                status: receipt ? 'confirmed' : 'pending',
+                blockNumber: Number(tx.blockNumber || 0),
             },
         };
 
     } catch (error) {
+        // 处理交易未找到的情况
+        if (error instanceof Error && error.message.includes('not found')) {
+            return { isValid: false, error: `Transaction not found on ${networkId}` };
+        }
+        
         return {
             isValid: false,
             error: `EVM validation error: ${error instanceof Error ? error.message : String(error)}`
@@ -168,19 +143,19 @@ async function validateEvmTransaction(
  * 验证 EVM 交易详情
  */
 function validateEvmTransactionDetails(
-    tx: any,
+    tx: Transaction,
     expectedTo?: string,
     expectedAmount?: bigint,
     expectedFrom?: string,
     networkId?: string
 ): { isValid: boolean; error?: string } {
-    // 检查交易是否确认
-    if (!tx.blockNumber || tx.blockNumber === '0x0') {
+    // 检查交易是否确认（viem 的 Transaction 对象，如果有 blockNumber 就是已确认的）
+    if (!tx.blockNumber) {
         return { isValid: false, error: 'Transaction not yet confirmed' };
     }
 
     // 检查发送方地址（如果提供）
-    if (expectedFrom && tx.from?.toLowerCase() !== expectedFrom.toLowerCase()) {
+    if (expectedFrom && tx.from.toLowerCase() !== expectedFrom.toLowerCase()) {
         return { isValid: false, error: 'Transaction sender address mismatch' };
     }
 
@@ -193,7 +168,7 @@ function validateEvmTransactionDetails(
         try {
             const decoded = decodeFunctionData({
                 abi: ERC20_ABI,
-                data: tx.input as `0x${string}`,
+                data: tx.input,
             });
 
             if (decoded.functionName === 'transfer') {
@@ -221,9 +196,8 @@ function validateEvmTransactionDetails(
             }
         } else if (!isERC20Transfer) {
             // 原生代币转账，检查 value 字段
-            const txValueBigInt = BigInt(tx.value || '0');
-            if (txValueBigInt !== expectedAmount) {
-                return { isValid: false, error: `Native currency amount mismatch. Expected ${expectedAmount}, but got ${txValueBigInt}` };
+            if (tx.value !== expectedAmount) {
+                return { isValid: false, error: `Native currency amount mismatch. Expected ${expectedAmount}, but got ${tx.value}` };
             }
         }
     }
@@ -235,13 +209,14 @@ function validateEvmTransactionDetails(
             if (erc20To.toLowerCase() !== expectedTo.toLowerCase()) {
                 return { isValid: false, error: `ERC-20 transaction recipient address mismatch, expected: ${expectedTo}, got: ${erc20To}` };
             }
-        } else if (tx.to?.toLowerCase() !== expectedTo.toLowerCase()) {
+        } else if (!tx.to || tx.to.toLowerCase() !== expectedTo.toLowerCase()) {
             // 原生代币转账或合约调用，检查交易的 to 字段
             
             // 如果期望地址是项目钱包，但实际接收地址是合约，检查是否使用了手续费分配合约
-            if (networkId) {
+            if (networkId && tx.to) {
                 const fundsDividerContract = getFundsDividerContract(networkId);
-                if (fundsDividerContract && tx.to?.toLowerCase() === fundsDividerContract.toLowerCase()) {
+                if (fundsDividerContract && tx.to.toLowerCase() === fundsDividerContract.toLowerCase()) {
+                    // TODO: 这里也需要校验交易的参数，不能因为调用了合约就信任参数
                     // 通过合约转账是有效的
                     return { isValid: true };
                 }
