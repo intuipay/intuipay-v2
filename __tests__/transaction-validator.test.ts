@@ -118,7 +118,7 @@ describe("Transaction Validator Tests", () => {
         it("should reject invalid Solana transaction hash format", async () => {
             const result = await validateTransaction('solana-devnet', 'invalid-hash');
             expect(result.isValid).toBe(false);
-            expect(result.error).toContain('RPC Error');
+            expect(result.error).toContain('validation error');
         });
 
         it("should reject empty transaction hash", async () => {
@@ -576,7 +576,7 @@ describe("Transaction Validator Tests", () => {
             );
             console.log('Cross-chain fraud test:', result);
             expect(result.isValid).toBe(false);
-            expect(result.error).toContain('RPC Error');
+            expect(result.error).toContain('failed to get transaction');
         });
 
         it("should detect wrong network for existing transaction", async () => {

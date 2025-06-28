@@ -2,6 +2,8 @@ import { BLOCKCHAIN_CONFIG, getFundsDividerContract } from '@/config/blockchain'
 import { decodeFunctionData, parseAbi } from 'viem';
 import ERC20_ABI from '@/lib/erc20.abi.json';
 import FUNDS_DIVIDER_ABI from '@/lib/IntuipayFundsDivider.abi.json';
+import { Connection, PublicKey, clusterApiUrl } from '@solana/web3.js';
+import { TOKEN_PROGRAM_ID } from '@solana/spl-token';
 
 export interface TransactionValidationResult {
     isValid: boolean;
@@ -70,30 +72,11 @@ export async function checkRpcHealth(networkId: string): Promise<{ healthy: bool
                 return { healthy: false, error: 'Solana RPC URL not configured' };
             }
 
-            // 调用 getSlot 检查连接
-            const response = await fetch(rpcUrl, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    jsonrpc: '2.0',
-                    id: 1,
-                    method: 'getSlot',
-                }),
-            });
-
-            if (!response.ok) {
-                return { healthy: false, error: `HTTP ${response.status}: ${response.statusText}` };
-            }
-
-            const data = await response.json();
-
-            if (data.error) {
-                return { healthy: false, error: `RPC Error: ${data.error.message}` };
-            }
-
-            return { healthy: true, blockNumber: data.result };
+            // 使用 Solana Connection 检查健康状态
+            const connection = new Connection(rpcUrl, 'confirmed');
+            const slot = await connection.getSlot();
+            
+            return { healthy: true, blockNumber: slot };
         } else {
             return { healthy: false, error: 'Unsupported blockchain type' };
         }
@@ -294,59 +277,40 @@ async function validateSolanaTransaction(
             return { isValid: false, error: 'Solana RPC URL not configured' };
         }
 
-        // 使用 Solana RPC 获取交易信息
-        const response = await fetch(rpcUrl, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                jsonrpc: '2.0',
-                id: 1,
-                method: 'getTransaction',
-                params: [
-                    txHash,
-                    {
-                        encoding: 'json',
-                        maxSupportedTransactionVersion: 0,
-                    },
-                ],
-            }),
+        // 创建 Solana 连接
+        const connection = new Connection(rpcUrl, 'confirmed');
+
+        // 获取交易信息
+        const txInfo = await connection.getTransaction(txHash, {
+            maxSupportedTransactionVersion: 0,
+            commitment: 'confirmed'
         });
 
-        if (!response.ok) {
-            return { isValid: false, error: 'Failed to fetch transaction from Solana RPC' };
-        }
-
-        const data = await response.json();
-
-        if (data.error) {
-            return { isValid: false, error: `RPC Error: ${data.error.message}` };
-        }
-
-        const tx = data.result;
-        if (!tx) {
+        if (!txInfo) {
             return { isValid: false, error: 'Transaction not found on Solana network' };
         }
 
         // 检查交易是否成功
-        if (tx.meta?.err) {
+        if (txInfo.meta?.err) {
             return { isValid: false, error: 'Transaction failed on blockchain' };
         }
 
         // 验证交易详情
-        const isValid = validateSolanaTransactionDetails(tx, expectedTo, expectedAmount, expectedFrom, currencyConfig);
+        const validation = validateSolanaTransactionDetails(txInfo, expectedTo, expectedAmount, expectedFrom, currencyConfig);
+
+        // 获取账户密钥
+        const accountKeys = txInfo.transaction.message.getAccountKeys();
 
         return {
-            isValid: isValid.isValid,
-            error: isValid.error,
+            isValid: validation.isValid,
+            error: validation.error,
             txDetails: {
                 hash: txHash,
-                from: tx.transaction?.message?.accountKeys?.[0] || '',
+                from: accountKeys.staticAccountKeys?.[0]?.toString() || '',
                 to: expectedTo || '',
                 value: expectedAmount,
-                status: tx.meta?.err ? 'failed' : 'confirmed',
-                blockNumber: tx.slot,
+                status: txInfo.meta?.err ? 'failed' : 'confirmed',
+                blockNumber: txInfo.slot,
             },
         };
 
@@ -362,14 +326,14 @@ async function validateSolanaTransaction(
  * 验证 Solana 交易详情
  */
 function validateSolanaTransactionDetails(
-    tx: any,
+    txInfo: any,
     expectedTo?: string,
     expectedAmount?: bigint,
     expectedFrom?: string,
     currencyConfig?: any
 ): { isValid: boolean; error?: string } {
     // 1. 检查交易是否成功
-    if (tx.meta?.err) {
+    if (txInfo.meta?.err) {
         return { isValid: false, error: 'Transaction failed on Solana blockchain' };
     }
 
@@ -378,12 +342,16 @@ function validateSolanaTransactionDetails(
         return { isValid: true };
     }
 
-    // 2. 正确提取账户密钥
-    // 使用 `encoding: 'json'` 时, accountKeys 是一个字符串数组
-    const accountKeys: string[] = tx.transaction.message.accountKeys;
-    if (!accountKeys || !Array.isArray(accountKeys)) {
+    // 2. 获取账户密钥
+    const accountKeys = txInfo.transaction.message.getAccountKeys();
+    const staticAccountKeys = accountKeys.staticAccountKeys || [];
+    
+    if (!staticAccountKeys || staticAccountKeys.length === 0) {
         return { isValid: false, error: 'Could not parse account keys from transaction.' };
     }
+
+    // 转换为字符串数组以便于比较
+    const accountKeyStrings = staticAccountKeys.map((key: PublicKey) => key.toString());
 
     // 3. 检查是 SPL 代币转账还是原生 SOL 转账
     const isSplToken = currencyConfig && currencyConfig.networks.find((n: any) => n.networkId.startsWith('solana'))?.contractAddress;
@@ -400,8 +368,8 @@ function validateSolanaTransactionDetails(
             return { isValid: false, error: 'Could not find token contract address for Solana in currency config.' };
         }
 
-        const preTokenBalances = tx.meta.preTokenBalances || [];
-        const postTokenBalances = tx.meta.postTokenBalances || [];
+        const preTokenBalances = txInfo.meta.preTokenBalances || [];
+        const postTokenBalances = txInfo.meta.postTokenBalances || [];
 
         const relevantPreBalances = preTokenBalances.filter((b: any) => b.mint === tokenContractAddress);
         const relevantPostBalances = postTokenBalances.filter((b: any) => b.mint === tokenContractAddress);
@@ -437,11 +405,11 @@ function validateSolanaTransactionDetails(
             return { isValid: false, error: 'Sender or recipient address not provided for native SOL transfer.' };
         }
 
-        const senderIndex = accountKeys.indexOf(expectedFrom);
+        const senderIndex = accountKeyStrings.indexOf(expectedFrom);
         if (senderIndex === -1) {
             return { isValid: false, error: `Sender address ${expectedFrom} not found in transaction accounts` };
         }
-        const recipientIndex = accountKeys.indexOf(expectedTo);
+        const recipientIndex = accountKeyStrings.indexOf(expectedTo);
         if (recipientIndex === -1) {
             return { isValid: false, error: `Recipient address ${expectedTo} not found in transaction account keys.` };
         }
@@ -451,8 +419,8 @@ function validateSolanaTransactionDetails(
             return { isValid: false, error: 'Expected amount not provided for SOL transfer validation.' };
         }
 
-        const preBalances: number[] = tx.meta.preBalances || [];
-        const postBalances: number[] = tx.meta.postBalances || [];
+        const preBalances: number[] = txInfo.meta.preBalances || [];
+        const postBalances: number[] = txInfo.meta.postBalances || [];
 
         if (recipientIndex >= preBalances.length || recipientIndex >= postBalances.length) {
             return { isValid: false, error: 'Transaction metadata is missing balance information for the recipient.' };
