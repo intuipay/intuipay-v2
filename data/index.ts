@@ -1,4 +1,4 @@
-import {Currency, DropdownItemProps, PaymentMethod, University} from "@/types";
+import {Currency, PaymentMethod, University} from "@/types";
 // 为了保持向后兼容，使用新的区块链配置系统
 import { getNetworkDropdownOptions, getWalletDropdownOptions } from '@/config/blockchain';
 

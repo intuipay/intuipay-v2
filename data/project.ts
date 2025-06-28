@@ -1,5 +1,5 @@
 export enum ProjectStatus {
-  Draft,
+  Draft = 1,
   Review,
   Rejected,
   Reopened,
