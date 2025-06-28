@@ -541,5 +541,35 @@
     "sql_file": "sql/GET-project_updates_count.sql",
     "type": "sql_endpoint",
     "return_type": "json"
+  },
+  {
+    "name": "admin /my-orgs",
+    "description": "",
+    "method": "GET",
+    "endpoint": "/admin/my_orgs",
+    "data_source": {
+      "cluster_id": 10914349176033975536
+    },
+    "params": [
+      {
+        "name": "user_id",
+        "type": "integer",
+        "required": 1,
+        "default": "",
+        "description": ""
+      }
+    ],
+    "settings": {
+      "timeout": 30000,
+      "row_limit": 1000,
+      "cache_enabled": 0,
+      "cache_ttl": 0,
+      "enable_pagination": 0
+    },
+    "tag": "Default",
+    "batch_operation": 0,
+    "sql_file": "sql/GET-admin-my_orgs.sql",
+    "type": "sql_endpoint",
+    "return_type": "json"
   }
 ]
