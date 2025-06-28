@@ -34,16 +34,47 @@ export async function POST(req: Request) {
       }
     } catch (e) {
       console.warn('Failed to fetch project wallet for validation:', e);
-      // 继续处理，但不验证项目钱包地址
+      return new Response(
+        JSON.stringify({
+          code: 1,
+          message: 'Failed to fetch project wallet configuration',
+        }),
+        { status: 400 },
+      );
     }
 
-    // 执行交易验证
-    const validationResult = await validateDonationTransaction(network, tx_hash, {
-      amount: amount,
-      currency: currency,
-      wallet_address: wallet_address,
-      project_wallet: project_wallet,
-    });
+    // 检查是否成功获取到项目钱包地址
+    if (!project_wallet) {
+      return new Response(
+        JSON.stringify({
+          code: 1,
+          message: `Project wallet address not configured for network: ${network}`,
+        }),
+        { status: 400 },
+      );
+    }
+
+    // 获取货币配置
+    const currencyConfig = BLOCKCHAIN_CONFIG.currencies[currency as keyof typeof BLOCKCHAIN_CONFIG.currencies];
+    if (!currencyConfig) {
+      return new Response(
+        JSON.stringify({
+          code: 1,
+          message: `Unsupported currency: ${currency}`,
+        }),
+        { status: 400 },
+      );
+    }
+
+    // 执行交易验证（amount 已经在前端转换为最小单位）
+    const validationResult = await validateDonationTransaction(
+      network,
+      tx_hash,
+      project_wallet, // expectedTo - 项目钱包地址
+      BigInt(amount), // 前端已经转换为最小单位，直接转换为 BigInt
+      wallet_address, // expectedFrom - 捐赠者钱包地址
+      currencyConfig
+    );
 
     // 如果交易验证失败，返回错误
     if (!validationResult.isValid) {
