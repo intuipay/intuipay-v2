@@ -1,4 +1,4 @@
-import { describe, it, expect } from "bun:test"; // 可以换成 jest 或其他测试框架
+import { describe, it, expect } from "vitest";
 import { validateTransaction, validateDonationTransaction, checkRpcHealth } from '@/services/transaction-validator';
 import { BLOCKCHAIN_CONFIG } from '@/config/blockchain';
 
