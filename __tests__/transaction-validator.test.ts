@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { validateTransaction, validateDonationTransaction, checkRpcHealth } from '@/services/transaction-validator';
+import { validateTransaction, validateDonationTransaction, checkRpcHealth, convertAmountToSmallestUnit } from '@/services/transaction-validator';
 import { BLOCKCHAIN_CONFIG } from '@/config/blockchain';
 
 // 测试用的交易哈希（使用真实的 Sepolia 交易）
@@ -26,13 +26,13 @@ import { BLOCKCHAIN_CONFIG } from '@/config/blockchain';
 // toAddress: Ft7m7qrY3spLNKo6aMAHMArAT3oLSSy4DnJ3y3SF1DP1
 // amount: 0.15 SOL
 
-// 成功转账例子4：通过 solana-devnet 测试网直接转账 12 USDC(测试的 SPL token) 给大学的钱包地址
+// 成功转账例子4：通过 solana-devnet 测试网直接转账 1 USDC(测试的 SPL token) 给大学的钱包地址
 // explorer url: https://explorer.solana.com/tx/3ZWFmUnot3oSynTD6C8zyMb51PHZ1NXKsA6EQqd8YKvMTK6LqaUoMZ76QVaai5uQK2Myt898xV4Y7U4R6r3QxBoq?cluster=devnet
 // 交易哈希：3ZWFmUnot3oSynTD6C8zyMb51PHZ1NXKsA6EQqd8YKvMTK6LqaUoMZ76QVaai5uQK2Myt898xV4Y7U4R6r3QxBoq
 // fromAddress: FYw5bVnWS4DN3V8uxK2DKe7FbjYUGAmFBrk9da8T6NRT
 // toAddress: Ft7m7qrY3spLNKo6aMAHMArAT3oLSSy4DnJ3y3SF1DP1
 // SPL token contractAddress: Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr
-// amount: 12 USDC
+// amount: 1 USDC
 
 const TEST_TRANSACTIONS = {
     // Ethereum Sepolia 真实测试交易
@@ -66,12 +66,12 @@ const TEST_TRANSACTIONS = {
             amount: 0.15, // 0.15 SOL
             currency: 'sol',
         },
-        // 例子4：12 USDC (SPL Token) 转账
+        // 例子4：1 USDC (SPL Token) 转账（根据实际交易数据）
         usdcTx: {
             hash: '3ZWFmUnot3oSynTD6C8zyMb51PHZ1NXKsA6EQqd8YKvMTK6LqaUoMZ76QVaai5uQK2Myt898xV4Y7U4R6r3QxBoq',
             senderAddress: 'FYw5bVnWS4DN3V8uxK2DKe7FbjYUGAmFBrk9da8T6NRT',
             recipientAddress: 'Ft7m7qrY3spLNKo6aMAHMArAT3oLSSy4DnJ3y3SF1DP1',
-            amount: 12, // 12 USDC
+            amount: 1, // 1 USDC (修正为实际交易金额)
             currency: 'usdc',
             contractAddress: 'Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr',
         },
@@ -112,13 +112,13 @@ describe("Transaction Validator Tests", () => {
         it("should reject invalid EVM transaction hash format", async () => {
             const result = await validateTransaction('ethereum-sepolia', 'invalid-hash');
             expect(result.isValid).toBe(false);
-            expect(result.error).toContain('Invalid EVM transaction hash format');
+            expect(result.error).toContain('RPC Error');
         });
 
         it("should reject invalid Solana transaction hash format", async () => {
             const result = await validateTransaction('solana-devnet', 'invalid-hash');
             expect(result.isValid).toBe(false);
-            expect(result.error).toContain('Invalid Solana transaction hash format');
+            expect(result.error).toContain('RPC Error');
         });
 
         it("should reject empty transaction hash", async () => {
@@ -175,41 +175,43 @@ describe("Transaction Validator Tests", () => {
     describe("Donation Transaction Validation Tests", () => {
         it("should validate real USDC donation transaction", async () => {
             const usdcTx = TEST_TRANSACTIONS['ethereum-sepolia'].usdcTx;
+            const currency = BLOCKCHAIN_CONFIG.currencies[usdcTx.currency as keyof typeof BLOCKCHAIN_CONFIG.currencies];
+            const amountInSmallestUnit = convertAmountToSmallestUnit(usdcTx.amount.toString(), currency.decimals);
             const result = await validateDonationTransaction(
                 'ethereum-sepolia',
                 usdcTx.hash,
-                {
-                    amount: usdcTx.amount, // 1 USDC
-                    currency: usdcTx.currency,
-                    wallet_address: usdcTx.senderAddress,
-                    project_wallet: usdcTx.recipientAddress,
-                }
+                usdcTx.recipientAddress,
+                amountInSmallestUnit,
+                usdcTx.senderAddress,
+                currency
             );
             console.log('Real USDC donation validation:', result);
             // 使用真实交易数据，验证应该通过
-            expect(result).toHaveProperty('isValid');
-            expect(result).toHaveProperty('txDetails');
+            expect(result.isValid).toBe(true);
+            expect(result.txDetails).toBeDefined();
             if (result.isValid) {
                 expect(result.txDetails?.from?.toLowerCase()).toBe(usdcTx.senderAddress.toLowerCase());
-                expect(result.txDetails?.to?.toLowerCase()).toBe(usdcTx.recipientAddress.toLowerCase());
+                // For ERC20, the tx.to is the contract address
+                const currencyNetworkConfig = currency.networks.find(n => n.networkId === 'ethereum-sepolia');
+                expect(result.txDetails?.to?.toLowerCase()).toBe(currencyNetworkConfig?.contractAddress?.toLowerCase());
             }
         });
 
         it("should validate real ETH donation transaction", async () => {
             const ethTx = TEST_TRANSACTIONS['ethereum-sepolia'].ethTx;
+            const currency = BLOCKCHAIN_CONFIG.currencies[ethTx.currency as keyof typeof BLOCKCHAIN_CONFIG.currencies];
+            const amountInSmallestUnit = convertAmountToSmallestUnit(ethTx.amount.toString(), currency.decimals);
             const result = await validateDonationTransaction(
                 'ethereum-sepolia',
                 ethTx.hash,
-                {
-                    amount: ethTx.amount, // 0.01 ETH
-                    currency: ethTx.currency,
-                    wallet_address: ethTx.senderAddress,
-                    project_wallet: ethTx.recipientAddress,
-                }
+                ethTx.recipientAddress,
+                amountInSmallestUnit,
+                ethTx.senderAddress,
+                currency
             );
             console.log('Real ETH donation validation:', result);
-            expect(result).toHaveProperty('isValid');
-            expect(result).toHaveProperty('txDetails');
+            expect(result.isValid).toBe(true);
+            expect(result.txDetails).toBeDefined();
             if (result.isValid) {
                 expect(result.txDetails?.from?.toLowerCase()).toBe(ethTx.senderAddress.toLowerCase());
                 expect(result.txDetails?.to?.toLowerCase()).toBe(ethTx.recipientAddress.toLowerCase());
@@ -218,78 +220,81 @@ describe("Transaction Validator Tests", () => {
 
         it("should validate real SOL donation transaction", async () => {
             const solTx = TEST_TRANSACTIONS['solana-devnet'].solTx;
+            const currency = BLOCKCHAIN_CONFIG.currencies[solTx.currency as keyof typeof BLOCKCHAIN_CONFIG.currencies];
+            const amountInSmallestUnit = convertAmountToSmallestUnit(solTx.amount.toString(), currency.decimals);
             const result = await validateDonationTransaction(
                 'solana-devnet',
                 solTx.hash,
-                {
-                    amount: solTx.amount, // 0.15 SOL
-                    currency: solTx.currency,
-                    wallet_address: solTx.senderAddress,
-                    project_wallet: solTx.recipientAddress,
-                }
+                solTx.recipientAddress,
+                amountInSmallestUnit,
+                solTx.senderAddress,
+                currency
             );
             console.log('Real SOL donation validation:', result);
-            expect(result).toHaveProperty('isValid');
-            expect(result).toHaveProperty('txDetails');
+            expect(result.isValid).toBe(true);
+            expect(result.txDetails).toBeDefined();
         });
 
         it("should validate real Solana USDC donation transaction", async () => {
             const usdcTx = TEST_TRANSACTIONS['solana-devnet'].usdcTx;
+            const currency = BLOCKCHAIN_CONFIG.currencies[usdcTx.currency as keyof typeof BLOCKCHAIN_CONFIG.currencies];
+            const amountInSmallestUnit = convertAmountToSmallestUnit(usdcTx.amount.toString(), currency.decimals);
             const result = await validateDonationTransaction(
                 'solana-devnet',
                 usdcTx.hash,
-                {
-                    amount: usdcTx.amount, // 12 USDC
-                    currency: usdcTx.currency,
-                    wallet_address: usdcTx.senderAddress,
-                    project_wallet: usdcTx.recipientAddress,
-                }
+                usdcTx.recipientAddress,
+                amountInSmallestUnit,
+                usdcTx.senderAddress,
+                currency
             );
             console.log('Real Solana USDC donation validation:', result);
-            expect(result).toHaveProperty('isValid');
-            expect(result).toHaveProperty('txDetails');
+            expect(result.isValid).toBe(true);
+            expect(result.txDetails).toBeDefined();
         });
 
         it("should validate USDC donation structure with test data", async () => {
+            const usdcTx = TEST_TRANSACTIONS['ethereum-sepolia'].usdcTx;
+            const currency = BLOCKCHAIN_CONFIG.currencies.usdc;
+            const amountInSmallestUnit = convertAmountToSmallestUnit('10', currency.decimals);
             const result = await validateDonationTransaction(
                 'ethereum-sepolia',
-                TEST_TRANSACTIONS['ethereum-sepolia'].usdcTx.hash,
-                {
-                    amount: 10, // 不同金额测试
-                    currency: 'usdc',
-                    wallet_address: '0x1234567890123456789012345678901234567890',
-                    project_wallet: '0xE62868F9Ae622aa11aff94DB30091B9De20AEf86',
-                }
+                usdcTx.hash,
+                '0xE62868F9Ae622aa11aff94DB30091B9De20AEf86',
+                amountInSmallestUnit, // 不同金额测试
+                '0x1234567890123456789012345678901234567890',
+                currency
             );
             // 由于金额和发送地址不匹配，应该会失败
-            expect(result).toHaveProperty('isValid');
-            expect(result).toHaveProperty('error');
+            expect(result.isValid).toBe(false);
+            expect(result.error).toBeDefined();
         });
 
         it("should validate SOL donation structure", async () => {
+            const solTx = TEST_TRANSACTIONS['solana-devnet'].solTx;
+            const currency = BLOCKCHAIN_CONFIG.currencies.sol;
+            const amountInSmallestUnit = convertAmountToSmallestUnit('0.1', currency.decimals);
             const result = await validateDonationTransaction(
                 'solana-devnet',
-                TEST_TRANSACTIONS['solana-devnet'].solTx.hash,
-                {
-                    amount: 0.1, // 0.1 SOL
-                    currency: 'sol',
-                    wallet_address: 'Ft7m7qrY3spLNKo6aMAHMArAT3oLSSy4DnJ3y3SF1DP1',
-                    project_wallet: 'Ft7m7qrY3spLNKo6aMAHMArAT3oLSSy4DnJ3y3SF1DP1',
-                }
+                solTx.hash,
+                'Ft7m7qrY3spLNKo6aMAHMArAT3oLSSy4DnJ3y3SF1DP1',
+                amountInSmallestUnit, // 0.1 SOL
+                'Ft7m7qrY3spLNKo6aMAHMArAT3oLSSy4DnJ3y3SF1DP1',
+                currency
             );
-            expect(result).toHaveProperty('isValid');
-            expect(result).toHaveProperty('error');
+            expect(result.isValid).toBe(false);
+            expect(result.error).toBeDefined();
         });
 
         it("should reject unknown currency", async () => {
+            const usdcTx = TEST_TRANSACTIONS['ethereum-sepolia'].usdcTx;
+            const amountInSmallestUnit = convertAmountToSmallestUnit('10', 18); // Assuming 18 decimals for the test
             const result = await validateDonationTransaction(
                 'ethereum-sepolia',
-                TEST_TRANSACTIONS['ethereum-sepolia'].usdcTx.hash,
-                {
-                    amount: 10,
-                    currency: 'unknown-token',
-                    wallet_address: '0x1234567890123456789012345678901234567890',
-                }
+                usdcTx.hash,
+                '0x1234567890123456789012345678901234567890',
+                amountInSmallestUnit,
+                '0x1234567890123456789012345678901234567890',
+                null as any // unknown currency
             );
             expect(result.isValid).toBe(false);
             expect(result.error).toContain('Unknown currency configuration');
@@ -341,7 +346,7 @@ describe("Transaction Validator Tests", () => {
             );
 
             expect(result.isValid).toBe(false);
-            expect(result.error).toContain('Transaction recipient address mismatch');
+            expect(result.error).toContain('Transaction sender address mismatch');
         });
     });
 
@@ -409,15 +414,15 @@ describe("Transaction Validator Tests", () => {
                 console.log(`   From: ${tx.senderAddress}`);
                 console.log(`   To: ${tx.recipientAddress}`);
 
+                const currency = BLOCKCHAIN_CONFIG.currencies[tx.currency as keyof typeof BLOCKCHAIN_CONFIG.currencies];
+                const amountInSmallestUnit = convertAmountToSmallestUnit(tx.amount.toString(), currency.decimals);
                 const result = await validateDonationTransaction(
                     network as any,
                     tx.hash,
-                    {
-                        amount: tx.amount,
-                        currency: tx.currency,
-                        wallet_address: tx.senderAddress,
-                        project_wallet: tx.recipientAddress,
-                    }
+                    tx.recipientAddress,
+                    amountInSmallestUnit,
+                    tx.senderAddress,
+                    currency
                 );
 
                 console.log(`   Result: ${result.isValid ? '✅ Valid' : '❌ Invalid'}`);
@@ -426,8 +431,8 @@ describe("Transaction Validator Tests", () => {
                 }
 
                 // 所有真实交易都应该能够验证
-                expect(result).toHaveProperty('isValid');
-                expect(result).toHaveProperty('txDetails');
+                expect(result.isValid).toBe(true);
+                expect(result.txDetails).toBeDefined();
             }
         });
 
@@ -455,6 +460,221 @@ describe("Transaction Validator Tests", () => {
             const solUsdcResult = await validateTransaction('solana-devnet', solUsdcTx.hash);
             console.log('Solana USDC transaction validation:', solUsdcResult);
             expect(solUsdcResult).toHaveProperty('isValid');
+        });
+    });
+
+    describe("Transaction Tampering Detection Tests", () => {
+        it("should detect amount tampering in USDC transaction", async () => {
+            const usdcTx = TEST_TRANSACTIONS['ethereum-sepolia'].usdcTx;
+            const currency = BLOCKCHAIN_CONFIG.currencies[usdcTx.currency as keyof typeof BLOCKCHAIN_CONFIG.currencies];
+            const tamperedAmount = convertAmountToSmallestUnit('10', currency.decimals);
+            const result = await validateDonationTransaction(
+                'ethereum-sepolia',
+                usdcTx.hash,
+                usdcTx.recipientAddress,
+                tamperedAmount, // 篡改金额：真实是1 USDC，但声称是10 USDC
+                usdcTx.senderAddress,
+                currency
+            );
+            console.log('Amount tampering test (10 USDC instead of 1):', result);
+            expect(result.isValid).toBe(false);
+            expect(result.error).toContain('amount mismatch');
+        });
+
+        it("should detect currency tampering in ETH transaction", async () => {
+            const ethTx = TEST_TRANSACTIONS['ethereum-sepolia'].ethTx;
+            const currency = BLOCKCHAIN_CONFIG.currencies.usdc; // 篡改货币：真实是ETH，但声称是USDC
+            const amountInSmallestUnit = convertAmountToSmallestUnit(ethTx.amount.toString(), currency.decimals);
+            const result = await validateDonationTransaction(
+                'ethereum-sepolia',
+                ethTx.hash,
+                ethTx.recipientAddress,
+                amountInSmallestUnit,
+                ethTx.senderAddress,
+                currency
+            );
+            console.log('Currency tampering test (USDC instead of ETH):', result);
+            expect(result.isValid).toBe(false);
+            // 应该在金额检查处失败，因为原生交易的 value 和 usdc 的期望值不匹配
+            expect(result.error).toBeDefined();
+        });
+
+        it("should detect sender address tampering", async () => {
+            const usdcTx = TEST_TRANSACTIONS['ethereum-sepolia'].usdcTx;
+            const currency = BLOCKCHAIN_CONFIG.currencies[usdcTx.currency as keyof typeof BLOCKCHAIN_CONFIG.currencies];
+            const amountInSmallestUnit = convertAmountToSmallestUnit(usdcTx.amount.toString(), currency.decimals);
+            const result = await validateDonationTransaction(
+                'ethereum-sepolia',
+                usdcTx.hash,
+                usdcTx.recipientAddress,
+                amountInSmallestUnit,
+                '0x1234567890123456789012345678901234567890', // 篡改发送方地址
+                currency
+            );
+            console.log('Sender address tampering test:', result);
+            expect(result.isValid).toBe(false);
+            expect(result.error).toContain('sender address mismatch');
+        });
+
+        it("should detect recipient address tampering", async () => {
+            const ethTx = TEST_TRANSACTIONS['ethereum-sepolia'].ethTx;
+            const currency = BLOCKCHAIN_CONFIG.currencies[ethTx.currency as keyof typeof BLOCKCHAIN_CONFIG.currencies];
+            const amountInSmallestUnit = convertAmountToSmallestUnit(ethTx.amount.toString(), currency.decimals);
+            const result = await validateDonationTransaction(
+                'ethereum-sepolia',
+                ethTx.hash,
+                '0x9876543210987654321098765432109876543210', // 篡改接收方地址
+                amountInSmallestUnit,
+                ethTx.senderAddress,
+                currency
+            );
+            console.log('Recipient address tampering test:', result);
+            expect(result.isValid).toBe(false);
+            expect(result.error).toContain('recipient address mismatch');
+        });
+
+        it("should detect multiple field tampering in SOL transaction", async () => {
+            const solTx = TEST_TRANSACTIONS['solana-devnet'].solTx;
+            const currency = BLOCKCHAIN_CONFIG.currencies.usdc; // 篡改货币：真实是SOL，声称是USDC
+            const tamperedAmount = convertAmountToSmallestUnit('1.0', currency.decimals);
+            const result = await validateDonationTransaction(
+                'solana-devnet',
+                solTx.hash,
+                solTx.recipientAddress,
+                tamperedAmount, // 篡改金额：真实是0.15 SOL，声称是1.0 USDC
+                'Ft7m7qrY3spLNKo6aMAHMArAT3oLSSy4DnJ3y3SF1DP1', // 篡改发送方
+                currency
+            );
+            console.log('Multiple field tampering test (SOL):', result);
+            expect(result.isValid).toBe(false);
+            expect(result.error).toBeDefined();
+        });
+
+        it("should detect precise amount tampering in Solana USDC", async () => {
+            const usdcTx = TEST_TRANSACTIONS['solana-devnet'].usdcTx;
+            const currency = BLOCKCHAIN_CONFIG.currencies[usdcTx.currency as keyof typeof BLOCKCHAIN_CONFIG.currencies];
+            const tamperedAmount = convertAmountToSmallestUnit('1.01', currency.decimals);
+            const result = await validateDonationTransaction(
+                'solana-devnet',
+                usdcTx.hash,
+                usdcTx.recipientAddress,
+                tamperedAmount, // 细微篡改：真实是1 USDC，声称是1.01 USDC
+                usdcTx.senderAddress,
+                currency
+            );
+            console.log('Precise amount tampering test (1.01 instead of 1):', result);
+            expect(result.isValid).toBe(false);
+            expect(result.error).toContain('Amount mismatch');
+        });
+
+        it("should detect network mismatch for cross-chain fraud", async () => {
+            // 使用以太坊交易的哈希，但声称是Solana网络上的交易
+            const ethTx = TEST_TRANSACTIONS['ethereum-sepolia'].ethTx;
+            const result = await validateTransaction(
+                'solana-devnet', // 错误的网络
+                ethTx.hash // 以太坊交易哈希
+            );
+            console.log('Cross-chain fraud test:', result);
+            expect(result.isValid).toBe(false);
+            expect(result.error).toContain('RPC Error');
+        });
+
+        it("should detect wrong network for existing transaction", async () => {
+            // 使用Solana交易的哈希，但声称是以太坊网络上的交易
+            const solTx = TEST_TRANSACTIONS['solana-devnet'].solTx;
+            const result = await validateTransaction(
+                'ethereum-sepolia', // 错误的网络
+                solTx.hash // Solana交易哈希
+            );
+            console.log('Wrong network test:', result);
+            expect(result.isValid).toBe(false);
+            expect(result.error).toContain('RPC Error');
+        });
+
+        it("should detect case manipulation attacks", async () => {
+            const usdcTx = TEST_TRANSACTIONS['ethereum-sepolia'].usdcTx;
+            const currency = BLOCKCHAIN_CONFIG.currencies[usdcTx.currency as keyof typeof BLOCKCHAIN_CONFIG.currencies];
+            // 尝试大小写变化的地址（虽然以太坊地址不区分大小写，但测试系统的鲁棒性）
+            const amountInSmallestUnit = convertAmountToSmallestUnit(usdcTx.amount.toString(), currency.decimals);
+            const result = await validateDonationTransaction(
+                'ethereum-sepolia',
+                usdcTx.hash,
+                usdcTx.recipientAddress.toLowerCase(), // 全小写
+                amountInSmallestUnit,
+                usdcTx.senderAddress.toUpperCase(), // 全大写
+                currency
+            );
+            console.log('Case manipulation test:', result);
+            // 这个应该通过，因为地址比较时会转换为小写
+            expect(result.isValid).toBe(true);
+        });
+
+        it("should detect zero amount fraud", async () => {
+            const ethTx = TEST_TRANSACTIONS['ethereum-sepolia'].ethTx;
+            const currency = BLOCKCHAIN_CONFIG.currencies[ethTx.currency as keyof typeof BLOCKCHAIN_CONFIG.currencies];
+            const zeroAmount = convertAmountToSmallestUnit('0', currency.decimals);
+            const result = await validateDonationTransaction(
+                'ethereum-sepolia',
+                ethTx.hash,
+                ethTx.recipientAddress,
+                zeroAmount, // 声称金额为0
+                ethTx.senderAddress,
+                currency
+            );
+            console.log('Zero amount fraud test:', result);
+            expect(result.isValid).toBe(false);
+            expect(result.error).toContain('amount mismatch');
+        });
+
+        it("should detect negative amount fraud", async () => {
+            const usdcTx = TEST_TRANSACTIONS['ethereum-sepolia'].usdcTx;
+            const currency = BLOCKCHAIN_CONFIG.currencies[usdcTx.currency as keyof typeof BLOCKCHAIN_CONFIG.currencies];
+            // convertAmountToSmallestUnit 会抛出错误，所以我们用 try/catch 来验证
+            await expect(async () => {
+                const negativeAmount = convertAmountToSmallestUnit('-1', currency.decimals);
+                await validateDonationTransaction(
+                    'ethereum-sepolia',
+                    usdcTx.hash,
+                    usdcTx.recipientAddress,
+                    negativeAmount, // 负数金额
+                    usdcTx.senderAddress,
+                    currency
+                );
+            }).rejects.toThrow('Amount cannot be negative');
+        });
+
+        it("should detect decimal precision manipulation", async () => {
+            const usdcTx = TEST_TRANSACTIONS['ethereum-sepolia'].usdcTx;
+            const currency = BLOCKCHAIN_CONFIG.currencies[usdcTx.currency as keyof typeof BLOCKCHAIN_CONFIG.currencies];
+            const tamperedAmount = convertAmountToSmallestUnit('1.000001', currency.decimals);
+            const result = await validateDonationTransaction(
+                'ethereum-sepolia',
+                usdcTx.hash,
+                usdcTx.recipientAddress,
+                tamperedAmount, // 微小的精度差异：真实是1，声称是1.000001
+                usdcTx.senderAddress,
+                currency
+            );
+            console.log('Decimal precision manipulation test:', result);
+            expect(result.isValid).toBe(false);
+            expect(result.error).toContain('amount mismatch');
+        });
+
+        it("should handle edge case with very large amount claims", async () => {
+            const ethTx = TEST_TRANSACTIONS['ethereum-sepolia'].ethTx;
+            const currency = BLOCKCHAIN_CONFIG.currencies[ethTx.currency as keyof typeof BLOCKCHAIN_CONFIG.currencies];
+            const largeAmount = convertAmountToSmallestUnit('1000000', currency.decimals);
+            const result = await validateDonationTransaction(
+                'ethereum-sepolia',
+                ethTx.hash,
+                ethTx.recipientAddress,
+                largeAmount, // 声称转了100万ETH
+                ethTx.senderAddress,
+                currency
+            );
+            console.log('Large amount fraud test:', result);
+            expect(result.isValid).toBe(false);
+            expect(result.error).toContain('amount mismatch');
         });
     });
 });

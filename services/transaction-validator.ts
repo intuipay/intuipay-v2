@@ -1,4 +1,7 @@
 import { BLOCKCHAIN_CONFIG, getFundsDividerContract } from '@/config/blockchain';
+import { decodeFunctionData, parseAbi } from 'viem';
+import ERC20_ABI from '@/lib/erc20.abi.json';
+import FUNDS_DIVIDER_ABI from '@/lib/IntuipayFundsDivider.abi.json';
 
 export interface TransactionValidationResult {
     isValid: boolean;
@@ -7,7 +10,8 @@ export interface TransactionValidationResult {
         hash: string;
         from?: string;
         to?: string;
-        value?: string;
+        value?: bigint; // 使用 bigint 替代 string
+        input?: string; // 添加 input 字段用于 ERC-20 解析
         status?: string;
         blockNumber?: number;
     };
@@ -108,7 +112,7 @@ async function validateEvmTransaction(
     networkId: string,
     txHash: string,
     expectedTo?: string,
-    expectedAmount?: string,
+    expectedAmount?: bigint,
     expectedFrom?: string
 ): Promise<TransactionValidationResult> {
     const network = BLOCKCHAIN_CONFIG.networks[networkId as keyof typeof BLOCKCHAIN_CONFIG.networks];
@@ -162,7 +166,8 @@ async function validateEvmTransaction(
                 hash: tx.hash,
                 from: tx.from,
                 to: tx.to,
-                value: tx.value,
+                value: BigInt(tx.value || '0'), // 转换为 bigint
+                input: tx.input, // 添加 input 数据用于 ERC-20 解析
                 status: tx.blockNumber && tx.blockNumber !== '0x0' ? 'confirmed' : 'pending',
                 blockNumber: parseInt(tx.blockNumber || '0', 16),
             },
@@ -182,7 +187,7 @@ async function validateEvmTransaction(
 function validateEvmTransactionDetails(
     tx: any,
     expectedTo?: string,
-    expectedAmount?: string,
+    expectedAmount?: bigint,
     expectedFrom?: string,
     networkId?: string
 ): { isValid: boolean; error?: string } {
@@ -191,32 +196,81 @@ function validateEvmTransactionDetails(
         return { isValid: false, error: 'Transaction not yet confirmed' };
     }
 
-    // 检查接收方地址（如果提供）
-    if (expectedTo && tx.to?.toLowerCase() !== expectedTo.toLowerCase()) {
-        // 如果期望地址是项目钱包，但实际接收地址是合约，检查是否使用了手续费分配合约
-        if (networkId) {
-            const fundsDividerContract = getFundsDividerContract(networkId);
-            if (fundsDividerContract && tx.to?.toLowerCase() === fundsDividerContract.toLowerCase()) {
-                // 通过合约转账是有效的
-                console.log('Transaction validated through funds divider contract');
-            } else {
-                console.log('tx detail', tx.to, expectedTo);
-                return { isValid: false, error: 'Transaction recipient address mismatch' };
-            }
-        } else {
-            console.log('tx detail', tx.to, expectedTo);
-            return { isValid: false, error: 'Transaction recipient address mismatch' };
-        }
-    }
-
     // 检查发送方地址（如果提供）
     if (expectedFrom && tx.from?.toLowerCase() !== expectedFrom.toLowerCase()) {
         return { isValid: false, error: 'Transaction sender address mismatch' };
     }
 
+    // 先尝试解析 ERC-20 交易信息
+    let isERC20Transfer = false;
+    let erc20To: string | null = null;
+    let erc20Amount: bigint | null = null;
+
+    if (tx.input && tx.input !== '0x' && tx.input.length > 10) {
+        try {
+            const decoded = decodeFunctionData({
+                abi: ERC20_ABI,
+                data: tx.input as `0x${string}`,
+            });
+            console.log('debug decoded erc20 input', decoded);
+
+            if (decoded.functionName === 'transfer') {
+                isERC20Transfer = true;
+                const [to, amount] = decoded.args as [string, bigint];
+                erc20To = to;
+                erc20Amount = amount;
+                console.log('debug erc20 transfer', to, amount, expectedAmount, expectedTo);
+            } else if (decoded.functionName === 'transferFrom') {
+                isERC20Transfer = true;
+                const [, to, amount] = decoded.args as [string, string, bigint];
+                erc20To = to;
+                erc20Amount = amount;
+                console.log('debug erc20 transferFrom', to, amount, expectedAmount, expectedTo);
+            }
+        } catch (error) {
+            console.warn('Failed to parse ERC-20 function data:', error);
+        }
+    }
+
     // 检查金额（如果提供）
-    if (expectedAmount && tx.value !== expectedAmount) {
-        return { isValid: false, error: 'Transaction amount mismatch' };
+    if (expectedAmount !== undefined) {
+        if (isERC20Transfer && erc20Amount !== null) {
+            // ERC-20 代币转账，使用解析出的金额
+            if (erc20Amount !== expectedAmount) {
+                return { isValid: false, error: `ERC-20 token amount mismatch. Expected ${expectedAmount}, but got ${erc20Amount}` };
+            }
+        } else if (!isERC20Transfer) {
+            // 原生代币转账，检查 value 字段
+            const txValueBigInt = BigInt(tx.value || '0');
+            if (txValueBigInt !== expectedAmount) {
+                return { isValid: false, error: `Native currency amount mismatch. Expected ${expectedAmount}, but got ${txValueBigInt}` };
+            }
+        }
+    }
+
+    // 检查接收方地址（如果提供）
+    if (expectedTo) {
+        if (isERC20Transfer && erc20To) {
+            // ERC-20 转账，使用解析出的接收方地址
+            if (erc20To.toLowerCase() !== expectedTo.toLowerCase()) {
+                return { isValid: false, error: `ERC-20 transaction recipient address mismatch, expected: ${expectedTo}, got: ${erc20To}` };
+            }
+        } else if (tx.to?.toLowerCase() !== expectedTo.toLowerCase()) {
+            // 原生代币转账或合约调用，检查交易的 to 字段
+            
+            // 如果期望地址是项目钱包，但实际接收地址是合约，检查是否使用了手续费分配合约
+            if (networkId) {
+                const fundsDividerContract = getFundsDividerContract(networkId);
+                if (fundsDividerContract && tx.to?.toLowerCase() === fundsDividerContract.toLowerCase()) {
+                    // 通过合约转账是有效的
+                    console.log('Transaction validated through funds divider contract');
+                    return { isValid: true };
+                }
+            }
+            
+            console.log('tx detail', tx.to, expectedTo);
+            return { isValid: false, error: 'Transaction recipient address mismatch' };
+        }
     }
 
     return { isValid: true };
@@ -229,8 +283,9 @@ async function validateSolanaTransaction(
     networkId: string,
     txHash: string,
     expectedTo?: string,
-    expectedAmount?: string,
-    expectedFrom?: string
+    expectedAmount?: bigint,
+    expectedFrom?: string,
+    currencyConfig?: any
 ): Promise<TransactionValidationResult> {
     const network = BLOCKCHAIN_CONFIG.networks[networkId as keyof typeof BLOCKCHAIN_CONFIG.networks];
 
@@ -285,7 +340,7 @@ async function validateSolanaTransaction(
         }
 
         // 验证交易详情
-        const isValid = validateSolanaTransactionDetails(tx, expectedTo, expectedAmount, expectedFrom);
+        const isValid = validateSolanaTransactionDetails(tx, expectedTo, expectedAmount, expectedFrom, currencyConfig);
 
         return {
             isValid: isValid.isValid,
@@ -294,7 +349,7 @@ async function validateSolanaTransaction(
                 hash: txHash,
                 from: tx.transaction?.message?.accountKeys?.[0] || '',
                 to: expectedTo || '',
-                value: expectedAmount || '',
+                value: expectedAmount,
                 status: tx.meta?.err ? 'failed' : 'confirmed',
                 blockNumber: tx.slot,
             },
@@ -314,36 +369,108 @@ async function validateSolanaTransaction(
 function validateSolanaTransactionDetails(
     tx: any,
     expectedTo?: string,
-    expectedAmount?: string,
-    expectedFrom?: string
+    expectedAmount?: bigint,
+    expectedFrom?: string,
+    currencyConfig?: any
 ): { isValid: boolean; error?: string } {
-    // 检查交易是否成功
+    // 1. 检查交易是否成功
     if (tx.meta?.err) {
         return { isValid: false, error: 'Transaction failed on Solana blockchain' };
     }
 
-    // Solana 交易验证比较复杂，因为涉及到账户变化和指令解析
-    // 这里做基本的验证
-
-    // 检查是否有账户余额变化
-    const preBalances = tx.meta?.preBalances || [];
-    const postBalances = tx.meta?.postBalances || [];
-
-    if (preBalances.length !== postBalances.length) {
-        return { isValid: false, error: 'Invalid transaction balance data' };
+    // 如果没有提供具体的验证细节，仅确认交易存在且成功
+    if (!expectedTo && !expectedAmount && !expectedFrom) {
+        return { isValid: true };
     }
 
-    // 检查是否有余额变化（表示有资金转移）
-    let hasBalanceChange = false;
-    for (let i = 0; i < preBalances.length; i++) {
-        if (preBalances[i] !== postBalances[i]) {
-            hasBalanceChange = true;
-            break;
+    // 2. 正确提取账户密钥
+    // 使用 `encoding: 'json'` 时, accountKeys 是一个字符串数组
+    const accountKeys: string[] = tx.transaction.message.accountKeys;
+    if (!accountKeys || !Array.isArray(accountKeys)) {
+        return { isValid: false, error: 'Could not parse account keys from transaction.' };
+    }
+
+    // 3. 检查是 SPL 代币转账还是原生 SOL 转账
+    const isSplToken = currencyConfig && currencyConfig.networks.find((n: any) => n.networkId.startsWith('solana'))?.contractAddress;
+
+    if (isSplToken) {
+        // --- SPL Token 转账验证 ---
+        const expectedAmountInSmallestUnit = expectedAmount;
+        if (expectedAmountInSmallestUnit === undefined) {
+            return { isValid: false, error: 'Expected amount not provided for SPL token transfer validation.' };
         }
-    }
 
-    if (!hasBalanceChange) {
-        return { isValid: false, error: 'No balance changes detected in transaction' };
+        const tokenContractAddress = currencyConfig.networks.find((n: any) => n.networkId.startsWith('solana'))?.contractAddress;
+        if (!tokenContractAddress) {
+            return { isValid: false, error: 'Could not find token contract address for Solana in currency config.' };
+        }
+
+        const preTokenBalances = tx.meta.preTokenBalances || [];
+        const postTokenBalances = tx.meta.postTokenBalances || [];
+
+        const relevantPreBalances = preTokenBalances.filter((b: any) => b.mint === tokenContractAddress);
+        const relevantPostBalances = postTokenBalances.filter((b: any) => b.mint === tokenContractAddress);
+
+        const senderBalanceChange = relevantPreBalances.find((b: any) => b.owner === expectedFrom);
+        const recipientBalanceChange = relevantPostBalances.find((b: any) => b.owner === expectedTo);
+
+        if (!senderBalanceChange) {
+            return { isValid: false, error: `Sender ${expectedFrom} not involved in this SPL token transaction.` };
+        }
+        
+        const senderPreAmount = BigInt(senderBalanceChange.uiTokenAmount.amount);
+        const senderPostBalance = relevantPostBalances.find((b: any) => b.accountIndex === senderBalanceChange.accountIndex);
+        const senderPostAmount = BigInt(senderPostBalance?.uiTokenAmount.amount || '0');
+        const actualSentAmount = senderPreAmount - senderPostAmount;
+
+        if (actualSentAmount !== expectedAmountInSmallestUnit) {
+            return { isValid: false, error: `Amount mismatch for sender. Expected to send ${expectedAmountInSmallestUnit}, but sent ${actualSentAmount}` };
+        }
+
+        const recipientPreBalance = relevantPreBalances.find((b: any) => b.accountIndex === recipientBalanceChange?.accountIndex);
+        const recipientPreAmount = BigInt(recipientPreBalance?.uiTokenAmount.amount || '0');
+        const recipientPostAmount = BigInt(recipientBalanceChange.uiTokenAmount.amount);
+        const actualReceivedAmount = recipientPostAmount - recipientPreAmount;
+
+        if (actualReceivedAmount !== expectedAmountInSmallestUnit) {
+            return { isValid: false, error: `Amount mismatch for recipient. Expected to receive ${expectedAmountInSmallestUnit}, but received ${actualReceivedAmount}` };
+        }
+
+    } else {
+        // --- 原生 SOL 转账验证 ---
+        if (!expectedFrom || !expectedTo) {
+            return { isValid: false, error: 'Sender or recipient address not provided for native SOL transfer.' };
+        }
+
+        const senderIndex = accountKeys.indexOf(expectedFrom);
+        if (senderIndex === -1) {
+            return { isValid: false, error: `Sender address ${expectedFrom} not found in transaction accounts` };
+        }
+        const recipientIndex = accountKeys.indexOf(expectedTo);
+        if (recipientIndex === -1) {
+            return { isValid: false, error: `Recipient address ${expectedTo} not found in transaction account keys.` };
+        }
+
+        const expectedAmountLamports = expectedAmount;
+        if (expectedAmountLamports === undefined) {
+            return { isValid: false, error: 'Expected amount not provided for SOL transfer validation.' };
+        }
+
+        const preBalances: number[] = tx.meta.preBalances || [];
+        const postBalances: number[] = tx.meta.postBalances || [];
+
+        if (recipientIndex >= preBalances.length || recipientIndex >= postBalances.length) {
+            return { isValid: false, error: 'Transaction metadata is missing balance information for the recipient.' };
+        }
+
+        const recipientPreBalance = BigInt(preBalances[recipientIndex]);
+        const recipientPostBalance = BigInt(postBalances[recipientIndex]);
+
+        const amountReceived = recipientPostBalance - recipientPreBalance;
+
+        if (amountReceived !== expectedAmountLamports) {
+            return { isValid: false, error: `Amount mismatch. Expected ${expectedAmountLamports}, but received ${amountReceived}` };
+        }
     }
 
     return { isValid: true };
@@ -356,8 +483,9 @@ export async function validateTransaction(
     networkId: string,
     txHash: string,
     expectedTo?: string,
-    expectedAmount?: string,
-    expectedFrom?: string
+    expectedAmount?: bigint,
+    expectedFrom?: string,
+    currencyConfig?: any
 ): Promise<TransactionValidationResult> {
     const network = BLOCKCHAIN_CONFIG.networks[networkId as keyof typeof BLOCKCHAIN_CONFIG.networks];
 
@@ -372,17 +500,9 @@ export async function validateTransaction(
 
     try {
         if (network.type === 'evm') {
-            // EVM 区块链验证
-            if (!/^0x[a-fA-F0-9]{64}$/.test(txHash)) {
-                return { isValid: false, error: 'Invalid EVM transaction hash format' };
-            }
-            return await validateEvmTransaction(networkId, txHash, expectedTo, expectedAmount, expectedFrom);
+            return validateEvmTransaction(networkId, txHash, expectedTo, expectedAmount, expectedFrom);
         } else if (network.type === 'solana') {
-            // Solana 区块链验证
-            if (!/^[1-9A-HJ-NP-Za-km-z]{87,88}$/.test(txHash)) {
-                return { isValid: false, error: 'Invalid Solana transaction hash format' };
-            }
-            return await validateSolanaTransaction(networkId, txHash, expectedTo, expectedAmount, expectedFrom);
+            return validateSolanaTransaction(networkId, txHash, expectedTo, expectedAmount, expectedFrom, currencyConfig);
         } else {
             return { isValid: false, error: 'Unsupported blockchain type' };
         }
@@ -395,122 +515,60 @@ export async function validateTransaction(
 }
 
 /**
+ * 将人类可读的金额字符串转换为最小单位的 BigInt
+ * @param amount - 金额字符串 (e.g., "0.1")
+ * @param decimals - 货币的小数位数
+ * @returns 最小单位的 BigInt
+ */
+export function convertAmountToSmallestUnit(amount: string, decimals: number): bigint {
+    if (typeof amount !== 'string' || !/^-?\d*(\.\d+)?$/.test(amount)) {
+        throw new Error('Invalid amount format. Amount must be a string representing a number.');
+    }
+    if (amount.startsWith('-')) {
+        throw new Error('Amount cannot be negative.');
+    }
+
+    const parts = amount.split('.');
+    const integerPart = BigInt(parts[0] || '0');
+    const fractionalPartStr = (parts[1] || '').padEnd(decimals, '0');
+    // 确保小数部分不会超过货币支持的精度
+    const truncatedFractionalPart = fractionalPartStr.slice(0, decimals);
+    const fractionalPart = BigInt(truncatedFractionalPart);
+
+    return integerPart * (10n ** BigInt(decimals)) + fractionalPart;
+}
+
+
+/**
  * 验证捐赠交易的特定函数
  */
 export async function validateDonationTransaction(
     networkId: string,
     txHash: string,
-    donationData: {
-        amount: string | number;
-        currency: string;
-        wallet_address?: string;
-        project_wallet?: string;
-    }
+    expectedTo: string,
+    amountInSmallestUnit: bigint,
+    expectedFrom: string,
+    currency: any
 ): Promise<TransactionValidationResult> {
-    const { amount, currency, wallet_address, project_wallet } = donationData;
 
-    // 获取货币配置进行金额验证
-    const currencyConfig = BLOCKCHAIN_CONFIG.currencies[currency as keyof typeof BLOCKCHAIN_CONFIG.currencies];
-    if (!currencyConfig) {
-        return {
-            isValid: false,
-            error: 'Unknown currency configuration'
-        };
+    if (!currency) {
+        return { isValid: false, error: 'Unknown currency configuration' };
     }
-
-    // 确定期望的接收地址
-    let expectedToAddress = project_wallet;
-    
-    // 检查是否使用手续费分配合约
-    const fundsDividerContract = getFundsDividerContract(networkId);
-    if (fundsDividerContract) {
-        // 如果配置了手续费分配合约，期望的接收地址应该是合约地址
-        expectedToAddress = fundsDividerContract;
-        console.log('Using funds divider contract for validation:', fundsDividerContract);
-    }
-
-    // 首先进行基本的交易验证
-    const basicValidation = await validateTransaction(
-        networkId,
-        txHash,
-        expectedToAddress,  // 使用计算出的期望接收地址
-        undefined,          // 先不验证金额，后面单独处理
-        wallet_address      // 期望的发送地址
-    );
-
-    if (!basicValidation.isValid) {
-        return basicValidation;
-    }
-
-    // 获取该货币在指定网络的配置
     const network = BLOCKCHAIN_CONFIG.networks[networkId as keyof typeof BLOCKCHAIN_CONFIG.networks];
     if (!network) {
-        return {
-            ...basicValidation,
-            isValid: false,
-            error: 'Unknown network configuration'
-        };
+        return { isValid: false, error: 'Unknown network' };
     }
+    
+    console.log(`Validating tx ${txHash} on ${networkId}:
+    - Expected To: ${expectedTo}
+    - Expected From: ${expectedFrom}
+    - Expected Amount (smallest unit): ${amountInSmallestUnit}`);
 
-    // 验证金额（如果提供了）
-    if (typeof amount === 'number' && amount > 0 && basicValidation.txDetails?.value) {
-        const txValue = basicValidation.txDetails.value;
-
-        try {
-            let expectedAmountInSmallestUnit: bigint;
-
-            if (network.type === 'solana') {
-                // Solana 金额处理
-                if (currency === 'sol') {
-                    // SOL 使用 lamports (1 SOL = 10^9 lamports)
-                    expectedAmountInSmallestUnit = BigInt(Math.floor(amount * 1_000_000_000));
-                } else {
-                    // SPL tokens
-                    expectedAmountInSmallestUnit = BigInt(Math.floor(amount * Math.pow(10, currencyConfig.decimals)));
-                }
-
-                // Solana 的金额比较（txValue 通常是 number）
-                const txValueBigInt = BigInt(txValue);
-                const tolerance = expectedAmountInSmallestUnit / BigInt(1000); // 0.1% 容差
-
-                if (txValueBigInt < expectedAmountInSmallestUnit - tolerance ||
-                    txValueBigInt > expectedAmountInSmallestUnit + tolerance) {
-                    return {
-                        ...basicValidation,
-                        isValid: false,
-                        error: `Amount mismatch: expected ${expectedAmountInSmallestUnit.toString()}, got ${txValueBigInt.toString()}`
-                    };
-                }
-            } else {
-                // EVM 金额处理
-                expectedAmountInSmallestUnit = BigInt(Math.floor(amount * Math.pow(10, currencyConfig.decimals)));
-
-                // 移除 '0x' 前缀并转换为 BigInt
-                const txValueHex = txValue.startsWith('0x') ? txValue.slice(2) : txValue;
-                const txValueBigInt = BigInt('0x' + txValueHex);
-
-                // 允许一定的容差（例如 0.1%）来处理精度问题
-                const tolerance = expectedAmountInSmallestUnit / BigInt(1000);
-
-                if (txValueBigInt < expectedAmountInSmallestUnit - tolerance ||
-                    txValueBigInt > expectedAmountInSmallestUnit + tolerance) {
-                    return {
-                        ...basicValidation,
-                        isValid: false,
-                        error: `Amount mismatch: expected ${expectedAmountInSmallestUnit.toString()}, got ${txValueBigInt.toString()}`
-                    };
-                }
-            }
-        } catch (error) {
-            console.warn('Amount validation failed:', error);
-            // 如果金额验证失败，我们仍然认为交易有效，但记录警告
-            return {
-                ...basicValidation,
-                isValid: true,
-                error: undefined // 清除错误，因为基本验证通过了
-            };
-        }
+    if (network.type === 'evm') {
+        return validateEvmTransaction(networkId, txHash, expectedTo, amountInSmallestUnit, expectedFrom);
+    } else if (network.type === 'solana') {
+        return validateSolanaTransaction(networkId, txHash, expectedTo, amountInSmallestUnit, expectedFrom, currency);
+    } else {
+        return { isValid: false, error: 'Unsupported blockchain type' };
     }
-
-    return basicValidation;
 }

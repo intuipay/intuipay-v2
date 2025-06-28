@@ -20,6 +20,7 @@ import {
 } from '@/config/blockchain';
 import { DonationProject } from '@/types';
 import IntuipayFundsDividerABI from '@/lib/IntuipayFundsDivider.abi.json';
+import ERC20_ABI from '@/lib/erc20.abi.json';
 
 type Props = {
   goToPreviousStep: () => void;
@@ -44,34 +45,6 @@ export default function DonationStep4({
   const currencyNetworkConfig = getCurrencyNetworkConfig(info.currency, info.network);
   // 从项目配置中读出收款钱包，配置不对的话会报错
   const recipientAddress = getProjectWalletAddress(project, info.network);
-
-  // USDC合约ABI (ERC-20标准)
-  const usdcAbi = [
-    {
-      name: 'transfer',
-      type: 'function',
-      inputs: [
-        { name: 'to', type: 'address' },
-        { name: 'amount', type: 'uint256' }
-      ],
-      outputs: [{ name: '', type: 'bool' }],
-      stateMutability: 'nonpayable'
-    },
-    {
-      name: 'decimals',
-      type: 'function',
-      inputs: [],
-      outputs: [{ name: '', type: 'uint8' }],
-      stateMutability: 'view'
-    },
-    {
-      name: 'balanceOf',
-      type: 'function',
-      inputs: [{ name: 'account', type: 'address' }],
-      outputs: [{ name: '', type: 'uint256' }],
-      stateMutability: 'view'
-    }
-  ] as const;
   // wagmi hooks
   const { address, isConnected } = useAccount();
   const chainId = useChainId();
@@ -432,7 +405,7 @@ export default function DonationStep4({
           console.log('Sending ERC-20 token transaction');
           writeContract({
             address: currencyNetworkConfig.contractAddress as `0x${string}`,
-            abi: usdcAbi,
+            abi: ERC20_ABI,
             functionName: 'transfer',
             args: [recipientAddress as `0x${string}`, amount],
           });
