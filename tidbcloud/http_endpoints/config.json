@@ -553,7 +553,7 @@
     "params": [
       {
         "name": "user_id",
-        "type": "integer",
+        "type": "string",
         "required": 1,
         "default": "",
         "description": ""
