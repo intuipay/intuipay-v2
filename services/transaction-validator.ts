@@ -212,20 +212,17 @@ function validateEvmTransactionDetails(
                 abi: ERC20_ABI,
                 data: tx.input as `0x${string}`,
             });
-            console.log('debug decoded erc20 input', decoded);
 
             if (decoded.functionName === 'transfer') {
                 isERC20Transfer = true;
                 const [to, amount] = decoded.args as [string, bigint];
                 erc20To = to;
                 erc20Amount = amount;
-                console.log('debug erc20 transfer', to, amount, expectedAmount, expectedTo);
             } else if (decoded.functionName === 'transferFrom') {
                 isERC20Transfer = true;
                 const [, to, amount] = decoded.args as [string, string, bigint];
                 erc20To = to;
                 erc20Amount = amount;
-                console.log('debug erc20 transferFrom', to, amount, expectedAmount, expectedTo);
             }
         } catch (error) {
             console.warn('Failed to parse ERC-20 function data:', error);
@@ -263,12 +260,10 @@ function validateEvmTransactionDetails(
                 const fundsDividerContract = getFundsDividerContract(networkId);
                 if (fundsDividerContract && tx.to?.toLowerCase() === fundsDividerContract.toLowerCase()) {
                     // 通过合约转账是有效的
-                    console.log('Transaction validated through funds divider contract');
                     return { isValid: true };
                 }
             }
             
-            console.log('tx detail', tx.to, expectedTo);
             return { isValid: false, error: 'Transaction recipient address mismatch' };
         }
     }
@@ -535,6 +530,7 @@ export function convertAmountToSmallestUnit(amount: string, decimals: number): b
     const truncatedFractionalPart = fractionalPartStr.slice(0, decimals);
     const fractionalPart = BigInt(truncatedFractionalPart);
 
+    // bigint 幂运算必须依赖 target: es2020
     return integerPart * (10n ** BigInt(decimals)) + fractionalPart;
 }
 
