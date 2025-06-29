@@ -1047,6 +1047,13 @@
         "required": 1,
         "default": "",
         "description": ""
+      },
+      {
+        "name": "user_id",
+        "type": "string",
+        "required": 1,
+        "default": "",
+        "description": ""
       }
     ],
     "settings": {
