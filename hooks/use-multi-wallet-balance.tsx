@@ -266,7 +266,7 @@ export function useMultiWalletBalance(network: string): MultiWalletBalanceResult
           }
         }
 
-        setSolanaBalances(newBalances);      
+        setSolanaBalances(newBalances);
       } catch (error: any) {
         console.error('Error fetching Solana balances:', error);
         const errorBalances: { [key: string]: TokenBalance } = {};

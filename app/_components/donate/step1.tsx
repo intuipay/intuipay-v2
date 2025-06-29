@@ -2,7 +2,7 @@ import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import MyCombobox from '@/components/my-combobox';
 import { DropdownItemProps } from '@/types';
-import { ChangeEvent, useState, useEffect, FormEvent, useCallback, useRef } from 'react';
+import { ChangeEvent, useState, useEffect, FormEvent, useCallback } from 'react';
 import CtaFooter from '@/app/_components/donate/cta-footer';
 import { clsx } from 'clsx';
 import Image from 'next/image';
@@ -79,7 +79,7 @@ export default function DonationStep1({
   const { disconnect } = useDisconnect();
   const chainId = useChainId();
   const [isPhantomConnected, setIsPhantomConnected] = useState(false);
-  
+
   // 根据 chainId 获取对应的网络ID
   const getNetworkIdByChainId = (chainId: number): string | null => {
     const networkEntry = Object.entries(BLOCKCHAIN_CONFIG.networks).find(([_, config]) => {
@@ -212,7 +212,7 @@ export default function DonationStep1({
     coinbase: connectors.find(c => c.id === 'coinbaseWalletSDK'),
     'wallet-connect': connectors.find(c => c.id === 'walletConnect'),
   };
-  
+
   // 刷新页面后，自动根据 wagmi 连接，恢复出之前选中的钱包
   useEffect(() => {
     if (isConnected && address && connector) {
@@ -225,7 +225,7 @@ export default function DonationStep1({
       setSelectedWallet(walletName);
     }
   }, [isConnected, address, connector, chainId]);
-  
+
   // Monitor connection errors
   useEffect(() => {
     if (connectError) {
@@ -295,7 +295,7 @@ export default function DonationStep1({
       }
     }
   };
-  
+
   const handleConnect = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!selectedWallet || isPending) return;
@@ -355,7 +355,7 @@ export default function DonationStep1({
         appkit.open();
         return;
       }
-      
+
       // Handle Phantom wallet for Solana
       if (selectedWallet === 'phantom') {
         if (window?.phantom?.solana?.isConnected) {

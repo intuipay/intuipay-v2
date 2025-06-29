@@ -37,12 +37,6 @@ export interface CryptoCurrencyConfig {
     }>;
 }
 
-// 大学钱包地址配置
-export interface UniversityWalletConfig {
-    networkId: string;
-    address: string;
-}
-
 // 统一的区块链配置
 export const BLOCKCHAIN_CONFIG = {
     // 网络配置
@@ -211,30 +205,6 @@ export const BLOCKCHAIN_CONFIG = {
             ],
         } as CryptoCurrencyConfig,
     },
-
-    // 大学钱包地址配置
-    universityWallets: [
-        {
-            networkId: 'ethereum-sepolia',
-            address: '0xE62868F9Ae622aa11aff94DB30091B9De20AEf86',
-        },
-        {
-            networkId: 'ethereum-mainnet',
-            address: '0xE62868F9Ae622aa11aff94DB30091B9De20AEf86',
-        },
-        {
-            networkId: 'solana-devnet',
-            address: 'Ft7m7qrY3spLNKo6aMAHMArAT3oLSSy4DnJ3y3SF1DP1',
-        },
-        {
-            networkId: 'solana-mainnet',
-            address: 'Ft7m7qrY3spLNKo6aMAHMArAT3oLSSy4DnJ3y3SF1DP1',
-        },
-        {
-            networkId: 'pharos-testnet',
-            address: '0xfFe4b50BC2885e4708544477B6EeD4B32e4d82BF', // 请替换为实际的 Pharos 钱包地址
-        },
-    ] as UniversityWalletConfig[],
 } as const;
 
 // 辅助函数
@@ -265,14 +235,6 @@ export function getCurrencyNetworkConfig(currencyId: string, networkId: string) 
     if (!currency) return null;
 
     return currency.networks.find(network => network.networkId === networkId) || null;
-}
-
-/**
- * 获取大学在指定网络上的钱包地址
- */
-export function getUniversityWalletAddress(networkId: string): string | null {
-    const wallet = BLOCKCHAIN_CONFIG.universityWallets.find(w => w.networkId === networkId);
-    return wallet?.address || null;
 }
 
 /**
@@ -374,22 +336,6 @@ export function getExplorerUrl(networkId: string, txHash: string): string {
     } else {
         return `${network.explorerUrl}/tx/${txHash}`;
     }
-}
-
-/**
- * 检查钱包是否与网络兼容
- */
-export function isWalletCompatibleWithNetwork(walletId: string, networkId: string): boolean {
-    const wallet = BLOCKCHAIN_CONFIG.wallets[walletId as keyof typeof BLOCKCHAIN_CONFIG.wallets];
-    return wallet ? wallet.supportedNetworks.includes(networkId) : false;
-}
-
-/**
- * 检查货币是否与网络兼容
- */
-export function isCurrencyCompatibleWithNetwork(currencyId: string, networkId: string): boolean {
-    const currency = BLOCKCHAIN_CONFIG.currencies[currencyId as keyof typeof BLOCKCHAIN_CONFIG.currencies];
-    return currency ? currency.networks.some(network => network.networkId === networkId) : false;
 }
 
 /**

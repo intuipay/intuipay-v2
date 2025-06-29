@@ -473,7 +473,7 @@ describe("Transaction Validator Tests", () => {
                 console.log(`   Amount: ${tx.amount} ${tx.currency.toUpperCase()}`);
                 console.log(`   From: ${tx.senderAddress}`);
                 console.log(`   To: ${tx.recipientAddress}`);
-                
+
                 // 如果是合约交易，显示额外信息
                 if ('fundsDividerContract' in tx) {
                     const contractTx = tx as any;
@@ -765,7 +765,7 @@ describe("Transaction Validator Tests", () => {
         it("should validate ETH donation via FundsDivider contract", async () => {
             const contractTx = TEST_TRANSACTIONS['ethereum-sepolia'].fundsDividerEthTx;
             const currency = BLOCKCHAIN_CONFIG.currencies[contractTx.currency as keyof typeof BLOCKCHAIN_CONFIG.currencies];
-            
+
             console.log(`\n🧪 Testing FundsDivider ETH contract donation:`);
             console.log(`   Hash: ${contractTx.hash}`);
             console.log(`   Total Amount: ${contractTx.amount} ETH`);
@@ -778,7 +778,7 @@ describe("Transaction Validator Tests", () => {
             const result = await validateTransaction('ethereum-sepolia', contractTx.hash);
             expect(result.isValid).toBe(true);
             expect(result.txDetails?.hash).toBe(contractTx.hash);
-            
+
             // 验证作为捐款交易（使用总金额）
             const amountInSmallestUnit = convertAmountToSmallestUnit(contractTx.amount.toString(), currency.decimals);
             const donationResult = await validateDonationTransaction(
@@ -789,12 +789,12 @@ describe("Transaction Validator Tests", () => {
                 contractTx.senderAddress,
                 currency
             );
-            
+
             console.log(`   Donation Validation: ${donationResult.isValid ? '✅ Valid' : '❌ Invalid'}`);
             if (!donationResult.isValid) {
                 console.log(`   Error: ${donationResult.error}`);
             }
-            
+
             // 注意：由于这是合约交易，实际的收款方是合约地址，不是最终受益人
             // 所以我们主要验证交易本身的有效性
             expect(donationResult.isValid).toBe(true);
@@ -803,7 +803,7 @@ describe("Transaction Validator Tests", () => {
         it("should validate USDC donation via FundsDivider contract", async () => {
             const contractTx = TEST_TRANSACTIONS['ethereum-sepolia'].fundsDividerUsdcTx;
             const currency = BLOCKCHAIN_CONFIG.currencies[contractTx.currency as keyof typeof BLOCKCHAIN_CONFIG.currencies];
-            
+
             console.log(`\n🧪 Testing FundsDivider USDC contract donation:`);
             console.log(`   Hash: ${contractTx.hash}`);
             console.log(`   Total Amount: ${contractTx.amount} USDC`);
@@ -817,7 +817,7 @@ describe("Transaction Validator Tests", () => {
             const result = await validateTransaction('ethereum-sepolia', contractTx.hash);
             expect(result.isValid).toBe(true);
             expect(result.txDetails?.hash).toBe(contractTx.hash);
-            
+
             // 验证作为捐款交易（使用总金额）
             const amountInSmallestUnit = convertAmountToSmallestUnit(contractTx.amount.toString(), currency.decimals);
             const donationResult = await validateDonationTransaction(
@@ -828,12 +828,12 @@ describe("Transaction Validator Tests", () => {
                 contractTx.senderAddress,
                 currency
             );
-            
+
             console.log(`   Donation Validation: ${donationResult.isValid ? '✅ Valid' : '❌ Invalid'}`);
             if (!donationResult.isValid) {
                 console.log(`   Error: ${donationResult.error}`);
             }
-            
+
             // 注意：由于这是合约交易，实际的收款方是合约地址，不是最终受益人
             expect(donationResult.isValid).toBe(true);
         });
@@ -841,54 +841,54 @@ describe("Transaction Validator Tests", () => {
         it("should verify contract transaction details are consistent", async () => {
             const ethContractTx = TEST_TRANSACTIONS['ethereum-sepolia'].fundsDividerEthTx;
             const usdcContractTx = TEST_TRANSACTIONS['ethereum-sepolia'].fundsDividerUsdcTx;
-            
+
             // 验证所有合约交易都使用相同的合约地址
             expect((ethContractTx as any).fundsDividerContract).toBe((usdcContractTx as any).fundsDividerContract);
-            
+
             // 验证所有合约交易都使用相同的发送方
             expect(ethContractTx.senderAddress).toBe(usdcContractTx.senderAddress);
-            
+
             // 验证所有合约交易都使用相同的最终受益人
             expect(ethContractTx.recipientAddress).toBe(usdcContractTx.recipientAddress);
-            
+
             // 验证所有合约交易都使用相同的手续费接收方
             expect((ethContractTx as any).feeRecipientAddress).toBe((usdcContractTx as any).feeRecipientAddress);
-            
+
             console.log('✅ Contract transaction consistency verified');
         });
 
         it("should calculate correct fee distribution", async () => {
             const ethContractTx = TEST_TRANSACTIONS['ethereum-sepolia'].fundsDividerEthTx;
             const usdcContractTx = TEST_TRANSACTIONS['ethereum-sepolia'].fundsDividerUsdcTx;
-            
+
             // 验证ETH交易的费用分配（假设3%手续费）
             const ethTotalAmount = ethContractTx.amount;
             const ethFeeAmount = (ethContractTx as any).feeAmount;
             const ethNetAmount = (ethContractTx as any).netAmount;
-            
+
             expect(ethFeeAmount + ethNetAmount).toBeCloseTo(ethTotalAmount, 5);
             const ethFeeRate = ethFeeAmount / ethTotalAmount;
             console.log(`ETH Fee Rate: ${(ethFeeRate * 100).toFixed(2)}%`);
-            
+
             // 验证USDC交易的费用分配
             const usdcTotalAmount = usdcContractTx.amount;
             const usdcFeeAmount = (usdcContractTx as any).feeAmount;
             const usdcNetAmount = (usdcContractTx as any).netAmount;
-            
+
             expect(usdcFeeAmount + usdcNetAmount).toBeCloseTo(usdcTotalAmount, 5);
             const usdcFeeRate = usdcFeeAmount / usdcTotalAmount;
             console.log(`USDC Fee Rate: ${(usdcFeeRate * 100).toFixed(2)}%`);
-            
+
             // 验证两种货币使用相同的费率
             expect(ethFeeRate).toBeCloseTo(usdcFeeRate, 3);
-            
+
             console.log('✅ Fee distribution calculations verified');
         });
 
         it("should handle fee tampering detection for contract transactions", async () => {
             const contractTx = TEST_TRANSACTIONS['ethereum-sepolia'].fundsDividerEthTx;
             const currency = BLOCKCHAIN_CONFIG.currencies[contractTx.currency as keyof typeof BLOCKCHAIN_CONFIG.currencies];
-            
+
             // 尝试用错误的净金额进行验证（声称没有手续费）
             const tamperedAmount = convertAmountToSmallestUnit(((contractTx as any).netAmount).toString(), currency.decimals);
             const result = await validateDonationTransaction(
@@ -899,7 +899,7 @@ describe("Transaction Validator Tests", () => {
                 contractTx.senderAddress,
                 currency
             );
-            
+
             console.log('Fee tampering test for contract transaction:', result);
             expect(result.isValid).toBe(false);
             expect(result.error).toContain('amount mismatch');

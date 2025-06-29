@@ -1,4 +1,4 @@
-import { ArrowLeft, TerminalIcon, Wallet, Globe } from 'lucide-react';
+import { ArrowLeft, TerminalIcon } from 'lucide-react';
 import { APIResponse, DonationInfo } from '@/types';
 import { useState, useEffect } from 'react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
@@ -7,7 +7,7 @@ import { DonationMethodType, DonationStatus } from '@/constants/donation';
 import CtaFooter from '@/app/_components/donate/cta-footer';
 import { useAccount, useChainId, useWriteContract, useWaitForTransactionReceipt, useSendTransaction } from 'wagmi';
 import { parseUnits } from 'viem';
-import { TransactionMessage, VersionedTransaction, LAMPORTS_PER_SOL, SystemProgram, Connection, PublicKey, clusterApiUrl } from '@solana/web3.js';
+import { TransactionMessage, VersionedTransaction, SystemProgram, Connection, PublicKey, clusterApiUrl } from '@solana/web3.js';
 import { createTransferInstruction, getAssociatedTokenAddress, TOKEN_PROGRAM_ID, ASSOCIATED_TOKEN_PROGRAM_ID } from '@solana/spl-token';
 import {
   BLOCKCHAIN_CONFIG,
@@ -124,11 +124,11 @@ export default function DonationStep4({
       setIsSubmitting(false);
     }
   }, [
-    isConfirmed, confirmError, writeError, writeData, 
+    isConfirmed, confirmError, writeError, writeData,
     isSendConfirmed, sendConfirmError, sendError, sendData,
     isApprovingERC20
   ]);
-  
+
   // Get explorer URL for transaction
   const getTransactionExplorerUrl = (txHash: string) => {
     return getExplorerUrl(info.network, txHash);
@@ -169,13 +169,13 @@ export default function DonationStep4({
     try {
       const amount = parseUnits(info.amount.toString(), currencyConfig.decimals);
       const fundsDividerContract = getFundsDividerContract(info.network);
-      
+
       if (!currencyNetworkConfig?.contractAddress) {
         setMessage('Invalid token configuration: no contract address');
         setIsSubmitting(false);
         return;
       }
-      
+
       if (fundsDividerContract) {
         console.log('Proceeding with ERC-20 transfer through contract');
         writeContract({
@@ -427,14 +427,14 @@ export default function DonationStep4({
     try {
       // 将捐赠金额转换为代币的最小单位
       const amount = parseUnits(info.amount.toString(), currencyConfig.decimals);
-      
+
       // 检查是否使用手续费分配合约
       const fundsDividerContract = getFundsDividerContract(info.network);
 
       if (fundsDividerContract) {
         // 使用手续费分配合约转账
         console.log('Using funds divider contract for transaction');
-        
+
         if (currencyNetworkConfig?.isNative) {
           // 原生代币通过合约转账
           writeContract({
@@ -448,7 +448,7 @@ export default function DonationStep4({
           // ERC-20 代币通过合约转账 - 需要先授权
           console.log('Starting ERC-20 transfer process with approval');
           setIsApprovingERC20(true);
-          
+
           // 第一步：授权合约使用用户的代币
           writeContract({
             address: currencyNetworkConfig.contractAddress as `0x${string}`,
@@ -514,10 +514,9 @@ export default function DonationStep4({
         {(writeData || solanaTransactionHash || isApprovingERC20) && (
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mt-4 w-full">
             <div className="flex items-center gap-3 mb-2">
-              <div className={`h-3 w-3 rounded-full ${
-                isSolanaTransaction
+              <div className={`h-3 w-3 rounded-full ${isSolanaTransaction
                   ? (solanaTransactionHash ? 'bg-green-600' : 'bg-blue-600')
-                  : isApprovingERC20 
+                  : isApprovingERC20
                     ? 'bg-yellow-500'
                     : (isConfirmed ? 'bg-green-600' : isConfirming ? 'bg-yellow-500' : 'bg-blue-600')
                 }`}></div>
@@ -544,8 +543,7 @@ export default function DonationStep4({
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="text-gray-600">Status:</span>
-                    <span className={`font-medium ${
-                      isSolanaTransaction
+                    <span className={`font-medium ${isSolanaTransaction
                         ? (solanaTransactionHash ? 'text-green-600' : 'text-blue-600')
                         : (isConfirming ? 'text-yellow-600' : isConfirmed ? 'text-green-600' : 'text-blue-600')
                       }`}>
@@ -591,10 +589,10 @@ export default function DonationStep4({
           isSolanaTransaction
             ? (solanaTransactionHash ? "Saving..." : isSubmitting ? "Sending Transaction..." : "Donate")
             : (isApprovingERC20 ? "Approving..." :
-               isWritePending || isSendPending ? "Sending Transaction..." :
-               isConfirming || isSendConfirming ? "Confirming..." :
-               isConfirmed || isSendConfirmed ? "Saving..." :
-               "Donate")
+              isWritePending || isSendPending ? "Sending Transaction..." :
+                isConfirming || isSendConfirming ? "Confirming..." :
+                  isConfirmed || isSendConfirmed ? "Saving..." :
+                    "Donate")
         }
         goToPreviousStep={goToPreviousStep}
         isLoading={isSubmitting || isWritePending || isSendPending || isConfirming || isSendConfirming || isApprovingERC20}

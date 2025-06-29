@@ -1,5 +1,5 @@
 import { BLOCKCHAIN_CONFIG, getFundsDividerContract } from '@/config/blockchain';
-import { decodeFunctionData, parseAbi, createPublicClient, http, type Transaction } from 'viem';
+import { decodeFunctionData, createPublicClient, http, type Transaction } from 'viem';
 import ERC20_ABI from '@/lib/erc20.abi.json';
 import FUNDS_DIVIDER_ABI from '@/lib/IntuipayFundsDivider.abi.json';
 import { Connection, PublicKey } from '@solana/web3.js';
@@ -55,7 +55,7 @@ export async function checkRpcHealth(networkId: string): Promise<{ healthy: bool
             // 使用 Solana Connection 检查健康状态
             const connection = new Connection(rpcUrl, 'confirmed');
             const slot = await connection.getSlot();
-            
+
             return { healthy: true, blockNumber: slot };
         } else {
             return { healthy: false, error: 'Unsupported blockchain type' };
@@ -131,7 +131,7 @@ async function validateEvmTransaction(
         if (error instanceof Error && error.message.includes('not found')) {
             return { isValid: false, error: `Transaction not found on ${networkId}` };
         }
-        
+
         return {
             isValid: false,
             error: `EVM validation error: ${error instanceof Error ? error.message : String(error)}`
@@ -166,7 +166,7 @@ function validateEvmTransactionDetails(
 
     // 获取合约地址用于判断交易类型
     const fundsDividerContract = networkId ? getFundsDividerContract(networkId) : null;
-    
+
     // 根据实际的 to 地址判断交易类型
     const actualTo = tx.to?.toLowerCase();
     const expectedToLower = expectedTo.toLowerCase();
@@ -271,7 +271,7 @@ function validateFundsDividerTransaction(
         if (decoded.functionName === 'divideNativeTransfer') {
             // 原生货币通过合约转账
             const [recipient] = decoded.args as [string];
-            
+
             // 验证最终受益人地址
             if (recipient.toLowerCase() !== expectedTo.toLowerCase()) {
                 return { isValid: false, error: `FundsDivider recipient address mismatch. Expected: ${expectedTo}, got: ${recipient}` };
@@ -287,7 +287,7 @@ function validateFundsDividerTransaction(
         } else if (decoded.functionName === 'divideERC20Transfer') {
             // ERC20 代币通过合约转账
             const [tokenContract, recipient, amount] = decoded.args as [string, string, bigint];
-            
+
             // 验证最终受益人地址
             if (recipient.toLowerCase() !== expectedTo.toLowerCase()) {
                 return { isValid: false, error: `FundsDivider ERC20 recipient address mismatch. Expected: ${expectedTo}, got: ${recipient}` };
@@ -401,7 +401,7 @@ function validateSolanaTransactionDetails(
     // 2. 获取账户密钥
     const accountKeys = txInfo.transaction.message.getAccountKeys();
     const staticAccountKeys = accountKeys.staticAccountKeys || [];
-    
+
     if (!staticAccountKeys || staticAccountKeys.length === 0) {
         return { isValid: false, error: 'Could not parse account keys from transaction.' };
     }
@@ -436,7 +436,7 @@ function validateSolanaTransactionDetails(
         if (!senderBalanceChange) {
             return { isValid: false, error: `Sender ${expectedFrom} not involved in this SPL token transaction.` };
         }
-        
+
         const senderPreAmount = BigInt(senderBalanceChange.uiTokenAmount.amount);
         const senderPostBalance = relevantPostBalances.find((b: any) => b.accountIndex === senderBalanceChange.accountIndex);
         const senderPostAmount = BigInt(senderPostBalance?.uiTokenAmount.amount || '0');
@@ -578,7 +578,7 @@ export async function validateDonationTransaction(
     if (!network) {
         return { isValid: false, error: 'Unknown network' };
     }
-    
+
     console.log(`Validating tx ${txHash} on ${networkId}:
     - Expected To: ${expectedTo}
     - Expected From: ${expectedFrom}
