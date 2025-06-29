@@ -95,11 +95,18 @@ export default function DonationStep1({
     if (isConnected && chainId) {
       const connectedNetworkId = getNetworkIdByChainId(chainId);
       if (connectedNetworkId && connectedNetworkId !== network) {
-        console.log('Syncing to connected network:', connectedNetworkId);
-        setNetwork(connectedNetworkId);
+        // 检查连接的网络是否在当前项目支持的网络列表中
+        const isSupportedNetwork = networkOptions.some(option => option.value === connectedNetworkId);
+        if (isSupportedNetwork) {
+          console.log('Syncing to connected network:', connectedNetworkId);
+          setNetwork(connectedNetworkId);
+        } else {
+          console.log('Connected network not supported by current project:', connectedNetworkId);
+          // 可以选择断开连接或者保持当前默认网络
+        }
       }
     }
-  }, [isConnected, chainId, network]);
+  }, [isConnected, chainId, network, networkOptions]);
 
   // 获取当前网络配置
   const currentNetwork = BLOCKCHAIN_CONFIG.networks[network as keyof typeof BLOCKCHAIN_CONFIG.networks];
