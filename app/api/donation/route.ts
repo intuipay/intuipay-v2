@@ -1,6 +1,6 @@
 import { fetchTidb } from '@/services/fetch-tidb';
 import { validateDonationTransaction } from '@/services/transaction-validator';
-import { getProjectWalletAddress, BLOCKCHAIN_CONFIG } from '@/config/blockchain';
+import { BLOCKCHAIN_CONFIG } from '@/config/blockchain';
 import { getDonationProjectBySlug } from '@/lib/data';
 
 export const runtime = 'edge';
