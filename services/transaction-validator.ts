@@ -1,5 +1,5 @@
 import { BLOCKCHAIN_CONFIG, getFundsDividerContract } from '@/config/blockchain';
-import { decodeFunctionData, createPublicClient, http, type Transaction } from 'viem';
+import { decodeFunctionData, createPublicClient, http, type Transaction, parseUnits } from 'viem';
 import ERC20_ABI from '@/lib/erc20.abi.json';
 import FUNDS_DIVIDER_ABI from '@/lib/IntuipayFundsDivider.abi.json';
 import { Connection, PublicKey } from '@solana/web3.js';
@@ -547,15 +547,8 @@ export function convertAmountToSmallestUnit(amount: string, decimals: number): b
         throw new Error('Amount cannot be negative.');
     }
 
-    const parts = amount.split('.');
-    const integerPart = BigInt(parts[0] || '0');
-    const fractionalPartStr = (parts[1] || '').padEnd(decimals, '0');
-    // 确保小数部分不会超过货币支持的精度
-    const truncatedFractionalPart = fractionalPartStr.slice(0, decimals);
-    const fractionalPart = BigInt(truncatedFractionalPart);
-
-    // bigint 幂运算必须依赖 target: es2020
-    return integerPart * (10n ** BigInt(decimals)) + fractionalPart;
+    // 使用 viem 的 parseUnits 函数，避免手动处理精度问题
+    return parseUnits(amount, decimals);
 }
 
 

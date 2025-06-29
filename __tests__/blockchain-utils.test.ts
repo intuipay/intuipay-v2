@@ -4,7 +4,6 @@ import { convertToSmallestUnit } from '@/config/blockchain';
 describe('Blockchain Utility Functions', () => {
     describe('convertToSmallestUnit', () => {
         it('should convert PHRS amount without precision loss', () => {
-            // 测试您遇到的精度问题
             const result = convertToSmallestUnit(0.14, 'phrs');
             expect(result).toBe(140000000000000000n); // 18位小数的正确结果 (bigint)
             expect(result.toString()).toBe('140000000000000000');
