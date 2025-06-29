@@ -1,3 +1,5 @@
+USE `test`;
+
 INSERT INTO `donation_project`
 (
   `project_name`, `project_subtitle`, `project_slug`,
