@@ -2,7 +2,7 @@ import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import MyCombobox from '@/components/my-combobox';
 import { DropdownItemProps } from '@/types';
-import { ChangeEvent, useState, useEffect, FormEvent, useCallback, useRef } from 'react';
+import { ChangeEvent, useState, useEffect, FormEvent, useCallback } from 'react';
 import CtaFooter from '@/app/_components/donate/cta-footer';
 import { clsx } from 'clsx';
 import Image from 'next/image';
@@ -79,7 +79,7 @@ export default function DonationStep1({
   const { disconnect } = useDisconnect();
   const chainId = useChainId();
   const [isPhantomConnected, setIsPhantomConnected] = useState(false);
-  
+
   // 根据 chainId 获取对应的网络ID
   const getNetworkIdByChainId = (chainId: number): string | null => {
     const networkEntry = Object.entries(BLOCKCHAIN_CONFIG.networks).find(([_, config]) => {
@@ -95,11 +95,18 @@ export default function DonationStep1({
     if (isConnected && chainId) {
       const connectedNetworkId = getNetworkIdByChainId(chainId);
       if (connectedNetworkId && connectedNetworkId !== network) {
-        console.log('Syncing to connected network:', connectedNetworkId);
-        setNetwork(connectedNetworkId);
+        // 检查连接的网络是否在当前项目支持的网络列表中
+        const isSupportedNetwork = networkOptions.some(option => option.value === connectedNetworkId);
+        if (isSupportedNetwork) {
+          console.log('Syncing to connected network:', connectedNetworkId);
+          setNetwork(connectedNetworkId);
+        } else {
+          console.log('Connected network not supported by current project:', connectedNetworkId);
+          // 可以选择断开连接或者保持当前默认网络
+        }
       }
     }
-  }, [isConnected, chainId, network]);
+  }, [isConnected, chainId, network, networkOptions]);
 
   // 获取当前网络配置
   const currentNetwork = BLOCKCHAIN_CONFIG.networks[network as keyof typeof BLOCKCHAIN_CONFIG.networks];
@@ -205,7 +212,7 @@ export default function DonationStep1({
     coinbase: connectors.find(c => c.id === 'coinbaseWalletSDK'),
     'wallet-connect': connectors.find(c => c.id === 'walletConnect'),
   };
-  
+
   // 刷新页面后，自动根据 wagmi 连接，恢复出之前选中的钱包
   useEffect(() => {
     if (isConnected && address && connector) {
@@ -218,7 +225,7 @@ export default function DonationStep1({
       setSelectedWallet(walletName);
     }
   }, [isConnected, address, connector, chainId]);
-  
+
   // Monitor connection errors
   useEffect(() => {
     if (connectError) {
@@ -288,7 +295,7 @@ export default function DonationStep1({
       }
     }
   };
-  
+
   const handleConnect = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!selectedWallet || isPending) return;
@@ -318,7 +325,7 @@ export default function DonationStep1({
 
           // 对于 EVM 钱包，检查并切换到目标网络
           const currentNetworkConfig = BLOCKCHAIN_CONFIG.networks[network as keyof typeof BLOCKCHAIN_CONFIG.networks];
-          if (currentNetworkConfig?.type === 'ethereum') {
+          if (currentNetworkConfig?.type === 'evm') {
             const targetChainId = getChainIdForNetwork(network);
             if (targetChainId && chainId !== targetChainId) {
               try {
@@ -348,7 +355,7 @@ export default function DonationStep1({
         appkit.open();
         return;
       }
-      
+
       // Handle Phantom wallet for Solana
       if (selectedWallet === 'phantom') {
         if (window?.phantom?.solana?.isConnected) {
@@ -363,7 +370,7 @@ export default function DonationStep1({
 
       // 未连接钱包，对于 EVM 钱包，先切换到目标网络再连接
       const currentNetworkConfig = BLOCKCHAIN_CONFIG.networks[network as keyof typeof BLOCKCHAIN_CONFIG.networks];
-      if (currentNetworkConfig?.type === 'ethereum') {
+      if (currentNetworkConfig?.type === 'evm') {
         const targetChainId = getChainIdForNetwork(network);
         const walletChainId = await targetConnector?.getChainId?.(); // 当前钱包连的网络
         if (targetChainId !== walletChainId) {

@@ -1,4 +1,5 @@
 import { DropdownItemProps } from "@/types";
+import { parseUnits } from "viem";
 
 // 区块链网络配置
 export interface NetworkConfig {
@@ -9,7 +10,8 @@ export interface NetworkConfig {
     rpcUrl?: string; // Solana RPC URL
     explorerUrl: string;
     explorerName: string;
-    type: 'ethereum' | 'solana'; // 网络类型
+    type: 'evm' | 'solana'; // 网络类型
+    fundsDividerContract?: string; // 手续费分配合约地址
 }
 
 // 钱包配置
@@ -36,12 +38,6 @@ export interface CryptoCurrencyConfig {
     }>;
 }
 
-// 大学钱包地址配置
-export interface UniversityWalletConfig {
-    networkId: string;
-    address: string;
-}
-
 // 统一的区块链配置
 export const BLOCKCHAIN_CONFIG = {
     // 网络配置
@@ -51,18 +47,22 @@ export const BLOCKCHAIN_CONFIG = {
             name: 'Ethereum Sepolia',
             icon: 'ethereum',
             chainId: 11155111,
+            rpcUrl: 'https://sepolia.infura.io/v3/3f0a3b8ee4134ebcb0947ecb057dcba5', // Joey's personal project
             explorerUrl: 'https://sepolia.etherscan.io',
             explorerName: 'Etherscan',
-            type: 'ethereum',
+            type: 'evm',
+            fundsDividerContract: '0xfEeC3028Af62B78E0D54F650063E1800Ac7Dfd98',
         } as NetworkConfig,
         'ethereum-mainnet': {
             id: 'ethereum-mainnet',
             name: 'Ethereum Mainnet',
             icon: 'ethereum',
             chainId: 1,
+            rpcUrl: 'https://eth.llamarpc.com',
             explorerUrl: 'https://etherscan.io',
             explorerName: 'Etherscan',
-            type: 'ethereum',
+            type: 'evm',
+            // fundsDividerContract: '', // TODO: Deploy contract on mainnet
         } as NetworkConfig,
         'solana-devnet': {
             id: 'solana-devnet',
@@ -90,7 +90,8 @@ export const BLOCKCHAIN_CONFIG = {
             rpcUrl: 'https://api.zan.top/node/v1/pharos/testnet/e3d694bd610c4a11a98b15b2296236c3',
             explorerUrl: 'https://testnet.pharosscan.xyz',
             explorerName: 'Pharos Testnet Explorer',
-            type: 'ethereum',
+            type: 'evm',
+            // fundsDividerContract: '', // TODO: Deploy contract on pharos testnet
         } as NetworkConfig,
     },
 
@@ -205,30 +206,6 @@ export const BLOCKCHAIN_CONFIG = {
             ],
         } as CryptoCurrencyConfig,
     },
-
-    // 大学钱包地址配置
-    universityWallets: [
-        {
-            networkId: 'ethereum-sepolia',
-            address: '0xE62868F9Ae622aa11aff94DB30091B9De20AEf86',
-        },
-        {
-            networkId: 'ethereum-mainnet',
-            address: '0xE62868F9Ae622aa11aff94DB30091B9De20AEf86',
-        },
-        {
-            networkId: 'solana-devnet',
-            address: 'Ft7m7qrY3spLNKo6aMAHMArAT3oLSSy4DnJ3y3SF1DP1',
-        },
-        {
-            networkId: 'solana-mainnet',
-            address: 'Ft7m7qrY3spLNKo6aMAHMArAT3oLSSy4DnJ3y3SF1DP1',
-        },
-        {
-            networkId: 'pharos-testnet',
-            address: '0xfFe4b50BC2885e4708544477B6EeD4B32e4d82BF', // 请替换为实际的 Pharos 钱包地址
-        },
-    ] as UniversityWalletConfig[],
 } as const;
 
 // 辅助函数
@@ -259,14 +236,6 @@ export function getCurrencyNetworkConfig(currencyId: string, networkId: string) 
     if (!currency) return null;
 
     return currency.networks.find(network => network.networkId === networkId) || null;
-}
-
-/**
- * 获取大学在指定网络上的钱包地址
- */
-export function getUniversityWalletAddress(networkId: string): string | null {
-    const wallet = BLOCKCHAIN_CONFIG.universityWallets.find(w => w.networkId === networkId);
-    return wallet?.address || null;
 }
 
 /**
@@ -371,22 +340,6 @@ export function getExplorerUrl(networkId: string, txHash: string): string {
 }
 
 /**
- * 检查钱包是否与网络兼容
- */
-export function isWalletCompatibleWithNetwork(walletId: string, networkId: string): boolean {
-    const wallet = BLOCKCHAIN_CONFIG.wallets[walletId as keyof typeof BLOCKCHAIN_CONFIG.wallets];
-    return wallet ? wallet.supportedNetworks.includes(networkId) : false;
-}
-
-/**
- * 检查货币是否与网络兼容
- */
-export function isCurrencyCompatibleWithNetwork(currencyId: string, networkId: string): boolean {
-    const currency = BLOCKCHAIN_CONFIG.currencies[currencyId as keyof typeof BLOCKCHAIN_CONFIG.currencies];
-    return currency ? currency.networks.some(network => network.networkId === networkId) : false;
-}
-
-/**
  * 格式化地址显示
  */
 export function formatAddress(address: string): string {
@@ -394,19 +347,13 @@ export function formatAddress(address: string): string {
 }
 
 /**
- * 根据货币和金额计算最小单位
+ * 根据货币和金额计算最小单位（使用 viem 避免精度损失）
  */
-export function convertToSmallestUnit(amount: number, currencyId: string): bigint | number {
+export function convertToSmallestUnit(amount: number, currencyId: string): bigint {
     const currency = BLOCKCHAIN_CONFIG.currencies[currencyId as keyof typeof BLOCKCHAIN_CONFIG.currencies];
-    if (!currency) return amount;
+    if (!currency) return BigInt(0); // 或者抛出异常
 
-    if (currencyId === 'sol') {
-        // Solana使用lamports
-        return amount * 1_000_000_000; // LAMPORTS_PER_SOL
-    } else {
-        // 其他代币使用10^decimals
-        return BigInt(Math.floor(amount * Math.pow(10, currency.decimals)));
-    }
+    return parseUnits(amount.toString(), currency.decimals);
 }
 
 /**
@@ -416,7 +363,7 @@ export function getWalletAddressFromProject(project: any, networkId: string): st
     if (!project?.wallets || !project.wallets[networkId]) {
         return null;
     }
-    
+
     // 简单格式：每个网络一个钱包地址
     return project.wallets[networkId];
 }
@@ -430,6 +377,14 @@ export function getProjectWalletAddress(project: any, networkId: string): string
     if (projectWallet) {
         return projectWallet;
     }
-    
+
     throw new Error(`No wallet address configured for network ${networkId} in project.`);
+}
+
+/**
+ * 获取指定网络的手续费分配合约地址
+ */
+export function getFundsDividerContract(networkId: string): string | null {
+    const network = BLOCKCHAIN_CONFIG.networks[networkId as keyof typeof BLOCKCHAIN_CONFIG.networks];
+    return network?.fundsDividerContract || null;
 }

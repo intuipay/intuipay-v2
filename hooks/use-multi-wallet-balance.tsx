@@ -67,7 +67,7 @@ export function useMultiWalletBalance(network: string): MultiWalletBalanceResult
 
   // 获取当前网络配置
   const currentNetwork = BLOCKCHAIN_CONFIG.networks[network as keyof typeof BLOCKCHAIN_CONFIG.networks];
-  const isEVMNetwork = currentNetwork?.type === 'ethereum';
+  const isEVMNetwork = currentNetwork?.type === 'evm';
   const isSolanaNetwork = currentNetwork?.type === 'solana';
 
   // 获取当前网络支持的所有代币
@@ -266,7 +266,7 @@ export function useMultiWalletBalance(network: string): MultiWalletBalanceResult
           }
         }
 
-        setSolanaBalances(newBalances);      
+        setSolanaBalances(newBalances);
       } catch (error: any) {
         console.error('Error fetching Solana balances:', error);
         const errorBalances: { [key: string]: TokenBalance } = {};
