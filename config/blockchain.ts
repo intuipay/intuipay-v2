@@ -1,4 +1,5 @@
 import { DropdownItemProps } from "@/types";
+import { parseUnits } from "viem";
 
 // 区块链网络配置
 export interface NetworkConfig {
@@ -346,19 +347,13 @@ export function formatAddress(address: string): string {
 }
 
 /**
- * 根据货币和金额计算最小单位
+ * 根据货币和金额计算最小单位（使用 viem 避免精度损失）
  */
-export function convertToSmallestUnit(amount: number, currencyId: string): bigint | number {
+export function convertToSmallestUnit(amount: number, currencyId: string): bigint {
     const currency = BLOCKCHAIN_CONFIG.currencies[currencyId as keyof typeof BLOCKCHAIN_CONFIG.currencies];
-    if (!currency) return amount;
+    if (!currency) return BigInt(0); // 或者抛出异常
 
-    if (currencyId === 'sol') {
-        // Solana使用lamports
-        return amount * 1_000_000_000; // LAMPORTS_PER_SOL
-    } else {
-        // 其他代币使用10^decimals
-        return BigInt(Math.floor(amount * Math.pow(10, currency.decimals)));
-    }
+    return parseUnits(amount.toString(), currency.decimals);
 }
 
 /**

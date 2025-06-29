@@ -160,8 +160,9 @@ export default function DonationStep4({
     return errorMessage;
   };
 
-  function convertAmountBasedOnCurrency(amount: number, currency: string): number {
-    return Number(convertToSmallestUnit(amount, currency));
+  function convertAmountBasedOnCurrency(amount: number, currency: string): string {
+    // json 最大支持的数字只有16位，在区块链中很容易超过18位，所以要转为 string
+    return convertToSmallestUnit(amount, currency).toString();
   }
 
   // 执行 ERC-20 转账（在授权完成后调用）
@@ -293,11 +294,14 @@ export default function DonationStep4({
           if (currencyNetworkConfig?.isNative) {
             // SOL 原生代币转账
             console.log('Creating SOL native transfer instruction');
+            // 使用专门的 SOL 转换函数
+            const lamportsAmount = parseUnits(info.amount.toString(), 9); // SOL 有 9 位小数
+
             instructions = [
               SystemProgram.transfer({
                 fromPubkey: phantom.publicKey,
                 toPubkey: new PublicKey(recipientAddress),
-                lamports: Math.floor(info.amount * Math.pow(10, currencyConfig.decimals)),
+                lamports: lamportsAmount,
               }),
             ];
           } else if (currencyNetworkConfig?.contractAddress) {
@@ -346,7 +350,7 @@ export default function DonationStep4({
             }
 
             // 计算转账金额（转换为代币的最小单位）
-            const transferAmount = Math.floor(info.amount * Math.pow(10, currencyConfig.decimals));
+            const transferAmount = parseUnits(info.amount.toString(), currencyConfig.decimals);
 
             console.log('SPL Token transfer details:', {
               fromTokenAccount: fromTokenAccount.toString(),
