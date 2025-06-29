@@ -511,14 +511,14 @@ export default function DonationStep4({
         <p className="text-2xl sm:text-3xl font-semibold text-blue-600">{info.amount} {info.currency}</p>
         <p className="text-base sm:text-xl font-semibold text-gray-900">~ {(info.dollar ?? 0).toLocaleString()} USD</p>
         {/* 交易状态显示 */}
-        {(writeData || solanaTransactionHash || isApprovingERC20) && (
+        {(writeData || sendData || solanaTransactionHash || isApprovingERC20) && (
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mt-4 w-full">
             <div className="flex items-center gap-3 mb-2">
               <div className={`h-3 w-3 rounded-full ${isSolanaTransaction
-                  ? (solanaTransactionHash ? 'bg-green-600' : 'bg-blue-600')
-                  : isApprovingERC20
-                    ? 'bg-yellow-500'
-                    : (isConfirmed ? 'bg-green-600' : isConfirming ? 'bg-yellow-500' : 'bg-blue-600')
+                ? (solanaTransactionHash ? 'bg-green-600' : 'bg-blue-600')
+                : isApprovingERC20
+                  ? 'bg-yellow-500'
+                  : ((isConfirmed || isSendConfirmed) ? 'bg-green-600' : (isConfirming || isSendConfirming) ? 'bg-yellow-500' : 'bg-blue-600')
                 }`}></div>
               <span className="font-medium text-blue-800">Transaction Status</span>
             </div>
@@ -528,39 +528,39 @@ export default function DonationStep4({
                   Step 1/2: Approving token spending permission...
                 </div>
               )}
-              {(writeData || solanaTransactionHash) && (
+              {(writeData || sendData || solanaTransactionHash) && (
                 <>
                   <div className="flex items-center justify-between">
                     <span className="text-gray-600">Transaction Hash:</span>
                     <a
-                      href={getTransactionExplorerUrl(isSolanaTransaction ? solanaTransactionHash : writeData!)}
+                      href={getTransactionExplorerUrl(isSolanaTransaction ? solanaTransactionHash : (writeData || sendData)!)}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="font-mono text-blue-600 text-xs hover:text-blue-800 underline"
                     >
-                      {formatTransactionAddress(isSolanaTransaction ? solanaTransactionHash : writeData!)}
+                      {formatTransactionAddress(isSolanaTransaction ? solanaTransactionHash : (writeData || sendData)!)}
                     </a>
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="text-gray-600">Status:</span>
                     <span className={`font-medium ${isSolanaTransaction
-                        ? (solanaTransactionHash ? 'text-green-600' : 'text-blue-600')
-                        : (isConfirming ? 'text-yellow-600' : isConfirmed ? 'text-green-600' : 'text-blue-600')
+                      ? (solanaTransactionHash ? 'text-green-600' : 'text-blue-600')
+                      : ((isConfirming || isSendConfirming) ? 'text-yellow-600' : (isConfirmed || isSendConfirmed) ? 'text-green-600' : 'text-blue-600')
                       }`}>
                       {isSolanaTransaction
                         ? (solanaTransactionHash ? 'Confirmed ✓' : 'Pending')
-                        : (isConfirming ? 'Confirming...' : isConfirmed ? 'Confirmed ✓' : 'Pending')
+                        : ((isConfirming || isSendConfirming) ? 'Confirming...' : (isConfirmed || isSendConfirmed) ? 'Confirmed ✓' : 'Pending')
                       }
                     </span>
                   </div>
                 </>
               )}
-              {!isSolanaTransaction && isConfirming && (
+              {!isSolanaTransaction && (isConfirming || isSendConfirming) && (
                 <div className="text-xs text-gray-500 mt-2">
                   Please wait while the transaction is being confirmed on the blockchain...
                 </div>
               )}
-              {((isSolanaTransaction && solanaTransactionHash) || (!isSolanaTransaction && isConfirmed)) && (
+              {((isSolanaTransaction && solanaTransactionHash) || (!isSolanaTransaction && (isConfirmed || isSendConfirmed))) && (
                 <div className="text-xs text-green-600 mt-2 flex items-center gap-1">
                   <span>✓</span>
                   <span>Transaction successfully confirmed!</span>
