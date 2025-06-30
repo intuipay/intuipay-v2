@@ -36,7 +36,7 @@ export function SiteHeader() {
           ))}
         </nav>
 
-        <div className="flex-1 hidden md:flex items-center justify-end space-x-4">
+        <div className="flex-1 hidden md:flex items-center justify-end gap-2">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" size="sm">
@@ -53,22 +53,28 @@ export function SiteHeader() {
 
           <Button
             asChild
-            className="border-neutral-mediumgray text-base ml-2 bg-primary rounded-full text-white w-28 hidden lg:block"
+            className="text-base font-medium px-6"
+            variant="ghost"
           >
             <Link
-              aria-label="Sign in"
+              aria-label="Log in"
               href="https://dash.intuipay.xyz/login"
               target="_blank"
-            >Sign In</Link>
+            >Log In</Link>
           </Button>
-          <Link
-            href="https://dash.intuipay.xyz/signup"
-            target="_blank"
-            aria-label="Create account"
-            className="text-primary ml-6 hidden lg:block"
+          <Button
+            asChild
+            className="text-base bg-black rounded-full text-white hidden lg:block px-6"
           >
-            Create account
-          </Link>
+            <Link
+              href="https://dash.intuipay.xyz/signup"
+              target="_blank"
+              aria-label="Create account"
+            >
+              Create account
+            </Link>
+          </Button>
+
         </div>
 
         <div className="md:hidden">
