@@ -17,7 +17,10 @@ export async function fetchTidb<T>(
   });
 
   if (!response.ok) {
-    console.log('URL', url);
+    if (process.env.NODE_ENV !== 'production') {
+      console.log('URL', url);
+      console.log('Body', body);
+    }
     throw new Error(`HTTP error. status: ${response.status}`);
   }
 

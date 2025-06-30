@@ -9,7 +9,8 @@ type ProjectCardProps = {
 }
 
 export function ProjectCard({ project }: ProjectCardProps) {
-  const progress = Math.round(project.amount / project.goal_amount * 1000) / 10;
+  const progress = project.goal_amount > 0
+    ? Math.round(project.amount / project.goal_amount * 1000) / 10 : 0;
   const daysLeft = Math.ceil((new Date(project.end_at).getTime() - Date.now()) / 1000 / 60 / 60 / 24);
 
   return (
