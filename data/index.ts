@@ -1,4 +1,6 @@
-import {Currency, DropdownItemProps, PaymentMethod, University} from "@/types";
+import {Currency, PaymentMethod, University} from "@/types";
+// 为了保持向后兼容，使用新的区块链配置系统
+import { getNetworkDropdownOptions, getWalletDropdownOptions } from '@/config/blockchain';
 
 export const CurrencyList: Currency[] = [
   {
@@ -434,8 +436,61 @@ export const PaymentMethodsOther: PaymentMethod[] = [
   },
 ];
 
-// 为了保持向后兼容，使用新的区块链配置系统
-import { getNetworkDropdownOptions, getWalletDropdownOptions } from '@/config/blockchain';
 
 export const Networks = getNetworkDropdownOptions();
 export const Wallets = getWalletDropdownOptions();
+
+export enum OrganizationType {
+  Business = 1,
+  NonProfit = 2,
+  Government = 3,
+  Academic = 4,
+  Philanthropic = 5,
+  Personal = 100,
+  Other = 200,
+}
+
+export enum ProjectCategories {
+  All = 0,
+  'Addiction Recovery' = 1,
+  Animals = 2,
+  'Arts & Culture' = 3,
+  'Children & Youth' = 4,
+  'Community Foundations' = 5,
+  'Community Service' = 6,
+  'Developmental Disabilities' = 7,
+  'Disaster Response' = 8,
+  'Education & Training' = 9,
+  Environment = 10,
+  'First Responders & Veterans' = 11,
+  'Health & Medical' = 12,
+  'Higher Education' = 13,
+  'Homelessness' = 14,
+  'Human Rights' = 15,
+  'Hunger' = 16,
+  'Immigration & Refugees' = 17,
+  'International Development' = 18,
+  'Legal Support' = 19,
+  'LGBTQ' = 20,
+  'Racial Justice' = 21,
+  'Religion and Faith Based' = 22,
+  'Technology' = 23,
+  'Water & Hygiene' = 24,
+  'Women & Girls' = 25,
+}
+
+export enum ProjectDonationMethods {
+  All = 0,
+  Crypto = 1,
+  Cash = 2,
+  'Crypto & Cash' = 3,
+}
+
+export enum ProjectTypes {
+  All = 0,
+  'Non-Profit / Academic Research' = 1,
+  'For-Profit Research' = 2,
+  'Government-Funded Research' = 3,
+  'Philanthropic Research' = 4,
+  'Crowdsourced / Open Science' = 5,
+}

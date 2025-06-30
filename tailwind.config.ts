@@ -1,5 +1,7 @@
 import type { Config } from "tailwindcss"
 import daisyui from "daisyui";
+import typography from "@tailwindcss/typography";
+import { fontFamily } from "tailwindcss/defaultTheme";
 
 const config: Config = {
   darkMode: ["class"],
@@ -11,6 +13,9 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        sans: ["var(--font-sans)", ...fontFamily.sans],
+      },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic": "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
@@ -23,14 +28,26 @@ const config: Config = {
       boxShadow: {
         footer: "0 -14px 14px #28303E05, 0 -55px 22px #28303E02",
       },
+      dropShadow: {
+        custom1: [
+          '0 3px 8px #28303E05',
+          '0 14px 14px #28303E05',
+        ],
+      },
       colors: {
+        icon: {
+          gray: '#A3A3A3',
+        },
         blue: {
           50: "#f0f7ff",
         },
         pink: {
           50: "#fff0f7",
         },
-        background: "hsl(var(--background))",
+        background: {
+          DEFAULT: "hsl(var(--background))",
+          gray: "#F5F5F7",
+        },
         foreground: "hsl(var(--foreground))",
         card: {
           DEFAULT: "hsl(var(--card))",
@@ -80,6 +97,9 @@ const config: Config = {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        line: {
+          'gray': '#D9D9D9',
+        },
       },
       keyframes: {
         "accordion-down": {
@@ -111,7 +131,10 @@ const config: Config = {
         22: '5.5rem',
         25: '6.25rem',
         30: '7.5rem',
+        50: '12.5rem',
+        53: '13.25rem',
         '81.5': '20.375rem',
+        101: '25.25rem',
         107: '26.75rem',
         '50dvw': '50dvw',
       },
@@ -119,6 +142,7 @@ const config: Config = {
   },
   plugins: [
     daisyui,
+    typography,
   ],
   daisyui: {
     themes: [],

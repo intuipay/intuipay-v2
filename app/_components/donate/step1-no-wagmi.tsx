@@ -6,13 +6,13 @@ import { ChangeEvent, useEffect } from 'react';
 import CtaFooter from '@/app/_components/donate/cta-footer';
 import { clsx } from 'clsx';
 import Image from 'next/image';
-import { 
+import {
   BLOCKCHAIN_CONFIG,
   getNetworkDropdownOptionsFromProject,
   getSupportedWallets,
   getCurrencyDropdownOptionsFromProject,
 } from '@/config/blockchain';
-import { DonationProject } from '@/types';
+import { ProjectInfo } from '@/types';
 
 type Props = {
   amount: number | '';
@@ -26,7 +26,7 @@ type Props = {
   setNetwork: (network: string) => void;
   dollar: number | null;
   setDollar: (value: number | null) => void;
-  project: DonationProject;
+  project: ProjectInfo;
 }
 
 export default function Step1NoWagmi({
@@ -168,8 +168,8 @@ export default function Step1NoWagmi({
         </div>
 
         <CtaFooter
-          buttonLabel={"Connect Wallet"}
-          buttonType={"submit"}
+          buttonLabel={'Connect Wallet'}
+          buttonType={'submit'}
           isSubmittable={false}
           isLoading={false}
         />

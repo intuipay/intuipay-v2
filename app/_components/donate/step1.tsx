@@ -17,7 +17,7 @@ import {
   getCurrencyDropdownOptionsFromProject,
 } from '@/config/blockchain';
 import { useExchangeRates } from '@/hooks/use-exchange-rates';
-import { DonationProject } from '@/types';
+import { ProjectInfo } from '@/types';
 
 // 钱包官网链接
 const WALLET_INSTALL_LINKS = {
@@ -51,7 +51,7 @@ type Props = {
   setNetwork: (network: string) => void;
   dollar: number | null;
   setDollar: (value: number | null) => void;
-  project: DonationProject;
+  project: ProjectInfo;
 }
 
 export default function DonationStep1({
@@ -85,7 +85,7 @@ export default function DonationStep1({
     const networkEntry = Object.entries(BLOCKCHAIN_CONFIG.networks).find(([_, config]) => {
       return config.chainId === chainId;
     });
-    return networkEntry ? networkEntry[0] : null;
+    return networkEntry ? networkEntry[ 0 ] : null;
   };
 
   // 如果是重新刷新页面，对于 evm 钱包来说，连接还在，所以可以恢复出连接的网络来
@@ -109,7 +109,7 @@ export default function DonationStep1({
   }, [isConnected, chainId, network, networkOptions]);
 
   // 获取当前网络配置
-  const currentNetwork = BLOCKCHAIN_CONFIG.networks[network as keyof typeof BLOCKCHAIN_CONFIG.networks];
+  const currentNetwork = BLOCKCHAIN_CONFIG.networks[ network as keyof typeof BLOCKCHAIN_CONFIG.networks ];
   // Filter payment methods based on selected network
   const getFilteredPaymentMethods = (): DropdownItemProps[] => {
     if (!network) return [];
@@ -193,8 +193,8 @@ export default function DonationStep1({
     if (network && !paymentMethod) {
       // 自动设置第一个 currency，否则用户不选择下拉菜单，就不会触发 setPaymentMethod
       const filteredMethods = getFilteredPaymentMethods();
-      if (filteredMethods.length === 1 && filteredMethods[0].value) {
-        setPaymentMethod(filteredMethods[0].value);
+      if (filteredMethods.length === 1 && filteredMethods[ 0 ].value) {
+        setPaymentMethod(filteredMethods[ 0 ].value);
       }
     }
   }, [network, paymentMethod]);
@@ -306,7 +306,7 @@ export default function DonationStep1({
       // 检查钱包是否已安装（对于需要浏览器插件的钱包）
       if (selectedWallet === 'metamask' || selectedWallet === 'phantom') {
         if (!isWalletInstalled(selectedWallet)) {
-          const installUrl = WALLET_INSTALL_LINKS[selectedWallet as keyof typeof WALLET_INSTALL_LINKS];
+          const installUrl = WALLET_INSTALL_LINKS[ selectedWallet as keyof typeof WALLET_INSTALL_LINKS ];
           window.open(installUrl, '_blank');
           setError(`Please install ${selectedWallet === 'metamask' ? 'MetaMask' : 'Phantom'} wallet first`);
           return;
@@ -314,7 +314,7 @@ export default function DonationStep1({
       }
 
       // 获取目标连接器
-      const targetConnector = connectorMap[selectedWallet as keyof typeof connectorMap];
+      const targetConnector = connectorMap[ selectedWallet as keyof typeof connectorMap ];
 
       // console.log('debug connected state', isConnected, connector, targetConnector);
       // 检查是否已经连接到相同的钱包连接器
@@ -578,7 +578,7 @@ export default function DonationStep1({
               hasRing={false}
               min="0"
               onChange={onAmountChange}
-              placeholder={!(isConnected || isPhantomConnected) ? "Connect wallet first" : "1.0"}
+              placeholder={!(isConnected || isPhantomConnected) ? 'Connect wallet first' : '1.0'}
               type="number"
               value={amount}
               disabled={!(isConnected || isPhantomConnected)}
@@ -594,7 +594,7 @@ export default function DonationStep1({
               hasRing={false}
               min="0"
               onChange={onDollarChange}
-              placeholder={!(isConnected || isPhantomConnected) ? "Connect wallet first" : "1.00"}
+              placeholder={!(isConnected || isPhantomConnected) ? 'Connect wallet first' : '1.00'}
               type="number"
               value={dollar || 0}
               disabled={!(isConnected || isPhantomConnected)}
@@ -602,8 +602,8 @@ export default function DonationStep1({
           </div>
         </div>
         <CtaFooter
-          buttonLabel={(isConnected || isPhantomConnected) ? "Next" : "Connect Wallet"}
-          buttonType={(isConnected || isPhantomConnected) ? "button" : "submit"}
+          buttonLabel={(isConnected || isPhantomConnected) ? 'Next' : 'Connect Wallet'}
+          buttonType={(isConnected || isPhantomConnected) ? 'button' : 'submit'}
           isSubmittable={(isConnected || isPhantomConnected) ? !!amount : true}
           isLoading={isPending}
           onSubmit={(isConnected || isPhantomConnected) ? handleSubmit : undefined}

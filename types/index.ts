@@ -1,4 +1,5 @@
-import {DonationProjectStatus} from "@/constants/donation";
+import { ProjectStatus } from "@/data/project";
+import { ProjectCategories, ProjectTypes, ProjectDonationMethods } from "@/data";
 
 export type DropdownItemProps = {
   icon: string;
@@ -55,27 +56,6 @@ export type PaymentMethod = {
   currency?: string[];
 }
 
-export type DonationProject = {
-  id: number;
-  banner: string;
-  created_at: string;
-  deleted_at?: string;
-  description: string;
-  org_id: number;
-  project_name: string;
-  project_slug: string;
-  qrcode: string;
-  status: DonationProjectStatus;
-  updated_at: string;
-  vault_account_id: string;
-  wallet_address: string;
-  
-  // 新增字段
-  networks?: string[]; // 支持的区块链网络列表
-  tokens?: Record<string, string[]>; // 每个网络支持的代币列表
-  wallets?: Record<string, string>; // 每个网络的收款钱包地址，格式：{ "ethereum-sepolia": "0x123...", "solana-devnet": "ABC..." }
-}
-
 export type TiDBDataServiceResponse<T> = {
   data: {
     columns: string[];
@@ -108,3 +88,83 @@ export type DonationInfo = {
   created_at?: string;
   updated_at?: string;
 }
+
+export type ProjectInfo = {
+  id: number;
+  project_slug: string;
+  project_subtitle: string;
+  accepts: string;
+  amount: number;
+  banner: string;
+  banners: string[];
+  campaign: string;
+  category: ProjectCategories;
+  description: string;
+  email: string;
+  end_at: string;
+  github: string;
+  goal_amount: number;
+  location: string;
+  org_id: number;
+  org_contact: string;
+  org_description: string;
+  org_location: string;
+  org_logo: string;
+  org_name: string;
+  org_slug: string;
+  org_type: string;
+  org_website: string;
+  project_name: string;
+  qrcode: string;
+  social_links: string | Record<string, string>;
+  status: ProjectStatus;
+  tags: string;
+  type: ProjectTypes;
+  vault_account_id: string;
+  wallet_address: string;
+  website: string;
+  backers: number
+
+  created_at: string;
+  deleted_at?: string;
+  updated_at: string;
+
+  // 新增字段
+  networks?: string[]; // 支持的区块链网络列表
+  tokens?: Record<string, string[]>; // 每个网络支持的代币列表
+  wallets?: Record<string, string>; // 每个网络的收款钱包地址，格式：{ "ethereum-sepolia": "0x123...", "solana-devnet": "ABC..." }
+}
+
+export type ProjectFilter = {
+  category: ProjectCategories;
+  progressMin: number;
+  progressMax: number;
+  location: string;
+  donationMethods: ProjectDonationMethods | string;
+  projectType: ProjectTypes | string;
+  excludes?: string[];
+}
+
+export type Donation = {
+  amount: number;
+  country: string;
+  currency: string;
+  first_name: string;
+  last_name: string;
+  method: string;
+}
+
+export type Donations = Donation[]
+
+export type Update = {
+  id: number;
+  projectId: number;
+  title: string;
+  content: string;
+  thumbnail: string | null;
+  created_at: string;
+  updated_at: string;
+  status: number | null;
+}
+
+export type Updates = Update[];
