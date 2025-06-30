@@ -51,12 +51,20 @@ export function SiteHeader() {
             </DropdownMenuContent>
           </DropdownMenu>
 
-          <Button className="border-neutral-mediumgray text-base ml-2 bg-primary rounded-full text-white w-28 hidden lg:block">
-            Sign In
+          <Button
+            asChild
+            className="border-neutral-mediumgray text-base ml-2 bg-primary rounded-full text-white w-28 hidden lg:block"
+          >
+            <Link
+              aria-label="Sign in"
+              href="https://dash.intuipay.xyz/login"
+              target="_blank"
+            >Sign In</Link>
           </Button>
           <Link
-            href={''}
-            aria-label={'todo'}
+            href="https://dash.intuipay.xyz/signup"
+            target="_blank"
+            aria-label="Create account"
             className="text-primary ml-6 hidden lg:block"
           >
             Create account
