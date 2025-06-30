@@ -169,7 +169,7 @@ export function FilterDrawer({ isOpen, onOpenChange, filter, setFilter }: Filter
                 value={[filter.progressMin, filter.progressMax]}
                 max={100}
                 step={1}
-                className="[&>span:first-child]:h-1 [&>span:first-child]:bg-action-blue [&>span:first-child_span]:bg-action-blue [&>span:first-child_span]:border-action-blue [&>span:first-child_span]:ring-offset-background [&>span:first-child_span]:focus-visible:ring-action-blue/50"
+                className="[&>span:first-child]:h-1 [&>span:first-child]:bg-action-blue [&>span]:bg-action-blue [&>span]:border-action-blue [&>span]:ring-offset-background [&>span]:focus-visible:ring-action-blue/50"
                 minStepsBetweenThumbs={1}
                 onValueChange={handleProgressChange}
               />
