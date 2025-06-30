@@ -85,7 +85,6 @@ export const getDonations = cache(async function getDonations(projectId: number,
   searchParams.set('start', ((page - 1) * pageSize).toString());
   searchParams.set('pagesize', pageSize.toString());
   searchParams.set('order', order);
-  console.log('searchParams.toString()', searchParams.toString())
   const data = await fetchTidb<Donation>(`/project_donations?${searchParams.toString()}`);
   return data;
 });
