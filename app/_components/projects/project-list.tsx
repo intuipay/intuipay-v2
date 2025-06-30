@@ -60,7 +60,8 @@ export default async function ProjectList(props: ProjectListProps) {
   // Construct the filter object for getProjects
   const filter: ProjectFilter = {
     category: categoryString ? parseInt(categoryString) as ProjectCategories : ProjectCategories.All,
-    progress: progressString ? parseInt(progressString) : 0,
+    progressMin: progressString ? parseInt(progressString) : 0,
+    progressMax: progressString ? parseInt(progressString) : 100,
     location: location || ''  , // Ensure location is always a string
     donationMethods: donationMethodsString ? parseInt(donationMethodsString) as ProjectDonationMethods : ProjectDonationMethods.All,
     projectType: projectTypeString ? parseInt(projectTypeString) as ProjectTypes : ProjectTypes.All,
