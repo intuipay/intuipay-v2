@@ -3,10 +3,10 @@
 import Link from 'next/link'
 import { marked } from 'marked'
 import { Badge } from '@/components/ui/badge'
-import type { ProjectDataType } from '@/app/project/[slug]/project-data'
+import type { ProjectInfo } from '@/types'
 
 type CampaignTabProps = {
-  project: ProjectDataType
+  project: ProjectInfo
 }
 
 export function CampaignTab({ project }: CampaignTabProps) {
@@ -14,7 +14,7 @@ export function CampaignTab({ project }: CampaignTabProps) {
   return (
     <>
       <article className="mb-8 scroll-mt-20 prose"
-        dangerouslySetInnerHTML={{ __html: marked.parse(project.campaign) }}
+        dangerouslySetInnerHTML={{ __html: marked.parse(project.campaign) as string }}
       />
       <p className="text-neutral-darkgray mb-13 mt-5">
         Questions about this project?{' '}

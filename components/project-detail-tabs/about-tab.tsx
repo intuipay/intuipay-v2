@@ -15,10 +15,10 @@ import {
   YoutubeLogo,
   FacebookLogo
 } from '@phosphor-icons/react';
-import type { ProjectDataType } from '@/app/project/[slug]/project-data'
+import type { ProjectInfo } from '@/types'
 
 type AboutTabProps = {
-  project: ProjectDataType
+  project: ProjectInfo
 }
 
 export function AboutTab({ project }: AboutTabProps) {
@@ -41,7 +41,7 @@ export function AboutTab({ project }: AboutTabProps) {
         <h3 className="text-xl font-semibold">{org_name}</h3>
       </div>
       <article className="text-neutral-darkgray leading-relaxed mb-10 prose"
-        dangerouslySetInnerHTML={{ __html: marked.parse(org_description) }}
+        dangerouslySetInnerHTML={{ __html: marked.parse(org_description) as string }}
       />
 
       <div className="space-y-2 mb-10 text-sm">
