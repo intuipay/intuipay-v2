@@ -1,7 +1,9 @@
-USE test;
+USE `test`;
 
-SELECT id, project_name, banner, wallet_address, accepts,`qrcode`,networks,
-  tokens,wallets
-FROM `donation_project` 
+SELECT p.`id`, `project_name`, `banner`, `accepts`,
+  `qrcode`, `networks`, `tokens`, `wallets` ,o.`wallet_address`
+FROM `donation_project` p
+  LEFT JOIN `organization` o
+    ON p.`org_id`=o.`id`
 WHERE `project_slug` = ${slug}
 LIMIT 1;
