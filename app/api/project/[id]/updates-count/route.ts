@@ -31,7 +31,7 @@ export async function GET(_: Request, { params }: { params: { id: string } }) {
     return new Response(
       JSON.stringify({
         code: 2,
-        message: `Failed to fetch donation projects: ${errorMessage}`,
+        message: `Failed to fetch update count: ${errorMessage}`,
       }),
       { status: 400 },
     );
