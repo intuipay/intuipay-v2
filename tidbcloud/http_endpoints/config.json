@@ -861,6 +861,13 @@
         "required": 1,
         "default": "",
         "description": ""
+      },
+      {
+        "name": "is_auto_end",
+        "type": "boolean",
+        "required": 0,
+        "default": "false",
+        "description": ""
       }
     ],
     "settings": {
