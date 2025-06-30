@@ -76,7 +76,7 @@ export function DonationsTab({ projectId }: DonationsTabProps) {
                   </AvatarFallback>
                 </Avatar>
                 <div>
-                  <p className="font-medium text-neutral-text">{donation.first_name + donation.last_name}</p>
+                  <p className="font-medium text-neutral-text">{`${donation.first_name} ${donation.last_name}`}</p>
                   {/* 没有相关字段，先注释 */}
                   {/* <p className="text-xs text-neutral-darkgray">{donation.timeAgo}</p> */}
                 </div>
