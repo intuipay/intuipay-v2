@@ -18,6 +18,7 @@ SET
   `goal_amount` = ${goal_amount},
   `end_at` = ${end_at},
   `accepts` = ${accepts},
+  `is_auto_end`=${is_auto_end},
   `updated_at`=now()
 WHERE p.`id` = ${id}
   AND `user_id`=${user_id};

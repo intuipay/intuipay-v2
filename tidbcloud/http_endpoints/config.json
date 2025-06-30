@@ -984,6 +984,13 @@
         "description": ""
       },
       {
+        "name": "is_auto_end",
+        "type": "boolean",
+        "required": 0,
+        "default": "false",
+        "description": ""
+      },
+      {
         "name": "id",
         "type": "integer",
         "required": 1,
