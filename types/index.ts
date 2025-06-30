@@ -96,7 +96,7 @@ export type ProjectInfo = {
   accepts: string;
   amount: number;
   banner: string;
-  banners: string;
+  banners: string[];
   campaign: string;
   category: ProjectCategories;
   description: string;

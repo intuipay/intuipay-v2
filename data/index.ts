@@ -440,7 +440,7 @@ export const PaymentMethodsOther: PaymentMethod[] = [
 export const Networks = getNetworkDropdownOptions();
 export const Wallets = getWalletDropdownOptions();
 
-export enum OrginzationType {
+export enum OrganizationType {
   Business = 1,
   NonProfit = 2,
   Government = 3,

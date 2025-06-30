@@ -38,8 +38,11 @@ export const getProjects = cache(async function getProjects(
   if (filter?.category) {
     searchParams.set('category', filter.category.toString());
   }
-  if (filter?.progress && filter.progress !== 0) {
-    searchParams.set('progress', filter.progress.toString());
+  if (filter?.progressMin !== undefined) {
+    searchParams.set('progress_min', filter.progressMin.toString());
+  }
+  if (filter?.progressMax !== undefined) {
+    searchParams.set('progress_max', filter.progressMax.toString());
   }
   if (filter?.location) {
     searchParams.set('location', filter.location);
