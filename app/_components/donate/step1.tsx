@@ -2,7 +2,7 @@ import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import MyCombobox from '@/components/my-combobox';
 import { DropdownItemProps } from '@/types';
-import { ChangeEvent, useState, useEffect, FormEvent, useCallback } from 'react';
+import { ChangeEvent, useState, useEffect, FormEvent } from 'react';
 import CtaFooter from '@/app/_components/donate/cta-footer';
 import { clsx } from 'clsx';
 import Image from 'next/image';
@@ -89,10 +89,10 @@ export default function DonationStep1({
   };
 
   // 获取网络对应的 Chain ID
-  const getChainIdForNetwork = useCallback((networkId: string): number | null => {
+  const getChainIdForNetwork = (networkId: string): number | null => {
     const networkConfig = BLOCKCHAIN_CONFIG.networks[networkId as keyof typeof BLOCKCHAIN_CONFIG.networks];
     return networkConfig?.chainId || null;
-  }, []);
+  };
 
   // 页面刷新后的网络状态恢复
   useEffect(() => {
@@ -139,17 +139,17 @@ export default function DonationStep1({
   // 获取当前网络配置
   const currentNetwork = BLOCKCHAIN_CONFIG.networks[network as keyof typeof BLOCKCHAIN_CONFIG.networks];
   // Filter payment methods based on selected network
-  const getFilteredPaymentMethods = useCallback((): DropdownItemProps[] => {
+  const getFilteredPaymentMethods = (): DropdownItemProps[] => {
     if (!network) return [];
     const result = getCurrencyDropdownOptionsFromProject(project, network);
     return result;
-  }, [network, project]);
+  };
   
   // Filter wallets based on selected network
-  const getFilteredWallets = useCallback((): typeof allWallets => {
+  const getFilteredWallets = (): typeof allWallets => {
     if (!network) return allWallets;
     return getSupportedWallets(network);
-  }, [network, allWallets]);
+  };
   // Get wallet balances for all supported tokens
   const { balances } = useMultiWalletBalance(network);
 
@@ -163,7 +163,7 @@ export default function DonationStep1({
     hasRates
   } = useExchangeRates(network);
 
-  const handleDisconnect = useCallback(async () => {
+  const handleDisconnect = async () => {
     try {
       if (window?.phantom?.solana?.isConnected) {
         console.log('Disconnecting Phantom wallet');
@@ -185,7 +185,7 @@ export default function DonationStep1({
       setSelectedWallet('');
       setError('');
     }
-  }, [disconnect, setSelectedWallet, isConnected]);
+  };
 
   // 设置 Phantom 钱包事件监听器
   useEffect(() => {
