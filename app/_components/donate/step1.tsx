@@ -193,13 +193,6 @@ export default function DonationStep1({
     if (typeof window !== 'undefined' && window.phantom?.solana) {
       const phantom = window.phantom.solana;
 
-      // 检查是否已经连接
-      if (phantom.isConnected) {
-        console.log('Phantom wallet is already connected');
-        setIsPhantomConnected(true);
-        setSelectedWallet('phantom');
-      }
-
       // 设置连接事件处理器
       const handleConnect = () => {
         console.log('Phantom wallet connected');
