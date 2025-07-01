@@ -1,22 +1,18 @@
 'use client'
 
-import { useMemo, useState, lazy, useEffect } from 'react'
+import { useMemo, useState, useEffect } from 'react'
 import { CircleDotIcon, HeadsetIcon } from 'lucide-react'
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link'
 import { DonationInfo, ProjectInfo } from '@/types';
 import { clsx } from 'clsx';
-import Step1NoWagmi from '@/app/_components/donate/step1-no-wagmi';
+import DonationStep1 from '@/app/_components/donate/step1';
 import DonationStep2 from '@/app/_components/donate/step2';
 import DonationStep4 from '@/app/_components/donate/step4';
 import DonationStep5 from '@/app/_components/donate/step5';
 import { createDonationInfo } from '@/utils';
-import { useWagmiReady } from '@/components/providers/web3-provider';
-import { getNetworkDropdownOptions, getNetworkDropdownOptionsFromProject } from '@/config/blockchain';
-
-// 动态导入包含 wagmi hooks 的组件，否则会在服务端执行，因为edge runtime的原因出现500报错
-const DonationStep1 = lazy(() => import('@/app/_components/donate/step1'));
+import { getNetworkDropdownOptionsFromProject } from '@/config/blockchain';
 
 type Step = 'initialization' | 'contacts' | 'payment' | 'complete'
 type Props = {
@@ -77,8 +73,6 @@ export default function DonationPageComp({
 
   // Dollar amount state (for real-time USD conversion)
   const [dollar, setDollar] = useState<number | null>(info.amount || 0);
-    // Check if wagmi is ready
-  const isWagmiReady = useWagmiReady();
 
   // Combined network setter that updates both local state and info
   const handleSetNetwork = (newNetwork: string) => {
@@ -91,7 +85,7 @@ export default function DonationPageComp({
     setSlideDirection('right')
     if (currentStep === 'initialization') setCurrentStep('contacts')
     else if (currentStep === 'contacts') setCurrentStep('payment')
-    else  if (currentStep === 'payment') setCurrentStep('complete')
+    else if (currentStep === 'payment') setCurrentStep('complete')
   }
   const goToPreviousStep = () => {
     setSlideDirection('left')
@@ -194,43 +188,23 @@ export default function DonationPageComp({
           >
             {/* Initialization Step */}
             {currentStep === 'initialization' && (
-              isWagmiReady ? (
-                <DonationStep1
-                    amount={info.amount}
-                    goToNextStep={goToNextStep}
-                    paymentMethod={info.currency}
-                    setAmount={value => updateInfo({ amount: value })}
-                    setPaymentMethod={value => updateInfo({ currency: value })}
-                    selectedWallet={info.wallet}
-                    setSelectedWallet={value => updateInfo({ wallet: value })}
-                    network={network}
-                    setNetwork={handleSetNetwork}
-                    dollar={dollar}
-                    setDollar={value => {
-                      setDollar(value);
-                      updateInfo({ dollar: typeof value === 'number' ? value : null });
-                    }}
-                    project={project}
-                />
-              ) : (
-                <Step1NoWagmi
-                  amount={info.amount}
-                  goToNextStep={goToNextStep}
-                  paymentMethod={info.currency}
-                  setAmount={value => updateInfo({ amount: value })}
-                  setPaymentMethod={value => updateInfo({ currency: value })}
-                  selectedWallet={info.wallet}
-                  setSelectedWallet={value => updateInfo({ wallet: value })}
-                  network={network}
-                  setNetwork={handleSetNetwork}
-                  dollar={dollar}
-                  setDollar={value => {
-                    setDollar(value);
-                    updateInfo({ dollar: typeof value === 'number' ? value : null });
-                  }}
-                  project={project}
-                />
-              )
+              <DonationStep1
+                amount={info.amount}
+                goToNextStep={goToNextStep}
+                paymentMethod={info.currency}
+                setAmount={value => updateInfo({ amount: value })}
+                setPaymentMethod={value => updateInfo({ currency: value })}
+                selectedWallet={info.wallet}
+                setSelectedWallet={value => updateInfo({ wallet: value })}
+                network={network}
+                setNetwork={handleSetNetwork}
+                dollar={dollar}
+                setDollar={value => {
+                  setDollar(value);
+                  updateInfo({ dollar: typeof value === 'number' ? value : null });
+                }}
+                project={project}
+              />
             )}
 
             {/* Contracts Step */}
