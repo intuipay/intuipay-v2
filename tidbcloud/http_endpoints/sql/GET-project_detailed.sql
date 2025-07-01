@@ -1,6 +1,6 @@
 USE test;
 
-SELECT `p`.`id`,`project_name`,`description`,`banner`,`status`,`qrcode`,`wallet_address`,
+SELECT `p`.`id`,`project_name`,`description`,`banner`,`status`,`qrcode`,o.`wallet_address`,
   `campaign`,`category`,`location`,`type`,`accepts`,`tags`,`amount`,`goal_amount`,
   `end_at`,`p`.`email`,`website`,`github`,`org_name`,`org_slug`,`project_subtitle`,
   `org_description`,`org_type`,`org_contact`,`org_location`,`org_website`,
