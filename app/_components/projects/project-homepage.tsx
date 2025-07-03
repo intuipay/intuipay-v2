@@ -1,6 +1,6 @@
 'use client'
 
-import { PropsWithChildren, useEffect, useState } from 'react'
+import { PropsWithChildren, useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -45,6 +45,7 @@ export default function ProjectHomepage({
 }: ProjectHomepageProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const isFirstRender = useRef(true);
 
   const [isFilterDrawerOpen, setIsFilterDrawerOpen] = useState(false);
 
@@ -129,6 +130,10 @@ export default function ProjectHomepage({
   }
 
   useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
     updateUrlWithFilters();
   }, [currentSortBy, activeFilters]);
 
