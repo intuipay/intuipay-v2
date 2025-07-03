@@ -9,7 +9,7 @@ import CtaFooter from '@/app/_components/donate/cta-footer';
 import { useAccount, useChainId, useWriteContract, useWaitForTransactionReceipt, useSendTransaction } from 'wagmi';
 import { parseUnits } from 'viem';
 import { TransactionMessage, VersionedTransaction, SystemProgram, Connection, PublicKey, clusterApiUrl } from '@solana/web3.js';
-import { createTransferInstruction, getAssociatedTokenAddress, TOKEN_PROGRAM_ID, ASSOCIATED_TOKEN_PROGRAM_ID } from '@solana/spl-token';
+import { createTransferInstruction, getAssociatedTokenAddress, TOKEN_PROGRAM_ID, ASSOCIATED_TOKEN_PROGRAM_ID, createAssociatedTokenAccountInstruction } from '@solana/spl-token';
 import {
   BLOCKCHAIN_CONFIG,
   getProjectWalletAddress,
@@ -337,7 +337,6 @@ export default function DonationStep4({
             // 如果接收者的代币账户不存在，需要先创建
             if (!toTokenAccountInfo) {
               console.log('Creating associated token account for recipient');
-              const { createAssociatedTokenAccountInstruction } = await import('@solana/spl-token');
               instructions.push(
                 createAssociatedTokenAccountInstruction(
                   fromWallet, // payer
