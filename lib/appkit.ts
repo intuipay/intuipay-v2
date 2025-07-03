@@ -2,6 +2,13 @@ import { createAppKit } from '@reown/appkit/react'
 import { WagmiAdapter } from '@reown/appkit-adapter-wagmi'
 import { mainnet, sepolia } from 'wagmi/chains'
 import { defineChain } from 'viem'
+import {
+  createConfig,
+  http,
+  cookieStorage,
+  createStorage
+} from 'wagmi'
+import { injected, metaMask, coinbaseWallet, walletConnect } from 'wagmi/connectors'
 
 // 定义 Pharos Testnet 链
 export const pharosTestnet = defineChain({
@@ -27,7 +34,7 @@ export const pharosTestnet = defineChain({
 })
 
 // 1. Get projectId from https://cloud.reown.com
-const projectId = process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID
+const projectId = process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID || '2056cd0f53ff3372b3b40ad4c0508c44'
 
 if (!projectId) {
   throw new Error('NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID is not set')
