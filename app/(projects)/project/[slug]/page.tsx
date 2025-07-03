@@ -4,9 +4,6 @@ import ProjectDetailClientLayout from './project-detail-client-layout' // New Cl
 import { getProjectDetail, getProjects } from '@/lib/data'
 import { ProjectCategories } from '@/data';
 
-export const runtime = 'edge';
-
-
 // Dynamic Metadata Generation for SEO
 type Props = {
   params: Promise<{ slug: string }>

@@ -1,12 +1,14 @@
-import { getRequestContext } from '@cloudflare/next-on-pages';
-
-export const runtime = 'edge';
+import { getCloudflareContext } from "@opennextjs/cloudflare";
 
 export async function POST(req: Request) {
-  const { env } = getRequestContext();
-  const d1 = (env as NodeJS.ProcessEnv).DB;
+  const { env } = getCloudflareContext();
+  const d1 = (env as CloudflareEnv).DB;
 
-  const { email, name, refer } = await req.json();
+  const { email, name, refer } = (await req.json()) as {
+    email: string;
+    name: string;
+    refer: string;
+  };
   const sql = `INSERT INTO waitlist
 (email, fullname, created, refer)
 VALUES (?, ?, ?, ?)`;

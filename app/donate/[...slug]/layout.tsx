@@ -4,8 +4,6 @@ import BackButton from '@/components/back-button';
 import { Web3Provider } from '@/components/providers/web3-provider';
 import { getDonationProjectBySlug } from '@/lib/data';
 
-export const runtime = 'edge';
-
 export default async function DonateLayout({
   children,
   params,

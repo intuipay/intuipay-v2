@@ -3,8 +3,6 @@ import { validateDonationTransaction } from '@/services/transaction-validator';
 import { BLOCKCHAIN_CONFIG } from '@/config/blockchain';
 import { getDonationProjectBySlug } from '@/lib/data';
 
-export const runtime = 'edge';
-
 export async function POST(req: Request) {
   const json = await req.json();
 

@@ -1,8 +1,6 @@
 import { fetchTidb } from '@/services/fetch-tidb';
 import { Update } from '@/types';
 
-export const runtime = 'edge';
-
 export async function GET(req: Request, { params }: { params: { id: string } }) {
   const { id } = await params;
   const { searchParams } = new URL(req.url);

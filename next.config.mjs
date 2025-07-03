@@ -1,5 +1,5 @@
-import { setupDevPlatform } from '@cloudflare/next-on-pages/next-dev';
 import pkg from './package.json' with { type: 'json' };
+import { initOpenNextCloudflareForDev } from "@opennextjs/cloudflare";
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -34,6 +34,5 @@ const nextConfig = {
 export default nextConfig;
 
 if (process.env.NODE_ENV === 'development') {
-  // we simply need to call the utility
-  setupDevPlatform();
+  initOpenNextCloudflareForDev();
 }
