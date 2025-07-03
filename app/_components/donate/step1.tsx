@@ -16,6 +16,7 @@ import {
 } from '@/config/blockchain';
 import { useExchangeRates } from '@/hooks/use-exchange-rates';
 import { ProjectInfo } from '@/types';
+import { Widget as WidgetPage } from './LifiWidget';
 
 // 钱包官网链接
 const WALLET_INSTALL_LINKS = {
@@ -67,6 +68,7 @@ export default function DonationStep1({
   project,
 }: Props) {
   const [error, setError] = useState<string>('');
+  const [isLifiModalOpen, setIsLifiModalOpen] = useState(false);
   // 获取配置数据 - 从项目配置中获取
   const networkOptions = getNetworkDropdownOptionsFromProject(project);
   const allWallets = Object.values(BLOCKCHAIN_CONFIG.wallets);
@@ -263,8 +265,6 @@ export default function DonationStep1({
   // 监控 wagmi 连接错误
   useEffect(() => {
     if (connectError) {
-      console.error('Wallet connection error:', connectError);
-
       // 处理特定错误
       if (connectError.message.includes('User rejected')) {
         setError('User rejected the connection request');
@@ -276,6 +276,7 @@ export default function DonationStep1({
         setError('');
         return;
       } else {
+        console.error('Wallet connection error:', connectError);
         setError(`Connection failed: ${connectError.message}`);
       }
     }
@@ -495,7 +496,18 @@ export default function DonationStep1({
         </div>
         {/* Currency Selection */}
         <div className="space-y-2">
-          <Label className="text-sm font-semibold text-black/50">Donate with</Label>
+          <div className="flex items-center justify-between">
+            <Label className="text-sm font-semibold text-black/50">Donate with</Label>
+            {(isConnected || isPhantomConnected) && (
+              <button
+                type="button"
+                onClick={() => setIsLifiModalOpen(true)}
+                className="text-sm text-gray-500 mr-3"
+              >
+                Swap
+              </button>
+            )}
+          </div>
           <MyCombobox
             className="rounded-lg h-12"
             iconClass="top-3"
@@ -547,6 +559,32 @@ export default function DonationStep1({
           isLoading={isPending}
           onSubmit={(isConnected || isPhantomConnected) ? handleSubmit : undefined}
         />
+      </div>
+
+      {/* LiFi Widget Modal */}
+      <input 
+        type="checkbox" 
+        id="lifi-modal" 
+        className="modal-toggle" 
+        checked={isLifiModalOpen}
+        onChange={() => setIsLifiModalOpen(!isLifiModalOpen)}
+      />
+      <div className="modal">
+        <div className="modal-box w-11/12 max-w-2xl">
+          <div className="flex justify-between items-center mb-4">
+            <h3 className="font-bold text-lg">Swap</h3>
+            <button 
+              className="btn btn-sm btn-circle btn-ghost"
+              onClick={() => setIsLifiModalOpen(false)}
+            >
+              ✕
+            </button>
+          </div>
+          <div className="py-4">
+            <WidgetPage />
+          </div>
+        </div>
+        <label className="modal-backdrop" htmlFor="lifi-modal">Close</label>
       </div>
     </form>
   )
