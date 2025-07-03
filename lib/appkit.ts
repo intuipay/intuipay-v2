@@ -1,12 +1,7 @@
+import { createAppKit } from '@reown/appkit/react'
+import { WagmiAdapter } from '@reown/appkit-adapter-wagmi'
 import { mainnet, sepolia } from 'wagmi/chains'
 import { defineChain } from 'viem'
-import {
-  createConfig,
-  http,
-  cookieStorage,
-  createStorage
-} from 'wagmi'
-import { injected, metaMask, coinbaseWallet, walletConnect } from 'wagmi/connectors'
 
 // 定义 Pharos Testnet 链
 export const pharosTestnet = defineChain({
@@ -38,6 +33,12 @@ if (!projectId) {
   throw new Error('NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID is not set')
 }
 
+// 2. Set up Wagmi adapter with all connectors
+const wagmiAdapter = new WagmiAdapter({
+  networks: [mainnet, sepolia, pharosTestnet],
+  projectId
+})
+
 // 3. Configure the metadata
 const metadata = {
   name: 'IntuiPay Donation',
@@ -46,27 +47,25 @@ const metadata = {
   icons: ['https://intuipay.xyz/images/logo.svg']
 }
 
-export const config = createConfig({
-  chains: [mainnet, sepolia, pharosTestnet],
-  connectors: [
-    injected(),
-    walletConnect({
-      projectId: projectId!,
-      metadata: metadata,
-    }),
-    metaMask(),
-    coinbaseWallet(),
-  ],
-  ssr: true,
-  storage: createStorage({
-    storage: cookieStorage,
-  }),
-  transports: {
-    [mainnet.id]: http(),
-    [sepolia.id]: http(),
-    [pharosTestnet.id]: http(),
+// 4. Create the AppKit instance
+export const appkit = createAppKit({
+  adapters: [wagmiAdapter],
+  networks: [mainnet, sepolia, pharosTestnet],
+  metadata,
+  projectId,
+  features: {
+    analytics: true,
   },
-});
+  // 启用常用的钱包连接器
+  enableWalletConnect: true,
+  enableInjected: true,
+  enableEIP6963: true,
+  enableCoinbase: true,
+})
+
+
+// Export wagmi config for use in providers
+export const config = wagmiAdapter.wagmiConfig
 
 // 辅助函数：向 MetaMask 添加网络
 export async function addNetworkToMetaMask(networkId: string) {

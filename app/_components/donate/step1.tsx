@@ -2,11 +2,13 @@ import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import MyCombobox from '@/components/my-combobox';
 import { DropdownItemProps } from '@/types';
-import { ChangeEvent, useState, useEffect, FormEvent } from 'react';
+import { ChangeEvent, useState, useEffect, FormEvent, useCallback, useRef } from 'react';
 import CtaFooter from '@/app/_components/donate/cta-footer';
 import { clsx } from 'clsx';
 import Image from 'next/image';
+import { WalletConnectButton } from '@/components/wallet-connect-button';
 import { useAccount, useConnect, useDisconnect, useChainId } from 'wagmi';
+import { appkit, addNetworkToMetaMask } from '@/lib/appkit';
 import { useMultiWalletBalance } from '@/hooks/use-multi-wallet-balance';
 import {
   BLOCKCHAIN_CONFIG,
@@ -68,18 +70,16 @@ export default function DonationStep1({
   project,
 }: Props) {
   const [error, setError] = useState<string>('');
-  const [isLifiModalOpen, setIsLifiModalOpen] = useState(false);
+  const lifiModalRef = useRef<HTMLDialogElement>(null);
   // 获取配置数据 - 从项目配置中获取
   const networkOptions = getNetworkDropdownOptionsFromProject(project);
   const allWallets = Object.values(BLOCKCHAIN_CONFIG.wallets);
 
-  // wagmi hooks - 用于 EVM 钱包连接
+  // wagmi hooks
   const { address, isConnected, connector } = useAccount();
   const { connect, connectors, isPending, error: connectError } = useConnect();
   const { disconnect } = useDisconnect();
   const chainId = useChainId();
-
-  // Phantom 钱包连接状态 - 用于 Solana 网络
   const [isPhantomConnected, setIsPhantomConnected] = useState(false);
 
   // 根据 chainId 获取对应的网络ID
@@ -87,66 +87,37 @@ export default function DonationStep1({
     const networkEntry = Object.entries(BLOCKCHAIN_CONFIG.networks).find(([_, config]) => {
       return config.chainId === chainId;
     });
-    return networkEntry ? networkEntry[0] : null;
+    return networkEntry ? networkEntry[ 0 ] : null;
   };
 
-  // 获取网络对应的 Chain ID
-  const getChainIdForNetwork = (networkId: string): number | null => {
-    const networkConfig = BLOCKCHAIN_CONFIG.networks[networkId as keyof typeof BLOCKCHAIN_CONFIG.networks];
-    return networkConfig?.chainId || null;
-  };
-
-  // 页面刷新后的网络状态恢复
+  // 如果是重新刷新页面，对于 evm 钱包来说，连接还在，所以可以恢复出连接的网络来
+  // 但是phantom solana钱包，刷新页面后 window.phantom.solana.isConnected 就变为 false 了，等于是已经断开了连接
+  // 所以如果之前连上了 phantom 钱包，刷新页面后，连接状态会丢，此时网络展示默认的 ethereum sepolia
   useEffect(() => {
-    if (!isConnected || !chainId) return;
-
-    const connectedNetworkId = getNetworkIdByChainId(chainId);
-    
-    // 如果无法解析出网络ID，断开连接
-    if (!connectedNetworkId) {
-      console.warn('Unknown chainId, disconnecting wallet:', chainId);
-      disconnect();
-      return;
-    }
-
-    const connectedNetworkConfig = BLOCKCHAIN_CONFIG.networks[connectedNetworkId as keyof typeof BLOCKCHAIN_CONFIG.networks];
-
-    // 如果连接的网络不是 EVM 类型，断开连接
-    if (connectedNetworkConfig?.type !== 'evm') {
-      console.warn('Connected network is not EVM type, disconnecting wallet:', connectedNetworkId);
-      disconnect();
-      return;
-    }
-
-    console.log('Connected network ID:', connectedNetworkId, 'Chain ID:', chainId, network, isConnected, networkOptions);
-    // 检查连接的网络是否在当前项目支持的网络列表中
-    const isSupportedNetwork = networkOptions.some(option => option.value === connectedNetworkId);
-    
-    if (isSupportedNetwork) {
-      // 如果连接的网络与当前选择的网络不同，同步到连接的网络
-      if (connectedNetworkId !== network) {
-        console.log('Page refresh detected, syncing to connected network:', connectedNetworkId);
-        setNetwork(connectedNetworkId);
-        setError(''); // 清除之前的错误
+    if (isConnected && chainId) {
+      const connectedNetworkId = getNetworkIdByChainId(chainId);
+      if (connectedNetworkId && connectedNetworkId !== network) {
+        // 检查连接的网络是否在当前项目支持的网络列表中
+        const isSupportedNetwork = networkOptions.some(option => option.value === connectedNetworkId);
+        if (isSupportedNetwork) {
+          console.log('Syncing to connected network:', connectedNetworkId);
+          setNetwork(connectedNetworkId);
+        } else {
+          console.log('Connected network not supported by current project:', connectedNetworkId);
+          // 可以选择断开连接或者保持当前默认网络
+        }
       }
-    } else {
-      // 连接到了错误的网络，钱包的活跃网络不是用户选择的网络，此时应该提示用户连错了网络，
-      // 一般在手机扫码连接容易复现，因为此时钱包app不一定跟用户选择的网络一致
-      console.warn('Connected network not supported by current project', connectedNetworkId);
-      setError('Connected network not supported, please switch to correct network in your wallet app first'); // 清除错误信息，因为我们主动断开了连接
-      disconnect(); // 主动断开连接
     }
-  }, [isConnected, chainId]); // 只在连接状态、链ID或项目支持的网络列表变化时执行
+  }, [isConnected, chainId, network, networkOptions]);
 
   // 获取当前网络配置
-  const currentNetwork = BLOCKCHAIN_CONFIG.networks[network as keyof typeof BLOCKCHAIN_CONFIG.networks];
+  const currentNetwork = BLOCKCHAIN_CONFIG.networks[ network as keyof typeof BLOCKCHAIN_CONFIG.networks ];
   // Filter payment methods based on selected network
   const getFilteredPaymentMethods = (): DropdownItemProps[] => {
     if (!network) return [];
     const result = getCurrencyDropdownOptionsFromProject(project, network);
     return result;
   };
-  
   // Filter wallets based on selected network
   const getFilteredWallets = (): typeof allWallets => {
     if (!network) return allWallets;
@@ -165,9 +136,9 @@ export default function DonationStep1({
     hasRates
   } = useExchangeRates(network);
 
-  const handleDisconnect = async () => {
+  const handleDisconnect = useCallback(async () => {
     try {
-      if (window?.phantom?.solana?.isConnected) {
+      if (window?.phantom?.solana) {
         console.log('Disconnecting Phantom wallet');
         await window.phantom.solana.disconnect();
         setIsPhantomConnected(false);
@@ -187,48 +158,48 @@ export default function DonationStep1({
       setSelectedWallet('');
       setError('');
     }
-  };
+  }, [disconnect, setSelectedWallet, isConnected]);
 
-  // 设置 Phantom 钱包事件监听器
   useEffect(() => {
-    // 确保在客户端执行且 Phantom 钱包可用
+    // 确保在客户端执行
     if (typeof window !== 'undefined' && window.phantom?.solana) {
       const phantom = window.phantom.solana;
-
-      // 设置连接事件处理器
+      if (phantom.isConnected) {
+        console.log('Phantom wallet is already connected');
+        setIsPhantomConnected(true);
+        setSelectedWallet('phantom');
+      }
       const handleConnect = () => {
         console.log('Phantom wallet connected');
         setIsPhantomConnected(true);
         setSelectedWallet('phantom');
         setError('');
       };
-
       const handleDisconnect = () => {
         console.log('Phantom wallet disconnected');
         setIsPhantomConnected(false);
         setSelectedWallet('');
       };
-
-      // 添加事件监听器
+      console.log('Setting up Phantom wallet connection listener');
       phantom.on('connect', handleConnect);
       phantom.on('disconnect', handleDisconnect);
-
-      // 清理函数，移除事件监听器
+      // Cleanup function to remove event listeners
       return () => {
+        console.log('Cleaning up Phantom wallet event listeners');
         phantom.off('connect', handleConnect);
         phantom.off('disconnect', handleDisconnect);
       };
     }
   }, []);
-  // 当网络改变时，自动设置默认的支付方式
   useEffect(() => {
     if (network && !paymentMethod) {
+      // 自动设置第一个 currency，否则用户不选择下拉菜单，就不会触发 setPaymentMethod
       const filteredMethods = getFilteredPaymentMethods();
-      if (filteredMethods.length === 1 && filteredMethods[0].value) {
-        setPaymentMethod(filteredMethods[0].value);
+      if (filteredMethods.length === 1 && filteredMethods[ 0 ].value) {
+        setPaymentMethod(filteredMethods[ 0 ].value);
       }
     }
-  }, [network, paymentMethod]); // 移除 getFilteredPaymentMethods 依赖
+  }, [network, paymentMethod]);
 
   // 当支付方式改变时，重新计算汇率转换
   useEffect(() => {
@@ -236,51 +207,96 @@ export default function DonationStep1({
       const usdValue = toUSD(amount, paymentMethod);
       setDollar(Math.round(usdValue * 100) / 100);
     }
-  }, [paymentMethod, amount, hasRates, toUSD]); // 优化依赖项
+  }, [paymentMethod, hasRates, amount, toUSD]);
 
-  // 创建钱包连接器映射
   const connectorMap = {
     metamask: connectors.find(c => c.id === 'metaMaskSDK' || c.id === 'io.metamask'),
     coinbase: connectors.find(c => c.id === 'coinbaseWalletSDK'),
     'wallet-connect': connectors.find(c => c.id === 'walletConnect'),
   };
 
-  // 刷新页面后，自动根据 wagmi 连接状态恢复钱包选择
+  // 刷新页面后，自动根据 wagmi 连接，恢复出之前选中的钱包
   useEffect(() => {
     if (isConnected && address && connector) {
-      // 根据连接器ID确定钱包类型
-      let walletName = 'wallet-connect'; // 默认为 wallet-connect
-      if (connector.id === 'metaMaskSDK' || connector.id === 'io.metamask') {
-        walletName = 'metamask';
-      } else if (connector.id === 'coinbaseWalletSDK') {
-        walletName = 'coinbase';
-      } else if (connector.id === 'walletConnect') {
-        walletName = 'wallet-connect';
-      }
+      setError('');
 
+      const walletName = connector.id === 'metaMaskSDK' || connector.id === 'io.metamask' ? 'metamask' :
+        connector.id === 'coinbaseWalletSDK' ? 'coinbase' :
+          connector.id === 'walletConnect' ? 'wallet-connect' :
+            'wallet-connect'; // 未识别的钱包，应该算到 WalletConnect里去，展示已连接钱包图标的时候用得到
       setSelectedWallet(walletName);
     }
   }, [isConnected, address, connector, chainId]);
 
-  // 监控 wagmi 连接错误
+  // Monitor connection errors
   useEffect(() => {
     if (connectError) {
-      // 处理特定错误
+      console.error('Wallet connection error:', connectError);
+
+      // Handle specific errors
       if (connectError.message.includes('User rejected')) {
         setError('User rejected the connection request');
       } else if (connectError.message.includes('Already processing')) {
         setError('Request is already being processed, please check your wallet');
       } else if (connectError.message.includes('Connector already connected')) {
-        // 这种情况通常意味着钱包已经连接，清除错误状态
+        // 这种情况下通常意味着钱包已经连接，不应该显示错误
         console.log('Connector already connected, clearing error state');
         setError('');
         return;
       } else {
-        console.error('Wallet connection error:', connectError);
         setError(`Connection failed: ${connectError.message}`);
       }
     }
   }, [connectError]);
+
+  // 获取网络对应的 Chain ID
+  const getChainIdForNetwork = (networkId: string): number | null => {
+    switch (networkId) {
+      case 'ethereum-mainnet':
+        return 1;
+      case 'ethereum-sepolia':
+        return 11155111;
+      case 'pharos-testnet':
+        return 688688;
+      default:
+        return null;
+    }
+  };
+  // 切换到指定网络的函数
+  const switchToTargetNetwork = async (networkId: string) => {
+    const targetChainId = getChainIdForNetwork(networkId);
+    if (!targetChainId) {
+      throw new Error(`Unsupported network: ${networkId}`);
+    }
+
+    if (typeof window === 'undefined' || !window.ethereum) {
+      throw new Error('MetaMask is not available');
+    }
+
+    const ethereum = window.ethereum as any;
+
+    try {
+      // 先尝试直接切换到目标网络
+      await ethereum.request({
+        method: 'wallet_switchEthereumChain',
+        params: [{ chainId: `0x${targetChainId.toString(16)}` }],
+      });
+    } catch (error: any) {
+      if (error.code === 4001) {
+        throw new Error('User rejected network switch');
+      } else if (error.code === 4902) {
+        // 网络不存在，需要添加网络
+        // 目前只支持添加 pharos-testnet，其他网络应该已经在 MetaMask 中
+        if (networkId === 'pharos-testnet') {
+          await addNetworkToMetaMask(networkId);
+        } else {
+          throw new Error(`Network ${networkId} is not available in your wallet`);
+        }
+      } else {
+        throw error;
+      }
+    }
+  };
 
   const handleConnect = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -288,66 +304,102 @@ export default function DonationStep1({
 
     setError('');
 
-    // 处理 Phantom 钱包（Solana）
-    if (selectedWallet === 'phantom') {
-      // 检查 Phantom 钱包是否已安装
-      if (!isWalletInstalled('phantom')) {
-        window.open(WALLET_INSTALL_LINKS.phantom, '_blank');
-        setError('Please install Phantom wallet first');
-        return;
-      }
-
-      // 如果已连接，直接返回
-      if (window?.phantom?.solana?.isConnected) {
-        console.log('Phantom wallet is already connected');
-        setIsPhantomConnected(true);
-        setSelectedWallet('phantom');
-        return;
-      }
-
-      // 连接 Phantom 钱包
-      try {
-        console.log('connect to phantom wallet');
-        await window?.phantom?.solana?.connect();
-        return;
-      } catch (phantomError: any) {
-        setError(`Phantom connection failed: ${phantomError.message}`);
-        return;
-      }
-    }
-
     try {
-      const currentNetworkConfig = BLOCKCHAIN_CONFIG.networks[network as keyof typeof BLOCKCHAIN_CONFIG.networks];
-
-      // 处理 EVM 钱包（MetaMask, WalletConnect, Coinbase）
-      if (currentNetworkConfig?.type === 'evm') {
-        // 检查 MetaMask 是否已安装（如果选择的是 MetaMask）
-        if (selectedWallet === 'metamask' && !isWalletInstalled('metamask')) {
-          window.open(WALLET_INSTALL_LINKS.metamask, '_blank');
-          setError('Please install MetaMask wallet first');
+      // 检查钱包是否已安装（对于需要浏览器插件的钱包）
+      if (selectedWallet === 'metamask' || selectedWallet === 'phantom') {
+        if (!isWalletInstalled(selectedWallet)) {
+          const installUrl = WALLET_INSTALL_LINKS[ selectedWallet as keyof typeof WALLET_INSTALL_LINKS ];
+          window.open(installUrl, '_blank');
+          setError(`Please install ${selectedWallet === 'metamask' ? 'MetaMask' : 'Phantom'} wallet first`);
           return;
         }
-
-        // 获取目标连接器
-        const targetConnector = connectorMap[selectedWallet as keyof typeof connectorMap];
-        if (!targetConnector) {
-          setError('Unsupported wallet type');
-          return;
-        }
-        const targetChainId = getChainIdForNetwork(network);
-        if (!targetChainId) {
-          setError(`Unsupported network: ${network}`);
-          return;
-        }
-
-        // 连接钱包
-        console.log(`Connecting to ${selectedWallet} wallet with chain ID ${targetChainId}...`);
-        connect({ connector: targetConnector, chainId: targetChainId });
-      } else {
-        setError('Unsupported network type');
       }
+
+      // 获取目标连接器
+      const targetConnector = connectorMap[ selectedWallet as keyof typeof connectorMap ];
+
+      // console.log('debug connected state', isConnected, connector, targetConnector);
+      // 检查是否已经连接到相同的钱包连接器
+      if (connector && targetConnector) {
+        // 如果已经连接到相同的连接器，只需要检查网络切换
+        if (connector.id === targetConnector.id) {
+          console.log('Already connected to the same wallet, checking network...');
+
+          // 对于 EVM 钱包，检查并切换到目标网络
+          const currentNetworkConfig = BLOCKCHAIN_CONFIG.networks[network as keyof typeof BLOCKCHAIN_CONFIG.networks];
+          if (currentNetworkConfig?.type === 'evm') {
+            const targetChainId = getChainIdForNetwork(network);
+            if (targetChainId && chainId !== targetChainId) {
+              try {
+                await switchToTargetNetwork(network);
+                console.log(`Successfully switched to ${network}`);
+              } catch (networkError: any) {
+                console.error('Failed to switch network:', networkError);
+                setError(`Failed to switch to ${currentNetworkConfig.name}: ${networkError.message}`);
+                return;
+              }
+            }
+          }
+          return; // 已连接相同钱包，无需重新连接
+        } else {
+          // 连接到不同的钱包，需要先断开
+          console.log('Disconnecting from current wallet to connect to new one...');
+          await new Promise<void>((resolve) => {
+            disconnect();
+            // 等待断开连接完成
+            setTimeout(resolve, 1000);
+          });
+        }
+      }
+
+      // Handle WalletConnect specially
+      if (selectedWallet === 'wallet-connect') {
+        appkit.open();
+        return;
+      }
+
+      // Handle Phantom wallet for Solana
+      if (selectedWallet === 'phantom') {
+        if (window?.phantom?.solana?.isConnected) {
+          console.log('Phantom wallet is already connected');
+          setIsPhantomConnected(true);
+          setSelectedWallet('phantom');
+          return;
+        }
+        window?.phantom?.solana?.connect();
+        return;
+      }
+
+      // 未连接钱包，对于 EVM 钱包，先切换到目标网络再连接
+      const currentNetworkConfig = BLOCKCHAIN_CONFIG.networks[network as keyof typeof BLOCKCHAIN_CONFIG.networks];
+      if (currentNetworkConfig?.type === 'evm') {
+        const targetChainId = getChainIdForNetwork(network);
+        const walletChainId = await targetConnector?.getChainId?.(); // 当前钱包连的网络
+        if (targetChainId !== walletChainId) {
+          console.log(`Pre-switching to target network: ${network} (Chain ID: ${targetChainId})`);
+          try {
+            await switchToTargetNetwork(network);
+            console.log(`Successfully pre-switched to ${network}`);
+            // switch 网络就代表连上了钱包，所以可以提前 return，不需要再执行下面的 connect 函数，
+            // 否则会报错： "Connector already connected"
+            return;
+          } catch (networkError: any) {
+            console.error('Failed to pre-switch network:', networkError);
+            setError(`Failed to switch to ${currentNetworkConfig.name}: ${networkError.message}`);
+            return;
+          }
+        }
+      }
+
+      // Handle other wallets using wagmi connectors
+      if (!targetConnector) {
+        setError('Unsupported wallet type');
+        return;
+      }
+      console.log(`Connecting to ${selectedWallet} wallet...`);
+      connect({ connector: targetConnector });
     } catch (error: any) {
-      console.error('Wallet connection failed:', error);
+      console.log('Wallet connection failed:', error);
       setError(`Connection failed: ${error.message || 'Unknown error'}`);
     }
   };
@@ -386,6 +438,7 @@ export default function DonationStep1({
     }
   }
   return (
+    <>
     <form onSubmit={handleConnect}>
       <div className="space-y-6 pt-8">
         <h2 className="text-xl font-semibold text-center text-black">Make your donation today</h2>
@@ -438,13 +491,23 @@ export default function DonationStep1({
           {(!isConnected && !isPhantomConnected) ? (
             <div className="grid sm:grid-cols-2 gap-2.5 sm:gap-y-6">
               {getFilteredWallets().map(wallet => {
+                // Handle WalletConnect separately
+                if (wallet.id === 'wallet-connect') {
+                  return (
+                    <WalletConnectButton
+                      key={wallet.id}
+                      isSelected={selectedWallet === wallet.id}
+                      onClick={() => setSelectedWallet(wallet.id)}
+                    />
+                  )
+                }
+
+                // Handle other wallets normally
                 return (
                   <label
                     className={clsx(
-                      'flex items-center p-3 gap-3 border rounded-lg cursor-pointer transition-colors',
-                      {
-                        'bg-blue-50 border-blue-500': selectedWallet === wallet.id
-                      }
+                      'flex items-center p-3 gap-3 border rounded-lg cursor-pointer',
+                      { 'bg-blue-50 border-blue-500': selectedWallet === wallet.id },
                     )}
                     key={wallet.id}
                   >
@@ -489,7 +552,7 @@ export default function DonationStep1({
                 onClick={handleDisconnect}
                 className="text-red-600 hover:text-red-700 text-sm font-medium"
               >
-                Disconnect
+                Disconnect Wallet
               </button>
             </div>
           )}
@@ -501,7 +564,7 @@ export default function DonationStep1({
             {(isConnected || isPhantomConnected) && (
               <button
                 type="button"
-                onClick={() => setIsLifiModalOpen(true)}
+                onClick={() => lifiModalRef.current?.showModal()}
                 className="text-sm text-gray-500 mr-3"
               >
                 Swap
@@ -560,32 +623,28 @@ export default function DonationStep1({
           onSubmit={(isConnected || isPhantomConnected) ? handleSubmit : undefined}
         />
       </div>
-
-      {/* LiFi Widget Modal */}
-      <input 
-        type="checkbox" 
-        id="lifi-modal" 
-        className="modal-toggle" 
-        checked={isLifiModalOpen}
-        onChange={() => setIsLifiModalOpen(!isLifiModalOpen)}
-      />
-      <div className="modal">
-        <div className="modal-box w-11/12 max-w-2xl">
-          <div className="flex justify-between items-center mb-4">
-            <h3 className="font-bold text-lg">Swap</h3>
-            <button 
-              className="btn btn-sm btn-circle btn-ghost"
-              onClick={() => setIsLifiModalOpen(false)}
-            >
-              ✕
-            </button>
-          </div>
-          <div className="py-4">
-            <WidgetPage />
-          </div>
-        </div>
-        <label className="modal-backdrop" htmlFor="lifi-modal">Close</label>
-      </div>
     </form>
+
+    {/* LiFi Widget Modal */}
+    <dialog ref={lifiModalRef} className="modal">
+      <div className="modal-box w-11/12 max-w-2xl">
+        <div className="flex justify-between items-center mb-4">
+          <h3 className="font-bold text-lg">Swap</h3>
+          <button 
+            className="btn btn-sm btn-circle btn-ghost"
+            onClick={() => lifiModalRef.current?.close()}
+          >
+            ✕
+          </button>
+        </div>
+        <div className="py-4">
+          <WidgetPage />
+        </div>
+      </div>
+      <form method="dialog" className="modal-backdrop">
+        <button>close</button>
+      </form>
+    </dialog>
+    </>
   )
 }
