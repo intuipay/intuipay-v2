@@ -20,3 +20,6 @@ NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID = "2056cd0f53ff3372b3b40ad4c0508c44"
 
 [observability.logs]
 enabled = true
+
+[limits]
+cpu_ms = 300_000
