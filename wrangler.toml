@@ -1,3 +1,4 @@
+main = ".open-next/worker.js"
 name = "intuipay-waitlist"
 compatibility_date = "2025-05-22" # Use a recent date
 compatibility_flags = ["nodejs_compat"]
@@ -8,3 +9,7 @@ account_id = "07ee1a1a1cf0da549eaaf6d3c5c80b62"
 binding = "DB" # This is how you'll access it in your code
 database_name = "waitlist"
 database_id = "a8ec52c6-d6c9-455b-b8b0-55d2d4a007e2" # Get this from `wrangler d1 info <YOUR_DATABASE_NAME>` or the dashboard
+
+[assets]
+directory = ".open-next/assets"
+binding = "ASSETS"

@@ -3,8 +3,6 @@ import { getDonationProjectBySlug } from '@/lib/data';
 import DonationPageComp from '@/app/_components/donate/donate-page';
 import { notFound } from 'next/navigation';
 
-export const runtime = 'edge';
-
 type Props = {
   params: Promise<{ slug: string }>;
 }
