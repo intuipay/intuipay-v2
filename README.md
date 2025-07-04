@@ -1,30 +1,17 @@
-# Intuiplay
+# Intuipay
 
-*Automatically synced with your [v0.dev](https://v0.dev) deployments*
+<img src="./images/intuipay-blue.png" alt="logo" width="200" height="200">
 
-[![Deployed on Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?style=for-the-badge&logo=vercel)](https://vercel.com/meathill-s-team/v0-intuiplay)
-[![Built with v0](https://img.shields.io/badge/Built%20with-v0.dev-black?style=for-the-badge)](https://v0.dev/chat/projects/9WoGDdPMJd2)
+*Transforms how education gets funded. Pay international tuition and donate to academic institutions and research initiatives cheaper, faster, and smarter, powered by stablecoins. *
+- Project Link: [intuipay website](https://intuipay-v1.pages.dev/)
+- Demo Video: [demo on youtube](https://youtu.be/_OmHL2hD_5U)
+- Pitch Video: [pitch on youtube](https://youtu.be/xUnesBvb38k)
+- Deck: [pitch deck](https://docsend.com/v/mj427/intuipay-v1)
+- Github: [intuipay-v1](https://github.com/intuipay/intuipay-v1)
+- Twitter: [@intuipay](https://x.com/intuipay)
 
-## Overview
+<br>
 
-This repository will stay in sync with your deployed chats on [v0.dev](https://v0.dev).
-Any changes you make to your deployed app will be automatically pushed to this repository from [v0.dev](https://v0.dev).
 
-## Deployment
 
-Your project is live at:
-
-**[https://vercel.com/meathill-s-team/v0-intuiplay](https://vercel.com/meathill-s-team/v0-intuiplay)**
-
-## Build your app
-
-Continue building your app on:
-
-**[https://v0.dev/chat/projects/9WoGDdPMJd2](https://v0.dev/chat/projects/9WoGDdPMJd2)**
-
-## How It Works
-
-1. Create and modify your project using [v0.dev](https://v0.dev)
-2. Deploy your chats from the v0 interface
-3. Changes are automatically pushed to this repository
-4. Vercel deploys the latest version from this repository
+Built with ❤️ for the future of education financing
