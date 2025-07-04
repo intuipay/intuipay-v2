@@ -104,4 +104,4 @@ Intuipay transforms education financing through blockchain technology, offering 
   
 ---
 
-** Built with ❤️ for the future of education financing**
+Built with ❤️ for the future of education financing
