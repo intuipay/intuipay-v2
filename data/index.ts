@@ -472,11 +472,13 @@ export enum ProjectCategories {
   'International Development' = 18,
   'Legal Support' = 19,
   'LGBTQ' = 20,
+  'Media' = 21,
   'Racial Justice' = 21,
   'Religion and Faith Based' = 22,
   'Technology' = 23,
   'Water & Hygiene' = 24,
   'Women & Girls' = 25,
+  'Agriculture' = 26,
 }
 
 export enum ProjectDonationMethods {
@@ -493,4 +495,5 @@ export enum ProjectTypes {
   'Government-Funded Research' = 3,
   'Philanthropic Research' = 4,
   'Crowdsourced / Open Science' = 5,
+  'Student Organization' = 6,
 }
