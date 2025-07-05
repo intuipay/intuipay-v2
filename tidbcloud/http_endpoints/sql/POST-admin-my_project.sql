@@ -12,4 +12,6 @@ VALUES (
   ${category},${type},${location},${banner},${video},${social_links},
   ${campaign},${tags},${goal_amount},${end_at},${accepts},${org_id},
   10,${is_auto_end}
-)
+);
+
+SELECT LAST_INSERT_ID() as id;
