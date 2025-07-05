@@ -9,4 +9,6 @@ SELECT `p`.`id`,`project_name`,`description`,`banner`,`status`,`qrcode`,
 FROM `donation_project` p
   LEFT JOIN `organization` o
   ON `p`.`org_id`=`o`.`id`
-WHERE `p`.`project_slug` = ${slug} ;
+WHERE `p`.`deleted_at` IS NULL
+  AND IF(LENGTH(${slug}), `p`.`project_slug` = ${slug}, 1)
+  AND IF(LENGTH(${id}), `p`.`id` = ${id}, 1);
