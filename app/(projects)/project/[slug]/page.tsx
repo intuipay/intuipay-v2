@@ -1,6 +1,6 @@
 // This is now a SERVER COMPONENT by default
 import type { Metadata, ResolvingMetadata } from 'next'
-import ProjectDetailClientLayout from './project-detail-client-layout' // New Client Component
+import ProjectDetailClientLayout from '@/app/_components/projects/project-detail';
 import { getProjectDetail, getProjects } from '@/lib/data'
 import { ProjectCategories } from '@/data';
 

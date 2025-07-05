@@ -23,12 +23,18 @@ import { ProjectDonationMethods } from '@/data'
 
 
 type ProjectDetailClientLayoutProps = {
+  id?: number;
   project: ProjectInfo;
-  similarProjects: ProjectInfo[];
+  similarProjects?: ProjectInfo[];
   slug: string;
 }
 
-export default function ProjectDetailClientLayout({ project, similarProjects, slug }: ProjectDetailClientLayoutProps) {
+export default function ProjectDetailClientLayout({
+  id,
+  project,
+  similarProjects = [],
+  slug,
+}: ProjectDetailClientLayoutProps) {
   const isMovie = project.banner.includes('youtube.com') || project.banner.includes('youtu.be');
   const socialLinks = project.social_links ? JSON.parse(project.social_links as string) : {};
   const [tab, setTab] = useState('campaign');
@@ -199,7 +205,11 @@ export default function ProjectDetailClientLayout({ project, similarProjects, sl
             <TabsTrigger value="about" className="py-2.5">
               About
             </TabsTrigger>
-            <TabsTrigger value="updates" className="py-2.5 relative">
+            <TabsTrigger
+              value="updates"
+              className="py-2.5 relative"
+              disabled={slug === 'preview'}
+            >
               Updates
               {(
                 <Badge
@@ -210,7 +220,11 @@ export default function ProjectDetailClientLayout({ project, similarProjects, sl
                 </Badge>
               )}
             </TabsTrigger>
-            <TabsTrigger value="donations" className="py-2.5">
+            <TabsTrigger
+              value="donations"
+              className="py-2.5"
+              disabled={slug === 'preview'}
+            >
               Donations
             </TabsTrigger>
           </TabsList>
