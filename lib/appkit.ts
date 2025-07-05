@@ -2,13 +2,6 @@ import { createAppKit } from '@reown/appkit/react'
 import { WagmiAdapter } from '@reown/appkit-adapter-wagmi'
 import { mainnet, sepolia } from 'wagmi/chains'
 import { defineChain } from 'viem'
-import {
-  createConfig,
-  http,
-  cookieStorage,
-  createStorage
-} from 'wagmi'
-import { injected, metaMask, coinbaseWallet, walletConnect } from 'wagmi/connectors'
 
 // 定义 Pharos Testnet 链
 export const pharosTestnet = defineChain({
