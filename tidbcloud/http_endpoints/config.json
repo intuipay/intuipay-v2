@@ -603,6 +603,13 @@
     },
     "params": [
       {
+        "name": "is_widget",
+        "type": "boolean",
+        "required": 0,
+        "default": "0",
+        "description": ""
+      },
+      {
         "name": "org_id",
         "type": "string",
         "required": 1,
