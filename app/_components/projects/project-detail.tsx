@@ -36,7 +36,18 @@ export default function ProjectDetailClientLayout({
   slug,
 }: ProjectDetailClientLayoutProps) {
   const isMovie = project.banner.includes('youtube.com') || project.banner.includes('youtu.be');
-  const socialLinks = project.social_links ? JSON.parse(project.social_links as string) : {};
+
+  function removeAtSymbolsFromSocialLinks(socialLinks: Record<string, string>) {
+    for (let key in socialLinks) {
+      if (socialLinks.hasOwnProperty(key)) {
+        if (socialLinks[key].includes('@')) {
+          socialLinks[key] = socialLinks[key].replace('@', '');
+        }
+      }
+    }
+    return socialLinks;
+}
+  const socialLinks = removeAtSymbolsFromSocialLinks(project.social_links ? JSON.parse(project.social_links as string) : {});
   const [tab, setTab] = useState('campaign');
   const [updatesCount, setUpdatesCount] = useState(0);
 
@@ -47,7 +58,11 @@ export default function ProjectDetailClientLayout({
     const headings = [];
 
     while ((match = regex.exec(markdownString)) !== null) {
-      headings.push(match[ 1 ]);
+      const boldPattern = /\*\*(.*?)\*\*/gm;
+      const matchedTitle = match[ 1 ];
+      let processedTitle = matchedTitle.replace(boldPattern, '$1');
+      processedTitle
+      headings.push(processedTitle);
     }
 
     return headings;
