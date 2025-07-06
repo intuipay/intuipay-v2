@@ -675,6 +675,13 @@
         "description": ""
       },
       {
+        "name": "is_widget",
+        "type": "boolean",
+        "required": 0,
+        "default": "0",
+        "description": ""
+      },
+      {
         "name": "status",
         "type": "integer",
         "required": 0,
