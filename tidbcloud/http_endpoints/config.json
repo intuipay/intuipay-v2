@@ -216,6 +216,13 @@
     },
     "params": [
       {
+        "name": "is_widget",
+        "type": "integer",
+        "required": 0,
+        "default": "0",
+        "description": ""
+      },
+      {
         "name": "search",
         "type": "string",
         "required": 0,
