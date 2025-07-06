@@ -127,9 +127,9 @@ export default function DonationPageComp({
         <div className="relative w-full aspect-[3/1] rounded-lg mb-4">
           <Image
             src={project.banner}
-            alt="Lion King inspired scene with lions silhouetted against full moon"
+            alt={project.project_name}
             fill
-            className="object-cover"
+            className="object-contain object-center"
             priority
           />
         </div>
