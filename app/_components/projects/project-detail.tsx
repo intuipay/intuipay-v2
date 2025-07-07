@@ -36,7 +36,30 @@ export default function ProjectDetailClientLayout({
   slug,
 }: ProjectDetailClientLayoutProps) {
   const isMovie = project.banner.includes('youtube.com') || project.banner.includes('youtu.be');
-  const socialLinks = project.social_links ? JSON.parse(project.social_links as string) : {};
+
+  function formatSocialLinks(socialLinks: Record<string, string> | string, name = '') {
+    const domainReg = /^https?:\/\//;
+    if (typeof socialLinks === 'string') {
+      socialLinks = socialLinks.replace('@', '');
+      if (!domainReg.test(socialLinks)) {
+        socialLinks = `https://www.${name}.com/${socialLinks}`;
+      }
+    } else {
+      for (let key in socialLinks) {
+        const isTikTok = key.toLocaleLowerCase() === 'tiktok';
+        if (socialLinks.hasOwnProperty(key)) {
+          if (!isTikTok && socialLinks[key].startsWith('@')) { // tiktok is a special case
+            socialLinks[key] = socialLinks[key].replace('@', '');
+          }
+          if (!domainReg.test(socialLinks[key])) {
+            socialLinks[key] = `https://www.${key.toLowerCase()}.com/${isTikTok && !socialLinks[key].includes('@') ? '@' + socialLinks[key] : socialLinks[key]}`;
+          }
+        }
+      }
+    }
+    return socialLinks;
+}
+  const socialLinks = formatSocialLinks(project.social_links ? JSON.parse(project.social_links as string) : {});
   const [tab, setTab] = useState('campaign');
   const [updatesCount, setUpdatesCount] = useState(0);
 
@@ -47,7 +70,11 @@ export default function ProjectDetailClientLayout({
     const headings = [];
 
     while ((match = regex.exec(markdownString)) !== null) {
-      headings.push(match[ 1 ]);
+      const boldPattern = /\*\*(.*?)\*\*/gm;
+      const matchedTitle = match[ 1 ];
+      let processedTitle = matchedTitle.replace(boldPattern, '$1');
+      processedTitle
+      headings.push(processedTitle);
     }
 
     return headings;
@@ -138,7 +165,7 @@ export default function ProjectDetailClientLayout({
                 href={`mailto:${project.email}`}
                 className="flex items-center gap-1 text-neutral-darkgray hover:text-action-blue"
               >
-                <EnvelopeIcon size={16} /> <span className="text-primary">{project.email}</span>
+                <EnvelopeIcon size={16} /> <span className="truncate text-primary">{project.email}</span>
               </Link>
               <Link
                 href={project.website || ''}
@@ -146,15 +173,15 @@ export default function ProjectDetailClientLayout({
                 rel="noopener noreferrer"
                 className="flex items-center gap-1 text-neutral-darkgray hover:text-action-blue"
               >
-                <LinkIcon size={16} /> <span className="text-primary">{project.website.replace(/^https?:\/\//, '')}</span>
+                <LinkIcon size={16} /> <span className="truncate text-primary">{project.website.replace(/^https?:\/\//, '')}</span>
               </Link>
               {project.github && <Link
-                href={`https://github.com/${project.github}`}
+                href={formatSocialLinks(project.github, 'github')}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-1 text-neutral-darkgray hover:text-action-blue"
               >
-                <GithubLogoIcon size={16} /> <span className="text-primary">{project.github}</span>
+                <GithubLogoIcon size={16} /> <span className="truncate text-primary">{project.github}</span>
               </Link>}
               {
                 socialLinks && (
@@ -174,7 +201,7 @@ export default function ProjectDetailClientLayout({
                         height={14}
                         loading="lazy"
                       />
-                      <span className="text-primary">{key}</span>
+                      <span className="truncate text-primary">{key}</span>
                     </Link>
                   ))
                 )
