@@ -46,12 +46,13 @@ export default function ProjectDetailClientLayout({
       }
     } else {
       for (let key in socialLinks) {
+        const isTikTok = key.toLocaleLowerCase() === 'tiktok';
         if (socialLinks.hasOwnProperty(key)) {
-          if (socialLinks[key].includes('@')) {
+          if (!isTikTok && socialLinks[key].startsWith('@')) { // tiktok is a special case
             socialLinks[key] = socialLinks[key].replace('@', '');
           }
           if (!domainReg.test(socialLinks[key])) {
-            socialLinks[key] = `https://www.${key.toLowerCase()}.com/${socialLinks[key]}`;
+            socialLinks[key] = `https://www.${key.toLowerCase()}.com/${isTikTok && !socialLinks[key].includes('@') ? '@' + socialLinks[key] : socialLinks[key]}`;
           }
         }
       }
