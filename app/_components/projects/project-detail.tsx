@@ -47,11 +47,15 @@ export default function ProjectDetailClientLayout({
     } else {
       for (let key in socialLinks) {
         const isTikTok = key.toLocaleLowerCase() === 'tiktok';
+        const isLinkedIn = key.toLocaleLowerCase() === 'linkedin';
         if (socialLinks.hasOwnProperty(key)) {
           if (!isTikTok && socialLinks[key].startsWith('@')) { // tiktok is a special case
             socialLinks[key] = socialLinks[key].replace('@', '');
           }
           if (!domainReg.test(socialLinks[key])) {
+            if (isLinkedIn && !socialLinks[key].startsWith('school')) {
+              socialLinks[key] = `school/${socialLinks[key]}`;
+            }
             socialLinks[key] = `https://www.${key.toLowerCase()}.com/${isTikTok && !socialLinks[key].includes('@') ? '@' + socialLinks[key] : socialLinks[key]}`;
           }
         }
@@ -73,7 +77,6 @@ export default function ProjectDetailClientLayout({
       const boldPattern = /\*\*(.*?)\*\*/gm;
       const matchedTitle = match[ 1 ];
       let processedTitle = matchedTitle.replace(boldPattern, '$1');
-      processedTitle
       headings.push(processedTitle);
     }
 
