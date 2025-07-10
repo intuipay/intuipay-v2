@@ -5,6 +5,7 @@ import { SiteFooter } from '@/components/site-footer'
 import { getProjects } from '@/lib/data';
 import { ProjectCard } from '@/components/project-card'; // Changed to named import
 import { ProjectInfo } from '@/types';
+import { AnimatedCounter } from '@/components/animated-counter';
 
 export default async function Home() {
   const projects = await getProjects(1, 8, '', 'id', 'desc');
@@ -35,7 +36,7 @@ export default async function Home() {
                   👋
                 </span>
                 <br />
-                <span className="text-blue-500">Next-Gen Payments.</span>
+                <span className="text-blue-500">Next-Gen Payments</span>
               </h1>
 
               <p className="sm:w-3/4 sm:min-w-107 text-xl mb-16">
@@ -97,15 +98,33 @@ export default async function Home() {
             <div className="">
               <div className="p-24 bg-violet-100 rounded-[32px] flex justify-start items-center gap-24">
                 <div className="flex-1 flex flex-col justify-start items-start gap-8">
-                  <div className="text-black text-6xl font-medium font-['Neue_Montreal'] capitalize">9,000+</div>
+                  <div className="text-black text-6xl font-medium font-['Neue_Montreal'] capitalize">
+                    <AnimatedCounter 
+                      end={9000} 
+                      suffix="+" 
+                      className="text-black text-6xl font-medium font-['Neue_Montreal'] capitalize"
+                    />
+                  </div>
                   <div className="text-black/50 text-xl font-normal font-['Inter']">World-Changing Organizations we serve</div>
                 </div>
                 <div className="flex-1 flex flex-col justify-start items-start gap-8">
-                  <div className="text-black text-6xl font-medium font-['Neue_Montreal'] capitalize">$15,000</div>
+                  <div className="text-black text-6xl font-medium font-['Neue_Montreal'] capitalize">
+                    <AnimatedCounter 
+                      end={15000} 
+                      prefix="$" 
+                      className="text-black text-6xl font-medium font-['Neue_Montreal'] capitalize"
+                    />
+                  </div>
                   <div className="text-black/50 text-xl font-normal font-['Inter']">Average donation size for our customers</div>
                 </div>
                 <div className="flex-1 flex flex-col justify-start items-start gap-8">
-                  <div className="text-black text-6xl font-medium font-['Neue_Montreal'] capitalize">75x</div>
+                  <div className="text-black text-6xl font-medium font-['Neue_Montreal'] capitalize">
+                    <AnimatedCounter 
+                      end={75} 
+                      suffix="x" 
+                      className="text-black text-6xl font-medium font-['Neue_Montreal'] capitalize"
+                    />
+                  </div>
                   <div className="text-black/50 text-xl font-normal font-['Inter']">Higher than average ACH/debit/credit donation</div>
                 </div>
               </div>
@@ -174,7 +193,14 @@ export default async function Home() {
                 <div className="w-full px-8 py-6 bg-white rounded-2xl outline outline-2 outline-black/10 flex justify-between items-start">
                   <div className="w-64 flex flex-col justify-start items-start gap-3">
                     <div className="text-Black text-sm font-semibold font-['Inter']">Balance</div>
-                    <div className="text-Black text-3xl font-semibold font-['Inter']">$12,345.00</div>
+                    <div className="text-Black text-3xl font-semibold font-['Inter']">
+                      <AnimatedCounter 
+                        end={12345} 
+                        prefix="$" 
+                        suffix=".00"
+                        className="text-Black text-3xl font-semibold font-['Inter']"
+                      />
+                    </div>
                     <div className="text-black/60 text-sm font-semibold font-['Inter']">
                       The next withdraw period: 07/05/2024
                     </div>
@@ -191,12 +217,20 @@ export default async function Home() {
 
                 <div className="w-full rounded-2xl flex justify-start items-center gap-4">
                   {[
-                    { amount: '$1,234.00', label: 'Total received this month', color: 'bg-red-500' },
-                    { amount: '$1,234.00', label: 'Total donated this month', color: 'bg-lime-500' },
-                    { amount: '$1,234.00', label: 'Processing received', color: 'bg-yellow-500' }
+                    { amount: 1234, label: 'Total received this month', color: 'bg-red-500' },
+                    { amount: 1234, label: 'Total donated this month', color: 'bg-lime-500' },
+                    { amount: 1234, label: 'Processing received', color: 'bg-yellow-500' }
                   ].map((item, index) => (
                     <div key={index} className="flex-1 p-6 bg-white rounded-2xl outline outline-2 outline-black/10 flex flex-col justify-start items-start gap-4">
-                      <div className="text-Black text-2xl font-semibold font-['Inter']">{item.amount}</div>
+                      <div className="text-Black text-2xl font-semibold font-['Inter']">
+                        <AnimatedCounter 
+                          end={item.amount} 
+                          prefix="$" 
+                          suffix=".00"
+                          className="text-Black text-2xl font-semibold font-['Inter']"
+                          duration={1800}
+                        />
+                      </div>
                       <div className="flex justify-start items-center gap-1">
                         <div className={`w-2 h-2 ${item.color} rounded-full`} />
                         <div className="flex-1 text-black/70 text-sm font-semibold font-['Inter']">{item.label}</div>
