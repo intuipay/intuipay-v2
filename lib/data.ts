@@ -16,6 +16,11 @@ export const getDonationProjectBySlug = cache(async function getDonationProjectB
   project.tokens = JSON.parse((project.tokens as unknown) as string);
   project.wallets = JSON.parse((project.wallets as unknown) as string);
 
+  // TODO: 给每个项目都加了 edu 测试环境配置，记得删掉
+  project.networks?.push('edu-testnet');
+  project.tokens['edu-testnet'] = ['edu', 'usdc'];
+  project.wallets['edu-testnet'] = '0xE62868F9Ae622aa11aff94DB30091B9De20AEf86';
+
   return project;
 });
 
