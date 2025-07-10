@@ -93,6 +93,17 @@ export const BLOCKCHAIN_CONFIG = {
             type: 'evm',
             // fundsDividerContract: '', // TODO: Deploy contract on pharos testnet
         } as NetworkConfig,
+        'edu-testnet': {
+            id: 'edu-testnet',
+            name: 'EDU Chain Testnet',
+            icon: 'edu',
+            chainId: 656476,
+            rpcUrl: 'https://rpc.open-campus-codex.gelato.digital',
+            explorerUrl: 'https://edu-chain-testnet.blockscout.com',
+            explorerName: 'EDU Chain Testnet Explorer',
+            type: 'evm',
+            // fundsDividerContract: '', // TODO: Deploy contract on pharos testnet
+        } as NetworkConfig,
     },
 
     // 钱包配置
@@ -101,21 +112,21 @@ export const BLOCKCHAIN_CONFIG = {
             id: 'metamask',
             name: 'MetaMask',
             icon: 'metamask',
-            supportedNetworks: ['ethereum-sepolia', 'ethereum-mainnet', 'pharos-testnet'],
+            supportedNetworks: ['ethereum-sepolia', 'ethereum-mainnet', 'pharos-testnet', 'edu-testnet'],
             connectorId: 'metaMaskSDK',
         } as WalletConfig,
         'wallet-connect': {
             id: 'wallet-connect',
             name: 'WalletConnect',
             icon: 'wallet-connect',
-            supportedNetworks: ['ethereum-sepolia', 'ethereum-mainnet', 'pharos-testnet'],
+            supportedNetworks: ['ethereum-sepolia', 'ethereum-mainnet', 'pharos-testnet', 'edu-testnet'],
             connectorId: 'walletConnect',
         } as WalletConfig,
         coinbase: {
             id: 'coinbase',
             name: 'Coinbase Wallet',
             icon: 'coinbase',
-            supportedNetworks: ['ethereum-sepolia', 'ethereum-mainnet', 'pharos-testnet'],
+            supportedNetworks: ['ethereum-sepolia', 'ethereum-mainnet', 'pharos-testnet', 'edu-testnet'],
             connectorId: 'coinbaseWalletSDK',
         } as WalletConfig,
         phantom: {
@@ -155,6 +166,10 @@ export const BLOCKCHAIN_CONFIG = {
                 {
                     networkId: 'solana-mainnet',
                     contractAddress: 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v', // USDC on Solana Mainnet
+                },
+                {
+                    networkId: 'edu-testnet',
+                    contractAddress: '0x19EeaDcBA1801Afec43e87Cefcd4239E13fc294d', // USDC on Solana Mainnet
                 }
             ],
         } as CryptoCurrencyConfig,
@@ -201,6 +216,19 @@ export const BLOCKCHAIN_CONFIG = {
                 },
                 {
                     networkId: 'ethereum-mainnet',
+                    isNative: true,
+                },
+            ],
+        } as CryptoCurrencyConfig,
+        edu: {
+            id: 'edu',
+            name: 'EDU',
+            symbol: 'EDU',
+            icon: 'edu',
+            decimals: 18,
+            networks: [
+                {
+                    networkId: 'edu-testnet',
                     isNative: true,
                 },
             ],

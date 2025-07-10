@@ -4,7 +4,7 @@ import { mainnet, sepolia } from 'wagmi/chains'
 import { defineChain } from 'viem'
 
 // 定义 Pharos Testnet 链
-export const pharosTestnet = defineChain({
+const pharosTestnet = defineChain({
   id: 688688,
   name: 'Pharos Testnet',
   nativeCurrency: {
@@ -24,6 +24,30 @@ export const pharosTestnet = defineChain({
     },
   },
   testnet: true,
+});
+
+
+// https://devdocs.educhain.xyz/
+const eduTestnet = defineChain({
+  id: 656476,
+  name: 'EDU Chain Testnet',
+  nativeCurrency: {
+    decimals: 18,
+    name: 'EDU',
+    symbol: 'EDU',
+  },
+  rpcUrls: {
+    default: {
+      http: ['https://rpc.open-campus-codex.gelato.digital'],
+    },
+  },
+  blockExplorers: {
+    default: {
+      name: 'EDU Chain Testnet Explorer',
+      url: 'https://edu-chain-testnet.blockscout.com',
+    },
+  },
+  testnet: true,
 })
 
 // 1. Get projectId from https://cloud.reown.com
@@ -35,7 +59,7 @@ if (!projectId) {
 
 // 2. Set up Wagmi adapter with all connectors
 const wagmiAdapter = new WagmiAdapter({
-  networks: [mainnet, sepolia, pharosTestnet],
+  networks: [mainnet, sepolia, pharosTestnet, eduTestnet],
   projectId
 })
 
@@ -50,7 +74,7 @@ const metadata = {
 // 4. Create the AppKit instance
 export const appkit = createAppKit({
   adapters: [wagmiAdapter],
-  networks: [mainnet, sepolia, pharosTestnet],
+  networks: [mainnet, sepolia, pharosTestnet, eduTestnet],
   metadata,
   projectId,
   features: {
@@ -66,56 +90,3 @@ export const appkit = createAppKit({
 
 // Export wagmi config for use in providers
 export const config = wagmiAdapter.wagmiConfig
-
-// 辅助函数：向 MetaMask 添加网络
-export async function addNetworkToMetaMask(networkId: string) {
-  if (typeof window === 'undefined' || !window.ethereum) {
-    throw new Error('MetaMask is not installed')
-  }
-
-  // 类型声明
-  const ethereum = window.ethereum as any
-  // 根据网络ID获取链配置
-  let chainConfig
-  switch (networkId) {
-    case 'pharos-testnet':
-      chainConfig = {
-        chainId: `0x${pharosTestnet.id.toString(16)}`, // 转换为十六进制 (0xa8090)
-        chainName: pharosTestnet.name,
-        nativeCurrency: {
-          name: pharosTestnet.nativeCurrency.name,
-          symbol: pharosTestnet.nativeCurrency.symbol,
-          decimals: pharosTestnet.nativeCurrency.decimals,
-        },
-        rpcUrls: pharosTestnet.rpcUrls.default.http, // 确保是字符串数组
-        blockExplorerUrls: [pharosTestnet.blockExplorers.default.url],
-      }
-      break
-    default:
-      throw new Error(`Unsupported network: ${networkId}`)
-  }
-  try {
-    // 尝试切换到目标网络
-    await ethereum.request({
-      method: 'wallet_switchEthereumChain',
-      params: [{ chainId: chainConfig.chainId }],
-    })
-  } catch (switchError: any) {    // 如果网络不存在（错误代码 4902），则添加网络
-    if (switchError.code === 4902) {
-      try {
-        console.log('Adding network with config:', chainConfig)
-        await ethereum.request({
-          method: 'wallet_addEthereumChain',
-          params: [chainConfig],
-        })
-        // 添加网络成功后，MetaMask 会自动切换到新网络，无需额外操作
-        console.log(`Successfully added and switched to network: ${networkId}`)
-      } catch (addError: any) {
-        console.log('Failed to add network:', addError)
-        console.log('Network config used:', chainConfig)
-      }
-    } else {
-      throw new Error(`Failed to switch network: ${switchError.message || switchError}`)
-    }
-  }
-}
