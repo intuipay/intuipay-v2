@@ -2,8 +2,13 @@ import StructuredData from '@/components/structured-data'
 import PaymentDemo from '@/components/payment-demo'
 import { SiteHeader } from '@/components/site-header'
 import { SiteFooter } from '@/components/site-footer'
+import { getProjects } from '@/lib/data';
+import { ProjectCard } from '@/components/project-card'; // Changed to named import
+import { ProjectInfo } from '@/types';
 
-export default function Home() {
+export default async function Home() {
+  const projects = await getProjects(1, 8, '', 'id', 'desc');
+
   return (
     <>
       <StructuredData />
@@ -148,22 +153,8 @@ export default function Home() {
               </div>
 
               <div className="w-full flex justify-center items-center gap-8 overflow-x-auto">
-                {Array(8).fill(null).map((_, index) => (
-                  <div key={index} className="min-w-64 p-4 bg-white rounded-xl outline outline-[0.50px] outline-black/20 flex flex-col justify-start items-start gap-4">
-                    <div className="text-black text-base font-medium font-['Inter']">NeuroBridge</div>
-                    <div className="opacity-60 text-black/50 text-xs font-medium font-['Inter']">
-                      Bridging Brain Health and AI for Early Alzheimer's Detection
-                    </div>
-                    <div className="flex justify-start items-center gap-2.5">
-                      <img className="w-6 h-6 rounded-full" src="https://placehold.co/26x26" alt="University Logo" />
-                      <div className="flex-1 text-black text-xs font-medium font-['Inter']">Emory University</div>
-                    </div>
-                    <div className="h-[0.80px] bg-zinc-300" />
-                    <div className="w-full flex justify-between items-center">
-                      <div className="opacity-60 text-black text-xs font-medium font-['Inter']">Total Raised</div>
-                      <div className="text-black text-xl font-medium font-['Inter']">$ 123,4567.00</div>
-                    </div>
-                  </div>
+                {projects.map((project: ProjectInfo) => (
+                  <ProjectCard key={project.id} project={project} />
                 ))}
               </div>
             </div>
