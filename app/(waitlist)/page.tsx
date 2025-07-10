@@ -1,47 +1,20 @@
-import Image from 'next/image'
-import PaymentCalculator from '@/components/payment-calculator'
-import WaitlistForm from '@/components/waitlist-form'
 import StructuredData from '@/components/structured-data'
-import Link from 'next/link';
 import PaymentDemo from '@/components/payment-demo'
+import { SiteHeader } from '@/components/site-header'
+import { SiteFooter } from '@/components/site-footer'
 
 export default function Home() {
   return (
     <>
       <StructuredData />
-      <div className="min-h-screen flex flex-col">
-        {/* Header */}
-         <header className="container mx-auto px-8 sm:px-4 py-4 sm:py-7.5 flex justify-between items-center border-b">
-          <div className="flex items-center">
-            <Image
-              src="/images/intuipay-logo.svg"
-              alt="Intuipay"
-              width={122}
-              height={24}
-              className="h-5 sm:h-6 w-auto"
-              priority
-            />
-          </div>
-          <Link
-            className="text-black" aria-label="Close"
-            href="https://x.com/intuipay"
-          >
-            <Image
-              src="/images/x.svg"
-              alt="X logo"
-              width={20}
-              height={20}
-              className="size-5 block"
-              loading="lazy"
-            />
-          </Link>
-        </header>
+      <div className="flex flex-col min-h-screen">
+        <SiteHeader />
 
         {/* Main Content */}
-         <main className="flex-1 container mx-auto md:p-8">
+         <main className="flex-1 max-w-7xl mx-auto px-12 md:px-10 py-8">
           <section className="xl:flex xl:items-center">
-            <div className="xl:w-1/2 flex-none p-8 md:p-0 mb-12 xl:mb-0">
-              <h1 className="sm:w-3/4 mx-auto sm:min-w-107 text-3xl sm:text-6xl xl:text-5xl 2xl:text-6xl font-medium mb-6 text-nowrap">
+            <div className="xl:w-1/2 flex-none mb-12 xl:mb-0">
+              <h1 className="sm:w-3/4 sm:min-w-107 text-3xl sm:text-6xl xl:text-5xl 2xl:text-6xl font-medium mb-6 text-nowrap">
                 Where{' '}
                 <span className="inline-flex items-center align-top w-25 relative me-1 md:me-3" aria-label="Flags">
                   <span className="size-7 md:size-11 text-base md:text-2xl border rounded-full flex justify-center items-center rotate-12 absolute z-50 top-2 left-0 bg-white">🇸🇬</span>
@@ -60,12 +33,12 @@ export default function Home() {
                 <span className="text-blue-500">Next-Gen Payments.</span>
               </h1>
 
-              <p className="sm:w-3/4 mx-auto sm:min-w-107 text-xl mb-16">
+              <p className="sm:w-3/4 sm:min-w-107 text-xl mb-16">
                 Support global universities and pay tuition & make donation across borders — with speed, trust, and
                 simplicity.
               </p>
 
-              <div className="sm:w-3/4 mx-auto flex justify-start items-center gap-8">
+              <div className="flex justify-start items-center gap-8">
                 <button className="btn btn-neutral rounded-full text-xl font-semibold">
                   Get started
                 </button>
@@ -87,7 +60,7 @@ export default function Home() {
 
           {/* Trust Section */}
           <section className="py-32">
-            <div className="px-4 sm:px-6 lg:px-8 flex flex-col justify-center items-center gap-6">
+            <div className="flex flex-col justify-center items-center gap-6">
               <div className="flex justify-center items-center">
                 <div className="text-center">
                   <span className="text-Black text-3xl font-medium font-['Neue_Montreal']">Trust by </span>
@@ -106,7 +79,7 @@ export default function Home() {
 
           {/* Impact Section */}
           <section className="py-16">
-            <div className="px-4 sm:px-6 lg:px-8 flex flex-col justify-center items-start gap-8">
+            <div className="flex flex-col justify-center items-start gap-8">
               <div className="text-black text-6xl font-medium font-['Neue_Montreal'] capitalize">Creating Exceptional Impact</div>
               <div className="text-black/50 text-xl font-normal font-['Inter']">
                 Our mission is to help you reach your mission. Crypto, Stock, and Legacy Giving - now in one enterprise-ready donation platform.
@@ -116,7 +89,7 @@ export default function Home() {
 
           {/* Statistics Section */}
           <section className="py-16">
-            <div className="px-4 sm:px-6 lg:px-8">
+            <div className="">
               <div className="p-24 bg-violet-100 rounded-[32px] flex justify-start items-center gap-24">
                 <div className="flex-1 flex flex-col justify-start items-start gap-8">
                   <div className="text-black text-6xl font-medium font-['Neue_Montreal'] capitalize">9,000+</div>
@@ -136,7 +109,7 @@ export default function Home() {
 
           {/* Widget Section */}
           <section className="py-16">
-            <div className="px-4 sm:px-6 lg:px-8 flex justify-between items-center">
+            <div className="flex justify-between items-center">
               <div className="w-[628px] flex flex-col justify-start items-start gap-8">
                 <div className="flex flex-col justify-start items-start gap-6">
                   <div className="text-black text-6xl font-medium  capitalize">Widget</div>
@@ -165,8 +138,8 @@ export default function Home() {
           </section>
 
           {/* Marketplace Section */}
-          <section className="py-16 bg-gray-50">
-            <div className="px-4 sm:px-6 lg:px-8 flex flex-col justify-center items-start gap-16">
+          <section className="py-16 -mx-12 md:-mx-10 px-12 md:px-10 bg-gray-50">
+            <div className="flex flex-col justify-center items-start gap-16">
               <div className="flex flex-col justify-start items-start gap-6">
                 <div className="text-black text-6xl font-medium font-['Neue_Montreal'] capitalize">Marketplace</div>
                 <div className="text-black/50 text-xl font-normal font-['Inter']">
@@ -198,7 +171,7 @@ export default function Home() {
 
           {/* Dashboard Section */}
           <section className="py-16">
-            <div className="px-4 sm:px-6 lg:px-8 flex flex-col justify-center items-start gap-16">
+            <div className="flex flex-col justify-center items-start gap-16">
               <div className="flex flex-col justify-start items-center gap-6 w-full">
                 <div className="text-black text-6xl font-medium font-['Neue_Montreal'] capitalize">Organization dashboard</div>
                 <div className="text-black/50 text-xl font-normal font-['Inter']">
@@ -246,7 +219,7 @@ export default function Home() {
 
           {/* Testimonial Section */}
           <section className="py-16">
-            <div className="px-4 sm:px-6 lg:px-8 flex justify-start items-start gap-24">
+            <div className="flex justify-start items-start gap-24">
               <div className="flex-1 text-black text-6xl font-medium font-['Neue_Montreal'] capitalize">Testimonial</div>
               <div className="flex-1 flex flex-col justify-start items-start gap-8">
                 <div className="text-black/50 text-xl font-normal font-['Inter']">
@@ -258,8 +231,8 @@ export default function Home() {
           </section>
 
           {/* CTA Section */}
-          <section className="bg-violet-100 rounded-tl-[64px] rounded-tr-[64px]">
-            <div className="px-4 sm:px-6 lg:px-8 py-16 flex flex-col justify-start items-center gap-16">
+          <section className="bg-violet-100 rounded-tl-[64px] rounded-tr-[64px] -mx-12 md:-mx-10">
+            <div className="px-12 md:px-10 py-16 flex flex-col justify-start items-center gap-16">
               <div className="flex flex-col justify-start items-center gap-6">
                 <div className="text-Black text-6xl font-medium font-['Neue_Montreal'] capitalize">Simplify Complex Giving</div>
                 <div className="text-black/70 text-xl font-normal font-['Inter']">
@@ -273,13 +246,7 @@ export default function Home() {
         </main>
 
         {/* Footer */}
-        <footer className="bg-violet-100">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            <div className="pt-8 border-t border-black/10 flex justify-between items-center">
-              <div className="text-black/40 text-sm font-normal ">© 2025 IntuiPay. All rights reserved.</div>
-            </div>
-          </div>
-        </footer>
+        <SiteFooter />
       </div>
     </>
   )
