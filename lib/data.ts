@@ -21,6 +21,12 @@ export const getDonationProjectBySlug = cache(async function getDonationProjectB
   project.tokens['edu-testnet'] = ['edu', 'usdc'];
   project.wallets['edu-testnet'] = '0xE62868F9Ae622aa11aff94DB30091B9De20AEf86';
 
+  // TODO: solana-devnet 也都加上，方便看效果
+  if (project.networks && !project.networks.includes('solana-devnet')) {
+    project.networks.push('solana-devnet');
+    project.tokens['solana-devnet'] = ['sol', 'usdc'];
+    project.wallets['solana-devnet'] = 'Ft7m7qrY3spLNKo6aMAHMArAT3oLSSy4DnJ3y3SF1DP1';
+  }
   return project;
 });
 
