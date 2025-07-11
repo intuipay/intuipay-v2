@@ -1273,7 +1273,7 @@
     "name": "dash /rename-my-profile",
     "description": "",
     "method": "PUT",
-    "endpoint": "/dash/my_project",
+    "endpoint": "/dash/rename_my_project",
     "data_source": {
       "cluster_id": 10914349176033975536
     },
@@ -1316,7 +1316,7 @@
     },
     "tag": "Default",
     "batch_operation": 0,
-    "sql_file": "sql/PUT-dash-my_project.sql",
+    "sql_file": "sql/PUT-dash-rename_my_project.sql",
     "type": "sql_endpoint",
     "return_type": "json"
   }
