@@ -6,6 +6,7 @@ import { getProjects } from '@/lib/data';
 import { ProjectCard } from '@/components/project-card'; // Changed to named import
 import { ProjectInfo } from '@/types';
 import { AnimatedCounter } from '@/components/animated-counter';
+import TrustSection from '@/components/trust-section';
 
 export default async function Home() {
   const projects = await getProjects(1, 8, '', 'id', 'desc');
@@ -16,72 +17,59 @@ export default async function Home() {
       <div className="flex flex-col min-h-screen">
         <SiteHeader />
 
-        {/* Main Content */}
-         <main className="flex-1 max-w-7xl mx-auto px-12 md:px-10 py-8">
-          <section className="xl:flex xl:items-center">
+        {/* Hero Section */}
+         <main className="flex-1">
+          <section className="bg-gradient-to-br from-blue-50 to-purple-50 py-16 px-6 md:px-10">
+            <div className="max-w-7xl mx-auto xl:flex xl:items-center xl:gap-16">
             <div className="xl:w-1/2 flex-none mb-12 xl:mb-0">
-              <h1 className="sm:w-3/4 sm:min-w-107 text-3xl sm:text-6xl xl:text-5xl 2xl:text-6xl font-medium mb-6 text-nowrap">
+              <h1 className="text-3xl sm:text-5xl xl:text-4xl 2xl:text-5xl font-medium mb-6 leading-tight">
                 Where{' '}
-                <span className="inline-flex items-center align-top w-25 relative me-1 md:me-3" aria-label="Flags">
-                  <span className="size-7 md:size-11 text-base md:text-2xl border rounded-full flex justify-center items-center rotate-12 absolute z-50 top-2 left-0 bg-white">🇸🇬</span>
-                  <span className="size-7 md:size-11 text-base md:text-2xl border rounded-full flex justify-center items-center rotate-12 absolute z-40 top-2 left-5 bg-white">🇺🇸</span>
-                  <span className="size-7 md:size-11 text-base md:text-2xl border rounded-full flex justify-center items-center rotate-12 absolute z-30 top-2 left-10 bg-white">🇸🇦</span>
-                  <span className="size-7 md:size-11 text-base md:text-2xl border rounded-full flex justify-center items-center rotate-12 absolute z-20 top-2 left-15 bg-white">🇵🇱</span>
-                  <span className="size-7 md:size-11 text-base md:text-2xl border rounded-full flex justify-center items-center rotate-12 absolute z-10 top-2 left-20 bg-white">🇦🇺</span>
+                <span className="inline-flex items-center align-top w-20 relative me-2" aria-label="Flags">
+                  <span className="size-6 md:size-8 text-sm md:text-lg border rounded-full flex justify-center items-center absolute z-40 top-0 left-0 bg-white">🇸🇬</span>
+                  <span className="size-6 md:size-8 text-sm md:text-lg border rounded-full flex justify-center items-center absolute z-30 top-0 left-3 bg-white">🇺🇸</span>
+                  <span className="size-6 md:size-8 text-sm md:text-lg border rounded-full flex justify-center items-center absolute z-20 top-0 left-6 bg-white">🇸🇦</span>
+                  <span className="size-6 md:size-8 text-sm md:text-lg border rounded-full flex justify-center items-center absolute z-10 top-0 left-9 bg-white">🇵🇱</span>
+                  <span className="size-6 md:size-8 text-sm md:text-lg border rounded-full flex justify-center items-center absolute z-0 top-0 left-12 bg-white">🇦🇺</span>
                 </span>{' '}
                 Global
                 <br />
                 Education Meets{' '}
-                <span className="text-yellow-400" aria-hidden="true">
-                  👋
+                <span className="text-red-500" aria-hidden="true">
+                  ❤️
                 </span>
                 <br />
-                <span className="text-blue-500">Next-Gen Payments</span>
+                <span className="text-blue-500">The Future Of Giving</span>
               </h1>
 
-              <p className="sm:w-3/4 sm:min-w-107 text-xl mb-16">
-                Support global universities and pay tuition & make donation across borders — with speed, trust, and
-                simplicity.
+              <p className="text-lg mb-8 text-gray-600 max-w-md">
+                Accept borderless donations and connect with donors who support education, research, and innovation.
               </p>
 
-              <div className="flex justify-start items-center gap-8">
-                <button className="btn btn-neutral rounded-full text-xl font-semibold">
+              <div className="flex flex-col sm:flex-row justify-start items-start sm:items-center gap-4 sm:gap-8">
+                <button className="bg-black text-white px-8 py-3 rounded-full text-lg font-medium hover:bg-gray-800 transition-colors">
                   Get started
                 </button>
 
-                <div className="rounded-[100px] flex justify-center items-center py-4">
-                  <div className="text-Black text-xl font-semibold underline">For organizations</div>
-                </div>
+                <button className="text-black text-lg font-medium underline hover:no-underline transition-all">
+                  I want to fund my project
+                </button>
               </div>
             </div>
 
             
 
-            <div className="xl:w-1/2 flex-none bg-slate-50 px-8 py-13  md:rounded-2xl bg-[url(/images/sidebar-bg.svg)] bg-cover bg-center">
-              <div className="w-81.5 sm:w-107 mx-auto  p-8 md:px-13 md:py-12 bg-white rounded-2xl shadow-md">
+            <div className="xl:w-1/2 flex-none px-6 py-12">
+              <div className="w-full max-w-md mx-auto p-6 md:p-8 bg-white rounded-2xl shadow-sm border border-gray-100">
                 <PaymentDemo />
               </div>
             </div>
-          </section>
-
-          {/* Trust Section */}
-          <section className="py-32">
-            <div className="flex flex-col justify-center items-center gap-6">
-              <div className="flex justify-center items-center">
-                <div className="text-center">
-                  <span className="text-Black text-3xl font-medium font-['Neue_Montreal']">Trust by </span>
-                  <span className="text-blue-600 text-3xl font-medium font-['Neue_Montreal']">Institutions & Nonprofits</span>
-                </div>
-              </div>
-
-              <div className="w-full max-w-[1614px] flex justify-center items-center gap-32 flex-wrap">
-                <img src="/images/information/metamask.svg" alt="Partner Logo" />
-                <img src="/images/information/paypal.svg" alt="Partner Logo" />
-                <img src="/images/information/moonpay.svg" alt="Partner Logo" />
-                <img src="/images/information/transak.svg" alt="Partner Logo" />
-              </div>
             </div>
           </section>
+
+          <div className="max-w-7xl mx-auto px-6 md:px-10 py-8">
+
+          {/* Trust Section */}
+          <TrustSection />
 
           {/* Impact Section */}
           <section className="py-16">
@@ -267,6 +255,7 @@ export default async function Home() {
               <button className="btn btn-neutral rounded-full text-xl font-semibold">Book a demo</button>
              </div>
            </section>
+          </div>
 
         </main>
 
