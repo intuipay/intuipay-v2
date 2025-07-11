@@ -6,4 +6,5 @@ FROM `donation_project` p
   LEFT JOIN `organization` o
     ON p.`org_id`=o.`id`
 WHERE `project_slug` = ${slug}
+  OR p.`id`=${id}
 LIMIT 1;
