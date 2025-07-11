@@ -72,190 +72,441 @@ export default async function Home() {
           <TrustSection />
 
           {/* Impact Section */}
-          <section className="py-16">
-            <div className="flex flex-col justify-center items-start gap-8">
-              <div className="text-black text-6xl font-medium font-['Neue_Montreal'] capitalize">Creating Exceptional Impact</div>
-              <div className="text-black/50 text-xl font-normal font-['Inter']">
-                Our mission is to help you reach your mission. Crypto, Stock, and Legacy Giving - now in one enterprise-ready donation platform.
+          <section className="py-[120px]">
+            <div className="flex flex-col items-center gap-24">
+              <div className="flex flex-col items-center gap-8 w-full">
+                <div className="text-black text-[56px] font-medium font-['Neue_Montreal'] capitalize text-center">
+                  Creating Exceptional Impact
+                </div>
+                <div className="text-black/50 text-base font-normal font-['Inter'] text-center max-w-4xl leading-6">
+                  Our mission is to help you reach your mission. Crypto, Stock, and Legacy Giving - now in one enterprise-ready donation platform. Sign up today and raise more money to impact more lives.
+                </div>
               </div>
-            </div>
-          </section>
-
-          {/* Statistics Section */}
-          <section className="py-16">
-            <div className="">
-              <div className="p-24 bg-violet-100 rounded-[32px] flex justify-start items-center gap-24">
-                <div className="flex-1 flex flex-col justify-start items-start gap-8">
-                  <div className="text-black text-6xl font-medium font-['Neue_Montreal'] capitalize">
-                    <AnimatedCounter 
-                      end={9000} 
-                      suffix="+" 
-                      className="text-black text-6xl font-medium font-['Neue_Montreal'] capitalize"
-                    />
+              
+              <div className="flex flex-row gap-8 w-full">
+                <div className="flex-1 bg-[#f5f5f7] rounded-[32px] p-12">
+                  <div className="flex flex-col gap-8">
+                    <div className="text-black text-[56px] font-medium font-['Neue_Montreal'] capitalize">
+                      70%
+                    </div>
+                    <div className="text-black/50 text-base font-normal font-['Inter'] leading-6">
+                      of Forbes' top 100 charities accept crypto donations
+                    </div>
                   </div>
-                  <div className="text-black/50 text-xl font-normal font-['Inter']">World-Changing Organizations we serve</div>
                 </div>
-                <div className="flex-1 flex flex-col justify-start items-start gap-8">
-                  <div className="text-black text-6xl font-medium font-['Neue_Montreal'] capitalize">
-                    <AnimatedCounter 
-                      end={15000} 
-                      prefix="$" 
-                      className="text-black text-6xl font-medium font-['Neue_Montreal'] capitalize"
-                    />
+                
+                <div className="flex-1 bg-[#f5f5f7] rounded-[32px] p-12">
+                  <div className="flex flex-col gap-8">
+                    <div className="text-black text-[56px] font-medium font-['Neue_Montreal'] capitalize">
+                      600Mn
+                    </div>
+                    <div className="text-black/50 text-base font-normal font-['Inter'] leading-6">
+                      crypto users worldwide
+                    </div>
                   </div>
-                  <div className="text-black/50 text-xl font-normal font-['Inter']">Average donation size for our customers</div>
                 </div>
-                <div className="flex-1 flex flex-col justify-start items-start gap-8">
-                  <div className="text-black text-6xl font-medium font-['Neue_Montreal'] capitalize">
-                    <AnimatedCounter 
-                      end={75} 
-                      suffix="x" 
-                      className="text-black text-6xl font-medium font-['Neue_Montreal'] capitalize"
-                    />
+                
+                <div className="flex-1 bg-[#f5f5f7] rounded-[32px] p-12">
+                  <div className="flex flex-col gap-8">
+                    <div className="text-black text-[56px] font-medium font-['Neue_Montreal'] capitalize">
+                      $2.5B
+                    </div>
+                    <div className="text-black/50 text-base font-normal font-['Inter'] leading-6">
+                      crypto giving expected in 2025 with growing trends
+                    </div>
                   </div>
-                  <div className="text-black/50 text-xl font-normal font-['Inter']">Higher than average ACH/debit/credit donation</div>
                 </div>
               </div>
             </div>
           </section>
 
           {/* Widget Section */}
-          <section className="py-16">
-            <div className="flex justify-between items-center">
-              <div className="w-[628px] flex flex-col justify-start items-start gap-8">
-                <div className="flex flex-col justify-start items-start gap-6">
-                  <div className="text-black text-6xl font-medium  capitalize">Widget</div>
-                  <div className="text-black/50 text-xl font-normal ">
-                    Powered by stables, Intuipay's product suite transforms how education gets funded
+          <section className="py-[120px]">
+            <div className="flex flex-col gap-16">
+              {/* Main Content Row */}
+              <div className="flex flex-row gap-16 items-center">
+                {/* Left Content */}
+                <div className="flex-1 h-[585px] flex flex-col justify-center">
+                  <div className="flex flex-col gap-6 mb-8">
+                    <div className="text-[#2461f2] text-base font-medium font-['Neue_Montreal'] capitalize tracking-[0.64px]">
+                      Accept Crypto with Ease
+                    </div>
+                    <div className="text-black text-[56px] font-medium font-['Neue_Montreal'] capitalize leading-normal">
+                      Plug-and-Play Donation Widget
+                    </div>
+                    <div className="text-black/50 text-base font-normal font-['Inter'] leading-6">
+                      Seamlessly embed crypto giving into your website in minutes — no developers required.
+                    </div>
                   </div>
+                  
+                  <button className="flex items-center gap-2 px-8 py-4 border border-black/70 rounded-full w-fit">
+                    <span className="text-black/70 text-xl font-semibold font-['Inter'] leading-6">
+                      See how it works
+                    </span>
+                    <div className="w-6 h-6">
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M7 17L17 7M17 7H7M17 7V17" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                    </div>
+                  </button>
                 </div>
 
-                <div className="w-[600px] flex flex-col justify-start items-start gap-8">
-                  {[
-                    'Simple HTML iframe embedding set-up',
-                    '30+ cryptocurrencies accepted',
-                    'Automatic conversion to local fiat currencies'
-                  ].map((feature, index) => (
-                    <div key={index} className="flex flex-col justify-start items-start gap-6">
-                      <div className="text-black/70 text-xl font-semibold ">{feature}</div>
-                    </div>
-                  ))}
+                {/* Right Content - Widget Demo */}
+                <div className="flex-1 bg-[#f1fbe8] rounded-[32px] h-[585px] flex items-center justify-center p-8">
+                  <div className="w-full aspect-[1240/824] shadow-[0px_4px_12px_0px_rgba(0,0,0,0.08)] rounded-2xl overflow-hidden">
+                    <img 
+                      src="/images/information/widget.svg" 
+                      alt="Widget Demo"
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
                 </div>
               </div>
 
-              <div className="p-6 bg-neutral-100 rounded-2xl outline outline-2 outline-black/20 flex justify-center items-center">
-                <img className="w-64 h-80 rounded-2xl" src="/images/information/widget.svg" alt="Widget Screenshot" />
+              {/* Divider Line */}
+              <div className="w-full h-px bg-gray-200"></div>
+
+              {/* Features Row */}
+              <div className="flex flex-row gap-24">
+                <div className="flex-1 flex flex-col gap-6">
+                  <div className="w-8 h-8">
+                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M1 7.5H31M1 7.5V24.5C1 25.0523 1.44772 25.5 2 25.5H30C30.5523 25.5 31 25.0523 31 24.5V7.5M1 7.5V6.5C1 5.94772 1.44772 5.5 2 5.5H30C30.5523 5.5 31 5.94772 31 6.5V7.5M9 11.5H15M9 15.5H19" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                    </svg>
+                  </div>
+                  <div className="text-black/70 text-base font-normal font-['Inter'] leading-6">
+                    Simple HTML iframe embedding set-up
+                  </div>
+                </div>
+
+                <div className="flex-1 flex flex-col gap-6">
+                  <div className="w-8 h-8">
+                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <circle cx="16" cy="11" r="6" stroke="currentColor" strokeWidth="2"/>
+                      <circle cx="8" cy="21" r="4" stroke="currentColor" strokeWidth="2"/>
+                      <circle cx="24" cy="21" r="4" stroke="currentColor" strokeWidth="2"/>
+                    </svg>
+                  </div>
+                  <div className="text-black/70 text-base font-normal font-['Inter'] leading-6">
+                    30+ cryptocurrencies accepted
+                  </div>
+                </div>
+
+                <div className="flex-1 flex flex-col gap-6">
+                  <div className="w-8 h-8">
+                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <circle cx="16" cy="16" r="13" stroke="currentColor" strokeWidth="2"/>
+                      <path d="M16 8v8l5.66 5.66" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                      <path d="M8 16h24" stroke="currentColor" strokeWidth="1"/>
+                      <path d="M16 3v2M16 27v2M29 16h2M1 16h2" stroke="currentColor" strokeWidth="1"/>
+                    </svg>
+                  </div>
+                  <div className="text-black/70 text-base font-normal font-['Inter'] leading-6">
+                    Automatic conversion to local fiat currencies
+                  </div>
+                </div>
               </div>
             </div>
           </section>
 
-          {/* Marketplace Section */}
-          <section className="py-16 -mx-12 md:-mx-10 px-12 md:px-10 bg-gray-50">
-            <div className="flex flex-col justify-center items-start gap-16">
-              <div className="flex flex-col justify-start items-start gap-6">
-                <div className="text-black text-6xl font-medium font-['Neue_Montreal'] capitalize">Marketplace</div>
-                <div className="text-black/50 text-xl font-normal font-['Inter']">
-                  Powered by stables, Intuipay's product suite transforms how education gets funded
+          {/* Showcase Section */}
+          <section className="py-[120px]">
+            <div className="flex flex-col gap-16">
+              {/* Main Content Row */}
+              <div className="flex flex-row gap-24 items-center">
+                {/* Left Content */}
+                <div className="flex-1 h-[585px] flex flex-col justify-center">
+                  <div className="flex flex-col gap-6 mb-8">
+                    <div className="text-[#2461f2] text-base font-medium font-['Neue_Montreal'] capitalize tracking-[0.64px]">
+                      Reach A Global Community
+                    </div>
+                    <div className="text-black text-[56px] font-medium font-['Neue_Montreal'] capitalize leading-normal">
+                      Showcase Your Projects To Crypto Donors
+                    </div>
+                    <div className="text-black/50 text-base font-normal font-['Inter'] leading-6">
+                      Get discovered by donors around the world who want to directly support impactful research and education.
+                    </div>
+                  </div>
+                  
+                  <button className="flex items-center gap-2 px-8 py-4 border border-black/70 rounded-full w-fit">
+                    <span className="text-black/70 text-xl font-semibold font-['Inter'] leading-6">
+                      Explore Marketplace
+                    </span>
+                    <div className="w-6 h-6">
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M7 17L17 7M17 7H7M17 7V17" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                    </div>
+                  </button>
+                </div>
+
+                {/* Right Content - Project Demo */}
+                <div className="flex-1 bg-[#fff8e8] rounded-[32px] h-[585px] flex items-center justify-center p-8">
+                  <div className="w-full flex flex-col gap-8">
+                    {/* Top Card */}
+                    <div className="bg-[#ffefc1] rounded-3xl h-[148px] w-full"></div>
+                    
+                    {/* Main Project Card */}
+                    <div className="bg-white rounded-3xl shadow-[0px_4px_12px_0px_rgba(0,0,0,0.08)] p-8">
+                      <div className="flex flex-col gap-6">
+                        {/* Project Info */}
+                        <div className="flex flex-col gap-3">
+                          <div className="text-black text-base font-semibold font-['Inter'] leading-6">
+                            NeuroBridge
+                          </div>
+                          <div className="text-black text-base font-semibold font-['Inter'] leading-6">
+                            Bridging Brain Health and AI for Early Alzheimer's Detection
+                          </div>
+                        </div>
+                        
+                        {/* Verification */}
+                        <div className="flex items-center gap-2">
+                          <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <path d="M9 12l2 2 4-4" stroke="#22c55e" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                              <circle cx="12" cy="12" r="9" stroke="#22c55e" strokeWidth="2"/>
+                            </svg>
+                          </div>
+                          <div className="text-black text-2xl font-semibold font-['Inter'] leading-8">
+                            Verified by universities
+                          </div>
+                        </div>
+                        
+                        {/* Total Raised */}
+                        <div className="flex justify-between items-center">
+                          <div className="text-black text-base font-semibold font-['Inter'] leading-6">
+                            Total Raised
+                          </div>
+                          <div className="text-black text-base font-semibold font-['Inter'] leading-6">
+                            $ 123,456.00
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    {/* Bottom Card */}
+                    <div className="bg-[#ffefc1] rounded-3xl h-[168px] w-full"></div>
+                  </div>
                 </div>
               </div>
 
-              <div className="w-full flex justify-center items-center gap-8 overflow-x-auto">
-                {projects.map((project: ProjectInfo) => (
-                  <ProjectCard key={project.id} project={project} />
-                ))}
+              {/* Divider Line */}
+              <div className="w-full h-px bg-gray-200"></div>
+
+              {/* Features Row */}
+              <div className="flex flex-row gap-24">
+                <div className="flex-1 flex flex-col gap-6">
+                  <div className="w-8 h-8">
+                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M16 3L3 10l13 7 13-7-13-7z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      <path d="M3 17l13 7 13-7M3 24l13 7 13-7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  </div>
+                  <div className="text-black/70 text-base font-normal font-['Inter'] leading-6">
+                    Verified projects from universities and researchers in 20+ countries
+                  </div>
+                </div>
+
+                <div className="flex-1 flex flex-col gap-6">
+                  <div className="w-8 h-8">
+                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M7 16l5-5 5 5M7 16l5 5 5-5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      <path d="M18 11l5 5-5 5M18 11v10" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  </div>
+                  <div className="text-black/70 text-base font-normal font-['Inter'] leading-6">
+                    Transparent donation tracking
+                  </div>
+                </div>
+
+                <div className="flex-1 flex flex-col gap-6">
+                  <div className="w-8 h-8">
+                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <circle cx="14" cy="14" r="9" stroke="currentColor" strokeWidth="2"/>
+                      <path d="M21 21l-4.35-4.35" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  </div>
+                  <div className="text-black/70 text-base font-normal font-['Inter'] leading-6">
+                    Direct support to institutions or specific researchers
+                  </div>
+                </div>
               </div>
             </div>
           </section>
 
           {/* Dashboard Section */}
-          <section className="py-16">
-            <div className="flex flex-col justify-center items-start gap-16">
-              <div className="flex flex-col justify-start items-center gap-6 w-full">
-                <div className="text-black text-6xl font-medium font-['Neue_Montreal'] capitalize">Organization dashboard</div>
-                <div className="text-black/50 text-xl font-normal font-['Inter']">
-                  Powered by stables, Intuipay's product suite transforms how education gets funded
+          <section className="py-[120px]">
+            <div className="flex flex-col gap-16">
+              {/* Main Content Row */}
+              <div className="flex flex-row gap-24 items-center">
+                {/* Left Content */}
+                <div className="flex-1 h-[585px] flex flex-col justify-center">
+                  <div className="flex flex-col gap-6 mb-8">
+                    <div className="text-[#2461f2] text-base font-medium font-['Neue_Montreal'] capitalize tracking-[0.64px]">
+                      Control, Track, Report
+                    </div>
+                    <div className="text-black text-[56px] font-medium font-['Neue_Montreal'] capitalize leading-normal">
+                      All-in-One Dashboard For Your Crypto Giving
+                    </div>
+                    <div className="text-black/50 text-base font-normal font-['Inter'] leading-6">
+                      Manage donations, compliance, and reporting — all from a single place, designed for institutional needs.
+                    </div>
+                  </div>
+                  
+                  <button className="flex items-center gap-2 px-8 py-4 border border-black/70 rounded-full w-fit">
+                    <span className="text-black/70 text-xl font-semibold font-['Inter'] leading-6">
+                      Create account
+                    </span>
+                    <div className="w-6 h-6">
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M7 17L17 7M17 7H7M17 7V17" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                    </div>
+                  </button>
+                </div>
+
+                {/* Right Content - Dashboard Demo */}
+                <div className="flex-1 bg-[#f6e7fe] rounded-[32px] h-[585px] flex items-center justify-center pl-8 pr-0 py-0">
+                  <div className="w-full flex flex-col gap-8">
+                    {/* Main Balance Card */}
+                    <div className="bg-white rounded-l-2xl shadow-[0px_4px_12px_0px_rgba(0,0,0,0.08)] px-8 py-6">
+                      <div className="w-[263px] flex flex-col gap-3">
+                        <div className="text-black text-sm font-semibold font-['Inter'] leading-5">
+                          Balance
+                        </div>
+                        <div className="text-black text-[32px] font-semibold font-['Inter'] leading-10">
+                          $12,345.00
+                        </div>
+                        <div className="text-black/60 text-sm font-semibold font-['Inter'] leading-5">
+                          The next withdraw period: 07/05/2024
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Stats Cards Row */}
+                    <div className="flex gap-8">
+                      {/* Total received card */}
+                      <div className="flex-1 bg-white rounded-2xl shadow-[0px_4px_12px_0px_rgba(0,0,0,0.08)] p-6">
+                        <div className="flex flex-col gap-4">
+                          <div className="text-black text-2xl font-semibold font-['Inter'] leading-8">
+                            $1,234.00
+                          </div>
+                          <div className="flex items-center gap-1">
+                            <div className="w-2 h-2 bg-red-500 rounded-full"></div>
+                            <div className="text-black/70 text-sm font-semibold font-['Inter'] leading-5">
+                              Total received this month
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Processing received card */}
+                      <div className="flex-1 bg-white rounded-l-2xl shadow-[0px_4px_12px_0px_rgba(0,0,0,0.08)] p-6">
+                        <div className="flex flex-col gap-4">
+                          <div className="text-black text-2xl font-semibold font-['Inter'] leading-8">
+                            $1,234.00
+                          </div>
+                          <div className="flex items-center gap-1">
+                            <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
+                            <div className="text-black/70 text-sm font-semibold font-['Inter'] leading-5">
+                              Processing received
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
 
-              <div className="w-full px-32 py-16 bg-neutral-50 rounded-3xl flex flex-col justify-start items-start gap-6">
-                <div className="w-full px-8 py-6 bg-white rounded-2xl outline outline-2 outline-black/10 flex justify-between items-start">
-                  <div className="w-64 flex flex-col justify-start items-start gap-3">
-                    <div className="text-Black text-sm font-semibold font-['Inter']">Balance</div>
-                    <div className="text-Black text-3xl font-semibold font-['Inter']">
-                      <AnimatedCounter 
-                        end={12345} 
-                        prefix="$" 
-                        suffix=".00"
-                        className="text-Black text-3xl font-semibold font-['Inter']"
-                      />
-                    </div>
-                    <div className="text-black/60 text-sm font-semibold font-['Inter']">
-                      The next withdraw period: 07/05/2024
-                    </div>
+              {/* Divider Line */}
+              <div className="w-full h-px bg-gray-200"></div>
+
+              {/* Features Row */}
+              <div className="flex flex-row gap-24">
+                <div className="flex-1 flex flex-col gap-6">
+                  <div className="w-8 h-8">
+                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M16 7v18M7 16h18" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                      <path d="M22 12l-6-6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
                   </div>
-                  <div className="flex flex-col justify-between items-end gap-4">
-                    <div className="flex justify-start items-center gap-2">
-                      <div className="text-blue-600 text-sm font-semibold font-['Inter']">How it works</div>
-                    </div>
-                    <div className="flex justify-start items-center gap-2">
-                      <div className="text-Black text-sm font-semibold font-['Inter']">Withdraw History</div>
-                    </div>
+                  <div className="text-black/70 text-base font-normal font-['Inter'] leading-6">
+                    Monitor real-time donations and currency breakdowns
                   </div>
                 </div>
 
-                <div className="w-full rounded-2xl flex justify-start items-center gap-4">
-                  {[
-                    { amount: 1234, label: 'Total received this month', color: 'bg-red-500' },
-                    { amount: 1234, label: 'Total donated this month', color: 'bg-lime-500' },
-                    { amount: 1234, label: 'Processing received', color: 'bg-yellow-500' }
-                  ].map((item, index) => (
-                    <div key={index} className="flex-1 p-6 bg-white rounded-2xl outline outline-2 outline-black/10 flex flex-col justify-start items-start gap-4">
-                      <div className="text-Black text-2xl font-semibold font-['Inter']">
-                        <AnimatedCounter 
-                          end={item.amount} 
-                          prefix="$" 
-                          suffix=".00"
-                          className="text-Black text-2xl font-semibold font-['Inter']"
-                          duration={1800}
-                        />
-                      </div>
-                      <div className="flex justify-start items-center gap-1">
-                        <div className={`w-2 h-2 ${item.color} rounded-full`} />
-                        <div className="flex-1 text-black/70 text-sm font-semibold font-['Inter']">{item.label}</div>
-                      </div>
-                    </div>
-                  ))}
+                <div className="flex-1 flex flex-col gap-6">
+                  <div className="w-8 h-8">
+                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M26 6H6a2 2 0 00-2 2v16a2 2 0 002 2h20a2 2 0 002-2V8a2 2 0 00-2-2z" stroke="currentColor" strokeWidth="2"/>
+                      <path d="M4 10h24M10 18h6" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                    </svg>
+                  </div>
+                  <div className="text-black/70 text-base font-normal font-['Inter'] leading-6">
+                    Manage receipts, project listings, and donor data
+                  </div>
+                </div>
+
+                <div className="flex-1 flex flex-col gap-6">
+                  <div className="w-8 h-8">
+                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M28 16H4M20 24l8-8-8-8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      <path d="M6 4v24" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                    </svg>
+                  </div>
+                  <div className="text-black/70 text-base font-normal font-['Inter'] leading-6">
+                    Download reports for finance and tax teams
+                  </div>
                 </div>
               </div>
             </div>
           </section>
 
           {/* Testimonial Section */}
-          <section className="py-16">
-            <div className="flex justify-start items-start gap-24">
-              <div className="flex-1 text-black text-6xl font-medium font-['Neue_Montreal'] capitalize">Testimonial</div>
-              <div className="flex-1 flex flex-col justify-start items-start gap-8">
-                <div className="text-black/50 text-xl font-normal font-['Inter']">
-                  "Engiven has been great. The website is easy to navigate and almost everything is automated. Whenever we have a question, the team is always quick to get back to us. We can incorporate Engiven's features into our website and customize it to our brand standards."
+          <section className="py-[120px]">
+            <div className="flex flex-row gap-24 items-start">
+              <div className="flex-1 text-black text-[56px] font-medium font-['Neue_Montreal'] capitalize leading-normal">
+                Testimonial
+              </div>
+              <div className="flex-1 flex flex-col gap-24 items-start justify-center">
+                {/* First Testimonial */}
+                <div className="flex flex-col gap-8 w-full">
+                  <div className="text-black/70 text-base font-normal font-['Inter'] leading-6 w-full">
+                    "Intuipay has been great. The website is easy to navigate and almost everything is automated. Whenever we have a question, the team is always quick to get back to us. We can incorporate Intuipay's features into our website and customize it to our brand standards."
+                  </div>
+                  <div className="text-black/70 text-xl font-semibold font-['Inter'] leading-6 w-full">
+                    Name / logo
+                  </div>
                 </div>
-                <div className="text-black/70 text-xl font-semibold font-['Inter']">Name / logo</div>
+                
+                {/* Second Testimonial */}
+                <div className="flex flex-col gap-8 w-full">
+                  <div className="text-black/70 text-base font-normal font-['Inter'] leading-6 w-full">
+                    "Intuipay has been great. The website is easy to navigate and almost everything is automated. Whenever we have a question, the team is always quick to get back to us. We can incorporate Engiven's features into our website and customize it to our brand standards."
+                  </div>
+                  <div className="text-black/70 text-xl font-semibold font-['Inter'] leading-6 w-full">
+                    Name / logo
+                  </div>
+                </div>
               </div>
             </div>
           </section>
 
+          </div>
+
           {/* CTA Section */}
-          <section className="bg-violet-100 rounded-tl-[64px] rounded-tr-[64px] -mx-12 md:-mx-10">
-            <div className="px-12 md:px-10 py-16 flex flex-col justify-start items-center gap-16">
+          <section className="bg-violet-100 rounded-tl-[64px] rounded-tr-[64px]">
+            <div className="max-w-7xl mx-auto px-6 md:px-10 py-[120px] flex flex-col justify-start items-center gap-16">
               <div className="flex flex-col justify-start items-center gap-6">
-                <div className="text-Black text-6xl font-medium font-['Neue_Montreal'] capitalize">Simplify Complex Giving</div>
-                <div className="text-black/70 text-xl font-normal font-['Inter']">
+                <div className="text-black text-[56px] font-medium font-['Neue_Montreal'] capitalize">Simplify Education Giving</div>
+                <div className="text-black/50 text-[20px] font-normal font-['Inter']">
                   Powered by stables, Intuipay's product suite transforms how education gets funded
                 </div>
               </div>
-              <button className="btn btn-neutral rounded-full text-xl font-semibold">Book a demo</button>
+              <button className="bg-black text-white px-8 py-4 rounded-[40px] text-[20px] font-semibold font-['Inter'] leading-6">Book a demo</button>
              </div>
            </section>
-          </div>
 
         </main>
 
