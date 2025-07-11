@@ -10,16 +10,16 @@ import { Globe, CaretDown, List, X } from '@phosphor-icons/react';
 const navLinks = [
   { href: '#', label: 'Donate' },
   { href: '#', label: 'Pay' },
-  { href: '#', label: 'Team' },
+  { href: '#', label: 'About' },
+  { href: '#', label: 'Support' },
 ]
 
 export function SiteHeader() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const [selectedNav, setSelectedNav] = useState(navLinks[ 0 ].label)
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-neutral-mediumgray/50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="w-full max-w-7xl mx-auto px-12 md:px-10 flex h-16 items-center justify-between ">
+    <header className="sticky top-0 z-50 w-full border-b border-black/10 bg-white">
+      <div className="w-full max-w-7xl mx-auto px-[120px] md:px-10 flex h-16 items-center justify-between">
         <div className="flex-1">
           <IntuipayLogo />
         </div>
@@ -29,7 +29,11 @@ export function SiteHeader() {
             <Link
               key={link.label}
               href={link.href}
-              className={`px-2 text-base font-medium text-neutral-darkgray hover:text-neutral-text transition-colors ${selectedNav === link.label ? 'text-primary' : ''}`}
+              className={`px-2 py-1 text-base font-medium transition-colors rounded-lg ${
+                link.label === 'Donate' 
+                  ? 'text-[#2461F2]' 
+                  : 'text-black hover:text-neutral-text'
+              }`}
             >
               {link.label}
             </Link>
@@ -39,10 +43,10 @@ export function SiteHeader() {
         <div className="flex-1 hidden md:flex items-center justify-end gap-2">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="sm">
+              <Button variant="ghost" size="sm" className="rounded-lg px-3 py-2">
                 <Globe size={16} className="mr-2" />
                 EN
-                <CaretDown size={16} className="ml-1" />
+                <CaretDown size={18} className="ml-1" />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
@@ -53,25 +57,25 @@ export function SiteHeader() {
 
           <Button
             asChild
-            className="text-base font-medium px-6"
+            className="text-base font-medium px-6 py-2 bg-white text-black rounded-[32px] border-0"
             variant="ghost"
           >
             <Link
-              aria-label="Log in"
+              aria-label="Sign in"
               href="https://dash.intuipay.xyz/login"
               target="_blank"
-            >Log In</Link>
+            >Sign in</Link>
           </Button>
           <Button
             asChild
-            className="text-base bg-black rounded-full text-white hidden lg:block px-6"
+            className="text-base font-medium bg-black rounded-[32px] text-white hidden lg:block px-6 py-2"
           >
             <Link
               href="https://dash.intuipay.xyz/signup"
               target="_blank"
-              aria-label="Create account"
+              aria-label="Get Started"
             >
-              Create account
+              Get Started
             </Link>
           </Button>
 
@@ -90,13 +94,17 @@ export function SiteHeader() {
       </div>
 
       {mobileMenuOpen && (
-        <div className="md:hidden absolute top-16 left-0 right-0 bg-background shadow-lg py-4 px-5 z-40">
+        <div className="md:hidden absolute top-16 left-0 right-0 bg-white shadow-lg py-4 px-5 z-40 border-b border-black/10">
           <div className="container flex flex-col space-y-4">
             {navLinks.map((link) => (
               <Link
                 key={link.label}
                 href={link.href}
-                className="text-sm font-medium text-neutral-darkgray hover:text-neutral-text transition-colors py-2"
+                className={`text-sm font-medium transition-colors py-2 ${
+                  link.label === 'Donate' 
+                    ? 'text-[#2461F2]' 
+                    : 'text-black hover:text-neutral-text'
+                }`}
                 onClick={() => setMobileMenuOpen(false)}
               >
                 {link.label}
@@ -104,10 +112,10 @@ export function SiteHeader() {
             ))}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="justify-start">
+                <Button variant="ghost" className="justify-start rounded-lg">
                   <Globe size={16} className="mr-2" />
                   EN
-                  <CaretDown size={16} className="ml-1" />
+                  <CaretDown size={18} className="ml-1" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent>
