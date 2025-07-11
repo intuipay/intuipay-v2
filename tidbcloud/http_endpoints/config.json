@@ -1226,7 +1226,14 @@
         "description": ""
       },
       {
-        "name": "display_name",
+        "name": "first_name",
+        "type": "string",
+        "required": 0,
+        "default": "",
+        "description": ""
+      },
+      {
+        "name": "last_name",
         "type": "string",
         "required": 0,
         "default": "",
