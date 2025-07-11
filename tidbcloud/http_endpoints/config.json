@@ -903,6 +903,13 @@
         "required": 0,
         "default": "1",
         "description": ""
+      },
+      {
+        "name": "is_widget",
+        "type": "boolean",
+        "required": 0,
+        "default": "0",
+        "description": ""
       }
     ],
     "settings": {
