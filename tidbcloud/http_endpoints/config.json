@@ -1224,6 +1224,20 @@
         "required": 0,
         "default": "",
         "description": ""
+      },
+      {
+        "name": "display_name",
+        "type": "string",
+        "required": 0,
+        "default": "",
+        "description": ""
+      },
+      {
+        "name": "display_image",
+        "type": "string",
+        "required": 0,
+        "default": "",
+        "description": ""
       }
     ],
     "settings": {
