@@ -14,3 +14,5 @@ ON DUPLICATE KEY UPDATE
   `first_name`=${first_name},
   `last_name`=${last_name},
   `display_image`=${display_image};
+
+SELECT LAST_INSERT_ID() as id;
