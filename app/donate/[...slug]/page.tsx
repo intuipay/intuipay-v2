@@ -12,7 +12,7 @@ type Props = {
 export async function generateMetadata({
   params
 }: Props): Promise<Metadata> {
-  const slug = (await params).slug[0];
+  const slug = (await params).slug[ 0 ];
   const project = await getDonationProjectBySlug(slug);
   if (!project) {
     return {
@@ -42,7 +42,7 @@ export async function generateMetadata({
 export default async function DonatePage({
   params,
 }: Props) {
-  const slug = (await params).slug[0]; // 目前定义的是动态路由 ...slug，所以返回的是数组，要提取第一个元素
+  const slug = (await params).slug[ 0 ]; // 目前定义的是动态路由 ...slug，所以返回的是数组，要提取第一个元素
   const project = await getDonationProjectBySlug(slug);
 
   if (!project) {

@@ -45,18 +45,18 @@ export default function ProjectDetailClientLayout({
         socialLinks = `https://www.${name}.com/${socialLinks}`;
       }
     } else {
-      for (let key in socialLinks) {
+      for (const key in socialLinks) {
         const isTikTok = key.toLocaleLowerCase() === 'tiktok';
         const isLinkedIn = key.toLocaleLowerCase() === 'linkedin';
         if (socialLinks.hasOwnProperty(key)) {
-          if (!isTikTok && socialLinks[key].startsWith('@')) { // tiktok is a special case
-            socialLinks[key] = socialLinks[key].replace('@', '');
+          if (!isTikTok && socialLinks[ key ].startsWith('@')) { // tiktok is a special case
+            socialLinks[ key ] = socialLinks[ key ].replace('@', '');
           }
-          if (!domainReg.test(socialLinks[key])) {
-            if (isLinkedIn && !socialLinks[key].startsWith('school')) {
-              socialLinks[key] = `school/${socialLinks[key]}`;
+          if (!domainReg.test(socialLinks[ key ])) {
+            if (isLinkedIn && !socialLinks[ key ].startsWith('school')) {
+              socialLinks[ key ] = `school/${socialLinks[ key ]}`;
             }
-            socialLinks[key] = `https://www.${key.toLowerCase()}.com/${isTikTok && !socialLinks[key].includes('@') ? '@' + socialLinks[key] : socialLinks[key]}`;
+            socialLinks[ key ] = `https://www.${key.toLowerCase()}.com/${isTikTok && !socialLinks[ key ].includes('@') ? '@' + socialLinks[ key ] : socialLinks[ key ]}`;
           }
         }
       }
@@ -76,7 +76,7 @@ export default function ProjectDetailClientLayout({
     while ((match = regex.exec(markdownString)) !== null) {
       const boldPattern = /\*\*(.*?)\*\*/gm;
       const matchedTitle = match[ 1 ];
-      let processedTitle = matchedTitle.replace(boldPattern, '$1');
+      const processedTitle = matchedTitle.replace(boldPattern, '$1');
       headings.push(processedTitle);
     }
 

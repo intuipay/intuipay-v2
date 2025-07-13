@@ -30,7 +30,7 @@ export async function POST(req: Request) {
       // 使用已有的函数通过 project_slug 获取项目信息
       const project = await getDonationProjectBySlug(project_slug);
       if (project && project.wallets) {
-        project_wallet = project.wallets[network];
+        project_wallet = project.wallets[ network ];
       }
     } catch (e) {
       console.warn('Failed to fetch project wallet for validation:', e);
@@ -55,7 +55,7 @@ export async function POST(req: Request) {
     }
 
     // 获取货币配置
-    const currencyConfig = BLOCKCHAIN_CONFIG.currencies[currency as keyof typeof BLOCKCHAIN_CONFIG.currencies];
+    const currencyConfig = BLOCKCHAIN_CONFIG.currencies[ currency as keyof typeof BLOCKCHAIN_CONFIG.currencies ];
     if (!currencyConfig) {
       return new Response(
         JSON.stringify({
@@ -92,7 +92,7 @@ export async function POST(req: Request) {
     return new Response(
       JSON.stringify({
         code: 0,
-        data: data[0].id,
+        data: data[ 0 ].id,
         validation: {
           verified: true,
         },

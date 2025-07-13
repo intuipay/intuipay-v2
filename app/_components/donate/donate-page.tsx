@@ -13,7 +13,8 @@ import DonationStep4 from '@/app/_components/donate/step4';
 import DonationStep5 from '@/app/_components/donate/step5';
 import { createDonationInfo } from '@/utils';
 import { useWagmiReady } from '@/components/providers/web3-provider';
-import { getNetworkDropdownOptions, getNetworkDropdownOptionsFromProject } from '@/config/blockchain';
+import { getNetworkDropdownOptionsFromProject } from '@/config/blockchain';
+import { CheckCircleIcon } from '@phosphor-icons/react/dist/ssr';
 
 // 动态导入包含 wagmi hooks 的组件，否则会在服务端执行，因为edge runtime的原因出现500报错
 const DonationStep1 = lazy(() => import('@/app/_components/donate/step1'));
@@ -59,6 +60,8 @@ export default function DonationPageComp({
   project,
   slug,
 }: Props) {
+  // Check if wagmi is ready
+const isWagmiReady = useWagmiReady();
   // State
   const [currentStep, setCurrentStep] = useState<Step>('initialization')
   const [slideDirection, setSlideDirection] = useState<'right' | 'left'>('right')
@@ -70,15 +73,12 @@ export default function DonationPageComp({
 
     return firstNetwork;
   });
-
-  useEffect(() => {
-    updateInfo({ network });
-  }, [network]);
-
   // Dollar amount state (for real-time USD conversion)
   const [dollar, setDollar] = useState<number | null>(info.amount || 0);
-    // Check if wagmi is ready
-  const isWagmiReady = useWagmiReady();
+  // Get current step index
+  const currentStepIndex = useMemo(() => {
+    return steps.findIndex((step) => step.id === currentStep);
+  }, [currentStep]);
 
   // Combined network setter that updates both local state and info
   const handleSetNetwork = (newNetwork: string) => {
@@ -115,23 +115,39 @@ export default function DonationPageComp({
     }));
   }
 
-  // Get current step index
-  const currentStepIndex = useMemo(() => {
-    return steps.findIndex((step) => step.id === currentStep);
-  }, [currentStep]);
+  useEffect(() => {
+    const hash = window.location.hash;
+    if (!hash) return;
+    const step = hash.replace('#', '');
+    if (steps.some((s) => s.id === step)) {
+      setCurrentStep(step as Step);
+    }
+  }, []);
+  useEffect(() => {
+    updateInfo({ network });
+  }, [network]);
 
   return (
     <main className="lg:flex lg:items-center lg:justify-center lg:py-20">
-      <div className="w-full max-w-xl mx-auto bg-white lg:rounded-2xl lg:shadow-lg px-8 pt-6  lg:px-10">
+      <div
+        className="w-full max-w-xl mx-auto bg-white lg:rounded-2xl lg:shadow-lg px-8 pt-6  lg:px-10"
+        style={{
+          '--brand-color': project.brand_color,
+        } as React.CSSProperties}
+      >
         {/* Hero Image */}
         <div className="relative w-full aspect-[3/1] rounded-lg mb-4">
-          <Image
-            src={project.banner}
-            alt={project.project_name}
-            fill
-            className="object-contain object-center"
-            priority
-          />
+          {project.banner
+            ? <Image
+                src={project.banner}
+                alt={project.project_name}
+                fill
+                className="object-contain object-center"
+                priority
+                />
+            : <div className="w-full h-full bg-gray-100 flex items-center justify-center text-2xl font-bold text-black/50">
+              {project.project_name}
+            </div>}
         </div>
 
         {/* Progress Steps */}
@@ -146,16 +162,13 @@ export default function DonationPageComp({
                 )} />
                 <div className="relative w-6 flex-none">
                   {index < currentStepIndex && (
-                    <Image
-                      alt="Check Icon"
-                      className="size-6"
-                      width={24}
-                      height={24}
-                      src="/images/icon/check-circle-active.svg"
+                    <CheckCircleIcon
+                      className="size-6 text-[var(--brand-color)]"
+                      weight="fill"
                     />
                   )}
                   {index === currentStepIndex && (
-                    <CircleDotIcon className="size-6 text-blue-600" />
+                    <CircleDotIcon className="size-6 text-[var(--brand-color)]" />
                   )}
                   {index > currentStepIndex && (
                     <div className="w-6 h-6 rounded-full bg-white border-2 border-black/40" />
@@ -252,6 +265,7 @@ export default function DonationPageComp({
             {currentStep === 'complete' && <DonationStep5
               index={info.id}
               reset={resetForm}
+              project={project}
             />}
           </motion.div>
         </AnimatePresence>

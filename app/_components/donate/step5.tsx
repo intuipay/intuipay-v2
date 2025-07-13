@@ -1,13 +1,16 @@
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
+import { ProjectInfo } from '@/types';
 
 type Props = {
   index: number;
+  project: ProjectInfo;
   reset: () => void;
 }
 
 export default function DonationStep5({
   index,
+  project,
   reset,
 }: Props) {
   return (
@@ -20,9 +23,10 @@ export default function DonationStep5({
       />
 
       <div className="text-center space-y-2">
-        <h1 className="text-xl font-semibold text-gray-900">
-          Thank you for your support! You are the {index} backer now.
+        <h1 className="text-xl font-semibold text-black">
+          Thank you for your donation!
         </h1>
+        <p className="text-sm text-black font-medium">{project.thanks_note || `You are the ${index} backer now.`}</p>
       </div>
 
       <div className="w-full mt-8">

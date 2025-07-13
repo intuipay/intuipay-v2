@@ -223,7 +223,7 @@ export default function DonationStep1({
   useEffect(() => {
     if (switchChainError) {
       console.error('Network switch error:', switchChainError);
-      
+
       if (switchChainError.message?.includes('User rejected')) {
         setError('User rejected the network switch request');
       } else if (switchChainError.message?.includes('Unrecognized chain')) {
@@ -236,7 +236,7 @@ export default function DonationStep1({
 
   // 获取网络对应的 Chain ID
   const getChainIdForNetwork = (networkId: string): number | null => {
-    const network = BLOCKCHAIN_CONFIG.networks[networkId as keyof typeof BLOCKCHAIN_CONFIG.networks];
+    const network = BLOCKCHAIN_CONFIG.networks[ networkId as keyof typeof BLOCKCHAIN_CONFIG.networks ];
     return network?.chainId || null;
   };
   // 切换到指定网络的函数
@@ -286,13 +286,13 @@ export default function DonationStep1({
       }
 
       // 获取目标连接器（只处理 EVM 钱包）
-      const targetConnector = connectorMap[selectedWallet as keyof typeof connectorMap];
+      const targetConnector = connectorMap[ selectedWallet as keyof typeof connectorMap ];
       if (!targetConnector) {
         setError('Unsupported wallet type');
         return;
       }
 
-      const currentNetworkConfig = BLOCKCHAIN_CONFIG.networks[network as keyof typeof BLOCKCHAIN_CONFIG.networks];
+      const currentNetworkConfig = BLOCKCHAIN_CONFIG.networks[ network as keyof typeof BLOCKCHAIN_CONFIG.networks ];
       const targetChainId = getChainIdForNetwork(network);
 
       // 只处理 EVM 网络
@@ -304,9 +304,9 @@ export default function DonationStep1({
       // 未连接钱包，直接连接
       console.log(`Connecting to ${selectedWallet} wallet with chainId ${targetChainId}...`);
       connect({ connector: targetConnector, chainId: targetChainId });
-      
+
       // 连接成功后，网络切换会在连接成功的 useEffect 中处理
-      
+
     } catch (error: any) {
       console.error('Wallet connection failed:', error);
       setError(`Connection failed: ${error.message || 'Unknown error'}`);
@@ -350,7 +350,9 @@ export default function DonationStep1({
     <>
     <form onSubmit={handleConnect}>
       <div className="space-y-6 pt-8">
-        <h2 className="text-xl font-semibold text-center text-black">Make your donation today</h2>
+        <h2 className="text-xl font-semibold text-center text-black">
+          {project.project_cta || 'Make your donation today'}
+        </h2>
         {/* Error message */}
         {error && (
           <div className="bg-red-50 border border-red-200 rounded-lg p-3">
@@ -539,7 +541,7 @@ export default function DonationStep1({
       <div className="modal-box w-11/12 max-w-2xl">
         <div className="flex justify-between items-center mb-4">
           <h3 className="font-bold text-lg">Swap</h3>
-          <button 
+          <button
             className="btn btn-sm btn-circle btn-ghost"
             onClick={() => lifiModalRef.current?.close()}
           >

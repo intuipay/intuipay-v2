@@ -91,6 +91,7 @@ export type DonationInfo = {
 
 export type ProjectInfo = {
   id: number;
+  project_name: string;
   project_slug: string;
   project_subtitle: string;
   accepts: string;
@@ -99,7 +100,6 @@ export type ProjectInfo = {
   banners: string[];
   campaign: string;
   category: ProjectCategories;
-  description: string;
   email: string;
   end_at: string;
   github: string;
@@ -114,25 +114,19 @@ export type ProjectInfo = {
   org_slug: string;
   org_type: string;
   org_website: string;
-  project_name: string;
-  qrcode: string;
   social_links: string | Record<string, string>;
   status: ProjectStatus;
   tags: string;
   type: ProjectTypes;
-  vault_account_id: string;
-  wallet_address: string;
   website: string;
-  backers: number
+  backers: number;
+  project_cta: string;
+  thanks_note: string;
+  brand_color: string;
 
   created_at: string;
   deleted_at?: string;
   updated_at: string;
-
-  // 新增字段
-  networks?: string[]; // 支持的区块链网络列表
-  tokens?: Record<string, string[]>; // 每个网络支持的代币列表
-  wallets?: Record<string, string>; // 每个网络的收款钱包地址，格式：{ "ethereum-sepolia": "0x123...", "solana-devnet": "ABC..." }
 }
 
 export type ProjectFilter = {

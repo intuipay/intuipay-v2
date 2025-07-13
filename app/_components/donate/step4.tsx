@@ -375,7 +375,7 @@ export default function DonationStep4({
           }
 
           // get latest `blockhash`
-          let blockhash = await connection.getLatestBlockhash().then((res) => res.blockhash);
+          const blockhash = await connection.getLatestBlockhash().then((res) => res.blockhash);
 
           // create v0 compatible message
           const messageV0 = new TransactionMessage({
@@ -591,12 +591,12 @@ export default function DonationStep4({
       <CtaFooter
         buttonLabel={
           isSolanaTransaction
-            ? (solanaTransactionHash ? "Saving..." : isSubmitting ? "Sending Transaction..." : "Donate")
-            : (isApprovingERC20 ? "Approving..." :
-              isWritePending || isSendPending ? "Sending Transaction..." :
-                isConfirming || isSendConfirming ? "Confirming..." :
-                  isConfirmed || isSendConfirmed ? "Saving..." :
-                    "Donate")
+            ? (solanaTransactionHash ? 'Saving...' : isSubmitting ? 'Sending Transaction...' : 'Donate')
+            : (isApprovingERC20 ? 'Approving...' :
+              isWritePending || isSendPending ? 'Sending Transaction...' :
+                isConfirming || isSendConfirming ? 'Confirming...' :
+                  isConfirmed || isSendConfirmed ? 'Saving...' :
+                    'Donate')
         }
         goToPreviousStep={goToPreviousStep}
         isLoading={isSubmitting || isWritePending || isSendPending || isConfirming || isSendConfirming || isApprovingERC20}

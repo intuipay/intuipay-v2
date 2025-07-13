@@ -33,7 +33,7 @@ export default function CtaFooter({
       </Button>}
       <Button
         className={clsx(
-          'w-full text-base font-semibold gap-2 h-12 bg-blue-600 hover:bg-blue-700 text-white rounded-full relative z-[1]',
+          'w-full text-base font-semibold gap-2 h-12 bg-[var(--brand-color)] hover:bg-[var(--brand-color)]/80 text-white rounded-full relative z-[1]',
           { 'col-span-2': !goToPreviousStep }
         )}
         disabled={!isSubmittable || isLoading}
