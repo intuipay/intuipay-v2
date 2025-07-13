@@ -88,6 +88,7 @@ export default function DonationPageComp({
   };
 
   function onMessage(event: MessageEvent) {
+    console.log('onMessage', event);
     const allowedOrigins = [
       'http://localhost:3000',
       'https://intuipay.com',
