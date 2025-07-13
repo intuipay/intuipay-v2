@@ -508,6 +508,85 @@ export default async function Home() {
              </div>
            </section>
 
+          {/* Footer Section */}
+          <section className="bg-violet-100">
+            <div className="max-w-7xl mx-auto px-6 md:px-10 lg:px-[120px] py-12">
+              <div className="flex flex-row justify-between gap-8">
+                {/* Product Column */}
+                <div className="flex-1 flex flex-col gap-6">
+                  <div className="text-black text-[14px] font-semibold font-['Inter'] leading-5">
+                    Product
+                  </div>
+                  <div className="flex flex-col gap-2">
+                    <div className="text-black/70 text-[14px] font-normal font-['Inter'] leading-5">
+                      Donation
+                    </div>
+                    <div className="text-black/70 text-[14px] font-normal font-['Inter'] leading-5">
+                      Payment
+                    </div>
+                  </div>
+                </div>
+
+                {/* For organizations Column */}
+                <div className="flex-1 flex flex-col gap-6">
+                  <div className="text-black text-[14px] font-semibold font-['Inter'] leading-5">
+                    For organizations
+                  </div>
+                  <div className="flex flex-col gap-2">
+                    <div className="text-black/70 text-[14px] font-normal font-['Inter'] leading-5">
+                      Book a demo
+                    </div>
+                    <div className="text-black/70 text-[14px] font-normal font-['Inter'] leading-5">
+                      Sign in
+                    </div>
+                  </div>
+                </div>
+
+                {/* Resources Column */}
+                <div className="flex-1 flex flex-col gap-6">
+                  <div className="text-black text-[14px] font-semibold font-['Inter'] leading-5">
+                    Resources
+                  </div>
+                  <div className="flex flex-col gap-2">
+                    <div className="text-black/70 text-[14px] font-normal font-['Inter'] leading-5">
+                      Blog
+                    </div>
+                    <div className="text-black/70 text-[14px] font-normal font-['Inter'] leading-5">
+                      Help Center
+                    </div>
+                    <div className="text-black/70 text-[14px] font-normal font-['Inter'] leading-5">
+                      Knowledge Space
+                    </div>
+                    <div className="text-black/70 text-[14px] font-normal font-['Inter'] leading-5">
+                      Legal
+                    </div>
+                  </div>
+                </div>
+
+                {/* Social Column */}
+                <div className="flex-1 flex flex-col gap-6">
+                  <div className="text-black text-[14px] font-semibold font-['Inter'] leading-5">
+                    Social
+                  </div>
+                  <div className="flex flex-col gap-2">
+                    <div className="text-black/70 text-[14px] font-normal font-['Inter'] leading-5">
+                      X
+                    </div>
+                    <div className="text-black/70 text-[14px] font-normal font-['Inter'] leading-5">
+                      Facebook
+                    </div>
+                    <div className="text-black/70 text-[14px] font-normal font-['Inter'] leading-5">
+                      Instagram
+                    </div>
+                    <div className="text-black/70 text-[14px] font-normal font-['Inter'] leading-5">
+                      Linkedin
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
         </main>
 
         {/* Footer */}
