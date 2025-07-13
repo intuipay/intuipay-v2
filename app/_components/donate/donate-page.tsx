@@ -61,11 +61,12 @@ export default function DonationPageComp({
   slug,
 }: Props) {
   // Check if wagmi is ready
-const isWagmiReady = useWagmiReady();
+  const isWagmiReady = useWagmiReady();
   // State
   const [currentStep, setCurrentStep] = useState<Step>('initialization')
   const [slideDirection, setSlideDirection] = useState<'right' | 'left'>('right')
   const [info, setInfo] = useState<DonationInfo>(createDonationInfo(project.id));
+  const [projectInfo, setProjectInfo] = useState<ProjectInfo>(project);
   // Network state management
   const [network, setNetwork] = useState<string>(() => {
     const networkOptions = getNetworkDropdownOptionsFromProject(project); // 从project里面读出支持的网络列表
@@ -94,8 +95,20 @@ const isWagmiReady = useWagmiReady();
     ];
     if (!allowedOrigins.includes(event.origin)) return;
 
-    if (event.data === 'reload') {
-      window.location.reload();
+    if (event.data.type === 'update') {
+      const {
+        banner,
+        brandColor,
+        projectCta,
+        thanksNote,
+      } = event.data.data;
+      setProjectInfo({
+        ...projectInfo,
+        banner,
+        brand_color: brandColor,
+        project_cta: projectCta,
+        thanks_note: thanksNote,
+      });
     }
   }
 
@@ -154,16 +167,16 @@ const isWagmiReady = useWagmiReady();
       >
         {/* Hero Image */}
         <div className="relative w-full aspect-[3/1] rounded-lg mb-4">
-          {project.banner
+          {projectInfo.banner
             ? <Image
-                src={project.banner}
-                alt={project.project_name}
+                src={projectInfo.banner}
+                alt={projectInfo.project_name}
                 fill
                 className="object-contain object-center"
                 priority
                 />
             : <div className="w-full h-full bg-gray-100 flex items-center justify-center text-2xl font-bold text-black/50">
-              {project.project_name}
+              {projectInfo.project_name}
             </div>}
         </div>
 
@@ -240,7 +253,7 @@ const isWagmiReady = useWagmiReady();
                       setDollar(value);
                       updateInfo({ dollar: typeof value === 'number' ? value : null });
                     }}
-                    project={project}
+                    project={projectInfo}
                 />
               ) : (
                 <Step1NoWagmi
@@ -258,7 +271,7 @@ const isWagmiReady = useWagmiReady();
                     setDollar(value);
                     updateInfo({ dollar: typeof value === 'number' ? value : null });
                   }}
-                  project={project}
+                  project={projectInfo}
                 />
               )
             )}
@@ -275,14 +288,14 @@ const isWagmiReady = useWagmiReady();
               goToNextStep={goToNextStep}
               goToPreviousStep={goToPreviousStep}
               info={info}
-              project={project}
+              project={projectInfo}
             />}
 
             {/* Complete Step */}
             {currentStep === 'complete' && <DonationStep5
               index={info.id}
               reset={resetForm}
-              project={project}
+              project={projectInfo}
             />}
           </motion.div>
         </AnimatePresence>
