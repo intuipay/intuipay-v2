@@ -86,6 +86,19 @@ const isWagmiReady = useWagmiReady();
     updateInfo({ network: newNetwork });
   };
 
+  function onMessage(event: MessageEvent) {
+    const allowedOrigins = [
+      'http://localhost:3000',
+      'https://intuipay.com',
+      'https://dash.intuipay.com',
+    ];
+    if (!allowedOrigins.includes(event.origin)) return;
+
+    if (event.data === 'reload') {
+      window.location.reload();
+    }
+  }
+
   // Step navigation
   const goToNextStep = () => {
     setSlideDirection('right')
@@ -116,11 +129,15 @@ const isWagmiReady = useWagmiReady();
   }
 
   useEffect(() => {
+    window.addEventListener('message', onMessage, false);
     const hash = window.location.hash;
     if (!hash) return;
     const step = hash.replace('#', '');
     if (steps.some((s) => s.id === step)) {
       setCurrentStep(step as Step);
+    }
+    return () => {
+      window.removeEventListener('message', onMessage, false);
     }
   }, []);
   useEffect(() => {
