@@ -3,14 +3,11 @@ import PaymentDemo from '@/components/payment-demo'
 import { SiteHeader } from '@/components/site-header'
 import { SiteFooter } from '@/components/site-footer'
 import { getProjects } from '@/lib/data';
-import { ProjectCard } from '@/components/project-card'; // Changed to named import
-import { ProjectInfo } from '@/types';
 import { AnimatedCounter } from '@/components/animated-counter';
 import TrustSection from '@/components/trust-section';
+import { CodeIcon, CoinsIcon, GlobeIcon, GraduationCapIcon, ArrowsDownUpIcon, MagnifyingGlassIcon, MoneyIcon, ReceiptIcon, FilesIcon } from '@phosphor-icons/react/ssr';
 
 export default async function Home() {
-  const projects = await getProjects(1, 8, '', 'id', 'desc');
-
   return (
     <>
       <StructuredData />
@@ -169,38 +166,21 @@ export default async function Home() {
               {/* Features Row */}
               <div className="flex flex-row gap-24">
                 <div className="flex-1 flex flex-col gap-6">
-                  <div className="w-8 h-8">
-                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M1 7.5H31M1 7.5V24.5C1 25.0523 1.44772 25.5 2 25.5H30C30.5523 25.5 31 25.0523 31 24.5V7.5M1 7.5V6.5C1 5.94772 1.44772 5.5 2 5.5H30C30.5523 5.5 31 5.94772 31 6.5V7.5M9 11.5H15M9 15.5H19" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-                    </svg>
-                  </div>
+                  <CodeIcon size={32} />
                   <div className="text-black/70 text-base font-normal font-['Inter'] leading-6">
                     Simple HTML iframe embedding set-up
                   </div>
                 </div>
 
                 <div className="flex-1 flex flex-col gap-6">
-                  <div className="w-8 h-8">
-                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <circle cx="16" cy="11" r="6" stroke="currentColor" strokeWidth="2"/>
-                      <circle cx="8" cy="21" r="4" stroke="currentColor" strokeWidth="2"/>
-                      <circle cx="24" cy="21" r="4" stroke="currentColor" strokeWidth="2"/>
-                    </svg>
-                  </div>
+                  <CoinsIcon size={32} />
                   <div className="text-black/70 text-base font-normal font-['Inter'] leading-6">
                     30+ cryptocurrencies accepted
                   </div>
                 </div>
 
                 <div className="flex-1 flex flex-col gap-6">
-                  <div className="w-8 h-8">
-                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <circle cx="16" cy="16" r="13" stroke="currentColor" strokeWidth="2"/>
-                      <path d="M16 8v8l5.66 5.66" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-                      <path d="M8 16h24" stroke="currentColor" strokeWidth="1"/>
-                      <path d="M16 3v2M16 27v2M29 16h2M1 16h2" stroke="currentColor" strokeWidth="1"/>
-                    </svg>
-                  </div>
+                  <GlobeIcon size={32} />
                   <div className="text-black/70 text-base font-normal font-['Inter'] leading-6">
                     Automatic conversion to local fiat currencies
                   </div>
@@ -296,36 +276,21 @@ export default async function Home() {
               {/* Features Row */}
               <div className="flex flex-row gap-24">
                 <div className="flex-1 flex flex-col gap-6">
-                  <div className="w-8 h-8">
-                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M16 3L3 10l13 7 13-7-13-7z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                      <path d="M3 17l13 7 13-7M3 24l13 7 13-7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
-                  </div>
+                  <GraduationCapIcon size={32} />
                   <div className="text-black/70 text-base font-normal font-['Inter'] leading-6">
                     Verified projects from universities and researchers in 20+ countries
                   </div>
                 </div>
 
                 <div className="flex-1 flex flex-col gap-6">
-                  <div className="w-8 h-8">
-                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M7 16l5-5 5 5M7 16l5 5 5-5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                      <path d="M18 11l5 5-5 5M18 11v10" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
-                  </div>
+                  <ArrowsDownUpIcon size={32} />
                   <div className="text-black/70 text-base font-normal font-['Inter'] leading-6">
                     Transparent donation tracking
                   </div>
                 </div>
 
                 <div className="flex-1 flex flex-col gap-6">
-                  <div className="w-8 h-8">
-                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <circle cx="14" cy="14" r="9" stroke="currentColor" strokeWidth="2"/>
-                      <path d="M21 21l-4.35-4.35" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
-                  </div>
+                  <MagnifyingGlassIcon size={32} />
                   <div className="text-black/70 text-base font-normal font-['Inter'] leading-6">
                     Direct support to institutions or specific researchers
                   </div>
@@ -425,36 +390,21 @@ export default async function Home() {
               {/* Features Row */}
               <div className="flex flex-row gap-24">
                 <div className="flex-1 flex flex-col gap-6">
-                  <div className="w-8 h-8">
-                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M16 7v18M7 16h18" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-                      <path d="M22 12l-6-6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
-                  </div>
+                  <MoneyIcon size={32} />
                   <div className="text-black/70 text-base font-normal font-['Inter'] leading-6">
                     Monitor real-time donations and currency breakdowns
                   </div>
                 </div>
 
                 <div className="flex-1 flex flex-col gap-6">
-                  <div className="w-8 h-8">
-                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M26 6H6a2 2 0 00-2 2v16a2 2 0 002 2h20a2 2 0 002-2V8a2 2 0 00-2-2z" stroke="currentColor" strokeWidth="2"/>
-                      <path d="M4 10h24M10 18h6" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-                    </svg>
-                  </div>
+                  <ReceiptIcon size={32} />
                   <div className="text-black/70 text-base font-normal font-['Inter'] leading-6">
                     Manage receipts, project listings, and donor data
                   </div>
                 </div>
 
                 <div className="flex-1 flex flex-col gap-6">
-                  <div className="w-8 h-8">
-                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M28 16H4M20 24l8-8-8-8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                      <path d="M6 4v24" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-                    </svg>
-                  </div>
+                  <FilesIcon size={32} />
                   <div className="text-black/70 text-base font-normal font-['Inter'] leading-6">
                     Download reports for finance and tax teams
                   </div>
