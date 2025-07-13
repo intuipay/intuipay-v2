@@ -75,7 +75,7 @@ export default async function Home() {
                 <div className="text-black text-[56px] font-medium font-['Neue_Montreal'] capitalize text-center">
                   Creating Exceptional Impact
                 </div>
-                <div className="text-black/50 text-base font-normal font-['Inter'] text-center max-w-4xl leading-6">
+                <div className="text-black/50 text-base font-normal text-center max-w-4xl leading-6">
                   Our mission is to help you reach your mission. Crypto, Stock, and Legacy Giving - now in one enterprise-ready donation platform. Sign up today and raise more money to impact more lives.
                 </div>
               </div>
@@ -86,7 +86,7 @@ export default async function Home() {
                     <div className="text-black text-[56px] font-medium font-['Neue_Montreal'] capitalize">
                       70%
                     </div>
-                    <div className="text-black/50 text-base font-normal font-['Inter'] leading-6">
+                    <div className="text-black/50 text-base font-normal leading-6">
                       of Forbes' top 100 charities accept crypto donations
                     </div>
                   </div>
@@ -97,7 +97,7 @@ export default async function Home() {
                     <div className="text-black text-[56px] font-medium font-['Neue_Montreal'] capitalize">
                       600Mn
                     </div>
-                    <div className="text-black/50 text-base font-normal font-['Inter'] leading-6">
+                    <div className="text-black/50 text-base font-normal leading-6">
                       crypto users worldwide
                     </div>
                   </div>
@@ -108,7 +108,7 @@ export default async function Home() {
                     <div className="text-black text-[56px] font-medium font-['Neue_Montreal'] capitalize">
                       $2.5B
                     </div>
-                    <div className="text-black/50 text-base font-normal font-['Inter'] leading-6">
+                    <div className="text-black/50 text-base font-normal leading-6">
                       crypto giving expected in 2025 with growing trends
                     </div>
                   </div>
@@ -131,13 +131,13 @@ export default async function Home() {
                     <div className="text-black text-[56px] font-medium font-['Neue_Montreal'] capitalize leading-normal">
                       Plug-and-Play Donation Widget
                     </div>
-                    <div className="text-black/50 text-base font-normal font-['Inter'] leading-6">
+                    <div className="text-black/50 text-base font-normal leading-6">
                       Seamlessly embed crypto giving into your website in minutes — no developers required.
                     </div>
                   </div>
                   
                   <button className="flex items-center gap-2 px-8 py-4 border border-black/70 rounded-full w-fit">
-                    <span className="text-black/70 text-xl font-semibold font-['Inter'] leading-6">
+                    <span className="text-black/70 text-xl font-semibold leading-6">
                       See how it works
                     </span>
                     <div className="w-6 h-6">
@@ -167,21 +167,21 @@ export default async function Home() {
               <div className="flex flex-row gap-24">
                 <div className="flex-1 flex flex-col gap-6">
                   <CodeIcon size={32} />
-                  <div className="text-black/70 text-base font-normal font-['Inter'] leading-6">
+                  <div className="text-black/70 text-base font-normal leading-6">
                     Simple HTML iframe embedding set-up
                   </div>
                 </div>
 
                 <div className="flex-1 flex flex-col gap-6">
                   <CoinsIcon size={32} />
-                  <div className="text-black/70 text-base font-normal font-['Inter'] leading-6">
+                  <div className="text-black/70 text-base font-normal leading-6">
                     30+ cryptocurrencies accepted
                   </div>
                 </div>
 
                 <div className="flex-1 flex flex-col gap-6">
                   <GlobeIcon size={32} />
-                  <div className="text-black/70 text-base font-normal font-['Inter'] leading-6">
+                  <div className="text-black/70 text-base font-normal leading-6">
                     Automatic conversion to local fiat currencies
                   </div>
                 </div>
@@ -203,13 +203,13 @@ export default async function Home() {
                     <div className="text-black text-[56px] font-medium font-['Neue_Montreal'] capitalize leading-normal">
                       Showcase Your Projects To Crypto Donors
                     </div>
-                    <div className="text-black/50 text-base font-normal font-['Inter'] leading-6">
+                    <div className="text-black/50 text-base font-normal leading-6">
                       Get discovered by donors around the world who want to directly support impactful research and education.
                     </div>
                   </div>
                   
                   <button className="flex items-center gap-2 px-8 py-4 border border-black/70 rounded-full w-fit">
-                    <span className="text-black/70 text-xl font-semibold font-['Inter'] leading-6">
+                    <span className="text-black/70 text-xl font-semibold leading-6">
                       Explore Marketplace
                     </span>
                     <div className="w-6 h-6">
@@ -231,10 +231,10 @@ export default async function Home() {
                       <div className="flex flex-col gap-6">
                         {/* Project Info */}
                         <div className="flex flex-col gap-3">
-                          <div className="text-black text-base font-semibold font-['Inter'] leading-6">
+                          <div className="text-black text-base font-semibold leading-6">
                             NeuroBridge
                           </div>
-                          <div className="text-black text-base font-semibold font-['Inter'] leading-6">
+                          <div className="text-black text-base font-semibold leading-6">
                             Bridging Brain Health and AI for Early Alzheimer's Detection
                           </div>
                         </div>
@@ -247,17 +247,17 @@ export default async function Home() {
                               <circle cx="12" cy="12" r="9" stroke="#22c55e" strokeWidth="2"/>
                             </svg>
                           </div>
-                          <div className="text-black text-2xl font-semibold font-['Inter'] leading-8">
+                          <div className="text-black text-2xl font-semibold leading-8">
                             Verified by universities
                           </div>
                         </div>
                         
                         {/* Total Raised */}
                         <div className="flex justify-between items-center">
-                          <div className="text-black text-base font-semibold font-['Inter'] leading-6">
+                          <div className="text-black text-base font-semibold leading-6">
                             Total Raised
                           </div>
-                          <div className="text-black text-base font-semibold font-['Inter'] leading-6">
+                          <div className="text-black text-base font-semibold leading-6">
                             $ 123,456.00
                           </div>
                         </div>
@@ -277,21 +277,21 @@ export default async function Home() {
               <div className="flex flex-row gap-24">
                 <div className="flex-1 flex flex-col gap-6">
                   <GraduationCapIcon size={32} />
-                  <div className="text-black/70 text-base font-normal font-['Inter'] leading-6">
+                  <div className="text-black/70 text-base font-normal leading-6">
                     Verified projects from universities and researchers in 20+ countries
                   </div>
                 </div>
 
                 <div className="flex-1 flex flex-col gap-6">
                   <ArrowsDownUpIcon size={32} />
-                  <div className="text-black/70 text-base font-normal font-['Inter'] leading-6">
+                  <div className="text-black/70 text-base font-normal leading-6">
                     Transparent donation tracking
                   </div>
                 </div>
 
                 <div className="flex-1 flex flex-col gap-6">
                   <MagnifyingGlassIcon size={32} />
-                  <div className="text-black/70 text-base font-normal font-['Inter'] leading-6">
+                  <div className="text-black/70 text-base font-normal leading-6">
                     Direct support to institutions or specific researchers
                   </div>
                 </div>
@@ -313,13 +313,13 @@ export default async function Home() {
                     <div className="text-black text-[56px] font-medium font-['Neue_Montreal'] capitalize leading-normal">
                       All-in-One Dashboard For Your Crypto Giving
                     </div>
-                    <div className="text-black/50 text-base font-normal font-['Inter'] leading-6">
+                    <div className="text-black/50 text-base font-normal leading-6">
                       Manage donations, compliance, and reporting — all from a single place, designed for institutional needs.
                     </div>
                   </div>
                   
                   <button className="flex items-center gap-2 px-8 py-4 border border-black/70 rounded-full w-fit">
-                    <span className="text-black/70 text-xl font-semibold font-['Inter'] leading-6">
+                    <span className="text-black/70 text-xl font-semibold leading-6">
                       Create account
                     </span>
                     <div className="w-6 h-6">
@@ -336,13 +336,13 @@ export default async function Home() {
                     {/* Main Balance Card */}
                     <div className="bg-white rounded-l-2xl shadow-[0px_4px_12px_0px_rgba(0,0,0,0.08)] px-8 py-6">
                       <div className="w-[263px] flex flex-col gap-3">
-                        <div className="text-black text-sm font-semibold font-['Inter'] leading-5">
+                        <div className="text-black text-sm font-semibold leading-5">
                           Balance
                         </div>
-                        <div className="text-black text-[32px] font-semibold font-['Inter'] leading-10">
+                        <div className="text-black text-[32px] font-semibold leading-10">
                           $12,345.00
                         </div>
-                        <div className="text-black/60 text-sm font-semibold font-['Inter'] leading-5">
+                        <div className="text-black/60 text-sm font-semibold leading-5">
                           The next withdraw period: 07/05/2024
                         </div>
                       </div>
@@ -353,12 +353,12 @@ export default async function Home() {
                       {/* Total received card */}
                       <div className="flex-1 bg-white rounded-2xl shadow-[0px_4px_12px_0px_rgba(0,0,0,0.08)] p-6">
                         <div className="flex flex-col gap-4">
-                          <div className="text-black text-2xl font-semibold font-['Inter'] leading-8">
+                          <div className="text-black text-2xl font-semibold leading-8">
                             $1,234.00
                           </div>
                           <div className="flex items-center gap-1">
                             <div className="w-2 h-2 bg-red-500 rounded-full"></div>
-                            <div className="text-black/70 text-sm font-semibold font-['Inter'] leading-5">
+                            <div className="text-black/70 text-sm font-semibold leading-5">
                               Total received this month
                             </div>
                           </div>
@@ -368,12 +368,12 @@ export default async function Home() {
                       {/* Processing received card */}
                       <div className="flex-1 bg-white rounded-l-2xl shadow-[0px_4px_12px_0px_rgba(0,0,0,0.08)] p-6">
                         <div className="flex flex-col gap-4">
-                          <div className="text-black text-2xl font-semibold font-['Inter'] leading-8">
+                          <div className="text-black text-2xl font-semibold leading-8">
                             $1,234.00
                           </div>
                           <div className="flex items-center gap-1">
                             <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
-                            <div className="text-black/70 text-sm font-semibold font-['Inter'] leading-5">
+                            <div className="text-black/70 text-sm font-semibold leading-5">
                               Processing received
                             </div>
                           </div>
@@ -391,21 +391,21 @@ export default async function Home() {
               <div className="flex flex-row gap-24">
                 <div className="flex-1 flex flex-col gap-6">
                   <MoneyIcon size={32} />
-                  <div className="text-black/70 text-base font-normal font-['Inter'] leading-6">
+                  <div className="text-black/70 text-base font-normal leading-6">
                     Monitor real-time donations and currency breakdowns
                   </div>
                 </div>
 
                 <div className="flex-1 flex flex-col gap-6">
                   <ReceiptIcon size={32} />
-                  <div className="text-black/70 text-base font-normal font-['Inter'] leading-6">
+                  <div className="text-black/70 text-base font-normal leading-6">
                     Manage receipts, project listings, and donor data
                   </div>
                 </div>
 
                 <div className="flex-1 flex flex-col gap-6">
                   <FilesIcon size={32} />
-                  <div className="text-black/70 text-base font-normal font-['Inter'] leading-6">
+                  <div className="text-black/70 text-base font-normal leading-6">
                     Download reports for finance and tax teams
                   </div>
                 </div>
@@ -422,20 +422,20 @@ export default async function Home() {
               <div className="flex-1 flex flex-col gap-24 items-start justify-center">
                 {/* First Testimonial */}
                 <div className="flex flex-col gap-8 w-full">
-                  <div className="text-black/70 text-base font-normal font-['Inter'] leading-6 w-full">
+                  <div className="text-black/70 text-base font-normal leading-6 w-full">
                     "Intuipay has been great. The website is easy to navigate and almost everything is automated. Whenever we have a question, the team is always quick to get back to us. We can incorporate Intuipay's features into our website and customize it to our brand standards."
                   </div>
-                  <div className="text-black/70 text-xl font-semibold font-['Inter'] leading-6 w-full">
+                  <div className="text-black/70 text-xl font-semibold leading-6 w-full">
                     Name / logo
                   </div>
                 </div>
                 
                 {/* Second Testimonial */}
                 <div className="flex flex-col gap-8 w-full">
-                  <div className="text-black/70 text-base font-normal font-['Inter'] leading-6 w-full">
+                  <div className="text-black/70 text-base font-normal leading-6 w-full">
                     "Intuipay has been great. The website is easy to navigate and almost everything is automated. Whenever we have a question, the team is always quick to get back to us. We can incorporate Engiven's features into our website and customize it to our brand standards."
                   </div>
-                  <div className="text-black/70 text-xl font-semibold font-['Inter'] leading-6 w-full">
+                  <div className="text-black/70 text-xl font-semibold leading-6 w-full">
                     Name / logo
                   </div>
                 </div>
@@ -450,11 +450,11 @@ export default async function Home() {
             <div className="max-w-7xl mx-auto px-6 md:px-10 py-[120px] flex flex-col justify-start items-center gap-16">
               <div className="flex flex-col justify-start items-center gap-6">
                 <div className="text-black text-[56px] font-medium font-['Neue_Montreal'] capitalize">Simplify Education Giving</div>
-                <div className="text-black/50 text-[20px] font-normal font-['Inter']">
+                <div className="text-black/50 text-[20px] font-normal">
                   Powered by stables, Intuipay's product suite transforms how education gets funded
                 </div>
               </div>
-              <button className="bg-black text-white px-8 py-4 rounded-[40px] text-[20px] font-semibold font-['Inter'] leading-6">Book a demo</button>
+              <button className="bg-black text-white px-8 py-4 rounded-[40px] text-[20px] font-semibold leading-6">Book a demo</button>
              </div>
            </section>
 
@@ -464,14 +464,14 @@ export default async function Home() {
               <div className="flex flex-row justify-between gap-8">
                 {/* Product Column */}
                 <div className="flex-1 flex flex-col gap-6">
-                  <div className="text-black text-[14px] font-semibold font-['Inter'] leading-5">
+                  <div className="text-black text-[14px] font-semibold leading-5">
                     Product
                   </div>
                   <div className="flex flex-col gap-2">
-                    <div className="text-black/70 text-[14px] font-normal font-['Inter'] leading-5">
+                    <div className="text-black/70 text-[14px] font-normal leading-5">
                       Donation
                     </div>
-                    <div className="text-black/70 text-[14px] font-normal font-['Inter'] leading-5">
+                    <div className="text-black/70 text-[14px] font-normal leading-5">
                       Payment
                     </div>
                   </div>
@@ -479,14 +479,14 @@ export default async function Home() {
 
                 {/* For organizations Column */}
                 <div className="flex-1 flex flex-col gap-6">
-                  <div className="text-black text-[14px] font-semibold font-['Inter'] leading-5">
+                  <div className="text-black text-[14px] font-semibold leading-5">
                     For organizations
                   </div>
                   <div className="flex flex-col gap-2">
-                    <div className="text-black/70 text-[14px] font-normal font-['Inter'] leading-5">
+                    <div className="text-black/70 text-[14px] font-normal leading-5">
                       Book a demo
                     </div>
-                    <div className="text-black/70 text-[14px] font-normal font-['Inter'] leading-5">
+                    <div className="text-black/70 text-[14px] font-normal leading-5">
                       Sign in
                     </div>
                   </div>
@@ -494,20 +494,20 @@ export default async function Home() {
 
                 {/* Resources Column */}
                 <div className="flex-1 flex flex-col gap-6">
-                  <div className="text-black text-[14px] font-semibold font-['Inter'] leading-5">
+                  <div className="text-black text-[14px] font-semibold leading-5">
                     Resources
                   </div>
                   <div className="flex flex-col gap-2">
-                    <div className="text-black/70 text-[14px] font-normal font-['Inter'] leading-5">
+                    <div className="text-black/70 text-[14px] font-normal leading-5">
                       Blog
                     </div>
-                    <div className="text-black/70 text-[14px] font-normal font-['Inter'] leading-5">
+                    <div className="text-black/70 text-[14px] font-normal leading-5">
                       Help Center
                     </div>
-                    <div className="text-black/70 text-[14px] font-normal font-['Inter'] leading-5">
+                    <div className="text-black/70 text-[14px] font-normal leading-5">
                       Knowledge Space
                     </div>
-                    <div className="text-black/70 text-[14px] font-normal font-['Inter'] leading-5">
+                    <div className="text-black/70 text-[14px] font-normal leading-5">
                       Legal
                     </div>
                   </div>
@@ -515,20 +515,20 @@ export default async function Home() {
 
                 {/* Social Column */}
                 <div className="flex-1 flex flex-col gap-6">
-                  <div className="text-black text-[14px] font-semibold font-['Inter'] leading-5">
+                  <div className="text-black text-[14px] font-semibold leading-5">
                     Social
                   </div>
                   <div className="flex flex-col gap-2">
-                    <div className="text-black/70 text-[14px] font-normal font-['Inter'] leading-5">
+                    <div className="text-black/70 text-[14px] font-normal leading-5">
                       X
                     </div>
-                    <div className="text-black/70 text-[14px] font-normal font-['Inter'] leading-5">
+                    <div className="text-black/70 text-[14px] font-normal leading-5">
                       Facebook
                     </div>
-                    <div className="text-black/70 text-[14px] font-normal font-['Inter'] leading-5">
+                    <div className="text-black/70 text-[14px] font-normal leading-5">
                       Instagram
                     </div>
-                    <div className="text-black/70 text-[14px] font-normal font-['Inter'] leading-5">
+                    <div className="text-black/70 text-[14px] font-normal leading-5">
                       Linkedin
                     </div>
                   </div>
