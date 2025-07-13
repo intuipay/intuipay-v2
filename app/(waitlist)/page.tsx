@@ -152,7 +152,7 @@ export default async function Home() {
                 <div className="flex-1 bg-[#f1fbe8] rounded-[32px] h-[585px] flex items-center justify-center p-8">
                   <div className="w-full aspect-[1240/824] shadow-[0px_4px_12px_0px_rgba(0,0,0,0.08)] rounded-2xl overflow-hidden">
                     <img 
-                      src="/images/information/widget.svg" 
+                      src="/images/mockup_light.gif" 
                       alt="Widget Demo"
                       className="w-full h-full object-cover"
                     />
