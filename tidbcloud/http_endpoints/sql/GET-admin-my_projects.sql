@@ -1,6 +1,6 @@
 USE `test`;
 
-SELECT `project_name`,`project_slug`,`project_subtitle`,`description`,
+SELECT `project_name`,`project_slug`,`project_subtitle`,
   `banner`,`published_at`,`end_at`,`goal_amount`,`amount`,`status`,p.`id`
 FROM `donation_project` p
   LEFT JOIN `user_org_relation` r
