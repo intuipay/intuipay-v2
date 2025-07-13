@@ -1,6 +1,6 @@
 USE `test`;
 
-SELECT p.`id`, `project_name`, `banner`, `accepts`,
+SELECT p.`id`, p.`slug`, `project_name`, `banner`, `accepts`,
   o.`networks`, o.`tokens`, o.`wallets`
 FROM `donation_project` p
   LEFT JOIN `organization` o
