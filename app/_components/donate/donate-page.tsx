@@ -88,7 +88,6 @@ export default function DonationPageComp({
   };
 
   function onMessage(event: MessageEvent) {
-    console.log('onMessage', event);
     const allowedOrigins = [
       'http://localhost:3000',
       'https://intuipay.com',
@@ -96,20 +95,27 @@ export default function DonationPageComp({
     ];
     if (!allowedOrigins.includes(event.origin)) return;
 
-    if (event.data.type === 'update') {
-      const {
-        banner,
-        brandColor,
-        projectCta,
-        thanksNote,
-      } = event.data.data;
-      setProjectInfo({
-        ...projectInfo,
-        banner,
-        brand_color: brandColor,
-        project_cta: projectCta,
-        thanks_note: thanksNote,
-      });
+    const { type, data } = event.data;
+    switch (type) {
+      case 'update':
+        const {
+          banner,
+          brandColor,
+          projectCta,
+          thanksNote,
+        } = data;
+        setProjectInfo({
+          ...projectInfo,
+          banner,
+          brand_color: brandColor,
+          project_cta: projectCta,
+          thanks_note: thanksNote,
+        });
+        break;
+
+      case 'step':
+        setCurrentStep(data.step);
+        break;
     }
   }
 
