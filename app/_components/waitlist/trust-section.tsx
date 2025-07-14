@@ -17,33 +17,35 @@ export default function TrustSection() {
 
   return (
     <section className="py-20">
-      <div className="flex flex-col justify-center items-center gap-12">
-        <div className="text-center">
-          <span className="text-black text-3xl font-medium">Trust by </span>
-          <span className="text-blue-600 text-3xl font-medium">Institutions & Nonprofits</span>
-        </div>
-
-        <div className="w-full overflow-hidden">
-          <div 
-            className={`flex items-center gap-16 ${
-              isPaused ? 'animate-pause' : 'animate-scroll-continuous'
-            }`}
-            onMouseEnter={() => setIsPaused(true)}
-            onMouseLeave={() => setIsPaused(false)}
-          >
-            {duplicatedPartners.map((partner, index) => (
-              <div
-                key={`${partner.name}-${index}`}
-                className="flex-shrink-0 flex items-center justify-center h-16 grayscale hover:grayscale-0 transition-all duration-300"
-              >
-                <img 
-                  src={partner.logo} 
-                  alt={`${partner.name} Logo`}
-                  className="max-h-12 object-contain"
-                />
-              </div>
-            ))}
+      <div className="max-w-7xl mx-auto px-6 md:px-10">
+        <div className="flex flex-col justify-center items-center gap-12">
+          <div className="text-center">
+            <span className="text-black text-3xl font-medium">Trust by </span>
+            <span className="text-blue-600 text-3xl font-medium">Institutions & Nonprofits</span>
           </div>
+        </div>
+      </div>
+
+      <div className="w-full overflow-hidden mt-12">
+        <div 
+          className={`flex items-center gap-16 ${
+            isPaused ? 'animate-pause' : 'animate-scroll-continuous'
+          }`}
+          onMouseEnter={() => setIsPaused(true)}
+          onMouseLeave={() => setIsPaused(false)}
+        >
+          {duplicatedPartners.map((partner, index) => (
+            <div
+              key={`${partner.name}-${index}`}
+              className="flex-shrink-0 flex items-center justify-center h-16 grayscale hover:grayscale-0 transition-all duration-300"
+            >
+              <img 
+                src={partner.logo} 
+                alt={`${partner.name} Logo`}
+                className="max-h-12 object-contain"
+              />
+            </div>
+          ))}
         </div>
       </div>
     </section>

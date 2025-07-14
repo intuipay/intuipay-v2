@@ -67,26 +67,32 @@ export default function Home() {
             </div>
           </section>
 
-          <div className="max-w-7xl mx-auto px-6 md:px-10 py-8">
+          {/* Trust Section */}
+          <TrustSection />
 
-            {/* Trust Section */}
-            <TrustSection />
-
-            {/* Impact Section */}
+          {/* Impact Section */}
+          <div className="max-w-7xl mx-auto px-6 md:px-10">
             <ImpactSection />
+          </div>
 
-            {/* Widget Section */}
+          {/* Widget Section */}
+          <div className="max-w-7xl mx-auto px-6 md:px-10">
             <WidgetSection />
+          </div>
 
-            {/* Showcase Section */}
+          {/* Showcase Section */}
+          <div className="max-w-7xl mx-auto px-6 md:px-10">
             <ShowcaseSection />
+          </div>
 
-            {/* Dashboard Section */}
+          {/* Dashboard Section */}
+          <div className="max-w-7xl mx-auto px-6 md:px-10">
             <DashboardSection />
+          </div>
 
-            {/* Testimonial Section */}
+          {/* Testimonial Section */}
+          <div className="max-w-7xl mx-auto px-6 md:px-10">
             <TestimonialSection />
-
           </div>
 
           {/* CTA Section */}
