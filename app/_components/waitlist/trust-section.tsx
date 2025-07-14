@@ -16,8 +16,8 @@ export default function TrustSection() {
   const duplicatedPartners = [...partners, ...partners, ...partners]
 
   return (
-    <section className="py-20">
-      <div className="max-w-7xl mx-auto px-6 md:px-10">
+    <section className="py-12">
+      <div className="max-w-7xl mx-auto px-16">
         <div className="flex flex-col justify-center items-center gap-12">
           <div className="text-center">
             <span className="text-black text-3xl font-medium">Trust by </span>

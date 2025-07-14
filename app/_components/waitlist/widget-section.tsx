@@ -2,12 +2,12 @@ import { CodeIcon, CoinsIcon, GlobeIcon, ArrowUpRightIcon } from '@phosphor-icon
 
 export default function WidgetSection() {
   return (
-    <section className="py-16 md:py-[120px]">
+    <section className="px-8 py-12 md:px-12 md:py-20 lg:px-16 lg:py-28 xl:p-28 max-w-7xl mx-auto">
       <div className="flex flex-col gap-8 md:gap-16">
         {/* Main Content Row */}
         <div className="flex flex-col lg:flex-row gap-8 lg:gap-16 items-center">
           {/* Widget Demo - First on mobile, Right on desktop */}
-          <div className="order-1 lg:order-2 flex-1 bg-[#f1fbe8] rounded-[32px] h-[300px] lg:h-[585px] flex items-center justify-center p-4 lg:p-8">
+          <div className="order-1 lg:order-2 flex-1 bg-lime-50 rounded-[32px] h-60 lg:h-[585px] flex items-center justify-center p-4 lg:p-8">
             <div className="w-full aspect-[1240/824] shadow-[0px_4px_12px_0px_rgba(0,0,0,0.08)] rounded-2xl overflow-hidden">
               <video
                 src="/images/mockup_light.mp4"
@@ -23,7 +23,7 @@ export default function WidgetSection() {
           </div>
 
           {/* Text Content - Second on mobile, Left on desktop */}
-          <div className="order-2 lg:order-1 flex-1 lg:h-[585px] flex flex-col justify-center">
+          <div className="order-2 lg:order-1 flex-1 flex flex-col justify-center">
             <div className="flex flex-col gap-4 lg:gap-6 mb-6 lg:mb-8">
               <div className="text-[#2461f2] text-sm lg:text-base font-medium font-['Neue_Montreal'] capitalize tracking-[0.64px]">
                 Accept Crypto with Ease

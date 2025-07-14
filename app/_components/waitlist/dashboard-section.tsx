@@ -3,16 +3,16 @@ import { AnimatedCounter } from '@/components/animated-counter';
 
 export default function DashboardSection() {
   return (
-    <section className="py-16 md:py-[120px]">
+    <section className="px-8 py-12 md:px-12 md:py-20 lg:px-16 lg:py-28 xl:p-28 max-w-7xl mx-auto">
       <div className="flex flex-col gap-8 md:gap-16">
         {/* Main Content Row */}
         <div className="flex flex-col lg:flex-row gap-8 lg:gap-24 items-center">
           {/* Dashboard Demo - First on mobile, Right on desktop */}
-          <div className="order-1 lg:order-2 flex-1 bg-[#f6e7fe] rounded-[32px] h-[240px] lg:h-[585px] flex items-center justify-center pl-4 lg:pl-8 pr-0 py-0">
+          <div className="order-1 lg:order-2 flex-1 bg-purple-100 rounded-[32px] h-60 md:h-96 lg:h-[585px] flex items-center justify-center pl-4 lg:pl-8 pr-0 py-0">
             <div className="w-full flex flex-col gap-4 py-4 lg:py-8 lg:gap-8">
               {/* Main Balance Card */}
               <div className="bg-white rounded-l-2xl shadow-[0px_4px_12px_0px_rgba(0,0,0,0.08)] px-4 lg:px-8 py-3 lg:py-6">
-                <div className="w-full lg:w-[263px] flex flex-col gap-2 lg:gap-3">
+                <div className="w-full flex flex-col gap-2 lg:gap-3">
                   <div className="text-black text-xs lg:text-sm font-semibold leading-5">
                     Balance
                   </div>

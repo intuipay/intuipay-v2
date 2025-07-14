@@ -2,12 +2,12 @@ import { GraduationCapIcon, ArrowsDownUpIcon, MagnifyingGlassIcon, ArrowUpRightI
 
 export default function ShowcaseSection() {
   return (
-    <section className="py-16 md:py-[120px]">
+    <section className="px-8 py-12 md:px-12 md:py-20 lg:px-16 lg:py-28 xl:p-28 max-w-7xl mx-auto">
       <div className="flex flex-col gap-8 md:gap-16">
         {/* Main Content Row */}
         <div className="flex flex-col lg:flex-row gap-8 lg:gap-24 items-center">
           {/* Project Demo - First on mobile, Right on desktop */}
-          <div className="order-1 lg:order-2 flex-1 bg-[#fff8e8] rounded-[32px] h-[396px] lg:h-[585px] flex items-center justify-center p-4 lg:p-8 overflow-hidden">
+          <div className="order-1 lg:order-2 flex-1 bg-[#fff8e8] rounded-[32px] h-60 md:h-96 lg:h-[585px] flex items-center justify-center p-4 lg:p-8 overflow-hidden">
             <div className="w-full flex flex-col gap-4 lg:gap-8">
               {/* Top Card */}
               <div className="bg-[#ffefc1] rounded-3xl lg:h-[148px] w-full"></div>
@@ -57,7 +57,7 @@ export default function ShowcaseSection() {
           </div>
 
           {/* Text Content - Second on mobile, Left on desktop */}
-          <div className="order-2 lg:order-1 flex-1 lg:h-[585px] flex flex-col justify-center">
+          <div className="order-2 lg:order-1 flex-1 flex flex-col justify-center">
             <div className="flex flex-col gap-4 lg:gap-6 mb-6 lg:mb-8">
               <div className="text-[#2461f2] text-sm lg:text-base font-medium font-['Neue_Montreal'] capitalize tracking-[0.64px]">
                 Reach A Global Community
