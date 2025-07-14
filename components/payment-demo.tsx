@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useMemo, useState, ChangeEvent } from 'react'
+import { useState, ChangeEvent } from 'react'
 import MyCombobox from '@/components/my-combobox';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
@@ -94,8 +94,8 @@ export default function PaymentDemo() {
                     <button
                         onClick={() => setDonationType('crypto')}
                         className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-lg border transition-all ${donationType === 'crypto'
-                                ? 'bg-blue-50 border-blue-200 text-blue-600'
-                                : 'bg-gray-50 border-gray-200 text-gray-600 hover:bg-gray-100'
+                            ? 'bg-blue-50 border-blue-200 text-blue-600'
+                            : 'bg-gray-50 border-gray-200 text-gray-600 hover:bg-gray-100'
                             }`}
                     >
                         <CardholderIcon size={16} weight="fill" />
@@ -104,8 +104,8 @@ export default function PaymentDemo() {
                     <button
                         onClick={() => setDonationType('cash')}
                         className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-lg border transition-all ${donationType === 'cash'
-                                ? 'bg-blue-50 border-blue-200 text-blue-600'
-                                : 'bg-gray-50 border-gray-200 text-gray-600 hover:bg-gray-100'
+                            ? 'bg-blue-50 border-blue-200 text-blue-600'
+                            : 'bg-gray-50 border-gray-200 text-gray-600 hover:bg-gray-100'
                             }`}
                     >
                         <MoneyWavyIcon size={16} weight="fill" />
@@ -228,12 +228,12 @@ function CashPaymentContent({
     const onBaseAmountChange = (event: ChangeEvent<HTMLInputElement>) => {
         const value = event.target.value.trim() ? Number(event.target.value) : '';
         onAmountChange(value);
-        
+
         // 计算并更新转换后的金额
         if (value !== '' && typeof value === 'number') {
             const baseRate = fiatExchangeRates[currency] || 1;
             const targetRate = fiatExchangeRates[targetCurrency] || 1;
-            
+
             // 先转换为美元，再转换为目标货币
             const usdAmount = value / baseRate;
             const converted = usdAmount * targetRate;
@@ -246,17 +246,17 @@ function CashPaymentContent({
     // 处理目标货币输入变化，根据目标货币金额反向计算基础货币金额
     const onTargetAmountChange = (event: ChangeEvent<HTMLInputElement>) => {
         const value = event.target.value.trim() ? Number(event.target.value) : '';
-        
+
         if (value === '' || value === 0) {
             onAmountChange('');
             onConvertedAmountChange('');
             return;
         }
-        
+
         if (typeof value === 'number') {
             const baseRate = fiatExchangeRates[currency] || 1;
             const targetRate = fiatExchangeRates[targetCurrency] || 1;
-            
+
             // 从目标货币转换为美元，再转换为基础货币
             const usdAmount = value / targetRate;
             const baseAmount = usdAmount * baseRate;

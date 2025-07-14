@@ -242,10 +242,11 @@ export default function Home() {
                           {/* Verification */}
                           <div className="flex items-center gap-2">
                             <div className="w-8 h-8 lg:w-12 lg:h-12 bg-green-100 rounded-full flex items-center justify-center">
-                              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="lg:w-6 lg:h-6">
-                                <path d="M9 12l2 2 4-4" stroke="#22c55e" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                                <circle cx="12" cy="12" r="9" stroke="#22c55e" strokeWidth="2" />
-                              </svg>
+                              <img
+                                src="/images/verified.gif"
+                                alt="Widget Demo"
+                                className="w-full h-full object-cover"
+                              />
                             </div>
                             <div className="text-black text-lg lg:text-2xl font-semibold leading-8">
                               Verified by universities
