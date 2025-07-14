@@ -221,7 +221,7 @@ export default function Home() {
                   </div>
 
                   {/* Right Content - Project Demo */}
-                  <div className="flex-1 bg-[#fff8e8] rounded-[32px] h-[400px] lg:h-[585px] flex items-center justify-center p-4 lg:p-8">
+                  <div className="flex-1 bg-[#fff8e8] rounded-[32px] h-[400px] lg:h-[585px] flex items-center justify-center p-4 lg:p-8 overflow-hidden">
                     <div className="w-full flex flex-col gap-4 lg:gap-8">
                       {/* Top Card */}
                       <div className="bg-[#ffefc1] rounded-3xl h-[80px] lg:h-[148px] w-full"></div>
