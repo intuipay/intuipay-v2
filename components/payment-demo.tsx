@@ -43,7 +43,7 @@ export default function PaymentDemo() {
     const [dollar, setDollar] = useState(1);
     const [currency, setCurrency] = useState<string>('USD');
     const [targetCurrency, setTargetCurrency] = useState<string>('CNY');
-    const [amount, setAmount] = useState<number | ''>(24000);
+    const [amount, setAmount] = useState<number | ''>(1);
     const [convertedAmount, setConvertedAmount] = useState<number | ''>('');
 
     function onAmountChange(event: ChangeEvent<HTMLInputElement>) {
@@ -92,7 +92,10 @@ export default function PaymentDemo() {
             <div className="space-y-2">
                 <div className="flex gap-2">
                     <button
-                        onClick={() => setDonationType('crypto')}
+                        onClick={() => {
+                            setDonationType('crypto');
+                            setAmount(1);
+                        }}
                         className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-lg border transition-all ${donationType === 'crypto'
                             ? 'bg-blue-50 border-blue-200 text-blue-600'
                             : 'bg-gray-50 border-gray-200 text-gray-600 hover:bg-gray-100'
@@ -102,7 +105,10 @@ export default function PaymentDemo() {
                         <span className="font-medium">Crypto</span>
                     </button>
                     <button
-                        onClick={() => setDonationType('cash')}
+                        onClick={() => {
+                            setDonationType('cash');
+                            setAmount('');
+                        }}
                         className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-lg border transition-all ${donationType === 'cash'
                             ? 'bg-blue-50 border-blue-200 text-blue-600'
                             : 'bg-gray-50 border-gray-200 text-gray-600 hover:bg-gray-100'
