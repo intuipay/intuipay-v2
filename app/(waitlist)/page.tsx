@@ -7,7 +7,7 @@ import { AnimatedCounter } from '@/components/animated-counter';
 import TrustSection from '@/components/trust-section';
 import { CodeIcon, CoinsIcon, GlobeIcon, GraduationCapIcon, ArrowsDownUpIcon, MagnifyingGlassIcon, MoneyIcon, ReceiptIcon, FilesIcon } from '@phosphor-icons/react/ssr';
 
-export default async function Home() {
+export default function Home() {
   return (
     <>
       <StructuredData />
