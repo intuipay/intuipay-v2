@@ -18,13 +18,15 @@ export function SiteHeader() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-black/10 bg-white">
-      <div className="w-full max-w-7xl mx-auto px-[120px] md:px-10 flex h-16 items-center justify-between">
-        <div className="flex-1">
+    <header className="sticky top-0 z-50 w-full bg-white">
+      <div className="flex items-center justify-between py-3 px-12 lg:px-[120px] md:px-10">
+        {/* Logo Section */}
+        <div className="flex-grow basis-0 min-w-0">
           <IntuipayLogo />
         </div>
 
-        <nav className="hidden md:flex items-center gap-4 w-min flex-none">
+        {/* Desktop Navigation */}
+        <nav className="hidden md:flex items-center gap-4 flex-none">
           {navLinks.map((link) => (
             <Link
               key={link.label}
@@ -32,7 +34,7 @@ export function SiteHeader() {
               className={`px-2 py-1 text-base font-medium transition-colors rounded-lg ${
                 link.label === 'Donate' 
                   ? 'text-[#2461F2]' 
-                  : 'text-black hover:text-neutral-text'
+                  : 'text-black hover:text-gray-600'
               }`}
             >
               {link.label}
@@ -40,11 +42,12 @@ export function SiteHeader() {
           ))}
         </nav>
 
-        <div className="flex-1 hidden md:flex items-center justify-end gap-2">
+        {/* Desktop Right Section */}
+        <div className="flex-grow basis-0 min-w-0 hidden md:flex items-center justify-end gap-2">
+          {/* Language Dropdown */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="sm" className="rounded-lg px-3 py-2">
-                <Globe size={16} className="mr-2" />
+              <Button variant="ghost" className="rounded-lg px-3 py-2 text-base font-medium">
                 EN
                 <CaretDown size={18} className="ml-1" />
               </Button>
@@ -55,20 +58,25 @@ export function SiteHeader() {
             </DropdownMenuContent>
           </DropdownMenu>
 
+          {/* Sign In Button */}
           <Button
             asChild
-            className="text-base font-medium px-6 py-2 bg-white text-black rounded-[32px] border-0"
+            className="text-base font-medium px-6 py-2 bg-white text-black rounded-[32px] hover:bg-gray-50 transition-colors"
             variant="ghost"
           >
             <Link
               aria-label="Sign in"
               href="https://dash.intuipay.xyz/login"
               target="_blank"
-            >Sign in</Link>
+            >
+              Sign in
+            </Link>
           </Button>
+
+          {/* Get Started Button */}
           <Button
             asChild
-            className="text-base font-medium bg-black rounded-[32px] text-white hidden lg:block px-6 py-2"
+            className="text-base font-medium bg-black rounded-[32px] text-white hover:bg-gray-800 transition-colors px-6 py-2"
           >
             <Link
               href="https://dash.intuipay.xyz/signup"
@@ -78,41 +86,48 @@ export function SiteHeader() {
               Get Started
             </Link>
           </Button>
-
         </div>
 
+        {/* Mobile Menu Button */}
         <div className="md:hidden">
           <Button
             variant="ghost"
             size="icon"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-label="Toggle menu"
+            className="h-10 w-10"
           >
             {mobileMenuOpen ? <X size={24} /> : <List size={24} />}
           </Button>
         </div>
       </div>
 
+      {/* Mobile Menu */}
       {mobileMenuOpen && (
-        <div className="md:hidden absolute top-16 left-0 right-0 bg-white shadow-lg py-4 px-5 z-40 border-b border-black/10">
-          <div className="container flex flex-col space-y-4">
-            {navLinks.map((link) => (
-              <Link
-                key={link.label}
-                href={link.href}
-                className={`text-sm font-medium transition-colors py-2 ${
-                  link.label === 'Donate' 
-                    ? 'text-[#2461F2]' 
-                    : 'text-black hover:text-neutral-text'
-                }`}
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                {link.label}
-              </Link>
-            ))}
+        <div className="md:hidden absolute top-full left-0 right-0 bg-white shadow-lg border-t border-black/10 z-40">
+          <div className="px-4 py-4 space-y-4">
+            {/* Mobile Navigation Links */}
+            <div className="flex flex-col space-y-3">
+              {navLinks.map((link) => (
+                <Link
+                  key={link.label}
+                  href={link.href}
+                  className={`text-base font-medium py-2 transition-colors ${
+                    link.label === 'Donate' 
+                      ? 'text-[#2461F2]' 
+                      : 'text-black hover:text-gray-600'
+                  }`}
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  {link.label}
+                </Link>
+              ))}
+            </div>
+
+            {/* Mobile Language Dropdown */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="justify-start rounded-lg">
+                <Button variant="ghost" className="justify-start rounded-lg w-full">
                   <Globe size={16} className="mr-2" />
                   EN
                   <CaretDown size={18} className="ml-1" />
@@ -123,9 +138,44 @@ export function SiteHeader() {
                 <DropdownMenuItem>ES (Español)</DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
+
+            {/* Mobile Action Buttons */}
+            <div className="flex flex-col space-y-3 pt-2">
+              <Button
+                asChild
+                className="text-base font-medium px-6 py-3 bg-white text-black rounded-[32px] border border-gray-200 hover:bg-gray-50 transition-colors"
+                variant="ghost"
+              >
+                <Link
+                  aria-label="Sign in"
+                  href="https://dash.intuipay.xyz/login"
+                  target="_blank"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Sign in
+                </Link>
+              </Button>
+              
+              <Button
+                asChild
+                className="text-base font-medium bg-black rounded-[32px] text-white hover:bg-gray-800 transition-colors px-6 py-3"
+              >
+                <Link
+                  href="https://dash.intuipay.xyz/signup"
+                  target="_blank"
+                  aria-label="Get Started"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Get Started
+                </Link>
+              </Button>
+            </div>
           </div>
         </div>
       )}
+
+      {/* Border */}
+      <div className="absolute bottom-0 left-0 right-0 h-px bg-black/10" />
     </header>
   )
 }
