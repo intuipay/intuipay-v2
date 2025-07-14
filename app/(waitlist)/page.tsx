@@ -120,8 +120,19 @@ export default function Home() {
               <div className="flex flex-col gap-8 md:gap-16">
                 {/* Main Content Row */}
                 <div className="flex flex-col lg:flex-row gap-8 lg:gap-16 items-center">
-                  {/* Left Content */}
-                  <div className="flex-1 lg:h-[585px] flex flex-col justify-center">
+                  {/* Widget Demo - First on mobile, Right on desktop */}
+                  <div className="order-1 lg:order-2 flex-1 bg-[#f1fbe8] rounded-[32px] h-[300px] lg:h-[585px] flex items-center justify-center p-4 lg:p-8">
+                    <div className="w-full aspect-[1240/824] shadow-[0px_4px_12px_0px_rgba(0,0,0,0.08)] rounded-2xl overflow-hidden">
+                      <img
+                        src="/images/mockup_light.gif"
+                        alt="Widget Demo"
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Text Content - Second on mobile, Left on desktop */}
+                  <div className="order-2 lg:order-1 flex-1 lg:h-[585px] flex flex-col justify-center">
                     <div className="flex flex-col gap-4 lg:gap-6 mb-6 lg:mb-8">
                       <div className="text-[#2461f2] text-sm lg:text-base font-medium font-['Neue_Montreal'] capitalize tracking-[0.64px]">
                         Accept Crypto with Ease
@@ -144,17 +155,6 @@ export default function Home() {
                         </svg>
                       </div>
                     </button>
-                  </div>
-
-                  {/* Right Content - Widget Demo */}
-                  <div className="flex-1 bg-[#f1fbe8] rounded-[32px] h-[300px] lg:h-[585px] flex items-center justify-center p-4 lg:p-8">
-                    <div className="w-full aspect-[1240/824] shadow-[0px_4px_12px_0px_rgba(0,0,0,0.08)] rounded-2xl overflow-hidden">
-                      <img
-                        src="/images/mockup_light.gif"
-                        alt="Widget Demo"
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
                   </div>
                 </div>
 
@@ -192,34 +192,8 @@ export default function Home() {
               <div className="flex flex-col gap-8 md:gap-16">
                 {/* Main Content Row */}
                 <div className="flex flex-col lg:flex-row gap-8 lg:gap-24 items-center">
-                  {/* Left Content */}
-                  <div className="flex-1 lg:h-[585px] flex flex-col justify-center">
-                    <div className="flex flex-col gap-4 lg:gap-6 mb-6 lg:mb-8">
-                      <div className="text-[#2461f2] text-sm lg:text-base font-medium font-['Neue_Montreal'] capitalize tracking-[0.64px]">
-                        Reach A Global Community
-                      </div>
-                      <div className="text-black text-[28px] lg:text-[56px] font-medium font-['Neue_Montreal'] capitalize leading-normal">
-                        Showcase Your Projects To Crypto Donors
-                      </div>
-                      <div className="text-black/50 text-sm lg:text-base font-normal leading-6">
-                        Get discovered by donors around the world who want to directly support impactful research and education.
-                      </div>
-                    </div>
-
-                    <button className="flex items-center gap-2 px-6 lg:px-8 py-3 lg:py-4 border border-black/70 rounded-full w-fit">
-                      <span className="text-black/70 text-lg lg:text-xl font-semibold leading-6">
-                        Explore Marketplace
-                      </span>
-                      <div className="w-5 h-5 lg:w-6 lg:h-6">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <path d="M7 17L17 7M17 7H7M17 7V17" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                        </svg>
-                      </div>
-                    </button>
-                  </div>
-
-                  {/* Right Content - Project Demo */}
-                  <div className="flex-1 bg-[#fff8e8] rounded-[32px] h-[400px] lg:h-[585px] flex items-center justify-center p-4 lg:p-8 overflow-hidden">
+                  {/* Project Demo - First on mobile, Right on desktop */}
+                  <div className="order-1 lg:order-2 flex-1 bg-[#fff8e8] rounded-[32px] h-[400px] lg:h-[585px] flex items-center justify-center p-4 lg:p-8 overflow-hidden">
                     <div className="w-full flex flex-col gap-4 lg:gap-8">
                       {/* Top Card */}
                       <div className="bg-[#ffefc1] rounded-3xl h-[80px] lg:h-[148px] w-full"></div>
@@ -267,6 +241,32 @@ export default function Home() {
                       <div className="bg-[#ffefc1] rounded-3xl h-[80px] lg:h-[168px] w-full"></div>
                     </div>
                   </div>
+
+                  {/* Text Content - Second on mobile, Left on desktop */}
+                  <div className="order-2 lg:order-1 flex-1 lg:h-[585px] flex flex-col justify-center">
+                    <div className="flex flex-col gap-4 lg:gap-6 mb-6 lg:mb-8">
+                      <div className="text-[#2461f2] text-sm lg:text-base font-medium font-['Neue_Montreal'] capitalize tracking-[0.64px]">
+                        Reach A Global Community
+                      </div>
+                      <div className="text-black text-[28px] lg:text-[56px] font-medium font-['Neue_Montreal'] capitalize leading-normal">
+                        Showcase Your Projects To Crypto Donors
+                      </div>
+                      <div className="text-black/50 text-sm lg:text-base font-normal leading-6">
+                        Get discovered by donors around the world who want to directly support impactful research and education.
+                      </div>
+                    </div>
+
+                    <button className="flex items-center gap-2 px-6 lg:px-8 py-3 lg:py-4 border border-black/70 rounded-full w-fit">
+                      <span className="text-black/70 text-lg lg:text-xl font-semibold leading-6">
+                        Explore Marketplace
+                      </span>
+                      <div className="w-5 h-5 lg:w-6 lg:h-6">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M7 17L17 7M17 7H7M17 7V17" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                        </svg>
+                      </div>
+                    </button>
+                  </div>
                 </div>
 
                 {/* Divider Line */}
@@ -303,34 +303,8 @@ export default function Home() {
               <div className="flex flex-col gap-8 md:gap-16">
                 {/* Main Content Row */}
                 <div className="flex flex-col lg:flex-row gap-8 lg:gap-24 items-center">
-                  {/* Left Content */}
-                  <div className="flex-1 lg:h-[585px] flex flex-col justify-center">
-                    <div className="flex flex-col gap-4 lg:gap-6 mb-6 lg:mb-8">
-                      <div className="text-[#2461f2] text-sm lg:text-base font-medium font-['Neue_Montreal'] capitalize tracking-[0.64px]">
-                        Control, Track, Report
-                      </div>
-                      <div className="text-black text-[28px] lg:text-[56px] font-medium font-['Neue_Montreal'] capitalize leading-normal">
-                        All-in-One Dashboard For Your Crypto Giving
-                      </div>
-                      <div className="text-black/50 text-sm lg:text-base font-normal leading-6">
-                        Manage donations, compliance, and reporting — all from a single place, designed for institutional needs.
-                      </div>
-                    </div>
-
-                    <button className="flex items-center gap-2 px-6 lg:px-8 py-3 lg:py-4 border border-black/70 rounded-full w-fit">
-                      <span className="text-black/70 text-lg lg:text-xl font-semibold leading-6">
-                        Create account
-                      </span>
-                      <div className="w-5 h-5 lg:w-6 lg:h-6">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <path d="M7 17L17 7M17 7H7M17 7V17" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                        </svg>
-                      </div>
-                    </button>
-                  </div>
-
-                  {/* Right Content - Dashboard Demo */}
-                  <div className="flex-1 bg-[#f6e7fe] rounded-[32px] h-[400px] lg:h-[585px] flex items-center justify-center pl-4 lg:pl-8 pr-0 py-0">
+                  {/* Dashboard Demo - First on mobile, Right on desktop */}
+                  <div className="order-1 lg:order-2 flex-1 bg-[#f6e7fe] rounded-[32px] h-[400px] lg:h-[585px] flex items-center justify-center pl-4 lg:pl-8 pr-0 py-0">
                     <div className="w-full flex flex-col gap-4 lg:gap-8">
                       {/* Main Balance Card */}
                       <div className="bg-white rounded-l-2xl shadow-[0px_4px_12px_0px_rgba(0,0,0,0.08)] px-4 lg:px-8 py-3 lg:py-6">
@@ -395,6 +369,32 @@ export default function Home() {
                         </div>
                       </div>
                     </div>
+                  </div>
+
+                  {/* Text Content - Second on mobile, Left on desktop */}
+                  <div className="order-2 lg:order-1 flex-1 lg:h-[585px] flex flex-col justify-center">
+                    <div className="flex flex-col gap-4 lg:gap-6 mb-6 lg:mb-8">
+                      <div className="text-[#2461f2] text-sm lg:text-base font-medium font-['Neue_Montreal'] capitalize tracking-[0.64px]">
+                        Control, Track, Report
+                      </div>
+                      <div className="text-black text-[28px] lg:text-[56px] font-medium font-['Neue_Montreal'] capitalize leading-normal">
+                        All-in-One Dashboard For Your Crypto Giving
+                      </div>
+                      <div className="text-black/50 text-sm lg:text-base font-normal leading-6">
+                        Manage donations, compliance, and reporting — all from a single place, designed for institutional needs.
+                      </div>
+                    </div>
+
+                    <button className="flex items-center gap-2 px-6 lg:px-8 py-3 lg:py-4 border border-black/70 rounded-full w-fit">
+                      <span className="text-black/70 text-lg lg:text-xl font-semibold leading-6">
+                        Create account
+                      </span>
+                      <div className="w-5 h-5 lg:w-6 lg:h-6">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M7 17L17 7M17 7H7M17 7V17" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                        </svg>
+                      </div>
+                    </button>
                   </div>
                 </div>
 
@@ -475,9 +475,9 @@ export default function Home() {
           {/* Footer Section */}
           <section className="bg-brand-blue">
             <div className="max-w-7xl mx-auto px-6 md:px-10 lg:px-[120px] py-12">
-              <div className="flex flex-col sm:flex-row justify-between gap-6 sm:gap-8">
-                {/* Product Column */}
-                <div className="flex-1 flex flex-col gap-4 sm:gap-6">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 sm:gap-8">
+                {/* Left Column on Mobile - Product */}
+                <div className="flex flex-col gap-4 sm:gap-6">
                   <div className="text-black text-[14px] font-semibold leading-5">
                     Product
                   </div>
@@ -491,8 +491,8 @@ export default function Home() {
                   </div>
                 </div>
 
-                {/* For organizations Column */}
-                <div className="flex-1 flex flex-col gap-4 sm:gap-6">
+                {/* Right Column on Mobile - For organizations */}
+                <div className="flex flex-col gap-4 sm:gap-6">
                   <div className="text-black text-[14px] font-semibold leading-5">
                     For organizations
                   </div>
@@ -506,8 +506,8 @@ export default function Home() {
                   </div>
                 </div>
 
-                {/* Resources Column */}
-                <div className="flex-1 flex flex-col gap-4 sm:gap-6">
+                {/* Left Column on Mobile - Resources */}
+                <div className="flex flex-col gap-4 sm:gap-6">
                   <div className="text-black text-[14px] font-semibold leading-5">
                     Resources
                   </div>
@@ -527,8 +527,8 @@ export default function Home() {
                   </div>
                 </div>
 
-                {/* Social Column */}
-                <div className="flex-1 flex flex-col gap-4 sm:gap-6">
+                {/* Right Column on Mobile - Social */}
+                <div className="flex flex-col gap-4 sm:gap-6">
                   <div className="text-black text-[14px] font-semibold leading-5">
                     Social
                   </div>
