@@ -39,7 +39,7 @@ const fiatExchangeRates: Record<string, number> = {
 // 首页中用到的捐款的demo widget
 export default function PaymentDemo() {
     const [donationType, setDonationType] = useState<'crypto' | 'cash'>('crypto');
-    const [paymentMethod, setPaymentMethod] = useState(paymentMethods[0].value);
+    const [paymentMethod, setPaymentMethod] = useState(paymentMethods[ 0 ].value);
     const [dollar, setDollar] = useState(1);
     const [currency, setCurrency] = useState<string>('USD');
     const [targetCurrency, setTargetCurrency] = useState<string>('CNY');
@@ -52,7 +52,7 @@ export default function PaymentDemo() {
         setAmount(value);
 
         // 根据当前支付方式和汇率计算美元价值
-        const rate = exchangeRates[paymentMethod as keyof typeof exchangeRates];
+        const rate = exchangeRates[ paymentMethod as keyof typeof exchangeRates ];
         const dollarValue = value * rate;
         setDollar(Number(dollarValue.toFixed(2)));
     }
@@ -64,7 +64,7 @@ export default function PaymentDemo() {
         setDollar(value);
 
         // 根据当前支付方式和汇率计算加密货币数量
-        const rate = exchangeRates[paymentMethod as keyof typeof exchangeRates];
+        const rate = exchangeRates[ paymentMethod as keyof typeof exchangeRates ];
         const cryptoAmount = value / rate;
         setAmount(Number(cryptoAmount.toFixed(6)));
     }
@@ -77,7 +77,7 @@ export default function PaymentDemo() {
         const newAmount = 1;
         setAmount(newAmount);
 
-        const rate = exchangeRates[value as keyof typeof exchangeRates];
+        const rate = exchangeRates[ value as keyof typeof exchangeRates ];
         const dollarValue = newAmount * rate;
         setDollar(Number(dollarValue.toFixed(2)));
     }
@@ -177,7 +177,7 @@ function CryptoPaymentContent({
             {/* Amount Input */}
             <div className="space-y-2">
                 <Label className="text-sm font-semibold text-black/50">Amount</Label>
-                <div className={`flex items-center border border-black/10 rounded-lg focus-within:outline focus-within:outline-1 focus-within:outline-blue-400`}>
+                <div className={'flex items-center border border-black/10 rounded-lg focus-within:outline focus-within:outline-1 focus-within:outline-blue-400'}>
                     <Input
                         className="text-sm h-12 flex-1 px-4 focus:outline-none"
                         hasRing={false}
@@ -231,8 +231,8 @@ function CashPaymentContent({
 
         // 计算并更新转换后的金额
         if (value !== '' && typeof value === 'number') {
-            const baseRate = fiatExchangeRates[currency] || 1;
-            const targetRate = fiatExchangeRates[targetCurrency] || 1;
+            const baseRate = fiatExchangeRates[ currency ] || 1;
+            const targetRate = fiatExchangeRates[ targetCurrency ] || 1;
 
             // 先转换为美元，再转换为目标货币
             const usdAmount = value / baseRate;
@@ -254,8 +254,8 @@ function CashPaymentContent({
         }
 
         if (typeof value === 'number') {
-            const baseRate = fiatExchangeRates[currency] || 1;
-            const targetRate = fiatExchangeRates[targetCurrency] || 1;
+            const baseRate = fiatExchangeRates[ currency ] || 1;
+            const targetRate = fiatExchangeRates[ targetCurrency ] || 1;
 
             // 从目标货币转换为美元，再转换为基础货币
             const usdAmount = value / targetRate;

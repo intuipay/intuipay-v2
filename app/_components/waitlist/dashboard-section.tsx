@@ -1,0 +1,134 @@
+import { MoneyIcon, ReceiptIcon, FilesIcon } from '@phosphor-icons/react/ssr';
+import { AnimatedCounter } from '@/components/animated-counter';
+
+export default function DashboardSection() {
+  return (
+    <section className="py-16 md:py-[120px]">
+      <div className="flex flex-col gap-8 md:gap-16">
+        {/* Main Content Row */}
+        <div className="flex flex-col lg:flex-row gap-8 lg:gap-24 items-center">
+          {/* Dashboard Demo - First on mobile, Right on desktop */}
+          <div className="order-1 lg:order-2 flex-1 bg-[#f6e7fe] rounded-[32px] h-[240px] lg:h-[585px] flex items-center justify-center pl-4 lg:pl-8 pr-0 py-0">
+            <div className="w-full flex flex-col gap-4 py-4 lg:py-8 lg:gap-8">
+              {/* Main Balance Card */}
+              <div className="bg-white rounded-l-2xl shadow-[0px_4px_12px_0px_rgba(0,0,0,0.08)] px-4 lg:px-8 py-3 lg:py-6">
+                <div className="w-full lg:w-[263px] flex flex-col gap-2 lg:gap-3">
+                  <div className="text-black text-xs lg:text-sm font-semibold leading-5">
+                    Balance
+                  </div>
+                  <div className="text-black text-[20px] lg:text-[32px] font-semibold leading-10">
+                    <AnimatedCounter
+                      end={12345}
+                      prefix="$"
+                      suffix=".00"
+                      duration={2500}
+                    />
+                  </div>
+                  <div className="text-black/60 text-xs lg:text-sm font-semibold leading-5">
+                    The next withdraw period: 07/05/2024
+                  </div>
+                </div>
+              </div>
+
+              {/* Stats Cards Row */}
+              <div className="flex flex-row gap-4 lg:gap-8">
+                {/* Total received card */}
+                <div className="flex-1 bg-white rounded-2xl shadow-[0px_4px_12px_0px_rgba(0,0,0,0.08)] p-3 lg:p-6">
+                  <div className="flex flex-col gap-2 lg:gap-4">
+                    <div className="text-black text-lg lg:text-2xl font-semibold leading-8">
+                      <AnimatedCounter
+                        end={1234}
+                        prefix="$"
+                        suffix=".00"
+                        duration={2000}
+                      />
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <div className="w-2 h-2 bg-red-500 rounded-full"></div>
+                      <div className="text-black/70 text-xs lg:text-sm font-semibold leading-5">
+                        Total received this month
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Processing received card */}
+                <div className="flex-1 bg-white rounded-l-2xl shadow-[0px_4px_12px_0px_rgba(0,0,0,0.08)] p-3 lg:p-6">
+                  <div className="flex flex-col gap-2 lg:gap-4">
+                    <div className="text-black text-lg lg:text-2xl font-semibold leading-8">
+                      <AnimatedCounter
+                        end={1234}
+                        prefix="$"
+                        suffix=".00"
+                        duration={2200}
+                      />
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
+                      <div className="text-black/70 text-xs lg:text-sm font-semibold leading-5">
+                        Processing received
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Text Content - Second on mobile, Left on desktop */}
+          <div className="order-2 lg:order-1 flex-1 lg:h-[585px] flex flex-col justify-center">
+            <div className="flex flex-col gap-4 lg:gap-6 mb-6 lg:mb-8">
+              <div className="text-[#2461f2] text-sm lg:text-base font-medium font-['Neue_Montreal'] capitalize tracking-[0.64px]">
+                Control, Track, Report
+              </div>
+              <div className="text-black text-[28px] lg:text-[56px] font-medium font-['Neue_Montreal'] capitalize leading-normal">
+                All-in-One Dashboard For Your Crypto Giving
+              </div>
+              <div className="text-black/50 text-sm lg:text-base font-normal leading-6">
+                Manage donations, compliance, and reporting — all from a single place, designed for institutional needs.
+              </div>
+            </div>
+
+            <button className="flex items-center gap-2 px-6 lg:px-8 py-3 lg:py-4 border border-black/70 rounded-full w-fit">
+              <span className="text-black/70 text-lg lg:text-xl font-semibold leading-6">
+                Create account
+              </span>
+              <div className="w-5 h-5 lg:w-6 lg:h-6">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M7 17L17 7M17 7H7M17 7V17" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </div>
+            </button>
+          </div>
+        </div>
+
+        {/* Divider Line */}
+        <div className="w-full h-px bg-gray-200"></div>
+
+        {/* Features Row */}
+        <div className="flex flex-col md:flex-row gap-8 md:gap-24">
+          <div className="flex-1 flex flex-col gap-4 md:gap-6">
+            <MoneyIcon size={32} />
+            <div className="text-black/70 text-sm md:text-base font-normal leading-6">
+              Monitor real-time donations and currency breakdowns
+            </div>
+          </div>
+
+          <div className="flex-1 flex flex-col gap-4 md:gap-6">
+            <ReceiptIcon size={32} />
+            <div className="text-black/70 text-sm md:text-base font-normal leading-6">
+              Manage receipts, project listings, and donor data
+            </div>
+          </div>
+
+          <div className="flex-1 flex flex-col gap-4 md:gap-6">
+            <FilesIcon size={32} />
+            <div className="text-black/70 text-sm md:text-base font-normal leading-6">
+              Download reports for finance and tax teams
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
