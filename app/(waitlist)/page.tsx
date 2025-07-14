@@ -195,10 +195,10 @@ export default function Home() {
                 {/* Main Content Row */}
                 <div className="flex flex-col lg:flex-row gap-8 lg:gap-24 items-center">
                   {/* Project Demo - First on mobile, Right on desktop */}
-                  <div className="order-1 lg:order-2 flex-1 bg-[#fff8e8] rounded-[32px] h-[400px] lg:h-[585px] flex items-center justify-center p-4 lg:p-8 overflow-hidden">
+                  <div className="order-1 lg:order-2 flex-1 bg-[#fff8e8] rounded-[32px] h-[396px] lg:h-[585px] flex items-center justify-center p-4 lg:p-8 overflow-hidden">
                     <div className="w-full flex flex-col gap-4 lg:gap-8">
                       {/* Top Card */}
-                      <div className="bg-[#ffefc1] rounded-3xl h-[80px] lg:h-[148px] w-full"></div>
+                      <div className="bg-[#ffefc1] rounded-3xl lg:h-[148px] w-full"></div>
 
                       {/* Main Project Card */}
                       <div className="bg-white rounded-3xl shadow-[0px_4px_12px_0px_rgba(0,0,0,0.08)] p-4 lg:p-8">
@@ -240,7 +240,7 @@ export default function Home() {
                       </div>
 
                       {/* Bottom Card */}
-                      <div className="bg-[#ffefc1] rounded-3xl h-[80px] lg:h-[168px] w-full"></div>
+                      <div className="bg-[#ffefc1] rounded-3xl lg:h-[168px] w-full"></div>
                     </div>
                   </div>
 
