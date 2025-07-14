@@ -341,7 +341,12 @@ export default function Home() {
                             Balance
                           </div>
                           <div className="text-black text-[20px] lg:text-[32px] font-semibold leading-10">
-                            $12,345.00
+                            <AnimatedCounter
+                              end={12345}
+                              prefix="$"
+                              suffix=".00"
+                              duration={2500}
+                            />
                           </div>
                           <div className="text-black/60 text-xs lg:text-sm font-semibold leading-5">
                             The next withdraw period: 07/05/2024
@@ -355,7 +360,12 @@ export default function Home() {
                         <div className="flex-1 bg-white rounded-2xl shadow-[0px_4px_12px_0px_rgba(0,0,0,0.08)] p-3 lg:p-6">
                           <div className="flex flex-col gap-2 lg:gap-4">
                             <div className="text-black text-lg lg:text-2xl font-semibold leading-8">
-                              $1,234.00
+                              <AnimatedCounter
+                                end={1234}
+                                prefix="$"
+                                suffix=".00"
+                                duration={2000}
+                              />
                             </div>
                             <div className="flex items-center gap-1">
                               <div className="w-2 h-2 bg-red-500 rounded-full"></div>
@@ -370,7 +380,12 @@ export default function Home() {
                         <div className="flex-1 bg-white rounded-l-2xl shadow-[0px_4px_12px_0px_rgba(0,0,0,0.08)] p-3 lg:p-6">
                           <div className="flex flex-col gap-2 lg:gap-4">
                             <div className="text-black text-lg lg:text-2xl font-semibold leading-8">
-                              $1,234.00
+                              <AnimatedCounter
+                                end={1234}
+                                prefix="$"
+                                suffix=".00"
+                                duration={2200}
+                              />
                             </div>
                             <div className="flex items-center gap-1">
                               <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
