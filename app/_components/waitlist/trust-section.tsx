@@ -34,12 +34,12 @@ export default function TrustSection() {
             {duplicatedPartners.map((partner, index) => (
               <div
                 key={`${partner.name}-${index}`}
-                className="flex-shrink-0 flex items-center justify-center min-w-[200px] h-16 grayscale hover:grayscale-0 transition-all duration-300"
+                className="flex-shrink-0 flex items-center justify-center h-16 grayscale hover:grayscale-0 transition-all duration-300"
               >
                 <img 
                   src={partner.logo} 
                   alt={`${partner.name} Logo`}
-                  className="max-h-12 max-w-[150px] object-contain"
+                  className="max-h-12 object-contain"
                 />
               </div>
             ))}
