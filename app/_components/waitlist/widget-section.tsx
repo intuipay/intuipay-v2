@@ -9,11 +9,16 @@ export default function WidgetSection() {
           {/* Widget Demo - First on mobile, Right on desktop */}
           <div className="order-1 lg:order-2 flex-1 bg-[#f1fbe8] rounded-[32px] h-[300px] lg:h-[585px] flex items-center justify-center p-4 lg:p-8">
             <div className="w-full aspect-[1240/824] shadow-[0px_4px_12px_0px_rgba(0,0,0,0.08)] rounded-2xl overflow-hidden">
-              <img
-                src="/images/mockup_light.gif"
-                alt="Widget Demo"
+              <video
+                src="/images/mockup_light.mp4"
+                autoPlay
+                loop
+                muted
+                playsInline
                 className="w-full h-full object-cover"
-              />
+              >
+                Your browser does not support the video tag.
+              </video>
             </div>
           </div>
 
