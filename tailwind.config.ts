@@ -45,6 +45,9 @@ const config: Config = {
         pink: {
           50: "#fff0f7",
         },
+        brand: {
+          blue: "#E7EEFE",
+        },
         background: {
           DEFAULT: "hsl(var(--background))",
           gray: "#F5F5F7",
