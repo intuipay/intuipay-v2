@@ -17,8 +17,8 @@ export default function Home() {
         {/* Hero Section */}
         <main className="flex-1">
           <section className="bg-brand-blue py-16 px-6 md:px-10">
-            <div className="max-w-7xl mx-auto xl:flex xl:items-center xl:gap-16">
-              <div className="xl:w-1/2 flex-none mb-12 xl:mb-0">
+            <div className="max-w-7xl mx-auto flex flex-col xl:flex-row xl:items-center xl:gap-16 gap-12">
+              <div className="xl:w-1/2 flex-none">
                 <h1 className="text-3xl sm:text-5xl xl:text-4xl 2xl:text-5xl font-medium mb-6 leading-tight">
                   Where{' '}
                   <span className="inline-flex items-center align-top w-20 relative me-2" aria-label="Flags">
@@ -42,8 +42,8 @@ export default function Home() {
                   Accept borderless donations and connect with donors who support education, research, and innovation.
                 </p>
 
-                <div className="flex flex-col sm:flex-row justify-start items-start sm:items-center gap-4 sm:gap-8">
-                  <button className="bg-black text-white px-8 py-3 rounded-full text-lg font-medium hover:bg-gray-800 transition-colors">
+                <div className="flex flex-col sm:flex-row justify-start items-center sm:items-center gap-4 sm:gap-8">
+                  <button className="bg-black text-white px-8 py-3 rounded-full text-lg font-medium hover:bg-gray-800 transition-colors w-full sm:w-auto">
                     Get started
                   </button>
 
@@ -53,9 +53,7 @@ export default function Home() {
                 </div>
               </div>
 
-
-
-              <div className="xl:w-1/2 flex-none px-6 py-12">
+              <div className="xl:w-1/2 flex-none px-6">
                 <div className="w-full max-w-md mx-auto p-6 md:p-8 bg-white rounded-2xl shadow-sm border border-gray-100">
                   <PaymentDemo />
                 </div>
