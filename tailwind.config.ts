@@ -127,7 +127,7 @@ const config: Config = {
             transform: "translateX(0)",
           },
           "100%": {
-            transform: "translateX(calc(-100% / 3))",
+            transform: "translateX(calc(-50% - 4rem))",
           },
         },
       },
