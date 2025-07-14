@@ -306,8 +306,8 @@ export default function Home() {
                 {/* Main Content Row */}
                 <div className="flex flex-col lg:flex-row gap-8 lg:gap-24 items-center">
                   {/* Dashboard Demo - First on mobile, Right on desktop */}
-                  <div className="order-1 lg:order-2 flex-1 bg-[#f6e7fe] rounded-[32px] h-[400px] lg:h-[585px] flex items-center justify-center pl-4 lg:pl-8 pr-0 py-0">
-                    <div className="w-full flex flex-col gap-4 lg:gap-8">
+                  <div className="order-1 lg:order-2 flex-1 bg-[#f6e7fe] rounded-[32px] h-[240px] lg:h-[585px] flex items-center justify-center pl-4 lg:pl-8 pr-0 py-0">
+                    <div className="w-full flex flex-col gap-4 py-4 lg:py-8 lg:gap-8">
                       {/* Main Balance Card */}
                       <div className="bg-white rounded-l-2xl shadow-[0px_4px_12px_0px_rgba(0,0,0,0.08)] px-4 lg:px-8 py-3 lg:py-6">
                         <div className="w-full lg:w-[263px] flex flex-col gap-2 lg:gap-3">
@@ -329,7 +329,7 @@ export default function Home() {
                       </div>
 
                       {/* Stats Cards Row */}
-                      <div className="flex flex-col lg:flex-row gap-4 lg:gap-8">
+                      <div className="flex flex-row gap-4 lg:gap-8">
                         {/* Total received card */}
                         <div className="flex-1 bg-white rounded-2xl shadow-[0px_4px_12px_0px_rgba(0,0,0,0.08)] p-3 lg:p-6">
                           <div className="flex flex-col gap-2 lg:gap-4">
