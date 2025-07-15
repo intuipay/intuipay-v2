@@ -195,8 +195,8 @@ export default function DonationPageComp({
               <div key={step.id} className="flex items-center">
                 <div className={clsx(
                   'h-0.5 flex-1',
-                  index === 0 ? 'bg-gradient-to-r from-white to-blue-600'
-                    : (index > currentStepIndex ? 'bg-black/40' : 'bg-blue-600')
+                  index === 0 ? 'bg-gradient-to-r from-white to-[var(--brand-color)]'
+                    : (index > currentStepIndex ? 'bg-black/40' : 'bg-[var(--brand-color)]')
                 )} />
                 <div className="relative w-6 flex-none">
                   {index < currentStepIndex && (
@@ -215,8 +215,8 @@ export default function DonationPageComp({
                 <div className={clsx(
                   'h-0.5 flex-1',
                   index === steps.length - 1
-                    ? 'bg-gradient-to-l from-white ' + (index < currentStepIndex ? 'to-blue-600' : 'to-black/40')
-                    : (index < currentStepIndex ? 'bg-blue-600' : 'bg-black/40')
+                    ? 'bg-gradient-to-l from-white ' + (index < currentStepIndex ? 'to-[var(--brand-color)]' : 'to-black/40')
+                    : (index < currentStepIndex ? 'bg-[var(--brand-color)]' : 'bg-black/40')
                 )} />
               </div>
             ))}
@@ -225,7 +225,7 @@ export default function DonationPageComp({
             {steps.map((step, index) => (
               <span
                 key={step.id}
-                className={`${index <= currentStepIndex ? 'text-blue-600' : 'text-black/40'}`}
+                className={`${index <= currentStepIndex ? 'text-[var(--brand-color)]' : 'text-black/40'}`}
               >
                 {step.label}
               </span>
