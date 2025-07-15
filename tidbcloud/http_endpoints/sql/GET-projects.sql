@@ -6,6 +6,7 @@ FROM `donation_project` p
   LEFT JOIN `organization` o
   ON `p`.`org_id`=`o`.`id`
 WHERE `status`=10 AND `p`.`deleted_at` IS NULL
+  AND `o`.`deleted_at` IS NULL
   AND `is_widget`=${is_widget}
   AND IF(LENGTH(${search}) > 0, `project_name` LIKE ${search}, 1)
   AND IF(${category} > 0, `category` = ${category}, 1)
