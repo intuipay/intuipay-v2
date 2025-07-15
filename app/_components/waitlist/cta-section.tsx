@@ -8,7 +8,7 @@ export default function CtaSection() {
             Powered by stables, Intuipay's product suite transforms how education gets funded
           </div>
         </div>
-        <button className="bg-black text-white px-6 md:px-8 py-3 md:py-4 rounded-[40px] text-lg md:text-[20px] font-semibold leading-6">Book a demo</button>
+        <button className="bg-black text-white px-6 md:px-8 py-3 md:py-4 rounded-[40px] text-xl font-semibold leading-normal">Book a demo</button>
       </div>
     </section>
   );

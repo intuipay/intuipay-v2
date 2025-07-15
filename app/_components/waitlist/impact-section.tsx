@@ -12,7 +12,7 @@ export default function ImpactSection() {
         </div>
 
         <div className="flex flex-col md:flex-row gap-8 w-full">
-          <div className="flex-1 bg-[#f5f5f7] rounded-[32px] p-6 md:p-12">
+          <div className="flex-1 bg-neutral-100 rounded-[32px] p-6 md:p-12">
             <div className="flex flex-col gap-4 md:gap-8">
               <div className="text-black text-6xl font-medium font-['Neue_Montreal'] capitalize">
                 70%
@@ -23,7 +23,7 @@ export default function ImpactSection() {
             </div>
           </div>
 
-          <div className="flex-1 bg-[#f5f5f7] rounded-[32px] p-6 md:p-12">
+          <div className="flex-1 bg-neutral-100 rounded-[32px] p-6 md:p-12">
             <div className="flex flex-col gap-4 md:gap-8">
               <div className="text-black text-6xl font-medium font-['Neue_Montreal'] capitalize">
                 600Mn
@@ -34,7 +34,7 @@ export default function ImpactSection() {
             </div>
           </div>
 
-          <div className="flex-1 bg-[#f5f5f7] rounded-[32px] p-6 md:p-12">
+          <div className="flex-1 bg-neutral-100 rounded-[32px] p-6 md:p-12">
             <div className="flex flex-col gap-4 md:gap-8">
               <div className="text-black text-6xl font-medium font-['Neue_Montreal'] capitalize">
                 $2.5B
