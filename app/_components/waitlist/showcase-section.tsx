@@ -7,11 +7,11 @@ export default function ShowcaseSection() {
         {/* Main Content Row */}
         <div className="flex flex-col lg:flex-row gap-8 lg:gap-24 items-center">
           {/* Project Demo - First on mobile, Right on desktop */}
-          <div className="order-1 lg:order-2 flex-1 bg-yellow-50 rounded-[32px] h-60 md:h-96 lg:h-[585px] flex items-center justify-center p-4 lg:p-8 overflow-hidden">
+          <div className="order-1 lg:order-2 flex-1 bg-yellow-50 rounded-[32px] flex items-center justify-center p-4 lg:p-8 relative overflow-hidden">
             <div className="w-full flex flex-col justify-center items-center gap-4 lg:gap-8">
-              {/* Top Card */}
-              <div className="self-stretch bg-amber-100 rounded-3xl flex flex-col justify-start items-start">
-                <div className="self-stretch h-36 p-8" />
+              {/* Top Card - Partially hidden */}
+              <div className="self-stretch bg-amber-100 rounded-3xl flex flex-col justify-start items-start -mt-16 md:-mt-20 lg:-mt-24">
+                <div className="self-stretch h-20 md:h-24 lg:h-32 p-8" />
               </div>
 
               {/* Main Project Card */}
@@ -53,9 +53,9 @@ export default function ShowcaseSection() {
                 </div>
               </div>
 
-              {/* Bottom Card */}
-              <div className="self-stretch bg-amber-100 rounded-3xl flex flex-col justify-start items-start">
-                <div className="self-stretch h-40 p-8" />
+              {/* Bottom Card - Partially hidden */}
+              <div className="self-stretch bg-amber-100 rounded-3xl flex flex-col justify-start items-start -mb-16 md:-mb-20 lg:-mb-24">
+                <div className="self-stretch h-20 md:h-24 lg:h-32 p-8" />
               </div>
             </div>
           </div>
