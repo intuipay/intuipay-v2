@@ -7,10 +7,12 @@ export default function ShowcaseSection() {
         {/* Main Content Row */}
         <div className="flex flex-col lg:flex-row gap-8 lg:gap-24 items-center">
           {/* Project Demo - First on mobile, Right on desktop */}
-          <div className="order-1 lg:order-2 flex-1 bg-[#fff8e8] rounded-[32px] h-60 md:h-96 lg:h-[585px] flex items-center justify-center p-4 lg:p-8 overflow-hidden">
-            <div className="w-full flex flex-col gap-4 lg:gap-8">
+          <div className="order-1 lg:order-2 flex-1 bg-yellow-50 rounded-[32px] h-60 md:h-96 lg:h-[585px] flex items-center justify-center p-4 lg:p-8 overflow-hidden">
+            <div className="w-full flex flex-col justify-center items-center gap-4 lg:gap-8">
               {/* Top Card */}
-              <div className="bg-[#ffefc1] rounded-3xl lg:h-[148px] w-full"></div>
+              <div className="self-stretch bg-amber-100 rounded-3xl flex flex-col justify-start items-start">
+                <div className="self-stretch h-36 p-8" />
+              </div>
 
               {/* Main Project Card */}
               <div className="bg-white rounded-3xl shadow-[0px_4px_12px_0px_rgba(0,0,0,0.08)] p-4 lg:p-8">
@@ -52,26 +54,28 @@ export default function ShowcaseSection() {
               </div>
 
               {/* Bottom Card */}
-              <div className="bg-[#ffefc1] rounded-3xl lg:h-[168px] w-full"></div>
+              <div className="self-stretch bg-amber-100 rounded-3xl flex flex-col justify-start items-start">
+                <div className="self-stretch h-40 p-8" />
+              </div>
             </div>
           </div>
 
           {/* Text Content - Second on mobile, Left on desktop */}
-          <div className="order-2 lg:order-1 flex-1 flex flex-col justify-center">
+          <div className="order-2 lg:order-1 flex-1 flex flex-col justify-between items-start self-stretch">
             <div className="flex flex-col gap-4 lg:gap-6 mb-6 lg:mb-8">
-              <div className="text-[#2461f2] text-sm lg:text-base font-medium font-['Neue_Montreal'] capitalize tracking-[0.64px]">
+              <div className="text-blue-600 text-base font-medium font-['Neue_Montreal'] capitalize tracking-wide">
                 Reach A Global Community
               </div>
-              <div className="text-black text-[28px] lg:text-[56px] font-medium font-['Neue_Montreal'] capitalize leading-normal">
+              <div className="text-black text-3xl md:text-6xl font-medium font-['Neue_Montreal'] capitalize">
                 Showcase Your Projects To Crypto Donors
               </div>
-              <div className="text-black/50 text-sm lg:text-base font-normal leading-6">
+              <div className="text-black/50 text-base font-normal leading-normal">
                 Get discovered by donors around the world who want to directly support impactful research and education.
               </div>
             </div>
 
             <button className="flex items-center gap-2 px-6 lg:px-8 py-3 lg:py-4 border border-black/70 rounded-full w-fit">
-              <span className="text-black/70 text-lg lg:text-xl font-semibold leading-6">
+              <span className="text-black/70 text-base md:text-xl font-semibold leading-tight md:leading-normal">
                 Explore Marketplace
               </span>
               <ArrowUpRightIcon size={24} />
