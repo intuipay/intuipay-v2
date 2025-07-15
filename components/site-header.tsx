@@ -19,7 +19,7 @@ export function SiteHeader() {
 
   return (
     <header className="sticky top-0 z-50 w-full bg-white">
-      <div className="flex items-center justify-between py-3 px-12 lg:px-[120px] md:px-10">
+      <div className="flex items-center justify-between py-3 px-8 md:px-12 lg:px-28">
         {/* Logo Section */}
         <div className="flex-grow basis-0 min-w-0">
           <IntuipayLogo />
@@ -33,7 +33,7 @@ export function SiteHeader() {
               href={link.href}
               className={`px-2 py-1 text-base font-medium transition-colors rounded-lg ${
                 link.label === 'Donate' 
-                  ? 'text-[#2461F2]' 
+                  ? 'text-blue-600' 
                   : 'text-black hover:text-gray-600'
               }`}
             >

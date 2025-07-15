@@ -1,3 +1,5 @@
+import Link from 'next/link'
+
 export default function CtaSection() {
   return (
     <section className="bg-brand-blue rounded-tl-[64px] rounded-tr-[64px]">
@@ -8,7 +10,7 @@ export default function CtaSection() {
             Powered by stables, Intuipay's product suite transforms how education gets funded
           </div>
         </div>
-        <button className="bg-black text-white px-6 md:px-8 py-3 md:py-4 rounded-[40px] text-xl font-semibold leading-normal">Book a demo</button>
+        <Link className="bg-black text-white px-6 md:px-8 py-3 md:py-4 rounded-[40px] text-xl font-semibold leading-normal" href="mailto:support@intuipay.xyz">Book a demo</Link>
       </div>
     </section>
   );
