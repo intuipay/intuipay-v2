@@ -91,8 +91,8 @@ export default function DonationPageComp({
     console.log('onMessage', event);
     const allowedOrigins = [
       'http://localhost:3000',
-      'https://intuipay.com',
-      'https://dash.intuipay.com',
+      'https://intuipay.xyz',
+      'https://dash.intuipay.xyz',
     ];
     if (!allowedOrigins.includes(event.origin)) return;
 
@@ -170,7 +170,7 @@ export default function DonationPageComp({
       <div
         className="w-full max-w-xl mx-auto bg-white lg:rounded-2xl lg:shadow-lg px-8 pt-6  lg:px-10"
         style={{
-          '--brand-color': project.brand_color,
+          '--brand-color': projectInfo.brand_color,
         } as React.CSSProperties}
       >
         {/* Hero Image */}
