@@ -25,10 +25,10 @@ export default function WidgetSection() {
           {/* Text Content - Second on mobile, Left on desktop */}
           <div className="order-2 lg:order-1 flex-1 flex flex-col justify-between items-start self-stretch">
             <div className="flex flex-col gap-4 lg:gap-6">
-              <div className="text-blue-600 text-base font-medium font-['Neue_Montreal'] capitalize tracking-wide">
+              <div className="text-blue-600 text-base font-medium font-neue-montreal capitalize tracking-wide">
                 Accept Crypto with Ease
               </div>
-              <div className="text-black text-3xl md:text-6xl font-medium font-['Neue_Montreal'] capitalize">
+              <div className="text-black text-3xl md:text-6xl font-medium font-neue-montreal capitalize">
                 Plug-and-Play Donation Widget
               </div>
               <div className="text-black/50 text-base font-normal leading-normal">

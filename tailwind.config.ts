@@ -15,7 +15,7 @@ const config: Config = {
     extend: {
       fontFamily: {
         sans: ["var(--font-sans)", ...fontFamily.sans],
-        "Neue_Montreal": ["'Neue Montreal'", ...fontFamily.sans],
+        "neue-montreal": ["'Neue Montreal'", ...fontFamily.sans],
       },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
