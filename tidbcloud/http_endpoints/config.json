@@ -47,7 +47,7 @@
     "params": [
       {
         "name": "dollar",
-        "type": "integer",
+        "type": "number",
         "required": 1,
         "default": "",
         "description": ""
