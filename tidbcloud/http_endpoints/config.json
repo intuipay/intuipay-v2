@@ -46,6 +46,13 @@
     },
     "params": [
       {
+        "name": "dollar",
+        "type": "integer",
+        "required": 1,
+        "default": "",
+        "description": ""
+      },
+      {
         "name": "project_id",
         "type": "number",
         "required": 1,
