@@ -288,7 +288,7 @@ function CashPaymentContent({
           <div className="flex-1">
             <input
               type="number"
-              className="w-full border rounded-l-lg border-r-0 h-14 font-semibold px-4"
+              className="w-full border rounded-l-lg border-r-0 h-14 font-semibold px-4 focus:outline-none focus:ring-0 focus:border-gray-300"
               onChange={onBaseAmountChange}
               step="0.01"
               value={amount}
@@ -315,7 +315,7 @@ function CashPaymentContent({
               </span>
               <input
                 type="number"
-                className="w-full border rounded-l-lg border-r-0 h-14 font-semibold pl-8 pr-4 focus:outline-none"
+                className="w-full border rounded-l-lg border-r-0 h-14 font-semibold pl-8 pr-4 focus:outline-none focus:ring-0 focus:border-gray-300"
                 value={convertedAmount}
                 placeholder="0.00"
                 step="0.01"
