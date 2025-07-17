@@ -215,7 +215,7 @@ export default function DonationPageComp({
                 <div className={clsx(
                   'h-0.5 flex-1',
                   index === steps.length - 1
-                    ? 'bg-gradient-to-l from-white ' + (index < currentStepIndex ? 'to-black/40' : 'to-[var(--brand-color)]')
+                    ? 'bg-gradient-to-l from-white ' + (index < currentStepIndex ? 'to-[var(--brand-color)]' : 'to-black/40')
                     : (index < currentStepIndex ? 'bg-[var(--brand-color)]' : 'bg-black/40')
                 )} />
               </div>
