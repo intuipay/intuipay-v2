@@ -1,7 +1,7 @@
 export default function FooterLinksSection() {
   return (
     <section className="bg-brand-blue">
-      <div className="py-16 max-w-7xl mx-auto">
+      <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 sm:gap-8">
           {/* Left Column on Mobile - Product */}
           <div className="flex flex-col gap-4 sm:gap-6">
