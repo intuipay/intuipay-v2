@@ -40,7 +40,7 @@ const fiatExchangeRates: Record<string, number> = {
 export default function PaymentDemo() {
   const [donationType, setDonationType] = useState<'crypto' | 'cash'>('crypto');
   const [paymentMethod, setPaymentMethod] = useState(paymentMethods[0].value);
-  const [dollar, setDollar] = useState(1);
+  const [dollar, setDollar] = useState<number | ''>(1);
   const [currency, setCurrency] = useState<string>('USD');
   const [targetCurrency, setTargetCurrency] = useState<string>('CNY');
   const [amount, setAmount] = useState<number | ''>(1);
@@ -48,25 +48,33 @@ export default function PaymentDemo() {
 
   function onAmountChange(event: ChangeEvent<HTMLInputElement>) {
     const input = event.target as HTMLInputElement;
-    const value = input.value ? Number(input.value) : 0;
+    const value = input.value.trim() ? Number(input.value) : '';
     setAmount(value);
 
     // 根据当前支付方式和汇率计算美元价值
-    const rate = exchangeRates[paymentMethod as keyof typeof exchangeRates];
-    const dollarValue = value * rate;
-    setDollar(Number(dollarValue.toFixed(2)));
+    if (value !== '' && typeof value === 'number') {
+      const rate = exchangeRates[paymentMethod as keyof typeof exchangeRates];
+      const dollarValue = value * rate;
+      setDollar(Number(dollarValue.toFixed(2)));
+    } else {
+      setDollar('');
+    }
   }
 
   // update crypto amount based on dollar and payment method
   function onDollarChange(event: ChangeEvent<HTMLInputElement>) {
     const input = event.target as HTMLInputElement;
-    const value = input.value ? Number(input.value) : 0;
+    const value = input.value.trim() ? Number(input.value) : '';
     setDollar(value);
 
     // 根据当前支付方式和汇率计算加密货币数量
-    const rate = exchangeRates[paymentMethod as keyof typeof exchangeRates];
-    const cryptoAmount = value / rate;
-    setAmount(Number(cryptoAmount.toFixed(6)));
+    if (value !== '' && typeof value === 'number') {
+      const rate = exchangeRates[paymentMethod as keyof typeof exchangeRates];
+      const cryptoAmount = value / rate;
+      setAmount(Number(cryptoAmount.toFixed(6)));
+    } else {
+      setAmount('');
+    }
   }
 
   // 当支付方式改变时，重新计算金额
@@ -157,7 +165,7 @@ function CryptoPaymentContent({
 }: {
   paymentMethod: string;
   amount: number | '';
-  dollar: number;
+  dollar: number | '';
   onPaymentMethodChange: (value: string) => void;
   onAmountChange: (event: ChangeEvent<HTMLInputElement>) => void;
   onDollarChange: (event: ChangeEvent<HTMLInputElement>) => void;
