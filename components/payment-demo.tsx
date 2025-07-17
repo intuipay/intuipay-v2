@@ -238,6 +238,8 @@ function CashPaymentContent({
   onTargetCurrencyChange: (value: string) => void;
   onConvertedAmountChange: (value: number | '') => void;
 }) {
+  const [isAmountFocused, setIsAmountFocused] = useState(false);
+  const [isTargetAmountFocused, setIsTargetAmountFocused] = useState(false);
   // 处理基础货币输入变化，同时更新转换后的金额
   const onBaseAmountChange = (event: ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value.trim() ? Number(event.target.value) : '';
@@ -288,8 +290,10 @@ function CashPaymentContent({
           <div className="flex-1">
             <input
               type="number"
-              className="w-full border rounded-l-lg border-r-0 h-14 font-semibold px-4 focus:outline-none focus:ring-0 focus:border-gray-300"
+              className="w-full border rounded-l-lg border-r-0 h-14 font-semibold px-4"
               onChange={onBaseAmountChange}
+              onFocus={() => setIsAmountFocused(true)}
+              onBlur={() => setIsAmountFocused(false)}
               step="0.01"
               value={amount}
               placeholder="0.00"
@@ -298,7 +302,7 @@ function CashPaymentContent({
           </div>
           <div className="w-32 flex-shrink-0">
             <MyCombobox
-              className="rounded-r-lg h-14 w-full"
+              className={`rounded-r-lg h-14 w-full ${isAmountFocused ? 'ring-2 ring-blue-500' : ''}`}
               options={CurrencyList.map(c => ({ icon: c.icon, label: c.code, value: c.code }))}
               onChange={onCurrencyChange}
               value={currency}
@@ -315,16 +319,18 @@ function CashPaymentContent({
               </span>
               <input
                 type="number"
-                className="w-full border rounded-l-lg border-r-0 h-14 font-semibold pl-8 pr-4 focus:outline-none focus:ring-0 focus:border-gray-300"
+                className="w-full border rounded-l-lg border-r-0 h-14 font-semibold pl-8 pr-4"
                 value={convertedAmount}
                 placeholder="0.00"
                 step="0.01"
                 onChange={onTargetAmountChange}
+                onFocus={() => setIsTargetAmountFocused(true)}
+                onBlur={() => setIsTargetAmountFocused(false)}
               />
             </div>
             <div className="w-32 flex-shrink-0">
               <MyCombobox
-                className="rounded-r-lg h-14 w-full"
+                className={`rounded-r-lg h-14 w-full ${isTargetAmountFocused ? 'ring-2 ring-blue-500' : ''}`}
                 options={CurrencyList.map(c => ({ icon: c.icon, label: c.code, value: c.code }))}
                 onChange={onTargetCurrencyChange}
                 value={targetCurrency}
