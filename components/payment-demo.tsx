@@ -242,7 +242,14 @@ function CashPaymentContent({
   const [isTargetAmountFocused, setIsTargetAmountFocused] = useState(false);
   // 处理基础货币输入变化，同时更新转换后的金额
   const onBaseAmountChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value.trim() ? Number(event.target.value) : '';
+    const inputValue = event.target.value.trim();
+    const value = inputValue ? Number(inputValue) : '';
+    
+    // 检查是否为负数，如果是负数则不处理
+    if (value !== '' && typeof value === 'number' && value < 0) {
+      return;
+    }
+    
     onAmountChange(value);
 
     // 计算并更新转换后的金额
@@ -261,7 +268,13 @@ function CashPaymentContent({
 
   // 处理目标货币输入变化，根据目标货币金额反向计算基础货币金额
   const onTargetAmountChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value.trim() ? Number(event.target.value) : '';
+    const inputValue = event.target.value.trim();
+    const value = inputValue ? Number(inputValue) : '';
+
+    // 检查是否为负数，如果是负数则不处理
+    if (value !== '' && typeof value === 'number' && value < 0) {
+      return;
+    }
 
     if (value === '' || value === 0) {
       onAmountChange('');
@@ -295,6 +308,7 @@ function CashPaymentContent({
               onFocus={() => setIsAmountFocused(true)}
               onBlur={() => setIsAmountFocused(false)}
               step="0.01"
+              min="0"
               value={amount}
               placeholder="0.00"
               title="Enter amount"
@@ -323,6 +337,7 @@ function CashPaymentContent({
                 value={convertedAmount}
                 placeholder="0.00"
                 step="0.01"
+                min="0"
                 onChange={onTargetAmountChange}
                 onFocus={() => setIsTargetAmountFocused(true)}
                 onBlur={() => setIsTargetAmountFocused(false)}
