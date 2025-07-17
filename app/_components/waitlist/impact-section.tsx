@@ -1,6 +1,6 @@
 export default function ImpactSection() {
   return (
-    <section className="px-8 py-12 md:px-12 md:py-20 lg:px-16 lg:py-28 xl:p-28 max-w-screen mx-auto">
+    <section className="py-16 max-w-7xl mx-auto">
       <div className="flex flex-col items-center gap-12 md:gap-24">
         <div className="flex flex-col items-center gap-6 md:gap-8 w-full">
           <div className="text-black text-6xl font-medium font-neue-montreal capitalize text-center">

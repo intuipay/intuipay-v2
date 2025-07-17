@@ -4,7 +4,7 @@ export default function HeroSection() {
   return (
     <section className="xl:py-16 xl:px-16 2xl:px-20">
       <div className="bg-brand-blue xl:rounded-3xl p-6 md:p-10 xl:p-16 2xl:p-20">
-        <div className="max-w-screen mx-auto flex flex-col xl:flex-row xl:items-center xl:gap-16 gap-12">
+        <div className="max-w-7xl mx-auto flex flex-col xl:flex-row xl:items-center xl:gap-16 gap-12">
           <div className="xl:w-1/2 flex-none">
             <h1 className="text-3xl sm:text-5xl xl:text-4xl 2xl:text-5xl font-medium mb-6 leading-tight">
               Where{' '}

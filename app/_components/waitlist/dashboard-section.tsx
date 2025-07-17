@@ -3,7 +3,7 @@ import { AnimatedCounter } from '@/components/animated-counter';
 
 export default function DashboardSection() {
   return (
-    <section className="px-8 py-12 md:px-12 md:py-20 lg:px-16 lg:py-28 xl:p-28 max-w-screen mx-auto">
+    <section className="py-16 max-w-7xl mx-auto">
       <div className="flex flex-col gap-8 md:gap-16">
         {/* Main Content Row */}
         <div className="flex flex-col lg:flex-row gap-8 lg:gap-24 items-center">
