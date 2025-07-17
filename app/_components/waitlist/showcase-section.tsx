@@ -18,12 +18,12 @@ export default function ShowcaseSection() {
               <div className="bg-white rounded-3xl shadow-[0px_4px_12px_0px_rgba(0,0,0,0.08)] p-4 lg:p-8">
                 <div className="flex flex-col gap-3 lg:gap-6">
                   {/* Project Info */}
-                  <div className="flex flex-col gap-2 lg:gap-3">
-                    <div className="text-black text-sm lg:text-base font-semibold leading-6">
-                      NeuroBridge
+                  <div className="self-stretch flex flex-col justify-start items-start gap-3">
+                    <div className="bg-neutral-100 inline-flex justify-center items-center gap-2.5">
+                      <div className="justify-start text-neutral-100 text-base font-semibold font-['Inter'] leading-normal">NeuroBridge </div>
                     </div>
-                    <div className="text-black text-sm lg:text-base font-semibold leading-6">
-                      Bridging Brain Health and AI for Early Alzheimer's Detection
+                    <div className="self-stretch bg-neutral-100 inline-flex justify-center items-center gap-2.5">
+                      <div className="flex-1 justify-start text-neutral-100 text-base font-semibold font-['Inter'] leading-normal">Bridging Brain Health and AI for Early Alzheimer’s Detection</div>
                     </div>
                   </div>
 
@@ -42,12 +42,12 @@ export default function ShowcaseSection() {
                   </div>
 
                   {/* Total Raised */}
-                  <div className="flex justify-between items-center">
-                    <div className="text-black text-sm lg:text-base font-semibold leading-6">
-                      Total Raised
+                  <div className="self-stretch inline-flex justify-between items-center">
+                    <div className="bg-neutral-100 flex justify-center items-center gap-2.5">
+                      <div className="justify-start text-neutral-100 text-base font-semibold font-['Inter'] leading-normal">Total Rasied</div>
                     </div>
-                    <div className="text-black text-sm lg:text-base font-semibold leading-6">
-                      $ 123,456.00
+                    <div className="bg-neutral-100 flex justify-center items-center gap-2.5">
+                      <div className="justify-start text-neutral-100 text-base font-semibold font-['Inter'] leading-normal">$ 123,4567.00</div>
                     </div>
                   </div>
                 </div>
