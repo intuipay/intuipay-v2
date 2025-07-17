@@ -40,7 +40,7 @@ export default function WidgetSection() {
               <span className="text-black/70 text-base md:text-xl font-semibold leading-tight md:leading-normal">
                 See how it works
               </span>
-              <ArrowUpRightIcon size={24} />
+              <ArrowUpRightIcon size={24} className="text-black/70" />
             </button>
           </div>
         </div>
@@ -51,21 +51,21 @@ export default function WidgetSection() {
         {/* Features Row */}
         <div className="flex flex-col md:flex-row gap-8 md:gap-24">
           <div className="flex-1 flex flex-col gap-4 md:gap-6">
-            <CodeIcon size={32} />
+            <CodeIcon size={32} className="text-black/70" />
             <div className="text-black/70 text-sm md:text-base font-normal leading-6">
               Simple HTML iframe embedding set-up
             </div>
           </div>
 
           <div className="flex-1 flex flex-col gap-4 md:gap-6">
-            <CoinsIcon size={32} />
+            <CoinsIcon size={32} className="text-black/70" />
             <div className="text-black/70 text-sm md:text-base font-normal leading-6">
               30+ cryptocurrencies accepted
             </div>
           </div>
 
           <div className="flex-1 flex flex-col gap-4 md:gap-6">
-            <GlobeIcon size={32} />
+            <GlobeIcon size={32} className="text-black/70" />
             <div className="text-black/70 text-sm md:text-base font-normal leading-6">
               Automatic conversion to local fiat currencies
             </div>

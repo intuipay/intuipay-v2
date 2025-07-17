@@ -78,7 +78,7 @@ export default function ShowcaseSection() {
               <span className="text-black/70 text-base md:text-xl font-semibold leading-tight md:leading-normal">
                 Explore Marketplace
               </span>
-              <ArrowUpRightIcon size={24} />
+              <ArrowUpRightIcon size={24} className="text-black/70" />
             </button>
           </div>
         </div>
@@ -89,21 +89,21 @@ export default function ShowcaseSection() {
         {/* Features Row */}
         <div className="flex flex-col md:flex-row gap-8 md:gap-24">
           <div className="flex-1 flex flex-col gap-4 md:gap-6">
-            <GraduationCapIcon size={32} />
+            <GraduationCapIcon size={32} className="text-black/70" />
             <div className="text-black/70 text-sm md:text-base font-normal leading-6">
               Verified projects from universities and researchers in 20+ countries
             </div>
           </div>
 
           <div className="flex-1 flex flex-col gap-4 md:gap-6">
-            <ArrowsDownUpIcon size={32} />
+            <ArrowsDownUpIcon size={32} className="text-black/70" />
             <div className="text-black/70 text-sm md:text-base font-normal leading-6">
               Transparent donation tracking
             </div>
           </div>
 
           <div className="flex-1 flex flex-col gap-4 md:gap-6">
-            <MagnifyingGlassIcon size={32} />
+            <MagnifyingGlassIcon size={32} className="text-black/70" />
             <div className="text-black/70 text-sm md:text-base font-normal leading-6">
               Direct support to institutions or specific researchers
             </div>

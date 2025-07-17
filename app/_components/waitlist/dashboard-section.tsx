@@ -93,7 +93,7 @@ export default function DashboardSection() {
               <span className="text-black/70 text-base md:text-xl font-semibold leading-tight md:leading-normal">
                 Create account
               </span>
-              <ArrowUpRightIcon size={24} />
+              <ArrowUpRightIcon size={24} className="text-black/70" />
             </button>
           </div>
         </div>
@@ -104,21 +104,21 @@ export default function DashboardSection() {
         {/* Features Row */}
         <div className="flex flex-col md:flex-row gap-8 md:gap-24">
           <div className="flex-1 flex flex-col gap-4 md:gap-6">
-            <MoneyIcon size={32} />
+            <MoneyIcon size={32} className="text-black/70" />
             <div className="text-black/70 text-sm md:text-base font-normal leading-6">
               Monitor real-time donations and currency breakdowns
             </div>
           </div>
 
           <div className="flex-1 flex flex-col gap-4 md:gap-6">
-            <ReceiptIcon size={32} />
+            <ReceiptIcon size={32} className="text-black/70" />
             <div className="text-black/70 text-sm md:text-base font-normal leading-6">
               Manage receipts, project listings, and donor data
             </div>
           </div>
 
           <div className="flex-1 flex flex-col gap-4 md:gap-6">
-            <FilesIcon size={32} />
+            <FilesIcon size={32} className="text-black/70" />
             <div className="text-black/70 text-sm md:text-base font-normal leading-6">
               Download reports for finance and tax teams
             </div>
