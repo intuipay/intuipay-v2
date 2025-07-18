@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link'
 import { MoneyIcon, ReceiptIcon, FilesIcon, ArrowUpRightIcon } from '@phosphor-icons/react/ssr';
 import { AnimatedCounter } from '@/components/animated-counter';
 import { motion } from 'framer-motion';
@@ -36,7 +37,6 @@ export default function DashboardSection() {
                       end={12345}
                       prefix="$"
                       suffix=".00"
-                      duration={2500}
                     />
                   </div>
                   <div className="text-black/60 text-xs lg:text-sm font-semibold leading-5">
@@ -55,7 +55,6 @@ export default function DashboardSection() {
                         end={1234}
                         prefix="$"
                         suffix=".00"
-                        duration={2000}
                       />
                     </div>
                     <div className="flex items-center gap-1">
@@ -75,7 +74,6 @@ export default function DashboardSection() {
                         end={1234}
                         prefix="$"
                         suffix=".00"
-                        duration={2200}
                       />
                     </div>
                     <div className="flex items-center gap-1">
@@ -107,12 +105,12 @@ export default function DashboardSection() {
               </div>
             </div>
 
-            <button className="flex items-center gap-2 px-6 lg:px-8 py-3 lg:py-4 border border-black/70 rounded-full w-fit">
+            <Link href="https://dash.intuipay.xyz" className="flex items-center gap-2 px-6 lg:px-8 py-3 lg:py-4 border border-black/70 rounded-full w-fit">
               <span className="text-black/70 text-base md:text-xl font-semibold leading-tight md:leading-normal">
                 Create account
               </span>
               <ArrowUpRightIcon size={24} className="text-black/70" />
-            </button>
+            </Link>
           </motion.div>
         </motion.div>
 

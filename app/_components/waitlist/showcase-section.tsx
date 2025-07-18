@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link'
 import { GraduationCapIcon, ArrowsDownUpIcon, MagnifyingGlassIcon, ArrowUpRightIcon } from '@phosphor-icons/react/ssr';
 import { motion } from 'framer-motion';
 import { sectionMotionVariants, sectionMotionProps } from './motion';
@@ -92,12 +93,12 @@ export default function ShowcaseSection() {
               </div>
             </div>
 
-            <button className="flex items-center gap-2 px-6 lg:px-8 py-3 lg:py-4 border border-black/70 rounded-full w-fit">
+            <Link href="/projects" className="flex items-center gap-2 px-6 lg:px-8 py-3 lg:py-4 border border-black/70 rounded-full w-fit">
               <span className="text-black/70 text-base md:text-xl font-semibold leading-tight md:leading-normal">
                 Explore Marketplace
               </span>
               <ArrowUpRightIcon size={24} className="text-black/70" />
-            </button>
+            </Link>
           </motion.div>
         </motion.div>
 
