@@ -35,12 +35,8 @@ export default function ShowcaseSection() {
                 <div className="flex flex-col gap-3 lg:gap-6">
                   {/* Project Info */}
                   <div className="self-stretch flex flex-col justify-start items-start gap-3">
-                    <div className="bg-neutral-100 inline-flex justify-center items-center gap-2.5">
-                      <div className="justify-start text-neutral-100 text-base font-semibold font-['Inter'] leading-normal">NeuroBridge </div>
-                    </div>
-                    <div className="self-stretch bg-neutral-100 inline-flex justify-center items-center gap-2.5">
-                      <div className="flex-1 justify-start text-neutral-100 text-base font-semibold font-['Inter'] leading-normal">Bridging Brain Health and AI for Early Alzheimer’s Detection</div>
-                    </div>
+                    <div className="bg-neutral-100 h-6 w-32 rounded"></div>
+                    <div className="bg-neutral-100 h-6 w-full rounded"></div>
                   </div>
 
                   {/* Verification */}
@@ -59,12 +55,8 @@ export default function ShowcaseSection() {
 
                   {/* Total Raised */}
                   <div className="self-stretch inline-flex justify-between items-center">
-                    <div className="bg-neutral-100 flex justify-center items-center gap-2.5">
-                      <div className="justify-start text-neutral-100 text-base font-semibold font-['Inter'] leading-normal">Total Raised</div>
-                    </div>
-                    <div className="bg-neutral-100 flex justify-center items-center gap-2.5">
-                      <div className="justify-start text-neutral-100 text-base font-semibold font-['Inter'] leading-normal">$ 123,4567.00</div>
-                    </div>
+                    <div className="bg-neutral-100 h-6 w-24 rounded"></div>
+                    <div className="bg-neutral-100 h-6 w-32 rounded"></div>
                   </div>
                 </div>
               </div>
