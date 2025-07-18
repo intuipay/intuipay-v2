@@ -40,7 +40,7 @@ const fiatExchangeRates: Record<string, number> = {
 export default function PaymentDemo() {
   const [donationType, setDonationType] = useState<'crypto' | 'cash'>('crypto');
   const [paymentMethod, setPaymentMethod] = useState(paymentMethods[0].value);
-  const [dollar, setDollar] = useState(1);
+  const [dollar, setDollar] = useState<number | ''>(1);
   const [currency, setCurrency] = useState<string>('USD');
   const [targetCurrency, setTargetCurrency] = useState<string>('CNY');
   const [amount, setAmount] = useState<number | ''>(1);
@@ -48,25 +48,33 @@ export default function PaymentDemo() {
 
   function onAmountChange(event: ChangeEvent<HTMLInputElement>) {
     const input = event.target as HTMLInputElement;
-    const value = input.value ? Number(input.value) : 0;
+    const value = input.value.trim() ? Number(input.value) : '';
     setAmount(value);
 
     // 根据当前支付方式和汇率计算美元价值
-    const rate = exchangeRates[paymentMethod as keyof typeof exchangeRates];
-    const dollarValue = value * rate;
-    setDollar(Number(dollarValue.toFixed(2)));
+    if (value !== '' && typeof value === 'number') {
+      const rate = exchangeRates[paymentMethod as keyof typeof exchangeRates];
+      const dollarValue = value * rate;
+      setDollar(Number(dollarValue.toFixed(2)));
+    } else {
+      setDollar('');
+    }
   }
 
   // update crypto amount based on dollar and payment method
   function onDollarChange(event: ChangeEvent<HTMLInputElement>) {
     const input = event.target as HTMLInputElement;
-    const value = input.value ? Number(input.value) : 0;
+    const value = input.value.trim() ? Number(input.value) : '';
     setDollar(value);
 
     // 根据当前支付方式和汇率计算加密货币数量
-    const rate = exchangeRates[paymentMethod as keyof typeof exchangeRates];
-    const cryptoAmount = value / rate;
-    setAmount(Number(cryptoAmount.toFixed(6)));
+    if (value !== '' && typeof value === 'number') {
+      const rate = exchangeRates[paymentMethod as keyof typeof exchangeRates];
+      const cryptoAmount = value / rate;
+      setAmount(Number(cryptoAmount.toFixed(6)));
+    } else {
+      setAmount('');
+    }
   }
 
   // 当支付方式改变时，重新计算金额
@@ -157,7 +165,7 @@ function CryptoPaymentContent({
 }: {
   paymentMethod: string;
   amount: number | '';
-  dollar: number;
+  dollar: number | '';
   onPaymentMethodChange: (value: string) => void;
   onAmountChange: (event: ChangeEvent<HTMLInputElement>) => void;
   onDollarChange: (event: ChangeEvent<HTMLInputElement>) => void;
@@ -230,9 +238,18 @@ function CashPaymentContent({
   onTargetCurrencyChange: (value: string) => void;
   onConvertedAmountChange: (value: number | '') => void;
 }) {
+  const [isAmountFocused, setIsAmountFocused] = useState(false);
+  const [isTargetAmountFocused, setIsTargetAmountFocused] = useState(false);
   // 处理基础货币输入变化，同时更新转换后的金额
   const onBaseAmountChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value.trim() ? Number(event.target.value) : '';
+    const inputValue = event.target.value.trim();
+    const value = inputValue ? Number(inputValue) : '';
+    
+    // 检查是否为负数，如果是负数则不处理
+    if (value !== '' && typeof value === 'number' && value < 0) {
+      return;
+    }
+    
     onAmountChange(value);
 
     // 计算并更新转换后的金额
@@ -251,7 +268,13 @@ function CashPaymentContent({
 
   // 处理目标货币输入变化，根据目标货币金额反向计算基础货币金额
   const onTargetAmountChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value.trim() ? Number(event.target.value) : '';
+    const inputValue = event.target.value.trim();
+    const value = inputValue ? Number(inputValue) : '';
+
+    // 检查是否为负数，如果是负数则不处理
+    if (value !== '' && typeof value === 'number' && value < 0) {
+      return;
+    }
 
     if (value === '' || value === 0) {
       onAmountChange('');
@@ -282,7 +305,10 @@ function CashPaymentContent({
               type="number"
               className="w-full border rounded-l-lg border-r-0 h-14 font-semibold px-4"
               onChange={onBaseAmountChange}
+              onFocus={() => setIsAmountFocused(true)}
+              onBlur={() => setIsAmountFocused(false)}
               step="0.01"
+              min="0"
               value={amount}
               placeholder="0.00"
               title="Enter amount"
@@ -290,7 +316,7 @@ function CashPaymentContent({
           </div>
           <div className="w-32 flex-shrink-0">
             <MyCombobox
-              className="rounded-r-lg h-14 w-full"
+              className={`rounded-r-lg h-14 w-full ${isAmountFocused ? 'ring-2 ring-blue-500' : ''}`}
               options={CurrencyList.map(c => ({ icon: c.icon, label: c.code, value: c.code }))}
               onChange={onCurrencyChange}
               value={currency}
@@ -307,16 +333,19 @@ function CashPaymentContent({
               </span>
               <input
                 type="number"
-                className="w-full border rounded-l-lg border-r-0 h-14 font-semibold pl-8 pr-4 focus:outline-none"
+                className="w-full border rounded-l-lg border-r-0 h-14 font-semibold pl-8 pr-4"
                 value={convertedAmount}
                 placeholder="0.00"
                 step="0.01"
+                min="0"
                 onChange={onTargetAmountChange}
+                onFocus={() => setIsTargetAmountFocused(true)}
+                onBlur={() => setIsTargetAmountFocused(false)}
               />
             </div>
             <div className="w-32 flex-shrink-0">
               <MyCombobox
-                className="rounded-r-lg h-14 w-full"
+                className={`rounded-r-lg h-14 w-full ${isTargetAmountFocused ? 'ring-2 ring-blue-500' : ''}`}
                 options={CurrencyList.map(c => ({ icon: c.icon, label: c.code, value: c.code }))}
                 onChange={onTargetCurrencyChange}
                 value={targetCurrency}
