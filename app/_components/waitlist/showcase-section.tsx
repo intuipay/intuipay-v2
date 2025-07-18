@@ -1,13 +1,29 @@
+'use client';
+
+import Link from 'next/link'
 import { GraduationCapIcon, ArrowsDownUpIcon, MagnifyingGlassIcon, ArrowUpRightIcon } from '@phosphor-icons/react/ssr';
+import { motion } from 'framer-motion';
+import { sectionMotionVariants, sectionMotionProps } from './motion';
 
 export default function ShowcaseSection() {
+  const { itemVariants } = sectionMotionVariants;
+
   return (
-    <section className="px-8 py-12 md:px-12 md:py-20 lg:px-16 lg:py-28 xl:p-28 max-w-7xl mx-auto">
-      <div className="flex flex-col gap-8 md:gap-16">
+    <section className="py-16 max-w-7xl mx-auto">
+      <motion.div
+        className="flex flex-col gap-8 md:gap-16"
+        {...sectionMotionProps}
+      >
         {/* Main Content Row */}
-        <div className="flex flex-col lg:flex-row gap-8 lg:gap-24 items-center">
+        <motion.div
+          className="flex flex-col lg:flex-row gap-8 lg:gap-24 items-center"
+          variants={itemVariants}
+        >
           {/* Project Demo - First on mobile, Right on desktop */}
-          <div className="order-1 lg:order-2 flex-1 bg-yellow-50 rounded-[32px] flex items-center justify-center p-4 lg:p-8 relative overflow-hidden">
+          <motion.div
+            className="order-1 lg:order-2 flex-1 bg-yellow-50 rounded-[32px] flex items-center justify-center p-4 lg:p-8 relative overflow-hidden"
+            variants={itemVariants}
+          >
             <div className="w-full flex flex-col justify-center items-center gap-4 lg:gap-8">
               {/* Top Card - Partially hidden */}
               <div className="self-stretch bg-amber-100 rounded-3xl flex flex-col justify-start items-start -mt-16 md:-mt-20 lg:-mt-24">
@@ -18,13 +34,9 @@ export default function ShowcaseSection() {
               <div className="bg-white rounded-3xl shadow-[0px_4px_12px_0px_rgba(0,0,0,0.08)] p-4 lg:p-8">
                 <div className="flex flex-col gap-3 lg:gap-6">
                   {/* Project Info */}
-                  <div className="flex flex-col gap-2 lg:gap-3">
-                    <div className="text-black text-sm lg:text-base font-semibold leading-6">
-                      NeuroBridge
-                    </div>
-                    <div className="text-black text-sm lg:text-base font-semibold leading-6">
-                      Bridging Brain Health and AI for Early Alzheimer's Detection
-                    </div>
+                  <div className="self-stretch flex flex-col justify-start items-start gap-3">
+                    <div className="bg-neutral-100 h-6 w-32 rounded"></div>
+                    <div className="bg-neutral-100 h-6 w-full rounded"></div>
                   </div>
 
                   {/* Verification */}
@@ -42,13 +54,9 @@ export default function ShowcaseSection() {
                   </div>
 
                   {/* Total Raised */}
-                  <div className="flex justify-between items-center">
-                    <div className="text-black text-sm lg:text-base font-semibold leading-6">
-                      Total Raised
-                    </div>
-                    <div className="text-black text-sm lg:text-base font-semibold leading-6">
-                      $ 123,456.00
-                    </div>
+                  <div className="self-stretch inline-flex justify-between items-center">
+                    <div className="bg-neutral-100 h-6 w-24 rounded"></div>
+                    <div className="bg-neutral-100 h-6 w-32 rounded"></div>
                   </div>
                 </div>
               </div>
@@ -58,10 +66,13 @@ export default function ShowcaseSection() {
                 <div className="self-stretch h-20 md:h-24 lg:h-32 p-8" />
               </div>
             </div>
-          </div>
+          </motion.div>
 
           {/* Text Content - Second on mobile, Left on desktop */}
-          <div className="order-2 lg:order-1 flex-1 flex flex-col justify-between items-start self-stretch">
+          <motion.div
+            className="order-2 lg:order-1 flex-1 flex flex-col justify-between items-start self-stretch"
+            variants={itemVariants}
+          >
             <div className="flex flex-col gap-4 lg:gap-6 mb-6 lg:mb-8">
               <div className="text-blue-600 text-base font-medium font-neue-montreal capitalize tracking-wide">
                 Reach A Global Community
@@ -74,42 +85,57 @@ export default function ShowcaseSection() {
               </div>
             </div>
 
-            <button className="flex items-center gap-2 px-6 lg:px-8 py-3 lg:py-4 border border-black/70 rounded-full w-fit">
+            <Link href="/projects" className="flex items-center gap-2 px-6 lg:px-8 py-3 lg:py-4 border border-black/70 rounded-full w-fit">
               <span className="text-black/70 text-base md:text-xl font-semibold leading-tight md:leading-normal">
                 Explore Marketplace
               </span>
-              <ArrowUpRightIcon size={24} />
-            </button>
-          </div>
-        </div>
+              <ArrowUpRightIcon size={24} className="text-black/70" />
+            </Link>
+          </motion.div>
+        </motion.div>
 
         {/* Divider Line */}
-        <div className="w-full h-px bg-gray-200"></div>
+        <motion.div
+          className="w-full h-px bg-gray-200"
+          variants={itemVariants}
+        ></motion.div>
 
         {/* Features Row */}
-        <div className="flex flex-col md:flex-row gap-8 md:gap-24">
-          <div className="flex-1 flex flex-col gap-4 md:gap-6">
-            <GraduationCapIcon size={32} />
+        <motion.div
+          className="flex flex-col md:flex-row gap-8 md:gap-24"
+          variants={itemVariants}
+        >
+          <motion.div
+            className="flex-1 flex flex-col gap-4 md:gap-6"
+            variants={itemVariants}
+          >
+            <GraduationCapIcon size={32} className="text-black/70" />
             <div className="text-black/70 text-sm md:text-base font-normal leading-6">
               Verified projects from universities and researchers in 20+ countries
             </div>
-          </div>
+          </motion.div>
 
-          <div className="flex-1 flex flex-col gap-4 md:gap-6">
-            <ArrowsDownUpIcon size={32} />
+          <motion.div
+            className="flex-1 flex flex-col gap-4 md:gap-6"
+            variants={itemVariants}
+          >
+            <ArrowsDownUpIcon size={32} className="text-black/70" />
             <div className="text-black/70 text-sm md:text-base font-normal leading-6">
               Transparent donation tracking
             </div>
-          </div>
+          </motion.div>
 
-          <div className="flex-1 flex flex-col gap-4 md:gap-6">
-            <MagnifyingGlassIcon size={32} />
+          <motion.div
+            className="flex-1 flex flex-col gap-4 md:gap-6"
+            variants={itemVariants}
+          >
+            <MagnifyingGlassIcon size={32} className="text-black/70" />
             <div className="text-black/70 text-sm md:text-base font-normal leading-6">
               Direct support to institutions or specific researchers
             </div>
-          </div>
-        </div>
-      </div>
+          </motion.div>
+        </motion.div>
+      </motion.div>
     </section>
   );
 }
