@@ -60,7 +60,7 @@ export default function ShowcaseSection() {
                   {/* Total Raised */}
                   <div className="self-stretch inline-flex justify-between items-center">
                     <div className="bg-neutral-100 flex justify-center items-center gap-2.5">
-                      <div className="justify-start text-neutral-100 text-base font-semibold font-['Inter'] leading-normal">Total Rasied</div>
+                      <div className="justify-start text-neutral-100 text-base font-semibold font-['Inter'] leading-normal">Total Raised</div>
                     </div>
                     <div className="bg-neutral-100 flex justify-center items-center gap-2.5">
                       <div className="justify-start text-neutral-100 text-base font-semibold font-['Inter'] leading-normal">$ 123,4567.00</div>
