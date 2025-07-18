@@ -6,7 +6,7 @@ export default function HeroSection() {
       <div className="bg-brand-blue xl:rounded-3xl p-6 md:p-10 xl:p-16 2xl:p-20">
         <div className="max-w-7xl mx-auto flex flex-col xl:flex-row xl:items-center xl:gap-16 gap-12">
           <div className="xl:w-1/2 flex-none">
-            <h1 className="text-3xl sm:text-5xl xl:text-4xl 2xl:text-5xl font-medium mb-6 leading-tight">
+            <h1 className="text-3xl sm:text-5xl xl:text-4xl 2xl:text-5xl font-medium font-neue-montreal mb-6 leading-tight">
               Where{' '}
               <span className="inline-flex items-center align-top w-20 relative me-2" aria-label="Flags">
                 <span className="size-6 md:size-8 text-sm md:text-lg border rounded-full flex justify-center items-center absolute z-40 top-0 left-0 bg-white">🇸🇬</span>
