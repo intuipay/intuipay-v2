@@ -1,13 +1,28 @@
+'use client';
+
 import { CodeIcon, CoinsIcon, GlobeIcon, ArrowUpRightIcon } from '@phosphor-icons/react/ssr';
+import { motion } from 'framer-motion';
+import { sectionMotionVariants, sectionMotionProps } from './motion';
 
 export default function WidgetSection() {
+  const { itemVariants } = sectionMotionVariants;
+
   return (
     <section className="py-16 max-w-7xl mx-auto">
-      <div className="flex flex-col gap-8 md:gap-16">
+      <motion.div
+        className="flex flex-col gap-8 md:gap-16"
+        {...sectionMotionProps}
+      >
         {/* Main Content Row */}
-        <div className="flex flex-col lg:flex-row gap-8 lg:gap-16 items-center">
+        <motion.div
+          className="flex flex-col lg:flex-row gap-8 lg:gap-16 items-center"
+          variants={itemVariants}
+        >
           {/* Widget Demo - First on mobile, Right on desktop */}
-          <div className="order-1 lg:order-2 flex-1 bg-lime-50 rounded-[32px] flex items-center justify-center py-32 px-4 lg:px-8">
+          <motion.div
+            className="order-1 lg:order-2 flex-1 bg-lime-50 rounded-[32px] flex items-center justify-center py-32 px-4 lg:px-8"
+            variants={itemVariants}
+          >
             <div className="w-full h-80 shadow-[0px_4px_12px_0px_rgba(0,0,0,0.08)] rounded-2xl overflow-hidden">
               <video
                 src="/images/mockup_light.mp4"
@@ -20,10 +35,13 @@ export default function WidgetSection() {
                 Your browser does not support the video tag.
               </video>
             </div>
-          </div>
+          </motion.div>
 
           {/* Text Content - Second on mobile, Left on desktop */}
-          <div className="order-2 lg:order-1 flex-1 flex flex-col justify-between items-start self-stretch">
+          <motion.div
+            className="order-2 lg:order-1 flex-1 flex flex-col justify-between items-start self-stretch"
+            variants={itemVariants}
+          >
             <div className="flex flex-col gap-4 lg:gap-6">
               <div className="text-blue-600 text-base font-medium font-neue-montreal capitalize tracking-wide">
                 Accept Crypto with Ease
@@ -42,36 +60,51 @@ export default function WidgetSection() {
               </span>
               <ArrowUpRightIcon size={24} className="text-black/70" />
             </button>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
 
         {/* Divider Line */}
-        <div className="w-full h-px bg-gray-200"></div>
+        <motion.div
+          className="w-full h-px bg-gray-200"
+          variants={itemVariants}
+        ></motion.div>
 
         {/* Features Row */}
-        <div className="flex flex-col md:flex-row gap-8 md:gap-24">
-          <div className="flex-1 flex flex-col gap-4 md:gap-6">
+        <motion.div
+          className="flex flex-col md:flex-row gap-8 md:gap-24"
+          variants={itemVariants}
+        >
+          <motion.div
+            className="flex-1 flex flex-col gap-4 md:gap-6"
+            variants={itemVariants}
+          >
             <CodeIcon size={32} className="text-black/70" />
             <div className="text-black/70 text-sm md:text-base font-normal leading-6">
               Simple HTML iframe embedding set-up
             </div>
-          </div>
+          </motion.div>
 
-          <div className="flex-1 flex flex-col gap-4 md:gap-6">
+          <motion.div
+            className="flex-1 flex flex-col gap-4 md:gap-6"
+            variants={itemVariants}
+          >
             <CoinsIcon size={32} className="text-black/70" />
             <div className="text-black/70 text-sm md:text-base font-normal leading-6">
               30+ cryptocurrencies accepted
             </div>
-          </div>
+          </motion.div>
 
-          <div className="flex-1 flex flex-col gap-4 md:gap-6">
+          <motion.div
+            className="flex-1 flex flex-col gap-4 md:gap-6"
+            variants={itemVariants}
+          >
             <GlobeIcon size={32} className="text-black/70" />
             <div className="text-black/70 text-sm md:text-base font-normal leading-6">
               Automatic conversion to local fiat currencies
             </div>
-          </div>
-        </div>
-      </div>
+          </motion.div>
+        </motion.div>
+      </motion.div>
     </section>
   );
 }

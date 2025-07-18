@@ -1,13 +1,28 @@
+'use client';
+
 import { GraduationCapIcon, ArrowsDownUpIcon, MagnifyingGlassIcon, ArrowUpRightIcon } from '@phosphor-icons/react/ssr';
+import { motion } from 'framer-motion';
+import { sectionMotionVariants, sectionMotionProps } from './motion';
 
 export default function ShowcaseSection() {
+  const { itemVariants } = sectionMotionVariants;
+
   return (
     <section className="py-16 max-w-7xl mx-auto">
-      <div className="flex flex-col gap-8 md:gap-16">
+      <motion.div
+        className="flex flex-col gap-8 md:gap-16"
+        {...sectionMotionProps}
+      >
         {/* Main Content Row */}
-        <div className="flex flex-col lg:flex-row gap-8 lg:gap-24 items-center">
+        <motion.div
+          className="flex flex-col lg:flex-row gap-8 lg:gap-24 items-center"
+          variants={itemVariants}
+        >
           {/* Project Demo - First on mobile, Right on desktop */}
-          <div className="order-1 lg:order-2 flex-1 bg-yellow-50 rounded-[32px] flex items-center justify-center p-4 lg:p-8 relative overflow-hidden">
+          <motion.div
+            className="order-1 lg:order-2 flex-1 bg-yellow-50 rounded-[32px] flex items-center justify-center p-4 lg:p-8 relative overflow-hidden"
+            variants={itemVariants}
+          >
             <div className="w-full flex flex-col justify-center items-center gap-4 lg:gap-8">
               {/* Top Card - Partially hidden */}
               <div className="self-stretch bg-amber-100 rounded-3xl flex flex-col justify-start items-start -mt-16 md:-mt-20 lg:-mt-24">
@@ -58,10 +73,13 @@ export default function ShowcaseSection() {
                 <div className="self-stretch h-20 md:h-24 lg:h-32 p-8" />
               </div>
             </div>
-          </div>
+          </motion.div>
 
           {/* Text Content - Second on mobile, Left on desktop */}
-          <div className="order-2 lg:order-1 flex-1 flex flex-col justify-between items-start self-stretch">
+          <motion.div
+            className="order-2 lg:order-1 flex-1 flex flex-col justify-between items-start self-stretch"
+            variants={itemVariants}
+          >
             <div className="flex flex-col gap-4 lg:gap-6 mb-6 lg:mb-8">
               <div className="text-blue-600 text-base font-medium font-neue-montreal capitalize tracking-wide">
                 Reach A Global Community
@@ -80,36 +98,51 @@ export default function ShowcaseSection() {
               </span>
               <ArrowUpRightIcon size={24} className="text-black/70" />
             </button>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
 
         {/* Divider Line */}
-        <div className="w-full h-px bg-gray-200"></div>
+        <motion.div
+          className="w-full h-px bg-gray-200"
+          variants={itemVariants}
+        ></motion.div>
 
         {/* Features Row */}
-        <div className="flex flex-col md:flex-row gap-8 md:gap-24">
-          <div className="flex-1 flex flex-col gap-4 md:gap-6">
+        <motion.div
+          className="flex flex-col md:flex-row gap-8 md:gap-24"
+          variants={itemVariants}
+        >
+          <motion.div
+            className="flex-1 flex flex-col gap-4 md:gap-6"
+            variants={itemVariants}
+          >
             <GraduationCapIcon size={32} className="text-black/70" />
             <div className="text-black/70 text-sm md:text-base font-normal leading-6">
               Verified projects from universities and researchers in 20+ countries
             </div>
-          </div>
+          </motion.div>
 
-          <div className="flex-1 flex flex-col gap-4 md:gap-6">
+          <motion.div
+            className="flex-1 flex flex-col gap-4 md:gap-6"
+            variants={itemVariants}
+          >
             <ArrowsDownUpIcon size={32} className="text-black/70" />
             <div className="text-black/70 text-sm md:text-base font-normal leading-6">
               Transparent donation tracking
             </div>
-          </div>
+          </motion.div>
 
-          <div className="flex-1 flex flex-col gap-4 md:gap-6">
+          <motion.div
+            className="flex-1 flex flex-col gap-4 md:gap-6"
+            variants={itemVariants}
+          >
             <MagnifyingGlassIcon size={32} className="text-black/70" />
             <div className="text-black/70 text-sm md:text-base font-normal leading-6">
               Direct support to institutions or specific researchers
             </div>
-          </div>
-        </div>
-      </div>
+          </motion.div>
+        </motion.div>
+      </motion.div>
     </section>
   );
 }

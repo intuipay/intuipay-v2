@@ -1,14 +1,29 @@
+'use client';
+
 import { MoneyIcon, ReceiptIcon, FilesIcon, ArrowUpRightIcon } from '@phosphor-icons/react/ssr';
 import { AnimatedCounter } from '@/components/animated-counter';
+import { motion } from 'framer-motion';
+import { sectionMotionVariants, sectionMotionProps } from './motion';
 
 export default function DashboardSection() {
+  const { itemVariants } = sectionMotionVariants;
+
   return (
     <section className="py-16 max-w-7xl mx-auto">
-      <div className="flex flex-col gap-8 md:gap-16">
+      <motion.div
+        className="flex flex-col gap-8 md:gap-16"
+        {...sectionMotionProps}
+      >
         {/* Main Content Row */}
-        <div className="flex flex-col lg:flex-row gap-8 lg:gap-24 items-center">
+        <motion.div
+          className="flex flex-col lg:flex-row gap-8 lg:gap-24 items-center"
+          variants={itemVariants}
+        >
           {/* Dashboard Demo - First on mobile, Right on desktop */}
-          <div className="order-1 lg:order-2 flex-1 bg-purple-100 rounded-[32px] flex items-center justify-center pl-4 lg:pl-8 pr-0 py-0">
+          <motion.div
+            className="order-1 lg:order-2 flex-1 bg-purple-100 rounded-[32px] flex items-center justify-center pl-4 lg:pl-8 pr-0 py-0"
+            variants={itemVariants}
+          >
             <div className="w-full flex flex-col gap-4 py-12 lg:py-32 lg:gap-8">
               {/* Main Balance Card */}
               <div className="bg-white rounded-l-2xl shadow-[0px_4px_12px_0px_rgba(0,0,0,0.08)] px-4 lg:px-8 py-3 lg:py-6">
@@ -73,10 +88,13 @@ export default function DashboardSection() {
                 </div>
               </div>
             </div>
-          </div>
+          </motion.div>
 
           {/* Text Content - Second on mobile, Left on desktop */}
-          <div className="order-2 lg:order-1 flex-1 flex flex-col justify-between items-start self-stretch">
+          <motion.div
+            className="order-2 lg:order-1 flex-1 flex flex-col justify-between items-start self-stretch"
+            variants={itemVariants}
+          >
             <div className="flex flex-col gap-4 lg:gap-6 mb-6 lg:mb-8">
               <div className="text-blue-600 text-base font-medium font-neue-montreal capitalize tracking-wide">
                 Control, Track, Report
@@ -95,36 +113,51 @@ export default function DashboardSection() {
               </span>
               <ArrowUpRightIcon size={24} className="text-black/70" />
             </button>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
 
         {/* Divider Line */}
-        <div className="w-full h-px bg-gray-200"></div>
+        <motion.div
+          className="w-full h-px bg-gray-200"
+          variants={itemVariants}
+        ></motion.div>
 
         {/* Features Row */}
-        <div className="flex flex-col md:flex-row gap-8 md:gap-24">
-          <div className="flex-1 flex flex-col gap-4 md:gap-6">
+        <motion.div
+          className="flex flex-col md:flex-row gap-8 md:gap-24"
+          variants={itemVariants}
+        >
+          <motion.div
+            className="flex-1 flex flex-col gap-4 md:gap-6"
+            variants={itemVariants}
+          >
             <MoneyIcon size={32} className="text-black/70" />
             <div className="text-black/70 text-sm md:text-base font-normal leading-6">
               Monitor real-time donations and currency breakdowns
             </div>
-          </div>
+          </motion.div>
 
-          <div className="flex-1 flex flex-col gap-4 md:gap-6">
+          <motion.div
+            className="flex-1 flex flex-col gap-4 md:gap-6"
+            variants={itemVariants}
+          >
             <ReceiptIcon size={32} className="text-black/70" />
             <div className="text-black/70 text-sm md:text-base font-normal leading-6">
               Manage receipts, project listings, and donor data
             </div>
-          </div>
+          </motion.div>
 
-          <div className="flex-1 flex flex-col gap-4 md:gap-6">
+          <motion.div
+            className="flex-1 flex flex-col gap-4 md:gap-6"
+            variants={itemVariants}
+          >
             <FilesIcon size={32} className="text-black/70" />
             <div className="text-black/70 text-sm md:text-base font-normal leading-6">
               Download reports for finance and tax teams
             </div>
-          </div>
-        </div>
-      </div>
+          </motion.div>
+        </motion.div>
+      </motion.div>
     </section>
   );
 }
