@@ -1,6 +1,5 @@
 import StructuredData from '@/components/structured-data'
 import { SiteHeader } from '@/components/site-header'
-import { SiteFooter } from '@/components/site-footer'
 import HeroSection from '@/app/_components/waitlist/hero-section';
 import TrustSection from '@/app/_components/waitlist/trust-section';
 import ImpactSection from '@/app/_components/waitlist/impact-section';
@@ -49,7 +48,14 @@ export default function Home() {
         </main>
 
         {/* Footer */}
-        <SiteFooter />
+        <footer className="bg-brand-blue">
+          <div className="mb-16 max-w-7xl mx-auto">
+            <p className="text-xs text-neutral-darkgray mb-4 md:mb-0 text-[#737373] mt-8">
+              &copy; {new Date().getFullYear()} Intuipay Holding PTE. LTD. All rights reserved.
+              <span className="text-neutral-darkgray ms-2">v{process.env.NEXT_PUBLIC_APP_VERSION}</span>
+            </p>
+          </div>
+        </footer>
       </div>
     </>
   )
