@@ -4,8 +4,8 @@ USE `test`;
 START TRANSACTION;
 
 -- --- 步骤 1: 定义上一个完整月的起止日期 ---
-SET @last_month_start = DATE_FORMAT(CURDATE() - INTERVAL 1 MONTH, '%Y-%m-01');
-SET @last_month_end = LAST_DAY(CURDATE() - INTERVAL 1 MONTH);
+SET @last_month_start = ${start_date};
+SET @last_month_end = ${end_date};
 
 -- --- 步骤 2: 聚合上个月的每日数据，并使用 UPSERT 方式插入或更新 ---
 INSERT INTO `org_donation_monthly_stat`
