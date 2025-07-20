@@ -3,30 +3,59 @@ USE `test`;
 -- 开启事务
 START TRANSACTION;
 
--- --- 步骤 1: 定义上一个完整月的起止日期 ---
-SET @last_month_start = ${start_date};
-SET @last_month_end = ${end_date};
-
--- --- 步骤 2: 聚合上个月的每日数据，并使用 UPSERT 方式插入或更新 ---
-INSERT INTO `org_donation_monthly_stat`
-    (`org_id`, `amount`, `count`, `start_date`, `end_date`)
+-- ===================================================================
+-- 脚本3: 生成【组织维度】的月统计数据 (org_donation_monthly_stat)
+-- ===================================================================
+INSERT INTO org_donation_monthly_stat 
+  (org_id, start_date, end_date, amount, `count`, cash, crypto)
 SELECT
-    daily.org_id,
-    SUM(daily.amount) AS total_amount,
-    SUM(daily.count) AS total_count,
-    @last_month_start,
-    @last_month_end
+    org_id,
+    ${start_date}, -- 传入的月起始日期
+    ${end_date},   -- 传入的月结束日期
+    SUM(amount) AS total_amount,
+    SUM(`count`) AS total_count,
+    SUM(cash) AS total_cash,
+    SUM(crypto) AS total_crypto
 FROM
-    `org_donation_daily_stat` AS daily
+    org_donation_daily_stat
 WHERE
-    daily.date BETWEEN @last_month_start AND @last_month_end
+    `date` >= ${start_date} AND `date` <= ${end_date}
 GROUP BY
-    daily.org_id
+    org_id
 ON DUPLICATE KEY UPDATE
-    -- 如果 (org_id, start_date) 记录已存在，则用新计算的值覆盖
+    end_date = VALUES(end_date),
     amount = VALUES(amount),
-    count = VALUES(count),
-    end_date = VALUES(end_date);
+    `count` = VALUES(`count`),
+    cash = VALUES(cash),
+    crypto = VALUES(crypto);
+
+
+-- ===================================================================
+-- 脚本4: 生成【项目维度】的月统计数据 (org_donation_project_monthly_stat)
+-- ===================================================================
+INSERT INTO org_donation_project_monthly_stat 
+  (org_id, project_id, start_date, end_date, amount, `count`, cash, crypto)
+SELECT
+    org_id,
+    project_id,
+    ${start_date}, -- 传入的月起始日期
+    ${end_date},   -- 传入的月结束日期
+    SUM(amount) AS total_amount,
+    SUM(`count`) AS total_count,
+    SUM(cash) AS total_cash,
+    SUM(crypto) AS total_crypto
+FROM
+    org_donation_project_daily_stat
+WHERE
+    `date` >= ${start_date} AND `date` <= ${end_date}
+GROUP BY
+    org_id, project_id
+ON DUPLICATE KEY UPDATE
+    end_date = VALUES(end_date),
+    amount = VALUES(amount),
+    `count` = VALUES(`count`),
+    cash = VALUES(cash),
+    crypto = VALUES(crypto);
 
 -- 提交事务
 COMMIT;
