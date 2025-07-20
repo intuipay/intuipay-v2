@@ -1551,5 +1551,27 @@
     "sql_file": "sql/GET-stats-donation-weekly.sql",
     "type": "sql_endpoint",
     "return_type": "json"
+  },
+  {
+    "name": "admin /stats/donation/monthly",
+    "description": "",
+    "method": "GET",
+    "endpoint": "/stats/donation/monthly",
+    "data_source": {
+      "cluster_id": 10914349176033975536
+    },
+    "params": [],
+    "settings": {
+      "timeout": 30000,
+      "row_limit": 1000,
+      "cache_enabled": 0,
+      "cache_ttl": 0,
+      "enable_pagination": 0
+    },
+    "tag": "Default",
+    "batch_operation": 0,
+    "sql_file": "sql/GET-stats-donation-monthly.sql",
+    "type": "sql_endpoint",
+    "return_type": "json"
   }
 ]
