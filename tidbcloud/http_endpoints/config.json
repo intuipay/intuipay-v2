@@ -1570,7 +1570,7 @@
   {
     "name": "admin /stats/donation/monthly",
     "description": "",
-    "method": "GET",
+    "method": "POST",
     "endpoint": "/stats/donation/monthly",
     "data_source": {
       "cluster_id": 10914349176033975536
@@ -1600,7 +1600,7 @@
     },
     "tag": "Default",
     "batch_operation": 0,
-    "sql_file": "sql/GET-stats-donation-monthly.sql",
+    "sql_file": "sql/POST-stats-donation-monthly.sql",
     "type": "sql_endpoint",
     "return_type": "json"
   }
