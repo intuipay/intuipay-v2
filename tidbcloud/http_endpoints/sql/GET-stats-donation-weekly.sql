@@ -4,9 +4,8 @@ USE `test`;
 START TRANSACTION;
 
 -- --- 步骤 1: 定义上一个完整周的起止日期 ---
-SET @last_week_start = DATE_SUB(CURDATE(), INTERVAL (DAYOFWEEK(CURDATE()) + 5) DAY);
-SET @last_week_end = DATE_SUB(CURDATE(), INTERVAL (DAYOFWEEK(CURDATE()) - 1) DAY);
-
+SET @last_week_start = ${start_date};
+SET @last_week_end = ${end_date};
 
 -- --- 步骤 2: 聚合上周的每日数据，并使用 UPSERT 方式插入或更新 ---
 INSERT INTO `org_donation_weekly_stat`

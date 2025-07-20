@@ -1538,7 +1538,22 @@
     "data_source": {
       "cluster_id": 10914349176033975536
     },
-    "params": [],
+    "params": [
+      {
+        "name": "start_date",
+        "type": "string",
+        "required": 1,
+        "default": "",
+        "description": ""
+      },
+      {
+        "name": "end_date",
+        "type": "string",
+        "required": 1,
+        "default": "",
+        "description": ""
+      }
+    ],
     "settings": {
       "timeout": 30000,
       "row_limit": 1000,
