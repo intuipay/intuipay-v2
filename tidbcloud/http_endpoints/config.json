@@ -1533,7 +1533,7 @@
   {
     "name": "admin /stats/donation/weekly",
     "description": "",
-    "method": "GET",
+    "method": "POST",
     "endpoint": "/stats/donation/weekly",
     "data_source": {
       "cluster_id": 10914349176033975536
@@ -1563,7 +1563,7 @@
     },
     "tag": "Default",
     "batch_operation": 0,
-    "sql_file": "sql/GET-stats-donation-weekly.sql",
+    "sql_file": "sql/POST-stats-donation-weekly.sql",
     "type": "sql_endpoint",
     "return_type": "json"
   },
