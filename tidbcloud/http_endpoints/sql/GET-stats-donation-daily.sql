@@ -3,101 +3,109 @@ USE `test`;
 -- 设置目标日期为“昨天”，方便脚本复用
 SET @target_date = CURDATE() - INTERVAL 1 DAY;
 
--- 开启事务，确保所有操作的原子性
+-- 开启事务以确保数据一致性
 START TRANSACTION;
 
--- --------------------------------------------------------------------------------
--- 核心查询逻辑 (定义在下面的派生表中):
--- 这个子查询的逻辑被重复使用了三次，每次都作为一个临时的派生表。
--- --------------------------------------------------------------------------------
-
-
--- 步骤 1: 将捐赠收入记录插入余额日志表 (org_balance_log)
-INSERT INTO `org_balance_log` (`org_id`, `amount`, `in_out`, `reason`, `created_at`)
+-- 任务7: 按项目统计并插入到 org_donation_project_daily_stat 表
+-- 首先，我们计算昨天每个项目收到的捐赠详情。
+INSERT INTO org_donation_project_daily_stat 
+  (org_id, project_id, `date`, amount, `count`, cash, crypto)
 SELECT
-    DailyStats.org_id,
-    DailyStats.total_amount,
-    1, -- 收入
-    1, -- 原因：捐赠
-    NOW()
-FROM (
-    -- 这是第一个派生表，用于计算统计数据
-    SELECT
-        dp.org_id,
-        SUM(d.dollar) AS total_amount
-    FROM
-        donation AS d
-    JOIN
-        donation_project AS dp ON d.project_id = dp.id
-    LEFT JOIN
-        org_donation_daily_stat AS stat ON dp.org_id = stat.org_id AND stat.date = @target_date
-    WHERE
-        d.status = 1
-        AND DATE(d.created_at) = @target_date
-        AND stat.id IS NULL
-    GROUP BY
-        dp.org_id
-    HAVING
-        SUM(d.dollar) > 0
-) AS DailyStats;
-
-
--- 步骤 2: 将每日统计数据插入每日捐赠统计表 (org_donation_daily_stat)
-INSERT INTO `org_donation_daily_stat` (`org_id`, `amount`, `date`, `count`)
-SELECT
-    DailyStats.org_id,
-    DailyStats.total_amount,
+    dp.org_id,
+    d.project_id,
     @target_date,
-    DailyStats.total_count
+    SUM(d.dollar) AS total_amount,
+    COUNT(d.id) AS donation_count,
+    SUM(CASE WHEN d.method = 2 THEN d.dollar ELSE 0 END) AS cash_amount,
+    SUM(CASE WHEN d.method = 1 THEN d.dollar ELSE 0 END) AS crypto_amount
+FROM
+    donation AS d
+JOIN
+    donation_project AS dp ON d.project_id = dp.id
+WHERE
+    -- 筛选出昨天的所有捐赠记录
+    DATE(d.created_at) = @target_date
+GROUP BY
+    dp.org_id, d.project_id;
+
+
+-- 任务5: 按组织统计并插入到 org_donation_daily_stat 表
+-- 接下来，我们基于上面的逻辑，按组织维度进行汇总。
+INSERT INTO org_donation_daily_stat 
+  (org_id, `date`, amount, `count`, cash, crypto)
+SELECT
+    org_stats.org_id,
+    @target_date,
+    SUM(org_stats.total_amount) AS org_total_amount,
+    SUM(org_stats.donation_count) AS org_total_count,
+    SUM(org_stats.cash_amount) AS org_cash_amount,
+    SUM(org_stats.crypto_amount) AS org_crypto_amount
 FROM (
-    -- 这是第二个派生表，逻辑与第一个几乎完全相同
+    -- 使用派生表计算每个项目的昨日捐赠数据
     SELECT
         dp.org_id,
         SUM(d.dollar) AS total_amount,
-        COUNT(d.id) AS total_count
+        COUNT(d.id) AS donation_count,
+        SUM(CASE WHEN d.method = 2 THEN d.dollar ELSE 0 END) AS cash_amount,
+        SUM(CASE WHEN d.method = 1 THEN d.dollar ELSE 0 END) AS crypto_amount
     FROM
         donation AS d
     JOIN
         donation_project AS dp ON d.project_id = dp.id
-    LEFT JOIN
-        org_donation_daily_stat AS stat ON dp.org_id = stat.org_id AND stat.date = @target_date
     WHERE
-        d.status = 1
-        AND DATE(d.created_at) = @target_date
-        AND stat.id IS NULL
+        DATE(d.created_at) = @target_date
     GROUP BY
         dp.org_id
-    HAVING
-        SUM(d.dollar) > 0
-) AS DailyStats;
+) AS org_stats
+GROUP BY
+    org_stats.org_id;
 
 
--- 步骤 3: 更新 organization 表中每个组织的余额 (balance)
-UPDATE
-    `organization` AS o
-JOIN (
-    -- 这是第三个派生表
+-- 任务4: 为每个有收入的组织记录一条余额变更日志
+INSERT INTO org_balance_log 
+  (org_id, amount, in_out, reason, created_at, creator)
+SELECT
+    org_daily_donations.org_id,
+    org_daily_donations.total_daily_amount,
+    1, -- 1 代表收入 (in)
+    1, -- 1 代表原因为捐赠
+    NOW(),
+    NULL -- creator 字段留空或根据业务逻辑设置
+FROM (
+    -- 使用派生表计算每个组织的昨日总捐赠额
     SELECT
         dp.org_id,
-        SUM(d.dollar) AS total_amount
+        SUM(d.dollar) AS total_daily_amount
     FROM
         donation AS d
     JOIN
         donation_project AS dp ON d.project_id = dp.id
-    LEFT JOIN
-        org_donation_daily_stat AS stat ON dp.org_id = stat.org_id AND stat.date = @target_date
     WHERE
-        d.status = 1
-        AND DATE(d.created_at) = @target_date
-        AND stat.id IS NULL
+        DATE(d.created_at) = DATE_SUB(CURDATE(), INTERVAL 1 DAY)
     GROUP BY
         dp.org_id
-    HAVING
-        SUM(d.dollar) > 0
-) AS DailyStats ON o.id = DailyStats.org_id
+) AS org_daily_donations;
+
+
+-- 任务6: 更新 organization 表的 balance 字段
+UPDATE organization o
+JOIN (
+    -- 再次使用派生表计算每个组织的昨日总捐赠额
+    SELECT
+        dp.org_id,
+        SUM(d.dollar) AS total_daily_amount
+    FROM
+        donation AS d
+    JOIN
+        donation_project AS dp ON d.project_id = dp.id
+    WHERE
+        DATE(d.created_at) = DATE_SUB(CURDATE(), INTERVAL 1 DAY)
+    GROUP BY
+        dp.org_id
+) AS org_daily_donations ON o.id = org_daily_donations.org_id
 SET
-    o.balance = o.balance + DailyStats.total_amount;
+    o.balance = o.balance + org_daily_donations.total_daily_amount;
 
 
--- 提交事务，应用所有更改
+-- 提交事务，完成所有操作
 COMMIT;
