@@ -30,6 +30,18 @@ export const getDonationProjectBySlug = cache(async function getDonationProjectB
   return project;
 });
 
+export const getCrowdFundingProjectBySlug = cache(async function getDonationProjectBySlug(slug: string) {
+  const data = await fetchTidb<ProjectInfo>(`/donation_project?slug=${slug}`);
+  const project = data[ 0 ];
+
+  project.project_slug = slug;
+  project.networks = ['ethereum-sepolia'];
+  project.tokens = { 'ethereum-sepolia': ['eth'] };
+  project.wallets = { 'ethereum-sepolia': '0x1b5078503369855e23bd0ec38e335ae1c36e5776' };
+
+  return project;
+});
+
 export const getProjects = cache(async function getProjects(
   page: number,
   pageSize: number,
