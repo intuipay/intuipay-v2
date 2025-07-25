@@ -39,7 +39,7 @@ export default function WidgetSection() {
 
           {/* Text Content - Second on mobile, Left on desktop */}
           <motion.div
-            className="order-2 lg:order-1 flex-1 flex flex-col justify-between items-start self-stretch"
+            className="order-2 lg:order-1 flex-1 flex flex-col justify-between items-start self-stretch gap-8"
             variants={itemVariants}
           >
             <div className="flex flex-col gap-4 lg:gap-6">

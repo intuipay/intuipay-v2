@@ -27,7 +27,7 @@ export default function ShowcaseSection() {
             <div className="w-full flex flex-col justify-center items-center gap-6 lg:gap-8">
               {/* Top Card - Partially hidden */}
               <div className="self-stretch bg-amber-100 rounded-3xl flex flex-col justify-start items-start -mt-16 md:-mt-20 lg:-mt-24">
-                <div className="self-stretch h-20 md:h-24 lg:h-32 p-8" />
+                <div className="self-stretch h-20 md:h-36 p-8" />
               </div>
 
               {/* Main Project Card */}
@@ -63,7 +63,7 @@ export default function ShowcaseSection() {
 
               {/* Bottom Card - Partially hidden */}
               <div className="self-stretch bg-amber-100 rounded-3xl flex flex-col justify-start items-start -mb-16 md:-mb-20 lg:-mb-24">
-                <div className="self-stretch h-20 md:h-24 lg:h-32 p-8" />
+                <div className="self-stretch h-20 md:h-40 p-8" />
               </div>
             </div>
           </motion.div>
