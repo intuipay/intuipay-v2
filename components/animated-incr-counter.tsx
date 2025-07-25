@@ -32,7 +32,7 @@ export function AnimatedIncrCounter({
       if (!startTime) startTime = currentTime
       const progress = Math.min((currentTime - startTime) / duration, 1)
       
-      // 使用缓动函数让动画更自然
+      // Use easing function to make the animation more natural
       const easeOutCubic = 1 - Math.pow(1 - progress, 3)
       const currentCount = Math.floor(easeOutCubic * end)
       
