@@ -10,7 +10,7 @@ export default function DashboardSection() {
   const { itemVariants } = sectionMotionVariants;
 
   return (
-    <section className="py-16 max-w-7xl mx-auto">
+    <section className="py-12 md:py-16 px-8 max-w-7xl mx-auto">
       <motion.div
         className="flex flex-col gap-8 md:gap-16"
         {...sectionMotionProps}
@@ -101,7 +101,7 @@ export default function DashboardSection() {
                 All-in-One Dashboard For Your Crypto Giving
               </div>
               <div className="text-black/50 text-base font-normal leading-normal">
-                Manage donations, compliance, and reporting — all from a single place, designed for institutional needs.
+                Manage fundings, compliance, and reporting — all from a single place, designed for institutional needs.
               </div>
             </div>
 
@@ -131,7 +131,7 @@ export default function DashboardSection() {
           >
             <MoneyIcon size={32} className="text-black/70" />
             <div className="text-black/70 text-sm md:text-base font-normal leading-6">
-              Monitor real-time donations and currency breakdowns
+              Monitor real-time fundings and currency breakdowns
             </div>
           </motion.div>
 
