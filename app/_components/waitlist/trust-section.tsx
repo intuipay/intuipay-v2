@@ -23,11 +23,11 @@ export default function TrustSection() {
   ]
 
   return (
-    <section className="py-16 max-w-7xl mx-auto">
+    <section className="py-12 md:py-16 px-8 max-w-7xl mx-auto">
       <div className="flex flex-col justify-center items-center gap-12">
         <div className="text-center">
-          <span className="text-black text-3xl font-medium">Trust by </span>
-          <span className="text-blue-600 text-3xl font-medium">Institutions & Nonprofits</span>
+          <span className="text-black text-xl font-medium font-neue-montreal">Trust by </span>
+          <span className="text-blue-600 text-xl font-medium font-neue-montreal">Institutions & Nonprofits</span>
         </div>
       </div>
 
