@@ -7,7 +7,7 @@ export default function ImpactSection() {
   const { itemVariants } = sectionMotionVariants;
 
   return (
-    <section className="py-16 max-w-7xl mx-auto">
+    <section className="py-12 md:py-16 px-8 md:px-0 max-w-7xl mx-auto">
       <motion.div
         className="flex flex-col items-center gap-12 md:gap-24"
         {...sectionMotionProps}

@@ -40,7 +40,7 @@ export default function HeroSection() {
             </div>
           </div>
 
-          <div className="xl:w-1/2 flex-none px-6">
+          <div className="xl:w-1/2 flex-none">
             <div className="w-full max-w-md mx-auto p-6 md:p-8 bg-white rounded-2xl shadow-sm border border-gray-100">
               <PaymentDemo />
             </div>

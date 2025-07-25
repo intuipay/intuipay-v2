@@ -9,7 +9,7 @@ export default function ShowcaseSection() {
   const { itemVariants } = sectionMotionVariants;
 
   return (
-    <section className="py-16 max-w-7xl mx-auto">
+    <section className="py-12 md:py-16 px-8 md:px-0 max-w-7xl mx-auto">
       <motion.div
         className="flex flex-col gap-8 md:gap-16"
         {...sectionMotionProps}
@@ -21,17 +21,17 @@ export default function ShowcaseSection() {
         >
           {/* Project Demo - First on mobile, Right on desktop */}
           <motion.div
-            className="order-1 lg:order-2 flex-1 bg-yellow-50 rounded-[32px] flex items-center justify-center p-4 lg:p-8 relative overflow-hidden"
+            className="order-1 lg:order-2 flex-1 bg-yellow-50 rounded-[32px] flex items-center justify-center px-8 relative overflow-hidden"
             variants={itemVariants}
           >
-            <div className="w-full flex flex-col justify-center items-center gap-4 lg:gap-8">
+            <div className="w-full flex flex-col justify-center items-center gap-6 lg:gap-8">
               {/* Top Card - Partially hidden */}
               <div className="self-stretch bg-amber-100 rounded-3xl flex flex-col justify-start items-start -mt-16 md:-mt-20 lg:-mt-24">
                 <div className="self-stretch h-20 md:h-24 lg:h-32 p-8" />
               </div>
 
               {/* Main Project Card */}
-              <div className="bg-white rounded-3xl shadow-[0px_4px_12px_0px_rgba(0,0,0,0.08)] p-4 lg:p-8">
+              <div className="bg-white rounded-3xl shadow-[0px_4px_12px_0px_rgba(0,0,0,0.08)] p-6 lg:p-8">
                 <div className="flex flex-col gap-3 lg:gap-6">
                   {/* Project Info */}
                   <div className="self-stretch flex flex-col justify-start items-start gap-3">
@@ -48,7 +48,7 @@ export default function ShowcaseSection() {
                         className="w-full h-full object-cover"
                       />
                     </div>
-                    <div className="text-black text-lg lg:text-2xl font-semibold leading-8">
+                    <div className="text-black text-sm lg:text-2xl font-semibold leading-8">
                       Verified by universities
                     </div>
                   </div>
