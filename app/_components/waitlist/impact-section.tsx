@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion';
 import { sectionMotionVariants, sectionMotionProps } from './motion';
+import { AnimatedIncrCounter } from '@/components/animated-incr-counter';
 
 export default function ImpactSection() {
   const { itemVariants } = sectionMotionVariants;
@@ -34,7 +35,11 @@ export default function ImpactSection() {
           >
             <div className="flex flex-col gap-4 md:gap-8">
               <div className="text-black text-6xl font-medium font-neue-montreal capitalize">
-                70%
+                <AnimatedIncrCounter
+                  end={70}
+                  suffix="%"
+                  duration={2000}
+                />
               </div>
               <div className="text-black/50 text-sm md:text-base font-normal leading-normal">
                 of Forbes' top 100 charities accept crypto donations
@@ -48,7 +53,11 @@ export default function ImpactSection() {
           >
             <div className="flex flex-col gap-4 md:gap-8">
               <div className="text-black text-6xl font-medium font-neue-montreal capitalize">
-                600Mn
+                <AnimatedIncrCounter
+                  end={600}
+                  suffix="Mn"
+                  duration={2200}
+                />
               </div>
               <div className="text-black/50 text-sm md:text-base font-normal leading-normal">
                 crypto users worldwide
@@ -62,7 +71,12 @@ export default function ImpactSection() {
           >
             <div className="flex flex-col gap-4 md:gap-8">
               <div className="text-black text-6xl font-medium font-neue-montreal capitalize">
-                $2.5B
+                <AnimatedIncrCounter
+                  end={2}
+                  prefix="$"
+                  suffix=".5B"
+                  duration={1000}
+                />
               </div>
               <div className="text-black/50 text-sm md:text-base font-normal leading-normal">
                 crypto giving expected in 2025 with growing trends
