@@ -4,8 +4,8 @@ export default function HeroSection() {
   return (
     <section className="xl:py-16 xl:px-16 2xl:px-20">
       <div className="bg-brand-blue xl:rounded-3xl p-6 md:p-10 xl:p-16 2xl:p-20">
-        <div className="max-w-7xl mx-auto flex flex-col xl:flex-row xl:items-center xl:gap-16 gap-12">
-          <div className="xl:w-1/2 flex-none">
+        <div className="max-w-7xl mx-auto flex flex-col lg:flex-row lg:items-center lg:gap-16 gap-12">
+          <div className="lg:w-1/2 flex-none">
             <h1 className="text-3xl md:text-6xl font-medium font-neue-montreal mb-6 leading-tight">
               Where{' '}
               <span className="inline-flex items-center align-top w-20 relative me-2" aria-label="Flags">
@@ -40,7 +40,7 @@ export default function HeroSection() {
             </div>
           </div>
 
-          <div className="xl:w-1/2 flex-none">
+          <div className="lg:w-1/2 flex-none">
             <div className="w-full max-w-md mx-auto p-6 md:p-8 bg-white rounded-2xl shadow-sm border border-gray-100">
               <PaymentDemo />
             </div>
