@@ -26,7 +26,7 @@ export function SiteHeader() {
         </div>
 
         {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center gap-4 flex-none">
+        <nav className="hidden lg:flex items-center gap-4 flex-none">
           {navLinks.map((link) => (
             <Link
               key={link.label}
@@ -43,7 +43,7 @@ export function SiteHeader() {
         </nav>
 
         {/* Desktop Right Section */}
-        <div className="flex-grow basis-0 min-w-0 hidden md:flex items-center justify-end gap-2">
+        <div className="flex-grow basis-0 min-w-0 hidden lg:flex items-center justify-end gap-2">
           {/* Language Dropdown */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -89,7 +89,7 @@ export function SiteHeader() {
         </div>
 
         {/* Mobile Menu Button */}
-        <div className="md:hidden">
+        <div className="lg:hidden">
           <Button
             variant="ghost"
             size="icon"
@@ -104,7 +104,7 @@ export function SiteHeader() {
 
       {/* Mobile Menu */}
       {mobileMenuOpen && (
-        <div className="md:hidden absolute top-full left-0 right-0 bg-white shadow-lg border-t border-black/10 z-40">
+        <div className="lg:hidden absolute top-full left-0 right-0 bg-white shadow-lg border-t border-black/10 z-40">
           <div className="px-4 py-4 space-y-4">
             {/* Mobile Navigation Links */}
             <div className="flex flex-col space-y-3">

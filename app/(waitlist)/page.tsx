@@ -49,10 +49,10 @@ export default function Home() {
 
         {/* Footer */}
         <footer className="bg-brand-blue">
-          <div className="mb-16 max-w-7xl mx-auto">
-            <p className="text-xs text-neutral-darkgray mb-4 md:mb-0 text-[#737373] mt-8">
+          <div className="my-16 px-8 md:px-0 max-w-7xl mx-auto">
+            <p className="text-xs text-black">
               &copy; {new Date().getFullYear()} Intuipay Holding PTE. LTD. All rights reserved.
-              <span className="text-neutral-darkgray ms-2">v{process.env.NEXT_PUBLIC_APP_VERSION}</span>
+              <span>v{process.env.NEXT_PUBLIC_APP_VERSION}</span>
             </p>
           </div>
         </footer>
