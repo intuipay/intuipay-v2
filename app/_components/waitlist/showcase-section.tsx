@@ -121,7 +121,7 @@ export default function ShowcaseSection() {
           >
             <ArrowsDownUpIcon size={32} className="text-black/70" />
             <div className="text-black/70 text-sm md:text-base font-normal leading-6">
-              Transparent donation tracking
+              Transparent funding tracking
             </div>
           </motion.div>
 
