@@ -137,6 +137,9 @@ const config: Config = {
         "scroll-continuous": "scroll-continuous 30s linear infinite",
         "pause": "none",
       },
+      maxWidth: {
+        '8xl': '1440px',
+      },
       spacing: {
         '7.5': '1.875rem',
         13: '3.25rem',
