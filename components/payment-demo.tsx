@@ -174,11 +174,9 @@ function CryptoPaymentContent({
     <>
       {/* Currency Selection */}
       <div className="space-y-2">
-        <div className="flex items-center justify-between">
-          <Label className="text-sm font-semibold text-black/50">Donate with</Label>
-        </div>
+        <Label className="text-sm font-semibold text-black/50">Donate with</Label>
         <MyCombobox
-          className="rounded-lg h-12"
+          className="rounded-lg h-14"
           iconClass="top-3"
           iconPath="information"
           iconExtension="png"
@@ -193,7 +191,7 @@ function CryptoPaymentContent({
         <Label className="text-sm font-semibold text-black/50">Amount</Label>
         <div className={'flex items-center border border-black/10 rounded-lg focus-within:outline focus-within:outline-1 focus-within:outline-blue-400'}>
           <Input
-            className="text-sm h-12 flex-1 px-4 focus:outline-none"
+            className="text-sm h-14 flex-1 px-4 focus:outline-none"
             hasRing={false}
             min="0"
             placeholder="1.0"
@@ -205,7 +203,7 @@ function CryptoPaymentContent({
             {paymentMethod} ≈ $
           </div>
           <Input
-            className="text-sm h-12 flex-1 px-4 focus:outline-none"
+            className="text-sm h-14 flex-1 px-4 focus:outline-none"
             hasRing={false}
             min="0"
             type="number"
