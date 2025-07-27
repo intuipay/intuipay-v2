@@ -9,7 +9,7 @@ export default function ShowcaseSection() {
   const { itemVariants } = sectionMotionVariants;
 
   return (
-    <section className="py-12 md:py-16 px-8 max-w-7xl mx-auto">
+    <section className="py-12 md:py-16 px-8 xl:max-w-6xl 2xl:max-w-8xl mx-auto">
       <motion.div
         className="flex flex-col gap-8 md:gap-16"
         {...sectionMotionProps}
@@ -78,7 +78,7 @@ export default function ShowcaseSection() {
                 Reach A Global Community
               </div>
               <div className="text-black text-3xl md:text-6xl font-medium font-neue-montreal capitalize">
-                Showcase Your Projects To Crypto Donors
+                Showcase Your Projects To Crypto Backers
               </div>
               <div className="text-black/50 text-base font-normal leading-normal">
                 Get discovered by donors around the world who want to directly support impactful research and education.
