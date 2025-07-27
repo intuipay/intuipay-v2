@@ -3,8 +3,8 @@ import PaymentDemo from '@/components/payment-demo'
 export default function HeroSection() {
   return (
     <section className="xl:py-16 xl:px-16 2xl:px-20">
-      <div className="bg-brand-blue xl:rounded-3xl p-6 md:p-10 xl:p-16 2xl:p-20">
-        <div className="px-8 xl:max-w-6xl 2xl:max-w-8xl mx-auto flex flex-col lg:flex-row lg:items-center lg:gap-16 gap-12">
+      <div className="bg-brand-blue xl:rounded-3xl px-8 py-12 md:p-12 lg:px-16 lg:py-8 xl:px-28 xl:py-8">
+        <div className="xl:max-w-6xl 2xl:max-w-8xl mx-auto flex flex-col lg:flex-row lg:items-center gap-8 md:gap-12 lg:gap-16">
           <div className="lg:w-1/2 flex-none">
             <h1 className="text-3xl md:text-6xl font-medium font-neue-montreal mb-6 leading-tight">
               Where{' '}
