@@ -19,10 +19,10 @@ WHERE
         -- 使用 CASE 语句根据 ${range} 参数动态确定起始日期
         CASE
             -- 如果 ${range}='quarter'，则起始日期为本季度的第一天
-            WHEN ${range} = 'quarter' THEN DATE_ADD(MAKEDATE(YEAR(CURDATE()), 1), INTERVAL QUARTER(CURDATE()) - 1 QUARTER)
+            WHEN ${range} = 'quarterly' THEN DATE_ADD(MAKEDATE(YEAR(CURDATE()), 1), INTERVAL QUARTER(CURDATE()) - 1 QUARTER)
 
             -- 如果 ${range}='year'，则起始日期为本年的第一天
-            WHEN ${range} = 'year' THEN MAKEDATE(YEAR(CURDATE()), 1)
+            WHEN ${range} = 'yearly' THEN MAKEDATE(YEAR(CURDATE()), 1)
 
             -- 其他情况 (包括 ${range}='month'、为 NULL 或为空字符串)，起始日期都为本月的第一天
             ELSE DATE_FORMAT(CURDATE(), '%Y-%m-01')

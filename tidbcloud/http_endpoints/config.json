@@ -1890,7 +1890,7 @@
     "return_type": "json"
   },
   {
-    "name": "dash /stats/donation/this-ran ge",
+    "name": "dash /stats/donation/this-range",
     "description": "",
     "method": "GET",
     "endpoint": "/stats/donation/this_range",
