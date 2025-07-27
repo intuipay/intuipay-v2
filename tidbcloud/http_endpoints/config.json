@@ -1890,10 +1890,10 @@
     "return_type": "json"
   },
   {
-    "name": "dash /stats/donation/this-year",
+    "name": "dash /stats/donation/this-ran ge",
     "description": "",
     "method": "GET",
-    "endpoint": "/stats/donation/this_year",
+    "endpoint": "/stats/donation/this_range",
     "data_source": {
       "cluster_id": 10914349176033975536
     },
@@ -1902,6 +1902,13 @@
         "name": "org_id",
         "type": "integer",
         "required": 1,
+        "default": "",
+        "description": ""
+      },
+      {
+        "name": "range",
+        "type": "string",
+        "required": 0,
         "default": "",
         "description": ""
       }
@@ -1915,7 +1922,7 @@
     },
     "tag": "Default",
     "batch_operation": 0,
-    "sql_file": "sql/GET-stats-donation-this_year.sql",
+    "sql_file": "sql/GET-stats-donation-this_range.sql",
     "type": "sql_endpoint",
     "return_type": "json"
   },
