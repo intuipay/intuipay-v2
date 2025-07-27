@@ -3,8 +3,8 @@ import PaymentDemo from '@/components/payment-demo'
 export default function HeroSection() {
   return (
     <section className="xl:py-16 xl:px-16 2xl:px-20">
-      <div className="bg-brand-blue xl:rounded-3xl px-8 py-12 md:p-12 lg:px-16 lg:py-24 xl:px-28">
-        <div className="xl:max-w-6xl 2xl:max-w-8xl mx-auto flex flex-col lg:flex-row lg:items-center gap-8 md:gap-12 lg:gap-16">
+      <div className="bg-brand-blue xl:rounded-3xl px-8 py-12 md:px-12 lg:px-16 xl:px-28 xl:min-h-[50vh] flex items-center">
+        <div className="xl:max-w-6xl 2xl:max-w-8xl mx-auto flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8 md:gap-12 lg:gap-16 w-full">
           <div className="flex-1">
             <h1 className="text-3xl md:text-6xl font-medium font-neue-montreal mb-6 leading-tight">
               Where{' '}
@@ -40,7 +40,7 @@ export default function HeroSection() {
             </div>
           </div>
 
-          <div className="flex-none">
+          <div className="flex-shrink-0">
             <div className="w-full max-w-md mx-auto p-6 md:p-8 bg-white rounded-2xl shadow-sm border border-gray-100">
               <PaymentDemo />
             </div>
