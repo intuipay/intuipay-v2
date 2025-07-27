@@ -8,7 +8,7 @@ export default function WidgetSection() {
   const { itemVariants } = sectionMotionVariants;
 
   return (
-    <section className="py-12 md:py-16 px-8 max-w-7xl mx-auto">
+    <section className="py-12 md:py-16 px-8 xl:max-w-6xl 2xl:max-w-8xl mx-auto">
       <motion.div
         className="flex flex-col gap-8 md:gap-16"
         {...sectionMotionProps}
