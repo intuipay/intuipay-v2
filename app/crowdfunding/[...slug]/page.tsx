@@ -12,7 +12,7 @@ type Props = {
 export async function generateMetadata({
   params
 }: Props): Promise<Metadata> {
-  const slug = (await params).slug[0];
+  const slug = (await params).slug[ 0 ];
   const project = await getCrowdFundingProjectBySlug(slug);
   if (!project) {
     return {

@@ -41,8 +41,8 @@ export default function DonationStep4({
   const [solanaTransactionHash, setSolanaTransactionHash] = useState<string>('');
   const [isSolanaTransaction, setIsSolanaTransaction] = useState<boolean>(false);
   // 动态获取配置
-  const networkConfig = BLOCKCHAIN_CONFIG.networks[info.network as keyof typeof BLOCKCHAIN_CONFIG.networks];
-  const currencyConfig = BLOCKCHAIN_CONFIG.currencies[info.currency as keyof typeof BLOCKCHAIN_CONFIG.currencies];
+  const networkConfig = BLOCKCHAIN_CONFIG.networks[ info.network as keyof typeof BLOCKCHAIN_CONFIG.networks ];
+  const currencyConfig = BLOCKCHAIN_CONFIG.currencies[ info.currency as keyof typeof BLOCKCHAIN_CONFIG.currencies ];
   const currencyNetworkConfig = getCurrencyNetworkConfig(info.currency, info.network);
   // 从项目配置中读出收款钱包，配置不对的话会报错
   const recipientAddress = getProjectWalletAddress(project, info.network);
