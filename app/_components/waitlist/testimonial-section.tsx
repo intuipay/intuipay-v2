@@ -7,7 +7,7 @@ export default function TestimonialSection() {
   const { itemVariants } = sectionMotionVariants;
 
   return (
-    <section className="py-12 md:py-16 px-8 xl:max-w-6xl 2xl:max-w-8xl mx-auto">
+    <section className="py-12 md:py-20 lg:py-30 px-8 xl:max-w-6xl 2xl:max-w-8xl mx-auto">
       <motion.div
         className="flex flex-col lg:flex-row gap-8 lg:gap-24 items-start"
         {...sectionMotionProps}
