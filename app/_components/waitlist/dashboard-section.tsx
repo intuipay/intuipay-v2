@@ -130,7 +130,7 @@ export default function DashboardSection() {
             variants={itemVariants}
           >
             <MoneyIcon size={32} className="text-black/70" />
-            <div className="text-black/70 text-sm md:text-base font-normal leading-6">
+            <div className="text-black/70 text-sm text-base font-normal leading-6">
               Monitor real-time fundings and currency breakdowns
             </div>
           </motion.div>
@@ -140,7 +140,7 @@ export default function DashboardSection() {
             variants={itemVariants}
           >
             <ReceiptIcon size={32} className="text-black/70" />
-            <div className="text-black/70 text-sm md:text-base font-normal leading-6">
+            <div className="text-black/70 text-sm text-base font-normal leading-6">
               Manage receipts, project listings, and donor data
             </div>
           </motion.div>
@@ -150,7 +150,7 @@ export default function DashboardSection() {
             variants={itemVariants}
           >
             <FilesIcon size={32} className="text-black/70" />
-            <div className="text-black/70 text-sm md:text-base font-normal leading-6">
+            <div className="text-black/70 text-sm text-base font-normal leading-6">
               Download reports for finance and tax teams
             </div>
           </motion.div>
