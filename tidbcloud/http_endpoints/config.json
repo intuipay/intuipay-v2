@@ -1967,7 +1967,7 @@
         "name": "sort_key",
         "type": "string",
         "required": 0,
-        "default": "d.id",
+        "default": "",
         "description": ""
       },
       {
