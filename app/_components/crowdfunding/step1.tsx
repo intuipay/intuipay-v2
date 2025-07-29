@@ -17,7 +17,7 @@ import {
   getCurrencyDropdownOptionsFromProject,
 } from '@/config/blockchain';
 import { useExchangeRates } from '@/hooks/use-exchange-rates';
-import { ProjectInfo } from '@/types';
+import { ProjectInfo, Reward } from '@/types';
 import { Widget as WidgetPage } from './LifiWidget';
 
 // 钱包官网链接
@@ -71,6 +71,54 @@ export default function DonationStep1({
 }: Props) {
   const [error, setError] = useState<string>('');
   const lifiModalRef = useRef<HTMLDialogElement>(null);
+  
+  // 奖励选择相关状态
+  const [hasSelectedReward, setHasSelectedReward] = useState<boolean>(false);
+  const [selectedReward, setSelectedReward] = useState<Reward | null>(null);
+  const [pledgeWithoutReward, setPledgeWithoutReward] = useState<boolean>(false);
+  
+  // 模拟奖励数据 - 实际项目中应该从项目数据中获取
+  const mockRewards: Reward[] = [
+    {
+      id: '1',
+      name: 'Reward Name',
+      description: 'One sentence of description.One sentence of description.One sentence of description.One sentence of description.',
+      amount: 100,
+      shipping_method: 'Ship to address',
+      estimated_delivery: 'Mar 2027',
+      availability: 'Limited (100 left of 100)',
+    },
+    {
+      id: '2', 
+      name: 'Reward Name',
+      description: 'One sentence of description.One sentence of description.One sentence of description.One sentence of description.',
+      amount: 100,
+      shipping_method: 'Ship to address',
+      estimated_delivery: 'Mar 2027',
+      availability: 'Limited (100 left of 100)',
+    }
+  ];
+
+  // 处理奖励选择
+  const handleRewardSelect = (reward: Reward) => {
+    setSelectedReward(reward);
+    setDollar(reward.amount);
+    setPledgeWithoutReward(false); // 选择奖励时取消 checkbox
+  };
+
+  // 处理无奖励捐赠
+  const handlePledgeWithoutReward = () => {
+    setSelectedReward(null); // 选择无奖励时取消选中的奖励
+    setPledgeWithoutReward(true);
+    setDollar(null);
+    setAmount('');
+  };
+
+  // 处理继续到下一步
+  const handleRewardNext = () => {
+    setHasSelectedReward(true);
+  };
+  
   // 获取配置数据 - 从项目配置中获取
   const networkOptions = getNetworkDropdownOptionsFromProject(project);
   const allWallets = Object.values(BLOCKCHAIN_CONFIG.wallets);
@@ -320,7 +368,13 @@ export default function DonationStep1({
   // update Dollar value based on amount and payment method
   function onAmountChange(event: ChangeEvent<HTMLInputElement>) {
     const input = event.target as HTMLInputElement;
-    const value = input.value ? Number(input.value) : 0;
+    let value = input.value ? Number(input.value) : 0;
+    
+    // 如果选择了奖励，确保金额不低于奖励的最小金额
+    if (selectedReward && value < selectedReward.amount) {
+      value = selectedReward.amount;
+    }
+    
     setAmount(value);
 
     // 使用真实汇率转换为美元金额
@@ -335,7 +389,13 @@ export default function DonationStep1({
   // update crypto amount based on dollar and payment method
   function onDollarChange(event: ChangeEvent<HTMLInputElement>) {
     const input = event.target as HTMLInputElement;
-    const value = input.value ? Number(input.value) : 0;
+    let value = input.value ? Number(input.value) : 0;
+    
+    // 如果选择了奖励，确保美元金额不低于奖励的最小金额
+    if (selectedReward && value < selectedReward.amount) {
+      value = selectedReward.amount;
+    }
+    
     setDollar(value);
 
     // 使用真实汇率转换为加密货币金额
@@ -346,6 +406,99 @@ export default function DonationStep1({
       setAmount(value);
     }
   }
+  
+  // 如果还没有选择奖励，显示奖励选择界面
+  if (!hasSelectedReward) {
+    return (
+      <div className="space-y-6 pt-8">
+        <h2 className="text-xl font-semibold text-center text-black">
+          Select your reward
+        </h2>
+        
+        {/* 奖励列表 */}
+        <div className="space-y-4">
+          {mockRewards.map((reward) => (
+            <div
+              key={reward.id}
+              className={`border rounded-lg p-4 cursor-pointer transition-all ${
+                selectedReward?.id === reward.id 
+                  ? 'border-blue-500 bg-blue-50' 
+                  : 'border-gray-200 hover:border-gray-300'
+              }`}
+              onClick={() => handleRewardSelect(reward)}
+            >
+              {/* 奖励图片占位符 */}
+              <div className="w-full h-40 bg-gray-200 rounded-lg mb-4"></div>
+              
+              <div className="flex justify-between items-start mb-2">
+                <h3 className="font-semibold text-lg">{reward.name}</h3>
+                <span className="font-bold text-lg">${reward.amount}</span>
+              </div>
+              
+              <p className="text-gray-600 text-sm mb-4">{reward.description}</p>
+              
+              <div className="grid grid-cols-2 gap-4 text-sm text-gray-500">
+                <div>
+                  <div className="font-medium">Shipping method</div>
+                  <div>{reward.shipping_method}</div>
+                </div>
+                <div>
+                  <div className="font-medium">Estimated delivery</div>
+                  <div>{reward.estimated_delivery}</div>
+                </div>
+              </div>
+              
+              <div className="mt-2 text-sm text-gray-500">
+                <div className="font-medium">Availability</div>
+                <div>{reward.availability}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+        
+        {/* Rewards aren't guaranteed 链接 */}
+        <div className="text-right">
+          <span className="text-blue-600 underline text-sm cursor-pointer">
+            Rewards aren't guaranteed
+          </span>
+        </div>
+        
+        {/* 不要奖励选项 - checkbox */}
+        <div className="flex items-center justify-center gap-3">
+          <input
+            type="checkbox"
+            id="pledge-without-reward"
+            checked={pledgeWithoutReward}
+            onChange={(e) => {
+              if (e.target.checked) {
+                handlePledgeWithoutReward();
+              } else {
+                setPledgeWithoutReward(false);
+                setSelectedReward(null);
+              }
+            }}
+            className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
+          />
+          <label 
+            htmlFor="pledge-without-reward" 
+            className="text-lg font-semibold cursor-pointer"
+          >
+            Pledge without reward
+          </label>
+        </div>
+        
+        {/* 继续按钮 */}
+        <CtaFooter
+          buttonLabel="Next"
+          buttonType="button"
+          isSubmittable={selectedReward !== null || pledgeWithoutReward}
+          isLoading={false}
+          onSubmit={handleRewardNext}
+        />
+      </div>
+    );
+  }
+  
   return (
     <>
     <form onSubmit={handleConnect}>
@@ -353,6 +506,45 @@ export default function DonationStep1({
         <h2 className="text-xl font-semibold text-center text-black">
           {project.project_cta || 'Make your pledge today'}
         </h2>
+        
+        {/* 显示所选奖励信息 */}
+        {selectedReward && (
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+            <div className="flex justify-between items-center">
+              <div>
+                <h3 className="font-semibold">Selected Reward: {selectedReward.name}</h3>
+                <p className="text-sm text-gray-600 mt-1">{selectedReward.description}</p>
+                <p className="text-sm font-medium mt-2">Minimum: ${selectedReward.amount}</p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setHasSelectedReward(false)}
+                className="text-blue-600 hover:text-blue-700 text-sm underline"
+              >
+                Change
+              </button>
+            </div>
+          </div>
+        )}
+        
+        {pledgeWithoutReward && (
+          <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
+            <div className="flex justify-between items-center">
+              <div>
+                <h3 className="font-semibold">Pledge without reward</h3>
+                <p className="text-sm text-gray-600 mt-1">Supporting the project without expecting a reward</p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setHasSelectedReward(false)}
+                className="text-gray-600 hover:text-gray-700 text-sm underline"
+              >
+                Change
+              </button>
+            </div>
+          </div>
+        )}
+        
         {/* Error message */}
         {error && (
           <div className="bg-red-50 border border-red-200 rounded-lg p-3">
@@ -497,13 +689,18 @@ export default function DonationStep1({
         {/* Amount Input */}
         <div className="space-y-2">
           <Label className="text-sm font-semibold text-black/50">Amount</Label>
+          {selectedReward && (
+            <div className="text-sm text-gray-600 mb-2">
+              Minimum amount for "{selectedReward.name}": ${selectedReward.amount}
+            </div>
+          )}
           <div className={`flex items-center border border-black/10 rounded-lg focus-within:outline focus-within:outline-1 focus-within:outline-blue-400 ${!(isConnected || isPhantomConnected) ? 'bg-gray-50' : ''}`}>
             <Input
               className="text-sm h-12 flex-1 px-4 focus:outline-none"
               hasRing={false}
-              min="0"
+              min={selectedReward ? selectedReward.amount.toString() : "0"}
               onChange={onAmountChange}
-              placeholder={!(isConnected || isPhantomConnected) ? 'Connect wallet first' : '1.0'}
+              placeholder={!(isConnected || isPhantomConnected) ? 'Connect wallet first' : selectedReward ? selectedReward.amount.toString() : '1.0'}
               type="number"
               value={amount}
               disabled={!(isConnected || isPhantomConnected)}
@@ -517,9 +714,9 @@ export default function DonationStep1({
             <Input
               className="text-sm h-12 flex-1 px-4 focus:outline-none"
               hasRing={false}
-              min="0"
+              min={selectedReward ? selectedReward.amount.toString() : "0"}
               onChange={onDollarChange}
-              placeholder={!(isConnected || isPhantomConnected) ? 'Connect wallet first' : '1.00'}
+              placeholder={!(isConnected || isPhantomConnected) ? 'Connect wallet first' : selectedReward ? selectedReward.amount.toString() : '1.00'}
               type="number"
               value={dollar || 0}
               disabled={!(isConnected || isPhantomConnected)}
