@@ -162,3 +162,17 @@ export type Update = {
 }
 
 export type Updates = Update[];
+
+export type Reward = {
+  id: string;
+  name: string;
+  description: string;
+  amount: number; // in USD
+  image?: string;
+  shipping_method?: string;
+  estimated_delivery?: string;
+  availability?: string;
+  quantity_limit?: number;
+}
+
+export type Rewards = Reward[];
