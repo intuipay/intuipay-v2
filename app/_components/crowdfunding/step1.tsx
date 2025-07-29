@@ -473,7 +473,7 @@ export default function DonationStep1({
         >
           <div className="col-span-2 flex items-center justify-center space-x-2 relative z-[1] mb-3">
             <Checkbox
-              id="anonymous"
+              id="pledge-without-reward"
               checked={pledgeWithoutReward}
               onCheckedChange={(checked) => {
                 if (checked) {
@@ -484,7 +484,7 @@ export default function DonationStep1({
                 }
               }}
             />
-            <Label htmlFor="anonymous" className="text-sm font-medium">
+            <Label htmlFor="pledge-without-reward" className="text-sm font-medium">
               Pledge without reward
             </Label>
           </div>
