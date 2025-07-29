@@ -351,7 +351,7 @@ export default function DonationStep1({
     <form onSubmit={handleConnect}>
       <div className="space-y-6 pt-8">
         <h2 className="text-xl font-semibold text-center text-black">
-          {project.project_cta || 'Make your donation today'}
+          {project.project_cta || 'Make your pledge today'}
         </h2>
         {/* Error message */}
         {error && (
