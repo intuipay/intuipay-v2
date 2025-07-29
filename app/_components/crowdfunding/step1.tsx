@@ -1,3 +1,4 @@
+import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import MyCombobox from '@/components/my-combobox';
@@ -456,35 +457,10 @@ export default function DonationStep1({
           ))}
         </div>
         
-        {/* Rewards aren't guaranteed 链接 */}
         <div className="text-right">
           <span className="text-blue-600 underline text-sm cursor-pointer">
             Rewards aren't guaranteed
           </span>
-        </div>
-        
-        {/* 不要奖励选项 - checkbox */}
-        <div className="flex items-center justify-center gap-3">
-          <input
-            type="checkbox"
-            id="pledge-without-reward"
-            checked={pledgeWithoutReward}
-            onChange={(e) => {
-              if (e.target.checked) {
-                handlePledgeWithoutReward();
-              } else {
-                setPledgeWithoutReward(false);
-                setSelectedReward(null);
-              }
-            }}
-            className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
-          />
-          <label 
-            htmlFor="pledge-without-reward" 
-            className="text-lg font-semibold cursor-pointer"
-          >
-            Pledge without reward
-          </label>
         </div>
         
         {/* 继续按钮 */}
@@ -494,7 +470,25 @@ export default function DonationStep1({
           isSubmittable={selectedReward !== null || pledgeWithoutReward}
           isLoading={false}
           onSubmit={handleRewardNext}
-        />
+        >
+          <div className="col-span-2 flex items-center justify-center space-x-2 relative z-[1] mb-3">
+            <Checkbox
+              id="anonymous"
+              checked={pledgeWithoutReward}
+              onCheckedChange={(checked) => {
+                if (checked) {
+                  handlePledgeWithoutReward();
+                } else {
+                  setPledgeWithoutReward(false);
+                  setSelectedReward(null);
+                }
+              }}
+            />
+            <Label htmlFor="anonymous" className="text-sm font-medium">
+              Pledge without reward
+            </Label>
+          </div>
+        </CtaFooter>
       </div>
     );
   }
