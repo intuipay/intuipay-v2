@@ -2,6 +2,8 @@ import { ArrowLeft, TerminalIcon } from 'lucide-react';
 import { APIResponse, DonationInfo } from '@/types';
 import { useState, useEffect } from 'react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Label } from '@/components/ui/label';
 import omit from 'lodash-es/omit';
 import { DonationStatus } from '@/data/project';
 import { ProjectDonationMethods } from '@/data';
@@ -40,6 +42,7 @@ export default function DonationStep4({
   const [message, setMessage] = useState<string>('');
   const [solanaTransactionHash, setSolanaTransactionHash] = useState<string>('');
   const [isSolanaTransaction, setIsSolanaTransaction] = useState<boolean>(false);
+  const [riskAcknowledged, setRiskAcknowledged] = useState<boolean>(false);
   // 动态获取配置
   const networkConfig = BLOCKCHAIN_CONFIG.networks[ info.network as keyof typeof BLOCKCHAIN_CONFIG.networks ];
   const currencyConfig = BLOCKCHAIN_CONFIG.currencies[ info.currency as keyof typeof BLOCKCHAIN_CONFIG.currencies ];
@@ -419,11 +422,22 @@ export default function DonationStep4({
         >
           <ArrowLeft className="h-5 w-5" />
         </button>
-        <h1 className="text-xl font-semibold text-center text-gray-900">Finish your donation</h1>
+        <h1 className="text-xl font-semibold text-center text-gray-900">Finish your pledge</h1>
+      </div>
+
+      {/* Explanation text */}
+      <div className="mb-12 text-center">
+        <p className="text-sm text-gray-900 leading-5">
+          Your payment method will be charged immediately if the project hits its goal and you'll receive a confirmation email at{' '}
+          <span className="font-semibold">{info.email || 'your registered email'}</span>. Your pledge cannot be canceled or modified.
+        </p>
+        <p className="text-sm text-gray-900 leading-5 mt-4">
+          Any shipping costs and applicable taxes will be charged separately, when the creator is ready to begin fulfillment.
+        </p>
       </div>
 
       <div className="flex flex-col items-center justify-center py-5 gap-4">
-        <p className="text-base sm:text-xl font-semibold text-gray-900">You are donating</p>
+        <p className="text-base sm:text-xl font-semibold text-gray-900">Amount</p>
         <p className="text-2xl sm:text-3xl font-semibold text-blue-600">{info.amount} {info.currency}</p>
         <p className="text-base sm:text-xl font-semibold text-gray-900">~ {(info.dollar ?? 0).toLocaleString()} USD</p>
         {/* 交易状态显示 */}
@@ -503,21 +517,54 @@ export default function DonationStep4({
       <CtaFooter
         buttonLabel={
           isSolanaTransaction
-            ? (solanaTransactionHash ? 'Saving...' : isSubmitting ? 'Sending Transaction...' : 'Donate')
+            ? (solanaTransactionHash ? 'Saving...' : isSubmitting ? 'Sending Transaction...' : 'Pledge')
             : (isApprovingERC20 ? 'Approving...' :
               isWritePending || isSendPending ? 'Sending Transaction...' :
                 isConfirming || isSendConfirming ? 'Confirming...' :
                   isConfirmed || isSendConfirmed ? 'Saving...' :
-                    'Donate')
+                    'Pledge')
         }
         goToPreviousStep={goToPreviousStep}
         isLoading={isSubmitting || isWritePending || isSendPending || isConfirming || isSendConfirming || isApprovingERC20}
         isSubmittable={
-          (window?.phantom?.solana?.isConnected && !isSubmitting) ||
-          (!isSubmitting && !isWritePending && !isSendPending && !isConfirming && !isSendConfirming && !isApprovingERC20 && isConnected)
+          riskAcknowledged &&
+          ((window?.phantom?.solana?.isConnected && !isSubmitting) ||
+          (!isSubmitting && !isWritePending && !isSendPending && !isConfirming && !isSendConfirming && !isApprovingERC20 && isConnected))
         }
         onSubmit={doSubmit}
-      />
+      >
+        <div className="col-span-2 flex items-center justify-start space-x-2 relative z-[1] mb-3">
+          <Checkbox
+            id="risk-acknowledgment"
+            checked={riskAcknowledged}
+            onCheckedChange={(checked) => setRiskAcknowledged(checked === true)}
+          />
+          <Label htmlFor="risk-acknowledgment" className="text-xs font-normal">
+            I understand that rewards aren't guaranteed by either Intuipay or the creator
+          </Label>
+        </div>
+      </CtaFooter>
+      
+      {/* Terms and privacy policy below the button */}
+      <div className="text-center mt-3">
+        <p className="text-xs font-normal text-black/80 leading-4">
+          By submitting your pledge, you agree to Intuipay's{' '}
+          <a 
+            href="#" 
+            className="underline hover:no-underline"
+          >
+            Terms of Use
+          </a>
+          {', and '}
+          <a 
+            href="#" 
+            className="underline hover:no-underline"
+          >
+            Privacy Policy
+          </a>
+          .
+        </p>
+      </div>
     </>
   )
 }
