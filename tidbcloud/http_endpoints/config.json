@@ -1906,7 +1906,14 @@
         "description": ""
       },
       {
-        "name": "range",
+        "name": "start_date",
+        "type": "string",
+        "required": 1,
+        "default": "",
+        "description": ""
+      },
+      {
+        "name": "end_date",
         "type": "string",
         "required": 0,
         "default": "",
