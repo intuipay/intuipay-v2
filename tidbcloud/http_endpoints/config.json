@@ -683,7 +683,7 @@
     "name": "dash /my-projects-count",
     "description": "",
     "method": "GET",
-    "endpoint": "/admin/my_projects_count",
+    "endpoint": "/dash/my_projects_count",
     "data_source": {
       "cluster_id": 10914349176033975536
     },
@@ -726,7 +726,7 @@
     },
     "tag": "Default",
     "batch_operation": 0,
-    "sql_file": "sql/GET-admin-my_projects_count.sql",
+    "sql_file": "sql/GET-dash-my_projects_count.sql",
     "type": "sql_endpoint",
     "return_type": "json"
   },
