@@ -2143,6 +2143,113 @@
     "return_type": "json"
   },
   {
+    "name": "dash /reward",
+    "description": "",
+    "method": "POST",
+    "endpoint": "/dash/reward",
+    "data_source": {
+      "cluster_id": 10914349176033975536
+    },
+    "params": [
+      {
+        "name": "project_id",
+        "type": "integer",
+        "required": 1,
+        "default": "",
+        "description": ""
+      },
+      {
+        "name": "reward_type",
+        "type": "integer",
+        "required": 1,
+        "default": "",
+        "description": ""
+      },
+      {
+        "name": "title",
+        "type": "string",
+        "required": 1,
+        "default": "",
+        "description": ""
+      },
+      {
+        "name": "description",
+        "type": "string",
+        "required": 0,
+        "default": "",
+        "description": ""
+      },
+      {
+        "name": "amount",
+        "type": "integer",
+        "required": 1,
+        "default": "",
+        "description": ""
+      },
+      {
+        "name": "images",
+        "type": "string",
+        "required": 0,
+        "default": "",
+        "description": ""
+      },
+      {
+        "name": "number",
+        "type": "integer",
+        "required": 1,
+        "default": "",
+        "description": ""
+      },
+      {
+        "name": "month",
+        "type": "integer",
+        "required": 0,
+        "default": "",
+        "description": ""
+      },
+      {
+        "name": "year",
+        "type": "integer",
+        "required": 0,
+        "default": "",
+        "description": ""
+      },
+      {
+        "name": "ship_method",
+        "type": "integer",
+        "required": 1,
+        "default": "",
+        "description": ""
+      },
+      {
+        "name": "destinations",
+        "type": "string",
+        "required": 0,
+        "default": "",
+        "description": ""
+      },
+      {
+        "name": "address",
+        "type": "string",
+        "required": 0,
+        "default": "",
+        "description": ""
+      }
+    ],
+    "settings": {
+      "timeout": 30000,
+      "row_limit": 1000,
+      "cache_enabled": 0,
+      "cache_ttl": 0,
+      "enable_pagination": 0
+    },
+    "tag": "Default",
+    "batch_operation": 0,
+    "sql_file": "sql/POST-dash-reward.sql",
+    "type": "sql_endpoint",
+    "return_type": "json"
+  },
+  {
     "name": "/refund",
     "description": "",
     "method": "POST",
