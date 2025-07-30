@@ -615,24 +615,24 @@
     "return_type": "json"
   },
   {
-    "name": "admin /my-projects",
+    "name": "dash /my-projects",
     "description": "",
     "method": "GET",
-    "endpoint": "/admin/my_projects",
+    "endpoint": "/dash/my_projects",
     "data_source": {
       "cluster_id": 10914349176033975536
     },
     "params": [
       {
         "name": "is_widget",
-        "type": "boolean",
+        "type": "integer",
         "required": 0,
         "default": "0",
         "description": ""
       },
       {
         "name": "org_id",
-        "type": "string",
+        "type": "integer",
         "required": 1,
         "default": "",
         "description": ""
@@ -675,12 +675,12 @@
     },
     "tag": "Default",
     "batch_operation": 0,
-    "sql_file": "sql/GET-admin-my_projects.sql",
+    "sql_file": "sql/GET-dash-my_projects.sql",
     "type": "sql_endpoint",
     "return_type": "json"
   },
   {
-    "name": "admin /my-projects-count",
+    "name": "dash /my-projects-count",
     "description": "",
     "method": "GET",
     "endpoint": "/admin/my_projects_count",
