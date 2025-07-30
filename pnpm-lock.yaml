@@ -11,6 +11,9 @@ importers:
       '@headlessui/react':
         specifier: ^2.2.4
         version: 2.2.4(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      '@intuipay/shared':
+        specifier: ^0.1.0
+        version: 0.1.0
       '@lifi/widget':
         specifier: ^3.24.3
         version: 3.24.3(785951cd8511b6d421166fdaebc6cf29)
@@ -1329,6 +1332,9 @@ packages:
     engines: {node: ^18.17.0 || ^20.3.0 || >=21.0.0}
     cpu: [x64]
     os: [win32]
+
+  '@intuipay/shared@0.1.0':
+    resolution: {integrity: sha512-GikNWf+hupYPYdA6K1HmJRoo9BdOCo9iMgfNKxUdHLz8KxdiSklLfTESYiNP5tFNUGicooFRFh2YcGDMnFjiUg==}
 
   '@isaacs/cliui@8.0.2':
     resolution: {integrity: sha512-O8jcjabXaleOG9DQ0+ARXWZBTfnP4WNAqzuiJK7ll44AmxGKv/J2M4TPjxjY3znBCfvBXFzucm1twdyFybFqEA==}
@@ -9068,6 +9074,8 @@ snapshots:
   '@img/sharp-win32-x64@0.34.3':
     optional: true
 
+  '@intuipay/shared@0.1.0': {}
+
   '@isaacs/cliui@8.0.2':
     dependencies:
       string-width: 5.1.2
@@ -9305,7 +9313,7 @@ snapshots:
       consola: 3.4.2
       detect-libc: 2.0.4
       https-proxy-agent: 7.0.6
-      node-fetch: 2.6.9
+      node-fetch: 2.7.0
       nopt: 8.1.0
       semver: 7.7.2
       tar: 7.4.3

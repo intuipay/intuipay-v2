@@ -64,8 +64,7 @@ const useStore = create<Props>((set, get) => {
               usdTargetRate: data.quotes[`${source}USD`],
             },
           });
-        }
-        else {
+        } else {
           set({
             amount: amt,
             isLoading: false,
