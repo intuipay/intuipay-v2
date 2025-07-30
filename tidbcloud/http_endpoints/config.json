@@ -2062,5 +2062,77 @@
     "sql_file": "sql/GET-donations_count.sql",
     "type": "sql_endpoint",
     "return_type": "json"
+  },
+  {
+    "name": "/withdraw",
+    "description": "",
+    "method": "POST",
+    "endpoint": "/withdraw",
+    "data_source": {
+      "cluster_id": 10914349176033975536
+    },
+    "params": [
+      {
+        "name": "org_id",
+        "type": "integer",
+        "required": 1,
+        "default": "",
+        "description": ""
+      },
+      {
+        "name": "project_id",
+        "type": "integer",
+        "required": 1,
+        "default": "",
+        "description": ""
+      },
+      {
+        "name": "amount",
+        "type": "integer",
+        "required": 1,
+        "default": "",
+        "description": ""
+      },
+      {
+        "name": "to_wallet",
+        "type": "string",
+        "required": 1,
+        "default": "",
+        "description": ""
+      },
+      {
+        "name": "status",
+        "type": "string",
+        "required": 0,
+        "default": "",
+        "description": ""
+      },
+      {
+        "name": "network",
+        "type": "string",
+        "required": 1,
+        "default": "",
+        "description": ""
+      },
+      {
+        "name": "source_wallet",
+        "type": "string",
+        "required": 1,
+        "default": "",
+        "description": ""
+      }
+    ],
+    "settings": {
+      "timeout": 30000,
+      "row_limit": 1000,
+      "cache_enabled": 0,
+      "cache_ttl": 0,
+      "enable_pagination": 0
+    },
+    "tag": "Default",
+    "batch_operation": 0,
+    "sql_file": "sql/POST-withdraw.sql",
+    "type": "sql_endpoint",
+    "return_type": "json"
   }
 ]
