@@ -384,7 +384,7 @@ export default function DonationStep4({
           address: crowdFundingContracct,
           abi: crowdFundingABI,
           functionName: 'contribute',
-          args: [1], // campaignId, 1 is the default campaign ID
+          args: [2], // campaignId, 1 is the default campaign ID
           value: amount,
         });
       } else if (currencyNetworkConfig?.contractAddress) {
