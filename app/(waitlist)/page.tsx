@@ -27,11 +27,11 @@ export default function Home() {
           {/* Impact Section */}
           <ImpactSection />
 
-          {/* Widget Section */}
-          <WidgetSection />
-
           {/* Showcase Section */}
           <ShowcaseSection />
+
+          {/* Widget Section */}
+          <WidgetSection />
 
           {/* Dashboard Section */}
           <DashboardSection />
