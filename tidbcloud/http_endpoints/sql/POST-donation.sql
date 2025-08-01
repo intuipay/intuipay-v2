@@ -21,6 +21,10 @@ SET `amount`=`amount`+@donation_amount,
   `backers`=`backers`+1
 WHERE `id`=${project_id};
 
+UPDATE `project_reward`
+SET `count`=`count`+1
+WHERE `id`=${reward_id};
+
 COMMIT;
 
 SELECT @new_donation_id as last_insert_id;
