@@ -9,7 +9,7 @@ export async function GET(request: NextRequest) {
   }
 
   const params = new URLSearchParams();
-  params.set('access_key', process.env.API_LAYER_ACCESS_KEY || '');
+  params.set('access_key', process.env.API_LAYER_ACCESS_KEY!);
   params.set('currencies', `USD,${target}`);
   params.set('source', source);
   const response = await fetch(`https://apilayer.net/api/live?${params.toString()}`, {

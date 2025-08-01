@@ -47,7 +47,8 @@ const useStore = create<Props>((set, get) => {
       return;
     } else {
       set({ isLoading: true });
-      const response = await fetch(`/api/waitlist?target=${target}&source=${source}`);
+      const params = new URLSearchParams({ target, source });
+      const response = await fetch(`/api/waitlist?${params.toString()}`);
       const data = await response.json();
       if (data.success) {
         if (target === source) {
