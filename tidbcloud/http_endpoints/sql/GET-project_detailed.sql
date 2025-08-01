@@ -6,27 +6,25 @@ SELECT `p`.`id`,`project_name`,`banner`,`status`,
   `org_description`,`org_type`,`org_contact`,`org_location`,`org_website`,
   `org_logo`,`banners`,`backers`,`o`.`email` as `org_email`,
   `org_title`,p.`social_links`,`o`.social_links as `org_social_links`,
-  COALESCE(
+  IF(
+    COUNT(r.id) = 0,
+    JSON_ARRAY(), 
     JSON_ARRAYAGG(
-      IF(r.id IS NULL,
-        NULL, -- 如果 reward 不存在，不创建 JSON object
-        JSON_OBJECT(
-          'id', r.`id`,
-          'title', r.`title`,
-          'description', r.`description`,
-          'amount', r.`amount`,
-          'images', r.`images`,
-          'number', r.`number`,
-          'count', r.`count`,
-          'year', r.`year`,
-          'month', r.`month`,
-          'ship_method', r.`ship_method`,
-          'destinations', r.`destinations`,
-          'address', r.`address`
-        )
+      JSON_OBJECT(
+        'id', r.`id`,
+        'title', r.`title`,
+        'description', r.`description`,
+        'amount', r.`amount`,
+        'images', r.`images`,
+        'number', r.`number`,
+        'count', r.`count`,
+        'year', r.`year`,
+        'month', r.`month`,
+        'ship_method', r.`ship_method`,
+        'destinations', r.`destinations`,
+        'address', r.`address`
       )
-    ),
-    JSON_ARRAY()
+    )
   ) AS rewards
 FROM `donation_project` p
   LEFT JOIN `organization` o
