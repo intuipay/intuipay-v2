@@ -1,6 +1,7 @@
 USE `test`;
 
-SELECT `project_id`,s.`amount`,`count`,`crypto`,`cash`,`project_name`
+SELECT `project_id`,s.`amount`,`count`,`crypto`,`cash`,`project_name`,
+  `date`
 FROM `org_donation_project_daily_stat` s
   LEFT JOIN `donation_project` p
     ON s.`project_id`=p.`id`
