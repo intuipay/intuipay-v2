@@ -47,7 +47,8 @@ const useStore = create<Props>((set, get) => {
       return;
     } else {
       set({ isLoading: true });
-      const response = await fetch(`https://apilayer.net/api/live?access_key=c00b1d196651f1245a3e4410df9863db&currencies=USD,${target}&source=${source}`);
+      const params = new URLSearchParams({ target, source });
+      const response = await fetch(`/api/waitlist?${params.toString()}`);
       const data = await response.json();
       if (data.success) {
         if (target === source) {
