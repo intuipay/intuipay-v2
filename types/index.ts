@@ -123,6 +123,7 @@ export type ProjectInfo = {
   project_cta: string;
   thanks_note: string;
   brand_color: string;
+  rewards?: string; // JSON string containing reward data
 
   created_at: string;
   deleted_at?: string;

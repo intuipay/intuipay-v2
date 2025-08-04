@@ -3,6 +3,7 @@ import { getDonationProjectBySlug, getProjectDetail } from '@/lib/data';
 import DonationPageComp from '@/app/_components/donate/donate-page';
 import CrowdFundingPageComp from '@/app/_components/crowdfunding/donate-page';
 import { notFound } from 'next/navigation';
+import { ProjectTypes } from '@/data';
 
 export const runtime = 'edge';
 
@@ -51,11 +52,10 @@ export default async function DonatePage({
   }
 
   const projectDetail = await getProjectDetail(slug);
-  console.log('projectDetail', projectDetail);
-  if (projectDetail && projectDetail.type === '101') {
-    // 101 表示众筹项目
+  // 目前返回的type是 '101' ，所以不能用全等号
+  if (projectDetail && projectDetail.type == ProjectTypes.Crownfunding) {
     return <CrowdFundingPageComp
-      project={project}
+      project={projectDetail}
       slug={slug}
     />;
   }

@@ -78,27 +78,55 @@ export default function DonationStep1({
   const [selectedReward, setSelectedReward] = useState<Reward | null>(null);
   const [pledgeWithoutReward, setPledgeWithoutReward] = useState<boolean>(false);
   
-  // 模拟奖励数据 - 实际项目中应该从项目数据中获取
-  const mockRewards: Reward[] = [
-    {
-      id: '1',
-      name: 'Reward Name',
-      description: 'One sentence of description.One sentence of description.One sentence of description.One sentence of description.',
-      amount: 100,
-      shipping_method: 'Ship to address',
-      estimated_delivery: 'Mar 2027',
-      availability: 'Limited (100 left of 100)',
-    },
-    {
-      id: '2', 
-      name: 'Reward Name',
-      description: 'One sentence of description.One sentence of description.One sentence of description.One sentence of description.',
-      amount: 100,
-      shipping_method: 'Ship to address',
-      estimated_delivery: 'Mar 2027',
-      availability: 'Limited (100 left of 100)',
+  // 将 project.rewards 字符串转换为 Reward[] 格式
+  const parseProjectRewards = (rewardsString: string): Reward[] => {
+    try {
+      const rawRewards = JSON.parse(rewardsString);
+      
+      // 映射 ship_method 数字到描述
+      const getShippingMethod = (shipMethod: number): string => {
+        switch (shipMethod) {
+          case 1: return 'By myself';
+          case 2: return 'Local pickup';
+          case 3: return 'Digital delivery';
+          default: return 'Digital delivery';
+        }
+      };
+      
+      // 格式化预计交付时间
+      const getEstimatedDelivery = (month: number | null, year: number | null): string => {
+        if (month && year) {
+          const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 
+                             'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+          return `${monthNames[month - 1]} ${year}`;
+        }
+        return 'TBD';
+      };
+      
+      // 格式化可用性信息
+      const getAvailability = (number: number, count: number | null): string => {
+        if (number === 0) return 'Unlimited';
+        if (count !== null) return `Limited (${count} left of ${number})`;
+        return `Limited (${number} available)`;
+      };
+      
+      return rawRewards.map((reward: any) => ({
+        id: reward.id.toString(),
+        name: reward.title || 'Untitled Reward',
+        description: reward.description || 'No description available',
+        amount: reward.amount || 0,
+        shipping_method: getShippingMethod(reward.ship_method),
+        estimated_delivery: getEstimatedDelivery(reward.month, reward.year),
+        availability: getAvailability(reward.number, reward.count),
+      }));
+    } catch (error) {
+      console.error('Error parsing project rewards:', error);
+      return [];
     }
-  ];
+  };
+  
+  // 从项目数据中获取转换后的奖励
+  const projectRewards = project.rewards ? parseProjectRewards(project.rewards) : [];
 
   // 处理奖励选择
   const handleRewardSelect = (reward: Reward) => {
@@ -418,7 +446,7 @@ export default function DonationStep1({
         
         {/* 奖励列表 */}
         <div className="space-y-4">
-          {mockRewards.map((reward) => (
+          {projectRewards.map((reward) => (
             <div
               key={reward.id}
               className={`border rounded-lg p-4 cursor-pointer transition-all ${
