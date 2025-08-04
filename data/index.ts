@@ -496,4 +496,6 @@ export enum ProjectTypes {
   'Philanthropic Research' = 4,
   'Crowdsourced / Open Science' = 5,
   'Student Organization' = 6,
+  Widget = 100,
+  Crownfunding = 101,
 }
