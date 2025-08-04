@@ -919,17 +919,17 @@
         "description": ""
       },
       {
-        "name": "is_auto_end",
-        "type": "string",
+        "name": "status",
+        "type": "integer",
         "required": 0,
         "default": "1",
         "description": ""
       },
       {
-        "name": "is_widget",
-        "type": "boolean",
+        "name": "is_auto_end",
+        "type": "string",
         "required": 0,
-        "default": "0",
+        "default": "1",
         "description": ""
       }
     ],
