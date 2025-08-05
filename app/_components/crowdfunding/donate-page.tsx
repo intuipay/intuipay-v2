@@ -5,7 +5,7 @@ import { CircleDotIcon, HeadsetIcon } from 'lucide-react'
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link'
-import { DonationInfo, ProjectInfo } from '@/types';
+import { DonationInfo, ProjectInfo, Reward } from '@/types';
 import { clsx } from 'clsx';
 import Step1NoWagmi from '@/app/_components/crowdfunding/step1-no-wagmi';
 import DonationStep2 from '@/app/_components/crowdfunding/step2';
@@ -85,6 +85,19 @@ export default function DonationPageComp({
   const handleSetNetwork = (newNetwork: string) => {
     setNetwork(newNetwork);
     updateInfo({ network: newNetwork });
+  };
+
+  // Combined reward setters that update info
+  const handleSetSelectedReward = (reward: Reward | null) => {
+    updateInfo({ selected_reward: reward });
+  };
+
+  const handleSetHasSelectedReward = (hasSelected: boolean) => {
+    updateInfo({ has_selected_reward: hasSelected });
+  };
+
+  const handleSetPledgeWithoutReward = (pledgeWithout: boolean) => {
+    updateInfo({ pledge_without_reward: pledgeWithout });
   };
 
   function onMessage(event: MessageEvent) {
@@ -262,6 +275,12 @@ export default function DonationPageComp({
                       updateInfo({ dollar: typeof value === 'number' ? value : null });
                     }}
                     project={projectInfo}
+                    selectedReward={info.selected_reward}
+                    setSelectedReward={handleSetSelectedReward}
+                    hasSelectedReward={info.has_selected_reward || false}
+                    setHasSelectedReward={handleSetHasSelectedReward}
+                    pledgeWithoutReward={info.pledge_without_reward || false}
+                    setPledgeWithoutReward={handleSetPledgeWithoutReward}
                 />
               ) : (
                 <Step1NoWagmi
@@ -280,6 +299,12 @@ export default function DonationPageComp({
                     updateInfo({ dollar: typeof value === 'number' ? value : null });
                   }}
                   project={projectInfo}
+                  selectedReward={info.selected_reward}
+                  setSelectedReward={handleSetSelectedReward}
+                  hasSelectedReward={info.has_selected_reward || false}
+                  setHasSelectedReward={handleSetHasSelectedReward}
+                  pledgeWithoutReward={info.pledge_without_reward || false}
+                  setPledgeWithoutReward={handleSetPledgeWithoutReward}
                 />
               )
             )}

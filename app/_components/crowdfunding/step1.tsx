@@ -54,6 +54,14 @@ type Props = {
   dollar: number | null;
   setDollar: (value: number | null) => void;
   project: ProjectInfo;
+  
+  // 奖励相关props
+  selectedReward?: Reward | null;
+  setSelectedReward: (reward: Reward | null) => void;
+  hasSelectedReward: boolean;
+  setHasSelectedReward: (hasSelected: boolean) => void;
+  pledgeWithoutReward: boolean;
+  setPledgeWithoutReward: (pledgeWithout: boolean) => void;
 }
 
 export default function DonationStep1({
@@ -69,14 +77,20 @@ export default function DonationStep1({
   dollar,
   setDollar,
   project,
+  selectedReward,
+  setSelectedReward,
+  hasSelectedReward,
+  setHasSelectedReward,
+  pledgeWithoutReward,
+  setPledgeWithoutReward,
 }: Props) {
   const [error, setError] = useState<string>('');
   const lifiModalRef = useRef<HTMLDialogElement>(null);
   
-  // 奖励选择相关状态
-  const [hasSelectedReward, setHasSelectedReward] = useState<boolean>(false);
-  const [selectedReward, setSelectedReward] = useState<Reward | null>(null);
-  const [pledgeWithoutReward, setPledgeWithoutReward] = useState<boolean>(false);
+  // 移除本地状态，使用传入的props
+  // const [hasSelectedReward, setHasSelectedReward] = useState<boolean>(false);
+  // const [selectedReward, setSelectedReward] = useState<Reward | null>(null);
+  // const [pledgeWithoutReward, setPledgeWithoutReward] = useState<boolean>(false);
   
   // 将 project.rewards 字符串转换为 Reward[] 格式
   const parseProjectRewards = (rewardsString: string): Reward[] => {
