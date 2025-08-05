@@ -17,6 +17,19 @@
   },
   {
     "type": "function",
+    "name": "MAX_STRING_LENGTH",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
     "name": "PERCENTAGE_BASE",
     "inputs": [],
     "outputs": [
@@ -125,13 +138,18 @@
         "name": "contributorsCount",
         "type": "uint256",
         "internalType": "uint256"
+      },
+      {
+        "name": "refundDeadline",
+        "type": "uint256",
+        "internalType": "uint256"
       }
     ],
     "stateMutability": "view"
   },
   {
     "type": "function",
-    "name": "checkCampaignStatus",
+    "name": "claimExpiredRefunds",
     "inputs": [
       {
         "name": "_campaignId",
@@ -220,13 +238,6 @@
   {
     "type": "function",
     "name": "emergencyWithdraw",
-    "inputs": [],
-    "outputs": [],
-    "stateMutability": "nonpayable"
-  },
-  {
-    "type": "function",
-    "name": "getCampaignDetails",
     "inputs": [
       {
         "name": "_campaignId",
@@ -234,59 +245,32 @@
         "internalType": "uint256"
       }
     ],
-    "outputs": [
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "finalizeCampaign",
+    "inputs": [
       {
-        "name": "id",
-        "type": "uint256",
-        "internalType": "uint256"
-      },
-      {
-        "name": "title",
-        "type": "string",
-        "internalType": "string"
-      },
-      {
-        "name": "description",
-        "type": "string",
-        "internalType": "string"
-      },
-      {
-        "name": "beneficiary",
-        "type": "address",
-        "internalType": "address"
-      },
-      {
-        "name": "fundingGoal",
-        "type": "uint256",
-        "internalType": "uint256"
-      },
-      {
-        "name": "deadline",
-        "type": "uint256",
-        "internalType": "uint256"
-      },
-      {
-        "name": "currentAmount",
-        "type": "uint256",
-        "internalType": "uint256"
-      },
-      {
-        "name": "status",
-        "type": "uint8",
-        "internalType": "enum CrowdFunding.CampaignStatus"
-      },
-      {
-        "name": "contributorsCount",
+        "name": "_campaignId",
         "type": "uint256",
         "internalType": "uint256"
       }
     ],
-    "stateMutability": "view"
+    "outputs": [],
+    "stateMutability": "nonpayable"
   },
   {
     "type": "function",
-    "name": "getContractBalance",
-    "inputs": [],
+    "name": "getCampaignRefundDeadline",
+    "inputs": [
+      {
+        "name": "_campaignId",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
     "outputs": [
       {
         "name": "",
@@ -322,6 +306,25 @@
   },
   {
     "type": "function",
+    "name": "isRefundPeriodExpired",
+    "inputs": [
+      {
+        "name": "_campaignId",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "",
+        "type": "bool",
+        "internalType": "bool"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
     "name": "owner",
     "inputs": [],
     "outputs": [
@@ -349,6 +352,19 @@
   {
     "type": "function",
     "name": "platformFeePercentage",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "refundPeriodDays",
     "inputs": [],
     "outputs": [
       {
@@ -420,10 +436,10 @@
   },
   {
     "type": "function",
-    "name": "withdrawFunds",
+    "name": "updateRefundPeriod",
     "inputs": [
       {
-        "name": "_campaignId",
+        "name": "_newRefundPeriodDays",
         "type": "uint256",
         "internalType": "uint256"
       }
@@ -518,6 +534,62 @@
       },
       {
         "name": "contributor",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      },
+      {
+        "name": "amount",
+        "type": "uint256",
+        "indexed": false,
+        "internalType": "uint256"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "EmergencyWithdrawal",
+    "inputs": [
+      {
+        "name": "campaignId",
+        "type": "uint256",
+        "indexed": true,
+        "internalType": "uint256"
+      },
+      {
+        "name": "to",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      },
+      {
+        "name": "tokenAddress",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      },
+      {
+        "name": "amount",
+        "type": "uint256",
+        "indexed": false,
+        "internalType": "uint256"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "ExpiredRefundsClaimed",
+    "inputs": [
+      {
+        "name": "campaignId",
+        "type": "uint256",
+        "indexed": true,
+        "internalType": "uint256"
+      },
+      {
+        "name": "tokenAddress",
         "type": "address",
         "indexed": true,
         "internalType": "address"
@@ -645,6 +717,30 @@
     "anonymous": false
   },
   {
+    "type": "event",
+    "name": "RefundPeriodUpdated",
+    "inputs": [
+      {
+        "name": "oldRefundPeriodDays",
+        "type": "uint256",
+        "indexed": false,
+        "internalType": "uint256"
+      },
+      {
+        "name": "newRefundPeriodDays",
+        "type": "uint256",
+        "indexed": false,
+        "internalType": "uint256"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "error",
+    "name": "ArithmeticOverflow",
+    "inputs": []
+  },
+  {
     "type": "error",
     "name": "CampaignDeadlinePassed",
     "inputs": []
@@ -706,6 +802,11 @@
   },
   {
     "type": "error",
+    "name": "InvalidRefundPeriod",
+    "inputs": []
+  },
+  {
+    "type": "error",
     "name": "InvalidTokenAddress",
     "inputs": []
   },
@@ -740,6 +841,26 @@
         "internalType": "address"
       }
     ]
+  },
+  {
+    "type": "error",
+    "name": "ReentrancyGuardReentrantCall",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "RefundPeriodExpired",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "RefundPeriodNotExpired",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "StringTooLong",
+    "inputs": []
   },
   {
     "type": "error",

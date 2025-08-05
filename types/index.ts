@@ -128,6 +128,7 @@ export type ProjectInfo = {
   created_at: string;
   deleted_at?: string;
   updated_at: string;
+  campaign_id?: number; // 区块链上的活动id，每个项目不同
 }
 
 export type ProjectFilter = {

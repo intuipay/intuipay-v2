@@ -108,6 +108,12 @@ export const getProjectDetail = cache(async function getProjectDetail(
     ...rest,
     amount: Number(amount),
     goal_amount: Number(goal_amount),
+
+    // 测试的众筹合约信息，等后台接入钱包后，应该从后台读取
+    campaign_id: 1, // 区块链上的活动id，每个项目不同
+    networks: ['ethereum-sepolia'],
+    tokens: { 'ethereum-sepolia': ['usdc'] },
+    wallets: { 'ethereum-sepolia': '0xbDE5c24B7c8551f93B95a8f27C6d926B3bCcF5aD' }, // 众筹合约地址
   };
 });
 

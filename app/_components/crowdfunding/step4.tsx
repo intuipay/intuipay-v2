@@ -24,6 +24,7 @@ import {
 import { ProjectInfo } from '@/types';
 import crowdFundingABI from '@/lib/crowdFunding.abi.json';
 import ERC20_ABI from '@/lib/erc20.abi.json';
+import { projectTraceSource } from 'next/dist/build/swc/generated-native';
 
 type Props = {
   goToPreviousStep: () => void;
@@ -44,11 +45,15 @@ export default function DonationStep4({
   const [isSolanaTransaction, setIsSolanaTransaction] = useState<boolean>(false);
   const [riskAcknowledged, setRiskAcknowledged] = useState<boolean>(false);
   // 动态获取配置
-  const networkConfig = BLOCKCHAIN_CONFIG.networks[ info.network as keyof typeof BLOCKCHAIN_CONFIG.networks ];
-  const currencyConfig = BLOCKCHAIN_CONFIG.currencies[ info.currency as keyof typeof BLOCKCHAIN_CONFIG.currencies ];
+  const networkConfig = BLOCKCHAIN_CONFIG.networks[info.network as keyof typeof BLOCKCHAIN_CONFIG.networks];
+  const currencyConfig = BLOCKCHAIN_CONFIG.currencies[info.currency as keyof typeof BLOCKCHAIN_CONFIG.currencies];
   const currencyNetworkConfig = getCurrencyNetworkConfig(info.currency, info.network);
-  // 从项目配置中读出收款钱包，配置不对的话会报错
-  const recipientAddress = getProjectWalletAddress(project, info.network);
+  const recipientAddress = getProjectWalletAddress(project, info.network); // 读出众筹合约地址
+
+  console.log('debug recipientAddress:', recipientAddress);
+
+  console.log('debug reward id: ', info);
+
   // wagmi hooks
   const { address, isConnected } = useAccount();
   const chainId = useChainId();
@@ -181,14 +186,12 @@ export default function DonationStep4({
       }
 
       // 直接转账
-      const crowdFundingContracct = '0x1b5078503369855e23bd0ec38e335ae1c36e5776';
-
       console.log('Proceeding with direct ERC-20 transfer');
       writeContract({
-        address: crowdFundingContracct,
+        address: recipientAddress,
         abi: crowdFundingABI,
         functionName: 'contributeERC20',
-        args: [1, amount],
+        args: [project.campaign_id, amount],
       });
     } catch (e) {
       setMessage(getReadableErrorMessage(e));
@@ -197,9 +200,58 @@ export default function DonationStep4({
   }
   // 保存捐赠数据到数据库
   async function saveDonationToDatabase(transactionHash: string, walletAddress?: string) {
-    setIsSubmitting(false);
-    goToNextStep();
+    try {
+      const response = await fetch('/api/donation', {
+        method: 'POST',
+        headers: {
+          'content-type': 'application/json',
+        },
+        body: JSON.stringify({
+          ...omit(info, ['id', 'amount', 'created_at', 'updated_at']),
+          amount: convertAmountBasedOnCurrency(info.amount as number, info.currency),
+          has_tax_invoice: Number(info.has_tax_invoice),
+          is_anonymous: Number(info.is_anonymous),
+          account: '',
+          method: ProjectDonationMethods.Crypto,
+          status: DonationStatus.Successful,
+          tx_hash: transactionHash,
+          wallet_address: walletAddress || address || '',
+          project_slug: project.project_slug,
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({ message: response.statusText }));
+        const errorMessage = errorData.message || response.statusText;
+
+        // 检查是否是交易验证错误
+        if (errorMessage.includes('Transaction validation failed')) {
+          setMessage(`Transaction verification failed: ${errorMessage.replace('Transaction validation failed:', '').trim()}`);
+        } else {
+          setMessage('Error saving donation: ' + errorMessage);
+        }
+        setIsSubmitting(false);
+        return;
+      }
+
+      const { data, validation } = (await response.json()) as APIResponse<number> & {
+        validation?: { verified: boolean }
+      };
+
+      // 显示验证成功的信息
+      if (validation?.verified) {
+        console.log('Transaction verified successfully:');
+      }
+
+      info.id = data;
+      setIsSubmitting(false);
+      goToNextStep();
+    } catch (e) {
+      setMessage(`Error saving donation: ${getReadableErrorMessage(e)}`);
+      setIsSubmitting(false);
+    }
   }
+
   async function doSubmit() {
     // Check donation amount validity
     if (!info.amount || info.amount <= 0) {
@@ -224,135 +276,7 @@ export default function DonationStep4({
 
     setIsSubmitting(true);
     setMessage('');
-    // Solana transaction
-    if (networkConfig.type === 'solana') {
-      const phantom = window?.phantom?.solana;
-      if (phantom && phantom.isConnected) {
-        setIsSolanaTransaction(true);
-        try {
-          const connection = new Connection(networkConfig.rpcUrl || clusterApiUrl('devnet'));
-          let instructions = [];
-
-          // 根据代币类型构造不同的交易指令
-          if (currencyNetworkConfig?.isNative) {
-            // SOL 原生代币转账
-            console.log('Creating SOL native transfer instruction');
-            // 使用专门的 SOL 转换函数
-            const lamportsAmount = parseUnits(info.amount.toString(), 9); // SOL 有 9 位小数
-
-            instructions = [
-              SystemProgram.transfer({
-                fromPubkey: phantom.publicKey,
-                toPubkey: new PublicKey(recipientAddress),
-                lamports: lamportsAmount,
-              }),
-            ];
-          } else if (currencyNetworkConfig?.contractAddress) {
-            // SPL Token 转账（如 USDC）
-            console.log('Creating SPL Token transfer instruction for:', currencyConfig.symbol);
-
-            const mintAddress = new PublicKey(currencyNetworkConfig.contractAddress);
-            const fromWallet = phantom.publicKey;
-            const toWallet = new PublicKey(recipientAddress);
-
-            // 获取或创建发送者的关联代币账户
-            const fromTokenAccount = await getAssociatedTokenAddress(
-              mintAddress,
-              fromWallet,
-              false,
-              TOKEN_PROGRAM_ID,
-              ASSOCIATED_TOKEN_PROGRAM_ID
-            );
-
-            // 获取或创建接收者的关联代币账户
-            const toTokenAccount = await getAssociatedTokenAddress(
-              mintAddress,
-              toWallet,
-              false,
-              TOKEN_PROGRAM_ID,
-              ASSOCIATED_TOKEN_PROGRAM_ID
-            );
-
-            // 检查接收者的代币账户是否存在
-            const toTokenAccountInfo = await connection.getAccountInfo(toTokenAccount);
-
-            // 如果接收者的代币账户不存在，需要先创建
-            if (!toTokenAccountInfo) {
-              console.log('Creating associated token account for recipient');
-              instructions.push(
-                createAssociatedTokenAccountInstruction(
-                  fromWallet, // payer
-                  toTokenAccount, // associatedToken
-                  toWallet, // owner
-                  mintAddress, // mint
-                  TOKEN_PROGRAM_ID,
-                  ASSOCIATED_TOKEN_PROGRAM_ID
-                )
-              );
-            }
-
-            // 计算转账金额（转换为代币的最小单位）
-            const transferAmount = parseUnits(info.amount.toString(), currencyConfig.decimals);
-
-            console.log('SPL Token transfer details:', {
-              fromTokenAccount: fromTokenAccount.toString(),
-              toTokenAccount: toTokenAccount.toString(),
-              amount: transferAmount,
-              decimals: currencyConfig.decimals
-            });
-
-            // 创建转账指令
-            instructions.push(
-              createTransferInstruction(
-                fromTokenAccount, // source
-                toTokenAccount, // destination
-                fromWallet, // owner
-                transferAmount, // amount
-                [],
-                TOKEN_PROGRAM_ID
-              )
-            );
-          } else {
-            throw new Error('Invalid token configuration: no contract address or native flag');
-          }
-
-          // get latest `blockhash`
-          const blockhash = await connection.getLatestBlockhash().then((res) => res.blockhash);
-
-          // create v0 compatible message
-          const messageV0 = new TransactionMessage({
-            payerKey: phantom.publicKey,
-            recentBlockhash: blockhash,
-            instructions,
-          }).compileToV0Message();
-
-          // make a versioned transaction
-          const transactionV0 = new VersionedTransaction(messageV0);
-
-          console.log('Solana transaction created:', transactionV0);
-          const result = await phantom.signAndSendTransaction(transactionV0);
-          console.log('Solana transaction result:', result);
-
-          if (result?.signature) {
-            // Set transaction hash for UI display
-            setSolanaTransactionHash(result.signature);
-            // Transaction successful, save to database
-            await saveDonationToDatabase(result.signature, phantom.publicKey.toString());
-          } else {
-            setMessage('Transaction failed: No signature returned');
-            setIsSubmitting(false);
-          }
-        } catch (e) {
-          setMessage(`Solana transaction failed: ${getReadableErrorMessage(e)}`);
-          setIsSubmitting(false);
-        }
-        return;
-      } else {
-        setMessage('Phantom wallet is not connected');
-        setIsSubmitting(false);
-        return;
-      }
-    }    // Ethereum transaction
+    // Ethereum transaction
     setIsSolanaTransaction(false);
     if (!isConnected || !address) {
       setMessage('Please connect your wallet first');
@@ -376,15 +300,13 @@ export default function DonationStep4({
 
       console.log('start evm crowd funding contribute');
 
-      const crowdFundingContracct = '0x1b5078503369855e23bd0ec38e335ae1c36e5776';
-
       if (currencyNetworkConfig?.isNative) {
         // 原生代币通过合约转账
         writeContract({
-          address: crowdFundingContracct,
+          address: recipientAddress as `0x${string}`,
           abi: crowdFundingABI,
           functionName: 'contribute',
-          args: [2], // campaignId, 1 is the default campaign ID
+          args: [project.campaign_id], // campaignId, 1 is the default campaign ID
           value: amount,
         });
       } else if (currencyNetworkConfig?.contractAddress) {
@@ -397,7 +319,7 @@ export default function DonationStep4({
           address: currencyNetworkConfig.contractAddress as `0x${string}`,
           abi: ERC20_ABI,
           functionName: 'approve',
-          args: [crowdFundingContracct, amount],
+          args: [recipientAddress, amount],
         });
       } else {
         setMessage('Invalid token configuration: no contract address or native flag');
@@ -529,7 +451,7 @@ export default function DonationStep4({
         isSubmittable={
           riskAcknowledged &&
           ((window?.phantom?.solana?.isConnected && !isSubmitting) ||
-          (!isSubmitting && !isWritePending && !isSendPending && !isConfirming && !isSendConfirming && !isApprovingERC20 && isConnected))
+            (!isSubmitting && !isWritePending && !isSendPending && !isConfirming && !isSendConfirming && !isApprovingERC20 && isConnected))
         }
         onSubmit={doSubmit}
       >
@@ -544,20 +466,20 @@ export default function DonationStep4({
           </Label>
         </div>
       </CtaFooter>
-      
+
       {/* Terms and privacy policy below the button */}
       <div className="text-center mt-3">
         <p className="text-xs font-normal text-black/80 leading-4">
           By submitting your pledge, you agree to Intuipay's{' '}
-          <a 
-            href="#" 
+          <a
+            href="#"
             className="underline hover:no-underline"
           >
             Terms of Use
           </a>
           {', and '}
-          <a 
-            href="#" 
+          <a
+            href="#"
             className="underline hover:no-underline"
           >
             Privacy Policy
