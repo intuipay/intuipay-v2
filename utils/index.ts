@@ -26,5 +26,10 @@ export function createDonationInfo(projectId: number): DonationInfo {
     state: '',
     wallet: '',
     zip: '',
+    
+    // 奖励相关字段初始值
+    selected_reward: null,
+    has_selected_reward: false,
+    pledge_without_reward: false,
   }
 }

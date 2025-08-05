@@ -52,7 +52,7 @@ export default function DonationStep4({
 
   console.log('debug recipientAddress:', recipientAddress);
 
-  console.log('debug reward id: ', info);
+  console.log('debug reward id: ', info.selected_reward, project.project_slug);
 
   // wagmi hooks
   const { address, isConnected } = useAccount();
@@ -217,6 +217,7 @@ export default function DonationStep4({
           tx_hash: transactionHash,
           wallet_address: walletAddress || address || '',
           project_slug: project.project_slug,
+          reward_id: info.selected_reward?.id || null,
         }),
       });
 

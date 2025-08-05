@@ -85,6 +85,11 @@ export type DonationInfo = {
   wallet: string;
   zip: string;
 
+  // 奖励相关字段
+  selected_reward?: Reward | null;
+  has_selected_reward?: boolean;
+  pledge_without_reward?: boolean;
+
   created_at?: string;
   updated_at?: string;
 }
