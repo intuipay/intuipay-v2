@@ -207,7 +207,7 @@ export default function DonationStep4({
           'content-type': 'application/json',
         },
         body: JSON.stringify({
-          ...omit(info, ['id', 'amount', 'created_at', 'updated_at']),
+          ...omit(info, ['id', 'amount', 'created_at', 'updated_at', 'selected_reward', 'has_selected_reward', 'pledge_without_reward']),
           amount: convertAmountBasedOnCurrency(info.amount as number, info.currency),
           has_tax_invoice: Number(info.has_tax_invoice),
           is_anonymous: Number(info.is_anonymous),
