@@ -12,7 +12,7 @@ import {
   getSupportedWallets,
   getCurrencyDropdownOptionsFromProject,
 } from '@/config/blockchain';
-import { ProjectInfo } from '@/types';
+import { ProjectInfo, Reward } from '@/types';
 
 type Props = {
   amount: number | '';
@@ -27,6 +27,14 @@ type Props = {
   dollar: number | null;
   setDollar: (value: number | null) => void;
   project: ProjectInfo;
+  
+  // 奖励相关props
+  selectedReward?: Reward | null;
+  setSelectedReward: (reward: Reward | null) => void;
+  hasSelectedReward: boolean;
+  setHasSelectedReward: (hasSelected: boolean) => void;
+  pledgeWithoutReward: boolean;
+  setPledgeWithoutReward: (pledgeWithout: boolean) => void;
 }
 
 export default function Step1NoWagmi({
@@ -39,6 +47,12 @@ export default function Step1NoWagmi({
   setNetwork,
   setDollar,
   project,
+  selectedReward,
+  setSelectedReward,
+  hasSelectedReward,
+  setHasSelectedReward,
+  pledgeWithoutReward,
+  setPledgeWithoutReward,
 }: Props) {
   // 获取配置数据 - 从项目配置中获取
   const networkOptions = getNetworkDropdownOptionsFromProject(project);
