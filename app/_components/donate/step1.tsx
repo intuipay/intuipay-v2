@@ -6,7 +6,6 @@ import { ChangeEvent, useState, useEffect, FormEvent, useCallback, useRef } from
 import CtaFooter from '@/app/_components/donate/cta-footer';
 import { clsx } from 'clsx';
 import Image from 'next/image';
-import { WalletConnectButton } from '@/components/wallet-connect-button';
 import { useAccount, useConnect, useDisconnect, useChainId, useSwitchChain } from 'wagmi';
 import { useMultiWalletBalance } from '@/hooks/use-multi-wallet-balance';
 import {
@@ -397,17 +396,6 @@ export default function DonationStep1({
           {(!isConnected && !isPhantomConnected) ? (
             <div className="grid sm:grid-cols-2 gap-2.5 sm:gap-y-6">
               {getFilteredWallets().map(wallet => {
-                // Handle WalletConnect separately
-                if (wallet.id === 'wallet-connect') {
-                  return (
-                    <WalletConnectButton
-                      key={wallet.id}
-                      isSelected={selectedWallet === wallet.id}
-                      onClick={() => setSelectedWallet(wallet.id)}
-                    />
-                  )
-                }
-
                 // Handle other wallets normally
                 return (
                   <label

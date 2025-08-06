@@ -56,8 +56,6 @@ export default function DonationPageComp({
   project,
   slug,
 }: Props) {
-  // Check if wagmi is ready
-  const isWagmiReady = useWagmiReady();
   // State
   const [currentStep, setCurrentStep] = useState<Step>('initialization')
   const [slideDirection, setSlideDirection] = useState<'right' | 'left'>('right')

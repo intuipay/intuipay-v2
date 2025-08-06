@@ -65,26 +65,24 @@ const metadata = {
   icons: ['https://intuipay.xyz/images/logo.svg']
 }
 
-export function getConfig() {
-  return createConfig({
-    chains: [mainnet, sepolia, pharosTestnet, eduTestnet],
-    transports: {
-      [mainnet.id]: http(),
-      [sepolia.id]: http(),
-      [pharosTestnet.id]: http(),
-      [eduTestnet.id]: http(),
-    },
-    connectors: [
-      injected(),
-      metaMask(),
-      walletConnect({
-        projectId: projectId || '',
-        metadata,
-      }),
-      coinbaseWallet(),
-    ],
-    storage: createStorage({
-      storage: cookieStorage,
+export const config = createConfig({
+  chains: [mainnet, sepolia, pharosTestnet, eduTestnet],
+  transports: {
+    [mainnet.id]: http(),
+    [sepolia.id]: http(),
+    [pharosTestnet.id]: http(),
+    [eduTestnet.id]: http(),
+  },
+  connectors: [
+    injected(),
+    metaMask(),
+    walletConnect({
+      projectId: projectId || '',
+      metadata,
     }),
-  });
-}
+    coinbaseWallet(),
+  ],
+  storage: createStorage({
+    storage: cookieStorage,
+  }),
+});
