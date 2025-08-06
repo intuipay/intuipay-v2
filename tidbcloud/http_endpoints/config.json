@@ -2415,5 +2415,36 @@
     "sql_file": "sql/PUT-dash-reward.sql",
     "type": "sql_endpoint",
     "return_type": "json"
+  },
+  {
+    "name": "GET /my-backed",
+    "description": "",
+    "method": "GET",
+    "endpoint": "/my_backed",
+    "data_source": {
+      "cluster_id": 10914349176033975536
+    },
+    "params": [
+      {
+        "name": "address",
+        "type": "array",
+        "required": 1,
+        "default": "",
+        "description": "",
+        "item_type": "string"
+      }
+    ],
+    "settings": {
+      "timeout": 30000,
+      "row_limit": 1000,
+      "cache_enabled": 0,
+      "cache_ttl": 0,
+      "enable_pagination": 0
+    },
+    "tag": "Default",
+    "batch_operation": 0,
+    "sql_file": "sql/GET-my_backed.sql",
+    "type": "sql_endpoint",
+    "return_type": "json"
   }
 ]
