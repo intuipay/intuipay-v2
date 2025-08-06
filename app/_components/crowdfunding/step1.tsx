@@ -87,11 +87,6 @@ export default function DonationStep1({
   const [error, setError] = useState<string>('');
   const lifiModalRef = useRef<HTMLDialogElement>(null);
   
-  // 移除本地状态，使用传入的props
-  // const [hasSelectedReward, setHasSelectedReward] = useState<boolean>(false);
-  // const [selectedReward, setSelectedReward] = useState<Reward | null>(null);
-  // const [pledgeWithoutReward, setPledgeWithoutReward] = useState<boolean>(false);
-  
   // 将 project.rewards 字符串转换为 Reward[] 格式
   const parseProjectRewards = (rewardsString: string): Reward[] => {
     try {
