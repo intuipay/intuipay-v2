@@ -2,10 +2,11 @@
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { type State, WagmiProvider } from 'wagmi'
-import { config } from '@/lib/appkit'
+import { getConfig } from '@/lib/appkit'
 import { type ReactNode, useState } from 'react'
 
 export function Web3Provider({ children, initialState }: { children: ReactNode, initialState: State | undefined }) {
+  const [config] = useState(() => getConfig())
   const [queryClient] = useState(() => new QueryClient())
 
   return (

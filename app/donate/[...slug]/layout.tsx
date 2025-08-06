@@ -5,7 +5,9 @@ import { Web3Provider } from '@/components/providers/web3-provider';
 import { getDonationProjectBySlug } from '@/lib/data';
 import { headers } from 'next/headers'
 import { cookieToInitialState } from 'wagmi'
-import { config } from '@/lib/appkit';
+import { getConfig } from '@/lib/appkit';
+
+export const runtime = 'edge';
 
 export default async function DonateLayout({
   children,
@@ -18,7 +20,7 @@ export default async function DonateLayout({
   const project = await getDonationProjectBySlug(slug);
   const pageTitle = project?.project_name || 'Support';
   const initialState = cookieToInitialState(
-    config,
+    getConfig(),
     (await headers()).get('cookie')
   )
   return (
