@@ -10,8 +10,6 @@ import { ProjectDonationMethods } from '@/data';
 import CtaFooter from '@/app/_components/donate/cta-footer';
 import { useAccount, useChainId, useWriteContract, useWaitForTransactionReceipt, useSendTransaction } from 'wagmi';
 import { parseUnits } from 'viem';
-import { TransactionMessage, VersionedTransaction, SystemProgram, Connection, PublicKey, clusterApiUrl } from '@solana/web3.js';
-import { createTransferInstruction, getAssociatedTokenAddress, TOKEN_PROGRAM_ID, ASSOCIATED_TOKEN_PROGRAM_ID, createAssociatedTokenAccountInstruction } from '@solana/spl-token';
 import {
   BLOCKCHAIN_CONFIG,
   getProjectWalletAddress,
@@ -19,12 +17,10 @@ import {
   getExplorerUrl,
   formatAddress,
   convertToSmallestUnit,
-  getFundsDividerContract
 } from '@/config/blockchain';
 import { ProjectInfo } from '@/types';
 import crowdFundingABI from '@/lib/crowdFunding.abi.json';
 import ERC20_ABI from '@/lib/erc20.abi.json';
-import { projectTraceSource } from 'next/dist/build/swc/generated-native';
 
 type Props = {
   goToPreviousStep: () => void;

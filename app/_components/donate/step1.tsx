@@ -8,7 +8,6 @@ import { clsx } from 'clsx';
 import Image from 'next/image';
 import { WalletConnectButton } from '@/components/wallet-connect-button';
 import { useAccount, useConnect, useDisconnect, useChainId, useSwitchChain } from 'wagmi';
-import { appkit } from '@/lib/appkit';
 import { useMultiWalletBalance } from '@/hooks/use-multi-wallet-balance';
 import {
   BLOCKCHAIN_CONFIG,
@@ -268,10 +267,6 @@ export default function DonationStep1({
       }
 
       // Handle WalletConnect specially (直接打开，不需要网络切换逻辑)
-      if (selectedWallet === 'wallet-connect') {
-        appkit.open();
-        return;
-      }
 
       // Handle Phantom wallet for Solana
       if (selectedWallet === 'phantom') {

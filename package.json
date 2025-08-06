@@ -40,8 +40,6 @@
     "@radix-ui/react-toggle": "^1.1.9",
     "@radix-ui/react-toggle-group": "^1.1.10",
     "@radix-ui/react-tooltip": "^1.2.7",
-    "@reown/appkit": "^1.7.13",
-    "@reown/appkit-adapter-wagmi": "^1.7.13",
     "@solana-program/system": "^0.7.0",
     "@solana/spl-token": "^0.4.13",
     "@solana/web3.js": "^1.98.2",
@@ -89,10 +87,10 @@
     "postcss": "^8.5.6",
     "tailwindcss": "^3.4.17",
     "typescript": "^5.8.3",
-    "viem": "^2.31.7",
+    "viem": "^2.33.2",
     "vite-tsconfig-paths": "^5.1.4",
     "vitest": "^3.2.4",
-    "wagmi": "^2.15.6"
+    "wagmi": "^2.16.1"
   },
   "packageManager": "pnpm@10.12.1+sha512.f0dda8580f0ee9481c5c79a1d927b9164f2c478e90992ad268bbb2465a736984391d6333d2c327913578b2804af33474ca554ba29c04a8b13060a717675ae3ac"
 }
