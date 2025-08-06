@@ -3,6 +3,9 @@ import { Button } from '@/components/ui/button';
 import BackButton from '@/components/back-button';
 import { Web3Provider } from '@/components/providers/web3-provider';
 import { getDonationProjectBySlug } from '@/lib/data';
+import { headers } from 'next/headers'
+import { cookieToInitialState } from 'wagmi'
+import { config } from '@/lib/appkit';
 
 export const runtime = 'edge';
 
@@ -16,8 +19,12 @@ export default async function DonateLayout({
   const slug = (await params).slug;
   const project = await getDonationProjectBySlug(slug);
   const pageTitle = project?.project_name || 'Support';
+  const initialState = cookieToInitialState(
+    config,
+    (await headers()).get('cookie')
+  );
   return (
-    <Web3Provider>
+    <Web3Provider initialState={initialState}>
       <div className="min-h-screen bg-gray-50 lg:bg-gray-100">
         {/* Header */}
         <header className="flex items-center justify-between px-8 sm:px-30 py-4 bg-white lg:bg-gray-50 border-b">
