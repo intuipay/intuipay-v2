@@ -7,8 +7,6 @@ import { headers } from 'next/headers'
 import { cookieToInitialState } from 'wagmi'
 import { config } from '@/lib/appkit';
 
-export const runtime = 'edge';
-
 export default async function DonateLayout({
   children,
   params,

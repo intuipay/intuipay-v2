@@ -5,8 +5,6 @@ import CrowdFundingPageComp from '@/app/_components/crowdfunding/donate-page';
 import { notFound } from 'next/navigation';
 import { ProjectTypes } from '@/data';
 
-export const runtime = 'edge';
-
 type Props = {
   params: Promise<{ slug: string }>;
 }
