@@ -1,7 +1,7 @@
 import { createConfig, http, cookieStorage, createStorage } from 'wagmi'
 import { mainnet, sepolia } from 'wagmi/chains'
 import { defineChain } from 'viem'
-import { injected, metaMask, coinbaseWallet, walletConnect } from 'wagmi/connectors'
+import { injected, metaMask, coinbaseWallet } from 'wagmi/connectors'
 
 // 定义 Pharos Testnet 链
 const pharosTestnet = defineChain({
@@ -76,10 +76,6 @@ export function getConfig() {
     },
     connectors: [
       injected(),
-      walletConnect({
-        projectId: projectId || '',
-        metadata,
-      }),
       metaMask(),
       coinbaseWallet(),
     ],
