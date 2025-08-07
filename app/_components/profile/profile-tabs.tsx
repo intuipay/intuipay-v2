@@ -5,8 +5,15 @@ import AboutTab from './about-tab';
 import BackedTab from './backed-tab';
 import RaisedTab from './raised-tab';
 import { CoinVerticalIcon, ArrowUpRightIcon } from '@phosphor-icons/react/ssr';
+import { Profile, ProjectInfo } from '@/types';
 
-export default function ProfileTabs() {
+interface ProfileTabsProps {
+  profile: Profile;
+  myBacked?: ProjectInfo[];
+  myProjects?: ProjectInfo[];
+}
+
+export default function ProfileTabs({ profile, myBacked, myProjects }: ProfileTabsProps) {
   return (
     <div className="w-full">
       <Tabs defaultValue="about" className="w-full">
@@ -47,13 +54,13 @@ export default function ProfileTabs() {
 
         {/* Tab Content */}
         <TabsContent value="about" className="mt-0">
-          <AboutTab />
+          <AboutTab profile={profile} />
         </TabsContent>
         <TabsContent value="backed" className="mt-0">
-          <BackedTab />
+          <BackedTab projects={myBacked} />
         </TabsContent>
         <TabsContent value="raised" className="mt-0">
-          <RaisedTab />
+          <RaisedTab projects={myProjects} />
         </TabsContent>
       </Tabs>
     </div>

@@ -36,7 +36,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
           <div className="flex items-center text-xs gap-2">
             <Avatar className="size-8">
               <AvatarImage src={project.org_logo} alt={project.org_name} />
-              <AvatarFallback>{project.org_name.charAt(0)}</AvatarFallback>
+              <AvatarFallback>{project?.org_name?.charAt(0) || ''}</AvatarFallback>
             </Avatar>
             <span>{project.org_name}</span>
           </div>
