@@ -67,6 +67,12 @@ export default function DonationPageComp({
   const [slideDirection, setSlideDirection] = useState<'right' | 'left'>('right')
   const [info, setInfo] = useState<DonationInfo>(createDonationInfo(project.id));
   const [projectInfo, setProjectInfo] = useState<ProjectInfo>(project);
+  // Transaction info state for step 5
+  const [transactionInfo, setTransactionInfo] = useState<{
+    hash?: string;
+    walletAddress?: string;
+    recipientAddress?: string;
+  }>({});
   // Network state management
   const [network, setNetwork] = useState<string>(() => {
     const networkOptions = getNetworkDropdownOptionsFromProject(project); // 从project里面读出支持的网络列表
@@ -322,6 +328,7 @@ export default function DonationPageComp({
               goToPreviousStep={goToPreviousStep}
               info={info}
               project={projectInfo}
+              onTransactionInfo={setTransactionInfo}
             />}
 
             {/* Complete Step */}
@@ -329,6 +336,10 @@ export default function DonationPageComp({
               index={info.id}
               reset={resetForm}
               project={projectInfo}
+              info={info}
+              transactionHash={transactionInfo.hash}
+              walletAddress={transactionInfo.walletAddress}
+              recipientAddress={transactionInfo.recipientAddress}
             />}
           </motion.div>
         </AnimatePresence>
