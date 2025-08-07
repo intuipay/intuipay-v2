@@ -32,7 +32,7 @@ export default function DonationStep5({
       <div className="w-full mt-8">
         <Button
           variant="outline"
-          className="w-full h-12 text-base font-semibold bg-blue-50 text-blue-600 border-blue-500 hover:bg-blue-100 hover:text-blue-500 py-3 rounded-full"
+          className="w-full h-12 text-base font-semibold bg-[var(--brand-color)]/10 text-[var(--brand-color)] border-[var(--brand-color)] hover:bg-[var(--brand-color)]/15 py-3 rounded-full"
           onClick={reset}
         >
           Make new donation
