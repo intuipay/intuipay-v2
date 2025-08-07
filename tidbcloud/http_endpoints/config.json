@@ -2427,11 +2427,10 @@
     "params": [
       {
         "name": "address",
-        "type": "array",
+        "type": "string",
         "required": 1,
         "default": "",
-        "description": "",
-        "item_type": "string"
+        "description": ""
       }
     ],
     "settings": {
