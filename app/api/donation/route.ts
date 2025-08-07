@@ -94,6 +94,7 @@ export async function POST(req: Request) {
 
     // 验证通过，保存到数据库
     const data = await fetchTidb<{ id: number }>('/donation', 'POST', json);
+    console.log('save result', data);
     return new Response(
       JSON.stringify({
         code: 0,

@@ -1,18 +1,51 @@
 import { Button } from '@/components/ui/button';
-import { ProjectInfo } from '@/types';
+import { ProjectInfo, DonationInfo } from '@/types';
 import { CopySimpleIcon } from '@phosphor-icons/react/dist/ssr';
+import { getExplorerUrl, formatAddress } from '@/config/blockchain';
+import { useState } from 'react';
 
 type Props = {
   index: number;
   project: ProjectInfo;
+  info: DonationInfo;
   reset: () => void;
+  transactionHash?: string;
+  walletAddress?: string;
+  recipientAddress?: string;
 }
 
 export default function DonationStep5({
   index,
+  info,
   project,
   reset,
+  transactionHash,
+  walletAddress,
+  recipientAddress,
 }: Props) {
+  const [copiedItem, setCopiedItem] = useState<string>('');
+
+  // 复制到剪贴板的函数
+  const copyToClipboard = async (text: string, itemType: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopiedItem(itemType);
+      setTimeout(() => setCopiedItem(''), 2000);
+    } catch (err) {
+      console.error('Failed to copy: ', err);
+    }
+  };
+
+  // 获取区块链浏览器链接
+  const getTransactionExplorerUrl = () => {
+    if (!transactionHash || !info.network) return '#';
+    return getExplorerUrl(info.network, transactionHash);
+  };
+
+  // 格式化地址显示
+  const formatTransactionAddress = (address: string) => {
+    return formatAddress(address);
+  };
   return (
     <div className="space-y-6 flex flex-col items-center">
       <div className="text-center space-y-2">
@@ -26,49 +59,106 @@ export default function DonationStep5({
         <div className="flex justify-between items-center">
           <span className="text-black/60 text-xs">Transaction ID</span>
           <div className="flex items-center gap-1">
-            <span className="text-black text-xs">1234567</span>
-            <CopySimpleIcon size={16} />
+            <span className="text-black text-xs">{info.id || 'N/A'}</span>
+            <button 
+              onClick={() => copyToClipboard(info.id?.toString() || '', 'transactionId')}
+              className="hover:bg-black/10 p-1 rounded"
+            >
+              <CopySimpleIcon size={16} className={copiedItem === 'transactionId' ? 'text-green-600' : ''} />
+            </button>
           </div>
         </div>
         
         <div className="flex justify-between items-center">
           <span className="text-black/60 text-xs">Status</span>
           <span className="px-2 py-1 bg-lime-100 text-lime-800 text-xs rounded">
-            Received
+            Confirmed
           </span>
         </div>
         
         <div className="flex justify-between items-center">
           <span className="text-black/60 text-xs">Pledge Amount</span>
-          <span className="text-black text-xs">123,456 USD</span>
+          <span className="text-black text-xs">{(info.dollar ?? 0).toLocaleString()} USD</span>
         </div>
         
         <div className="flex justify-between items-center">
           <span className="text-black/60 text-xs">Currency</span>
-          <span className="text-black text-xs">123,456 USDC</span>
+          <span className="text-black text-xs">{info.amount} {info.currency}</span>
         </div>
         
         <div className="flex justify-between items-center">
           <span className="text-black/60 text-xs">TX Hash</span>
           <div className="flex items-center gap-1">
-            <span className="text-black text-xs">123456781234567812345678</span>
-            <CopySimpleIcon size={16} />
+            {transactionHash ? (
+              <>
+                <a
+                  href={getTransactionExplorerUrl()}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-600 text-xs hover:text-blue-800 underline font-mono"
+                >
+                  {formatTransactionAddress(transactionHash)}
+                </a>
+                <button 
+                  onClick={() => copyToClipboard(transactionHash, 'txHash')}
+                  className="hover:bg-black/10 p-1 rounded"
+                >
+                  <CopySimpleIcon size={16} className={copiedItem === 'txHash' ? 'text-green-600' : ''} />
+                </button>
+              </>
+            ) : (
+              <span className="text-black text-xs">N/A</span>
+            )}
           </div>
         </div>
         
         <div className="flex justify-between items-center">
           <span className="text-black/60 text-xs">Reward</span>
-          <span className="text-black text-xs">Reward name</span>
+          <span className="text-black text-xs">
+            {info.selected_reward?.name || 'No reward selected'}
+          </span>
         </div>
         
         <div className="flex justify-between items-center">
           <span className="text-black/60 text-xs">From</span>
-          <span className="text-black text-xs">Zoe Zhang</span>
+          <div className="flex items-center gap-1">
+            {walletAddress ? (
+              <>
+                <span className="text-black text-xs font-mono">
+                  {formatTransactionAddress(walletAddress)}
+                </span>
+                <button 
+                  onClick={() => copyToClipboard(walletAddress, 'fromAddress')}
+                  className="hover:bg-black/10 p-1 rounded"
+                >
+                  <CopySimpleIcon size={16} className={copiedItem === 'fromAddress' ? 'text-green-600' : ''} />
+                </button>
+              </>
+            ) : (
+              <span className="text-black text-xs">N/A</span>
+            )}
+          </div>
         </div>
         
         <div className="flex justify-between items-center">
           <span className="text-black/60 text-xs">To</span>
-          <span className="text-black text-xs">Intuipay Foundation</span>
+          <div className="flex items-center gap-1">
+            {recipientAddress ? (
+              <>
+                <span className="text-black text-xs font-mono">
+                  {formatTransactionAddress(recipientAddress)}
+                </span>
+                <button 
+                  onClick={() => copyToClipboard(recipientAddress, 'toAddress')}
+                  className="hover:bg-black/10 p-1 rounded"
+                >
+                  <CopySimpleIcon size={16} className={copiedItem === 'toAddress' ? 'text-green-600' : ''} />
+                </button>
+              </>
+            ) : (
+              <span className="text-black text-xs">Project Wallet</span>
+            )}
+          </div>
         </div>
       </div>
 

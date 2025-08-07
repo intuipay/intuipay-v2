@@ -10,8 +10,6 @@ import { ProjectDonationMethods } from '@/data';
 import CtaFooter from '@/app/_components/donate/cta-footer';
 import { useAccount, useChainId, useWriteContract, useWaitForTransactionReceipt, useSendTransaction } from 'wagmi';
 import { parseUnits } from 'viem';
-import { TransactionMessage, VersionedTransaction, SystemProgram, Connection, PublicKey, clusterApiUrl } from '@solana/web3.js';
-import { createTransferInstruction, getAssociatedTokenAddress, TOKEN_PROGRAM_ID, ASSOCIATED_TOKEN_PROGRAM_ID, createAssociatedTokenAccountInstruction } from '@solana/spl-token';
 import {
   BLOCKCHAIN_CONFIG,
   getProjectWalletAddress,
@@ -19,18 +17,21 @@ import {
   getExplorerUrl,
   formatAddress,
   convertToSmallestUnit,
-  getFundsDividerContract
 } from '@/config/blockchain';
 import { ProjectInfo } from '@/types';
 import crowdFundingABI from '@/lib/crowdFunding.abi.json';
 import ERC20_ABI from '@/lib/erc20.abi.json';
-import { projectTraceSource } from 'next/dist/build/swc/generated-native';
 
 type Props = {
   goToPreviousStep: () => void;
   goToNextStep: () => void;
   info: DonationInfo;
   project: ProjectInfo;
+  onTransactionInfo?: (info: {
+    hash?: string;
+    walletAddress?: string;
+    recipientAddress?: string;
+  }) => void;
 }
 
 export default function DonationStep4({
@@ -38,6 +39,7 @@ export default function DonationStep4({
   goToNextStep,
   info,
   project,
+  onTransactionInfo,
 }: Props) {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [message, setMessage] = useState<string>('');
@@ -188,7 +190,7 @@ export default function DonationStep4({
       // 直接转账
       console.log('Proceeding with direct ERC-20 transfer');
       writeContract({
-        address: recipientAddress,
+        address: recipientAddress as `0x${string}`,
         abi: crowdFundingABI,
         functionName: 'contributeERC20',
         args: [project.campaign_id, amount],
@@ -245,6 +247,14 @@ export default function DonationStep4({
       }
 
       info.id = data;
+      
+      // Set transaction info for step 5
+      onTransactionInfo?.({
+        hash: transactionHash,
+        walletAddress: walletAddress || address || '',
+        recipientAddress: recipientAddress || '',
+      });
+      
       setIsSubmitting(false);
       goToNextStep();
     } catch (e) {
