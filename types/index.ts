@@ -1,5 +1,5 @@
 import { ProjectStatus } from "@/data/project";
-import { ProjectCategories, ProjectTypes, ProjectDonationMethods } from "@/data";
+import { ProjectCategories, ProjectTypes, ProjectDonationMethods, OrganizationType } from "@/data";
 
 export type DropdownItemProps = {
   icon: string;
@@ -94,6 +94,24 @@ export type DonationInfo = {
   updated_at?: string;
 }
 
+export type OrganizationInfo = {
+  ein: string;
+  id: number;
+  org_name: string;
+  org_slug: string;
+  org_logo: string;
+  org_website?: string;
+  org_description?: string;
+  org_type: OrganizationType;
+  permission: string;
+  org_contact: string;
+  email: string;
+  org_location: string;
+  timezone: string;
+  social_links: string; // stringified JSON object
+  balance: string;
+}
+
 export type ProjectInfo = {
   id: number;
   project_name: string;
@@ -183,3 +201,15 @@ export type Reward = {
 }
 
 export type Rewards = Reward[];
+
+export interface Profile {
+  id?: string;
+  location: string;
+  timezone: string;
+  bio: string;
+  social_links: string; // JSON stringified object
+  number: string;
+  first_name: string;
+  last_name: string;
+  display_image: string;
+}

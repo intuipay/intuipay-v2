@@ -1,6 +1,7 @@
 import { cache } from 'react';
 import { fetchTidb } from '@/services/fetch-tidb';
-import { ProjectInfo, ProjectFilter, Donation, Donations, Update, Updates } from '@/types';
+import { ProjectInfo, ProjectFilter, Donation, Donations, Update, Updates, Profile, OrganizationInfo } from '@/types';
+import { DEFAULT_PROFILE_VALUES } from '@/data';
 
 type CountResult = {
   count: number;
@@ -28,6 +29,48 @@ export const getDonationProjectBySlug = cache(async function getDonationProjectB
     project.wallets[ 'solana-devnet' ] = 'Ft7m7qrY3spLNKo6aMAHMArAT3oLSSy4DnJ3y3SF1DP1';
   }
   return project;
+});
+
+export const getWidgetById = cache(async function (id: string) {
+  const result = await fetchTidb<ProjectInfo>(`/donation_project?id=${id}`);
+  console.log('getWidgetById', id, result);
+  return result[0];
+});
+
+export const getProfile = cache(async function (userId: string) {
+  const result = await fetchTidb<Profile>(`/dash/my_profile?user_id=${userId}`);
+  if (result.length === 0) return DEFAULT_PROFILE_VALUES;
+
+  const [item] = result;
+  return item;
+});
+
+export const getMyBacked = cache(async function (address: string) {
+  const result = await fetchTidb<ProjectInfo>(`/my_backed?address=${address}`);
+  console.log('getMyBacked', address, result);
+  if (result.length === 0) {
+    return null;
+  }
+
+  return result[0];
+});
+
+export const getMyProjects = cache(async function (params: URLSearchParams) {
+  return await fetchTidb<ProjectInfo>(`/dash/my_projects?${params.toString()}`);
+});
+
+export const getMyOrg = cache(async function (userId: string) {
+  const result = await fetchTidb<OrganizationInfo>(`/admin/my_orgs?user_id=${userId}`);
+  if (result.length === 0) {
+    return null;
+  }
+
+  const [item] = result;
+  return {
+    ...item,
+    id: Number(item.id),
+    org_type: Number(item.org_type),
+  };
 });
 
 export const getCrowdFundingProjectBySlug = cache(async function getDonationProjectBySlug(slug: string) {
@@ -104,6 +147,7 @@ export const getProjectDetail = cache(async function getProjectDetail(
     goal_amount,
     ...rest
   } = data[ 0 ];
+  console.log('data0', data);
   return {
     ...rest,
     amount: Number(amount),

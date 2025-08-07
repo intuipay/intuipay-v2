@@ -1,6 +1,7 @@
 import {Currency, PaymentMethod, University} from "@/types";
 // 为了保持向后兼容，使用新的区块链配置系统
 import { getNetworkDropdownOptions, getWalletDropdownOptions } from '@/config/blockchain';
+import { Profile } from "@/types";
 
 export const CurrencyList: Currency[] = [
   {
@@ -499,3 +500,14 @@ export enum ProjectTypes {
   Widget = 100,
   Crownfunding = 101,
 }
+
+export const DEFAULT_PROFILE_VALUES: Profile = {
+  display_image: '',
+  timezone: '',
+  bio: '',
+  social_links: "{}",
+  number: '',
+  location: '',
+  first_name: '',
+  last_name: '',
+};

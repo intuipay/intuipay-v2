@@ -8,34 +8,96 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog'
+import { Profile } from '@/types'
 
 interface EditProfileDialogProps {
   open: boolean
   onOpenChange: (open: boolean) => void
+  profile: Profile
+  onProfileUpdate?: () => void
 }
 
-export function EditProfileDialog({ open, onOpenChange }: EditProfileDialogProps) {
+export function EditProfileDialog({ open, onOpenChange, profile, onProfileUpdate }: EditProfileDialogProps) {
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  
   const [formData, setFormData] = useState({
-    firstName: 'Zoe',
-    lastName: 'Zhang',
-    location: 'Shanghai, China',
-    timeZone: '(GMT-10:00) Hawaii',
-    bio: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+    firstName: profile.first_name || '',
+    lastName: profile.last_name || '',
+    location: profile.location || '',
+    timeZone: profile.timezone || '',
+    bio: profile.bio || '',
     website: '',
-    privacyOnly: true,
+    number: profile.number || '',
+    displayImage: profile.display_image || '',
+    socialLinks: (() => {
+      try {
+        return profile.social_links ? JSON.parse(profile.social_links) : {}
+      } catch {
+        return {}
+      }
+    })(),
+    privacyOnly: false,
   })
 
   const handleInputChange = (field: string, value: string | boolean) => {
     setFormData(prev => ({
       ...prev,
-      [ field ]: value
+      [field]: value
     }))
   }
 
-  const handleSave = () => {
-    // TODO: 实现保存逻辑
-    console.log('Saving profile data:', formData)
-    onOpenChange(false)
+  const handleSocialLinkChange = (platform: string, url: string) => {
+    setFormData(prev => ({
+      ...prev,
+      socialLinks: {
+        ...prev.socialLinks,
+        [platform]: url
+      }
+    }))
+  }
+
+  const handleSave = async () => {
+    setIsLoading(true)
+    setError(null)
+    
+    try {
+      const response = await fetch('/api/profile', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          first_name: formData.firstName,
+          last_name: formData.lastName,
+          location: formData.location,
+          timezone: formData.timeZone,
+          bio: formData.bio,
+          number: formData.number,
+          display_image: formData.displayImage,
+          social_links: JSON.stringify(formData.socialLinks),
+        }),
+      })
+
+      const result = await response.json() as { code: number; message?: string; data?: any }
+
+      if (!response.ok || result.code !== 0) {
+        throw new Error(result.message || 'Failed to update profile')
+      }
+
+      console.log('Profile updated successfully:', result)
+      onOpenChange(false)
+      
+      // 调用回调函数刷新页面数据
+      if (onProfileUpdate) {
+        onProfileUpdate()
+      }
+    } catch (err) {
+      console.error('Error updating profile:', err)
+      setError(err instanceof Error ? err.message : 'Failed to update profile')
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (
@@ -57,13 +119,30 @@ export function EditProfileDialog({ open, onOpenChange }: EditProfileDialogProps
         </DialogHeader>
 
         <div className="space-y-6">
+          {/* Error Message */}
+          {error && (
+            <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+              <p className="text-sm text-red-600">{error}</p>
+            </div>
+          )}
           {/* Profile Image */}
           <div className="space-y-3">
             <label className="text-sm font-semibold text-gray-500">
               Profile image
             </label>
-            <div className="w-20 h-20 bg-blue-600 rounded-full flex items-center justify-center">
-              <span className="text-white text-2xl font-semibold">Z</span>
+            <div className="w-20 h-20 bg-blue-600 rounded-full flex items-center justify-center overflow-hidden">
+              {formData.displayImage ? (
+                <img 
+                  src={formData.displayImage} 
+                  alt={`${formData.firstName} ${formData.lastName}`}
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <span className="text-white text-2xl font-semibold">
+                  {formData.firstName?.[0] || ''}
+                  {formData.lastName?.[0] || ''}
+                </span>
+              )}
             </div>
           </div>
 
@@ -195,15 +274,90 @@ export function EditProfileDialog({ open, onOpenChange }: EditProfileDialogProps
               </div>
             </div>
           </div>
+
+          {/* Social Media Links */}
+          <div className="space-y-4">
+            <h3 className="text-sm font-semibold text-gray-500">Social Media Links</h3>
+            
+            {/* Twitter */}
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <div className="w-5 h-5 text-blue-400">
+                  <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>
+                  </svg>
+                </div>
+                <span className="text-sm font-medium text-gray-900">Twitter</span>
+              </div>
+              <div className="w-[420px]">
+                <input
+                  type="text"
+                  value={formData.socialLinks.twitter || ''}
+                  onChange={(e) => handleSocialLinkChange('twitter', e.target.value)}
+                  placeholder="https://twitter.com/username"
+                  className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                />
+              </div>
+            </div>
+
+            {/* Facebook */}
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <div className="w-5 h-5 text-blue-600">
+                  <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                  </svg>
+                </div>
+                <span className="text-sm font-medium text-gray-900">Facebook</span>
+              </div>
+              <div className="w-[420px]">
+                <input
+                  type="text"
+                  value={formData.socialLinks.facebook || ''}
+                  onChange={(e) => handleSocialLinkChange('facebook', e.target.value)}
+                  placeholder="https://facebook.com/username"
+                  className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                />
+              </div>
+            </div>
+
+            {/* LinkedIn */}
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <div className="w-5 h-5 text-blue-700">
+                  <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                  </svg>
+                </div>
+                <span className="text-sm font-medium text-gray-900">LinkedIn</span>
+              </div>
+              <div className="w-[420px]">
+                <input
+                  type="text"
+                  value={formData.socialLinks.linkedin || ''}
+                  onChange={(e) => handleSocialLinkChange('linkedin', e.target.value)}
+                  placeholder="https://linkedin.com/in/username"
+                  className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                />
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Save Button */}
         <div className="flex justify-end pt-6">
           <button
             onClick={handleSave}
-            className="px-8 py-2 bg-blue-400 hover:bg-blue-500 text-white font-medium text-sm rounded-full transition-colors"
+            disabled={isLoading}
+            className="px-8 py-2 bg-blue-400 hover:bg-blue-500 disabled:bg-gray-300 disabled:cursor-not-allowed text-white font-medium text-sm rounded-full transition-colors flex items-center gap-2"
           >
-            Save
+            {isLoading && (
+              <svg className="w-4 h-4 animate-spin" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+              </svg>
+            )}
+            {isLoading ? 'Saving...' : 'Save'}
           </button>
         </div>
       </DialogContent>
