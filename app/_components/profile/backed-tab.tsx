@@ -12,8 +12,7 @@ export default function BackedTab({ projects }: BackedTabProps) {
   if (projectsToShow.length === 0) {
     return (
       <div className="w-full text-center py-12">
-        <p className="text-gray-500 text-lg">No backed projects yet</p>
-        <p className="text-gray-400 text-sm mt-2">Projects you support will appear here</p>
+        <p className="text-black-600">You are not backing any projects.</p>
       </div>
     );
   }
