@@ -9,6 +9,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog'
 import { Profile } from '@/types'
+import { AvatarUpload } from '@/components/ui/avatar-upload'
 
 interface EditProfileDialogProps {
   open: boolean
@@ -39,6 +40,7 @@ export function EditProfileDialog({ open, onOpenChange, profile, onProfileUpdate
     })(),
     privacyOnly: false,
   })
+  const [isUploadingAvatar, setIsUploadingAvatar] = useState(false)
 
   const handleInputChange = (field: string, value: string | boolean) => {
     setFormData(prev => ({
@@ -127,21 +129,24 @@ export function EditProfileDialog({ open, onOpenChange, profile, onProfileUpdate
           )}
           {/* Profile Image */}
           <div className="space-y-3">
-            <label className="text-sm font-semibold text-gray-500">
-              Profile image
-            </label>
-            <div className="w-20 h-20 bg-blue-600 rounded-full flex items-center justify-center overflow-hidden">
-              {formData.displayImage ? (
-                <img 
-                  src={formData.displayImage} 
-                  alt={`${formData.firstName} ${formData.lastName}`}
-                  className="w-full h-full object-cover"
-                />
-              ) : (
-                <span className="text-white text-2xl font-semibold">
-                  {formData.firstName?.[0] || ''}
-                  {formData.lastName?.[0] || ''}
-                </span>
+            <label className="text-sm font-semibold text-gray-500">Profile image</label>
+            <div className="relative">
+              <AvatarUpload
+                value={formData.displayImage}
+                isUploading={isUploadingAvatar}
+                setIsUploading={setIsUploadingAvatar}
+                size={80}
+                onUploaded={(url) => {
+                  setFormData(prev => ({ ...prev, displayImage: url }))
+                }}
+                placeholder={
+                  <span className="text-white text-xl font-semibold">
+                    {formData.firstName?.[0] || ''}{formData.lastName?.[0] || ''}
+                  </span>
+                }
+              />
+              {isUploadingAvatar && (
+                <div className="absolute inset-0 flex items-center justify-center rounded-full bg-black/40 text-white text-[10px]">上传中...</div>
               )}
             </div>
           </div>
