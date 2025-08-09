@@ -5,11 +5,11 @@ import AboutTab from './about-tab';
 import BackedTab from './backed-tab';
 import RaisedTab from './raised-tab';
 import { CoinVerticalIcon, ArrowUpRightIcon } from '@phosphor-icons/react/ssr';
-import { Profile, ProjectInfo } from '@/types';
+import { Profile, ProjectInfo, BackedProject } from '@/types';
 
 interface ProfileTabsProps {
   profile: Profile;
-  myBacked?: ProjectInfo[];
+  myBacked?: BackedProject[]; // 改为 BackedProject 类型
   myProjects?: ProjectInfo[];
 }
 

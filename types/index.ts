@@ -1,4 +1,4 @@
-import { ProjectStatus } from "@/data/project";
+import { ProjectStatus, DonationStatus } from "@/data/project";
 import { ProjectCategories, ProjectTypes, ProjectDonationMethods, OrganizationType } from "@/data";
 
 export type DropdownItemProps = {
@@ -213,3 +213,8 @@ export interface Profile {
   last_name: string;
   display_image: string;
 }
+
+// 用户支持的项目类型，包含项目信息和用户的退款状态
+export type BackedProject = ProjectInfo & {
+  isRefunded: boolean;         // 是否已经退款
+};
