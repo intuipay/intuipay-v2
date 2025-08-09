@@ -1,13 +1,20 @@
 import { ProjectCard } from '@/components/project-card';
-import { ProjectInfo } from '@/types';
+import { BackedProject } from '@/types';
 
 interface BackedTabProps {
-  projects?: ProjectInfo[];
+  projects?: BackedProject[]; // 用户支持的项目列表，包含退款状态
 }
 
 export default function BackedTab({ projects }: BackedTabProps) {
   // 使用传入的项目数据，如果没有则显示空状态
   const projectsToShow = projects || [];
+
+  // 处理退款操作
+  const handleWithdrawPledge = (projectId: number) => {
+    // TODO: 实现退款逻辑
+    console.log('Withdrawing pledge for project:', projectId);
+    // 这里可以调用API来处理退款请求
+  };
 
   if (projectsToShow.length === 0) {
     return (
@@ -20,11 +27,18 @@ export default function BackedTab({ projects }: BackedTabProps) {
     <div className="w-full">
       {/* Project Cards Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {projectsToShow.map((project) => (
-          <div key={project.id} className="w-full">
-            <ProjectCard project={project} />
-          </div>
-        ))}
+        {projectsToShow.map((project: BackedProject) => {
+          // 直接使用 BackedProject 的 isRefunded 字段
+          return (
+            <div key={project.id} className="w-full">
+              <ProjectCard 
+                project={project} 
+                onWithdrawPledge={handleWithdrawPledge}
+                isRefunded={project.isRefunded}
+              />
+            </div>
+          );
+        })}
       </div>
     </div>
   );
