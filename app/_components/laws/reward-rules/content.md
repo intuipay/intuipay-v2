@@ -1,4 +1,4 @@
-export const content = `# Project Listing & Reward Rules
+# Project Listing & Reward Rules
 
 **Last Updated: 07.20.2025**
 
@@ -47,4 +47,3 @@ Projects involving the following are not permitted to be listed on Intuipay thro
 - Drugs, nicotine, tobacco, vaporizers, and related paraphernalia;
 - Weapons, weapon replicas, and weapon accessories;
 - Projects involving anything illegal, heavily regulated or potentially dangerous to backers.
-`;

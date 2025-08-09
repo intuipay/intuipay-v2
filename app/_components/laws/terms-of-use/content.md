@@ -1,4 +1,4 @@
-export const content = `# Intuipay Terms of Use
+# Intuipay Terms of Use
 
 **Last Updated: 07.25.2025**
 
@@ -222,4 +222,4 @@ The Website contains links to the websites of third parties, whether non-profit 
 
 **Assignment.** You may not assign, delegate, or transfer these Terms, by operation of law or otherwise, without our prior written consent, but Intuipay may freely assign or transfer these Terms without restriction. Any attempt by you to assign or transfer these Terms, without such consent, will be null. Notwithstanding the foregoing, each party may, without consent, assign these Terms to any successor to all or substantially all its business that concerns these Terms (whether by sale of assets or equity, merger, consolidation or otherwise). Subject to the foregoing, these Terms will bind and inure to the benefit of the parties, their successors, and permitted assigns.
 
-**Waiver; Severability.** Intuipay's failure to enforce any right or provision of these Terms will not be considered a waiver of such right or provision. Except as expressly set forth herein, the exercise by either party of any of its remedies under these Terms will be without prejudice to its other remedies under these Terms or otherwise. If for any reason a court of competent jurisdiction finds any provision of these Terms invalid or unenforceable, that provision will be enforced to the maximum extent permissible, and the other provisions of these Terms will remain in full force and effect.`
+**Waiver; Severability.** Intuipay's failure to enforce any right or provision of these Terms will not be considered a waiver of such right or provision. Except as expressly set forth herein, the exercise by either party of any of its remedies under these Terms will be without prejudice to its other remedies under these Terms or otherwise. If for any reason a court of competent jurisdiction finds any provision of these Terms invalid or unenforceable, that provision will be enforced to the maximum extent permissible, and the other provisions of these Terms will remain in full force and effect.

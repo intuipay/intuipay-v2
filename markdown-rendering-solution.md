@@ -2,88 +2,94 @@
 
 ## 架构设计
 
-基于内容与展示分离的设计模式，便于团队协作和内容管理。
+基于内容与展示分离的设计模式，采用纯 Markdown 文件 + 公共组件架构，便于团队协作和内容管理。
 
 ```text
 📁 项目结构
-├── components/markdown-preview-with-no-style.tsx    # 核心渲染组件
-├── app/_components/laws/[page-name]/content.ts      # 内容文件
+├── components/legal-page-markdown.tsx               # 法律页面专用渲染组件
+├── app/_components/laws/[page-name]/content.md      # 纯 Markdown 内容文件
 └── app/(laws)/[page-name]/page.tsx                  # 页面组件
 ```
 
-**技术栈**: `react-markdown` + `remark-gfm` + `remark-breaks` + Tailwind CSS Prose
+**技术栈**: `react-markdown` + `remark-gfm` + `remark-breaks` + Tailwind CSS Prose + Node.js `fs`
 
 ## 核心组件
 
-### 1. 渲染组件 (`MarkdownPreviewWithNoStyle`)
+### 1. 渲染组件 (`LegalPageMarkdown`)
 
 ```typescript
-interface MarkdownPreviewWithNoStyleProps {
+interface LegalPageMarkdownProps {
   content: string          // Markdown 内容
-  className?: string       // 自定义样式类
-  minHeight?: string       // 最小高度
+  className?: string       // 额外自定义样式类
 }
 ```
 
-### 2. 内容文件 (`content.ts`)
+**特点**：
 
-```typescript
-export const content = `# 页面标题
-**更新时间: 07.25.2025**
+- 内置完整的法律页面样式
+- 包含布局容器 (`max-w-7xl mx-auto px-6 py-8`)
+- 兼容新版 `react-markdown` (无 className prop 问题)
+- 支持 GFM 和换行等 Markdown 扩展
+
+### 2. 内容文件 (`content.md`) - 纯 Markdown
+
+```markdown
+# 页面标题
+
+**Last Updated: 07.25.2025**
+
 页面内容...
-`;
 ```
 
-### 3. 页面组件样式
+### 3. 页面组件实现
 
 ```typescript
-<MarkdownPreviewWithNoStyle
-  className="prose prose-sm max-w-none
-    prose-h1:text-4xl prose-h1:font-semibold
-    prose-p:text-gray-700 prose-a:text-blue-600"
-  content={content}
-/>
+import { LegalPageMarkdown } from "@/components/legal-page-markdown";
+import { readFileSync } from "fs";
+import { join } from "path";
+
+export default function Page() {
+  const contentPath = join(process.cwd(), "app/_components/laws/xxx/content.md");
+  const content = readFileSync(contentPath, "utf8");
+  
+  return <LegalPageMarkdown content={content} />;
+}
 ```
 
 ## 优势
 
-- **内容与代码分离**: 内容更新无需修改组件
-- **高度复用**: 一个组件支持所有 Markdown 页面
-- **样式灵活**: 每个页面可独立定制样式
+- **真正的 Markdown**: 使用标准 `.md` 文件，编辑器友好
+- **公共组件**: 样式统一管理，消除重复代码
+- **服务器端渲染**: 构建时读取文件，性能优异
+- **兼容性强**: 解决新版 `react-markdown` 的 className 问题
+- **维护性高**: 样式修改只需更新一个组件
+- **内容与代码完全分离**: Markdown 内容独立于 TypeScript 代码
 - **协作友好**: 非技术人员可直接编辑 Markdown
+- **版本控制**: Git 可以追踪内容变更
+- **灵活扩展**: 支持 GFM 和换行等 Markdown 扩展
 
 ## 快速使用
 
-### 1. 创建内容文件
+### 1. 创建 Markdown 内容文件
 
-```typescript
-// app/_components/laws/new-page/content.ts
-export const content = `# 新页面标题
-内容...`;
+```markdown
+<!-- app/_components/laws/new-page/content.md -->
+
+内容...
 ```
 
 ### 2. 创建页面组件
 
 ```typescript
 // app/(laws)/new-page/page.tsx
-import { MarkdownPreviewWithNoStyle } from "@/components/markdown-preview-with-no-style";
-import { content } from "@/app/_components/laws/new-page/content";
+import { LegalPageMarkdown } from "@/components/legal-page-markdown";
+import { readFileSync } from "fs";
+import { join } from "path";
 
 export default function NewPage() {
-  return (
-    <div className="max-w-7xl mx-auto px-6 py-8">
-      <MarkdownPreviewWithNoStyle
-        className="prose prose-sm max-w-none [自定义样式]"
-        content={content}
-      />
-    </div>
-  );
+  const contentPath = join(process.cwd(), "app/_components/laws/new-page/content.md");
+  const content = readFileSync(contentPath, "utf8");
+  
+  return <LegalPageMarkdown content={content} />;
 }
 ```
-
-## 最佳实践
-
-1. **内容组织**: 按业务逻辑分组存放内容文件
-2. **样式一致性**: 建立样式指南，确保页面视觉一致
-3. **性能优化**: 大型文档考虑懒加载
-4. **版本控制**: 内容变更通过 Git 追踪

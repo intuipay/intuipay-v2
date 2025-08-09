@@ -1,4 +1,4 @@
-export const content = `# Privacy Policy
+# Privacy Policy
 
 **Last Updated: 07.20.2025**
 
@@ -177,4 +177,3 @@ You may do so by submitting a written request via email to our Personal Data Pro
 We may charge you a reasonable fee for the handling and processing of your requests. If we so choose to charge, we will provide you with a written estimate of the fee we will be charging. Please note that we are not required to respond to or deal with your request unless you have agreed to pay the fee.
 
 We reserve the right to refuse to correct/delete your personal data in accordance with the provisions as set out in applicable privacy laws, where they require and/or entitle an organisation to refuse to correct/delete personal data in stated circumstances.
-`;
