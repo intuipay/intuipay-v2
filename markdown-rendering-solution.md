@@ -41,17 +41,13 @@ interface LegalPageMarkdownProps {
 页面内容...
 ```
 
-### 3. 页面组件实现
+### 3. 页面组件实现（推荐，Serverless/Edge 友好）
 
 ```typescript
 import { LegalPageMarkdown } from "@/components/legal-page-markdown";
-import { readFileSync } from "fs";
-import { join } from "path";
-
 export default function Page() {
-  const contentPath = join(process.cwd(), "app/_components/laws/xxx/content.md");
-  const content = readFileSync(contentPath, "utf8");
-  
+
+  import content from "@/app/_components/laws/xxx/content.md";
   return <LegalPageMarkdown content={content} />;
 }
 ```

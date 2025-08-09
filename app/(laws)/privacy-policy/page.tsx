@@ -1,10 +1,6 @@
 import { LegalPageMarkdown } from "@/components/legal-page-markdown";
-import { readFileSync } from "fs";
-import { join } from "path";
+import content from "@/app/_components/laws/privacy-policy/content.md";
 
 export default function RulesPage() {
-  const contentPath = join(process.cwd(), "app/_components/laws/privacy-policy/content.md");
-  const content = readFileSync(contentPath, "utf8");
-  
   return <LegalPageMarkdown content={content} />;
 }
