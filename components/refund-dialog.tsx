@@ -13,7 +13,6 @@ import { getExplorerUrl, formatAddress } from '@/config/blockchain'
 interface RefundDialogProps {
   open: boolean
   onOpenChange: (open: boolean) => void
-  onWalletConnected?: (address: string) => void
   projectId?: number // 数据库中的项目ID
   campaignId?: number // 区块链上的活动ID，对应合约中的 campaignId
   contractAddress?: string // 合约地址
@@ -40,7 +39,7 @@ const WALLET_OPTIONS = [
   }
 ]
 
-export function RefundDialog({ open, onOpenChange, onWalletConnected, projectId, campaignId, contractAddress }: RefundDialogProps) {
+export function RefundDialog({ open, onOpenChange, projectId, campaignId, contractAddress }: RefundDialogProps) {
   campaignId = 1;
   console.log('in refund dialog', projectId, campaignId, contractAddress);
   const [connecting, setConnecting] = useState<string | null>(null)
@@ -145,9 +144,8 @@ export function RefundDialog({ open, onOpenChange, onWalletConnected, projectId,
       setConnecting(null)
       setError('')
       onOpenChange(false)
-      onWalletConnected?.(address)
     }
-  }, [isConnected, address, connecting, onWalletConnected, onOpenChange])
+  }, [isConnected, address, connecting, onOpenChange])
 
   // 监听连接错误
   useEffect(() => {
@@ -224,7 +222,6 @@ export function RefundDialog({ open, onOpenChange, onWalletConnected, projectId,
       setTimeout(() => {
         setTransactionHash('')
         onOpenChange(false)
-        onWalletConnected?.(address!)
       }, 2000)
     } catch (e) {
       console.error('Error saving refund:', e)

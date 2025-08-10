@@ -5,20 +5,18 @@ import Link from 'next/link' // Import Link
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { ProjectInfo } from '@/types';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { ProjectStatus, DonationStatus } from '@/data/project';
+import { ProjectStatus } from '@/data/project';
 import { Button } from '@/components/ui/button';
 import { RefundDialog } from '@/components/refund-dialog';
 import { useState } from 'react';
 
 type ProjectCardProps = {
   project: ProjectInfo;
-  // 退款回调函数
-  onWithdrawPledge?: (projectId: number) => void;
   // 用户是否已退款（undefined表示非用户backed项目）
   isRefunded?: boolean;
 }
 
-export function ProjectCard({ project, onWithdrawPledge, isRefunded }: ProjectCardProps) {
+export function ProjectCard({ project, isRefunded }: ProjectCardProps) {
   const [isWalletDialogOpen, setIsWalletDialogOpen] = useState(false);
 
   const progress = project.goal_amount > 0
@@ -26,22 +24,10 @@ export function ProjectCard({ project, onWithdrawPledge, isRefunded }: ProjectCa
   const daysLeft = Math.ceil((new Date(project.end_at).getTime() - Date.now()) / 1000 / 60 / 60 / 24);
 
   // 判断项目是否失败
-  const isProjectFailed = project.status === ProjectStatus.PaymentFailed || 
-                         project.status === ProjectStatus.Cancelled ||
-                         project.status === ProjectStatus.Suspended ||
-                         (daysLeft <= 0 && progress < 100);
+  const isProjectFailed = project.status === ProjectStatus.Failed;
 
-  console.log('isproject failed', isProjectFailed, project.status, daysLeft, progress);
   // 判断是否为backed状态（传入了isRefunded参数）
   const isBackedView = isRefunded !== undefined;
-
-  // 处理钱包连接成功后的退款请求
-  const handleWalletConnected = (address: string) => {
-    console.log('Wallet connected:', address);
-    if (onWithdrawPledge) {
-      onWithdrawPledge(project.id);
-    }
-  };
 
   return (
     <Card className="group overflow-hidden flex flex-col h-full border-transparent hover:border-action-blue/50 transition-colors rounded-lg h-101 drop-shadow-custom1 hover:shadow-lg transition-shadow duration-800">
@@ -104,7 +90,6 @@ export function ProjectCard({ project, onWithdrawPledge, isRefunded }: ProjectCa
                       <RefundDialog 
                         open={isWalletDialogOpen}
                         onOpenChange={setIsWalletDialogOpen}
-                        onWalletConnected={handleWalletConnected}
                         projectId={project.id}
                         campaignId={project.campaign_id}
                         contractAddress={'0xbDE5c24B7c8551f93B95a8f27C6d926B3bCcF5aD'}
