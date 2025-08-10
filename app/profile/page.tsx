@@ -14,7 +14,7 @@ export default async function Page() {
   const profile = await getProfile(userId);
   console.log('my profile', profile);
 
-  const myBacked = await getMyBacked('0x7e727520B29773e7F23a8665649197aAf064CeF1');
+  const myBacked = await getMyBacked(userId);
   console.log('my backed projects', myBacked);
 
   const myOrg = await getMyOrg(userId);

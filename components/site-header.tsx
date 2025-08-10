@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { authClient } from '@/lib/auth-client'
-import { Globe, CaretDown, List, X, SignOut } from '@phosphor-icons/react';
+import { GlobeIcon, CaretDownIcon, ListIcon, XLogoIcon, SignOutIcon } from '@phosphor-icons/react';
 
 const navLinks = [
   { href: '#', label: 'Donate' },
@@ -57,7 +57,7 @@ export function SiteHeader() {
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" className="rounded-lg px-3 py-2 text-base font-medium">
                 EN
-                <CaretDown size={18} className="ml-1" />
+                <CaretDownIcon size={18} className="ml-1" />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
@@ -101,7 +101,7 @@ export function SiteHeader() {
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={handleSignOut}>
-                  <SignOut className="mr-2 h-4 w-4" />
+                  <SignOutIcon className="mr-2 h-4 w-4" />
                   Sign out
                 </DropdownMenuItem>
               </DropdownMenuContent>
@@ -148,7 +148,7 @@ export function SiteHeader() {
             aria-label="Toggle menu"
             className="h-10 w-10"
           >
-            {mobileMenuOpen ? <X size={24} /> : <List size={24} />}
+            {mobileMenuOpen ? <XLogoIcon size={24} /> : <ListIcon size={24} />}
           </Button>
         </div>
       </div>
@@ -179,9 +179,9 @@ export function SiteHeader() {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" className="justify-start rounded-lg w-full">
-                  <Globe size={16} className="mr-2" />
+                  <GlobeIcon size={16} className="mr-2" />
                   EN
-                  <CaretDown size={18} className="ml-1" />
+                  <CaretDownIcon size={18} className="ml-1" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent>
@@ -235,7 +235,7 @@ export function SiteHeader() {
                     onClick={handleSignOut}
                     className="text-base font-medium bg-red-600 rounded-[32px] text-white hover:bg-red-700 transition-colors px-6 py-3"
                   >
-                    <SignOut className="mr-2 h-4 w-4" />
+                    <SignOutIcon className="mr-2 h-4 w-4" />
                     Sign out
                   </Button>
                 </>

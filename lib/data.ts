@@ -45,9 +45,9 @@ export const getProfile = cache(async function (userId: string) {
   return item;
 });
 
-export const getMyBacked = cache(async function (address: string) {
-  const result = await fetchTidb<ProjectInfo>(`/my_backed?address=${address}`);
-  console.log('getMyBacked', address, result);
+export const getMyBacked = cache(async function (userId: string) {
+  const result = await fetchTidb<ProjectInfo>(`/my_backed?user_id=${userId}`);
+  console.log('getMyBacked', userId, result);
   if (result.length === 0) {
     return null;
   }

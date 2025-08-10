@@ -113,6 +113,7 @@ export default function DonationStep1({
       };
       
       // 格式化可用性信息
+      // number: 总量, count: 剩余数量
       const getAvailability = (number: number, count: number | null): string => {
         if (number === 0) return 'Unlimited';
         if (count !== null) return `Limited (${count} left of ${number})`;

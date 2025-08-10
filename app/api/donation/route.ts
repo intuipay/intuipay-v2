@@ -2,6 +2,8 @@ import { fetchTidb } from '@/services/fetch-tidb';
 import { validateDonationTransaction } from '@/services/transaction-validator';
 import { BLOCKCHAIN_CONFIG } from '@/config/blockchain';
 import { getProjectDetail } from '@/lib/data';
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
 
 export const runtime = 'edge';
 
@@ -93,6 +95,14 @@ export async function POST(req: Request) {
     }
 
     // 验证通过，保存到数据库
+    const session = await auth.api.getSession({
+      headers: await headers(),
+    });
+    let user_id = null;
+    if (session?.user?.id) {
+      user_id = session.user.id;
+    }
+    json.user_id = user_id;
     const data = await fetchTidb<{ id: number }>('/donation', 'POST', json);
     console.log('save result', data);
     return new Response(
