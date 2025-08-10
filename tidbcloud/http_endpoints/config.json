@@ -2266,14 +2266,14 @@
     },
     "params": [
       {
-        "name": "refund_hash",
+        "name": "user_id",
         "type": "string",
         "required": 1,
         "default": "",
         "description": ""
       },
       {
-        "name": "id",
+        "name": "project_id",
         "type": "integer",
         "required": 1,
         "default": "",
