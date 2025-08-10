@@ -103,12 +103,12 @@ export async function POST(req: Request) {
       user_id = session.user.id;
     }
     json.user_id = user_id;
-    const data = await fetchTidb<{ id: number }>('/donation', 'POST', json);
-    console.log('save result', data);
+    const data = await fetchTidb<{ last_insert_id: number }>('/donation', 'POST', json);
+    console.log('save donation result', data);
     return new Response(
       JSON.stringify({
         code: 0,
-        data: data[ 0 ].id,
+        data: data[ 0 ].last_insert_id,
         validation: {
           verified: true,
         },

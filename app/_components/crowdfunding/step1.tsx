@@ -91,6 +91,7 @@ export default function DonationStep1({
   const parseProjectRewards = (rewardsString: string): Reward[] => {
     try {
       const rawRewards = JSON.parse(rewardsString);
+      console.log('project reward', rawRewards);
       
       // 映射 ship_method 数字到描述
       const getShippingMethod = (shipMethod: number): string => {
@@ -128,6 +129,7 @@ export default function DonationStep1({
         shipping_method: getShippingMethod(reward.ship_method),
         estimated_delivery: getEstimatedDelivery(reward.month, reward.year),
         availability: getAvailability(reward.number, reward.count),
+        image: reward.image || '', // 确保有图片字段
       }));
     } catch (error) {
       console.error('Error parsing project rewards:', error);
@@ -466,8 +468,23 @@ export default function DonationStep1({
               }`}
               onClick={() => handleRewardSelect(reward)}
             >
-              {/* 奖励图片占位符 */}
-              <div className="w-full h-40 bg-gray-200 rounded-lg mb-4"></div>
+              {/* 奖励图片 */}
+              {reward.image ? (
+                <div className="w-full h-40 rounded-lg mb-4 overflow-hidden">
+                  <Image
+                    src={reward.image}
+                    alt={reward.name}
+                    width={400}
+                    height={160}
+                    className="w-full h-full object-cover"
+                    loading="lazy"
+                  />
+                </div>
+              ) : (
+                <div className="w-full h-40 bg-gray-200 rounded-lg mb-4 flex items-center justify-center">
+                  <span className="text-gray-500 text-sm">No image available</span>
+                </div>
+              )}
               
               <div className="flex justify-between items-start mb-2">
                 <h3 className="font-semibold text-lg">{reward.name}</h3>

@@ -7,7 +7,7 @@ import { ProjectInfo } from '@/types';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { ProjectStatus, DonationStatus } from '@/data/project';
 import { Button } from '@/components/ui/button';
-import { WalletConnectDialog } from '@/components/wallet-connect-dialog';
+import { RefundDialog } from '@/components/refund-dialog';
 import { useState } from 'react';
 
 type ProjectCardProps = {
@@ -101,12 +101,13 @@ export function ProjectCard({ project, onWithdrawPledge, isRefunded }: ProjectCa
                       >
                         Withdraw my pledge
                       </Button>
-                      <WalletConnectDialog 
+                      <RefundDialog 
                         open={isWalletDialogOpen}
                         onOpenChange={setIsWalletDialogOpen}
                         onWalletConnected={handleWalletConnected}
-                        projectId={project.campaign_id || project.id}
-                        contractAddress={process.env.NEXT_PUBLIC_CROWDFUNDING_CONTRACT_ADDRESS || '0x1234567890123456789012345678901234567890'}
+                        projectId={project.id}
+                        campaignId={project.campaign_id}
+                        contractAddress={'0xbDE5c24B7c8551f93B95a8f27C6d926B3bCcF5aD'}
                       />
                     </>
                   )
