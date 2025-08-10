@@ -25,7 +25,9 @@ WHERE `id`=${project_id};
 
 UPDATE `project_reward`
 SET `count`=`count`+1
-WHERE `id`=${reward_id};
+WHERE `id`=${reward_id} 
+  AND ${reward_id} IS NOT NULL 
+  AND ${reward_id} > 0;
 
 COMMIT;
 

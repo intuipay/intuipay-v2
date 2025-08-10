@@ -208,7 +208,7 @@
       },
       {
         "name": "reward_id",
-        "type": "string",
+        "type": "integer",
         "required": 0,
         "default": "",
         "description": ""
