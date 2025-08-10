@@ -5,7 +5,9 @@ import Link from 'next/link'
 import { IntuipayLogo } from '@/components/intuipay-logo'
 import { Button } from '@/components/ui/button'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
-import { Globe, CaretDown, List, X } from '@phosphor-icons/react';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { authClient } from '@/lib/auth-client'
+import { Globe, CaretDown, List, X, SignOut } from '@phosphor-icons/react';
 
 const navLinks = [
   { href: '#', label: 'Donate' },
@@ -16,6 +18,12 @@ const navLinks = [
 
 export function SiteHeader() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const { data: session } = authClient.useSession()
+
+  const handleSignOut = async () => {
+    await authClient.signOut()
+    setMobileMenuOpen(false)
+  }
 
   return (
     <header className="sticky top-0 z-50 w-full bg-white">
@@ -58,34 +66,77 @@ export function SiteHeader() {
             </DropdownMenuContent>
           </DropdownMenu>
 
-          {/* Sign In Button */}
-          <Button
-            asChild
-            className="text-base font-medium px-6 py-2 bg-white text-black rounded-[32px] hover:bg-gray-50 transition-colors"
-            variant="ghost"
-          >
-            <Link
-              aria-label="Sign in"
-              href="https://dash.intuipay.xyz/login"
-              target="_blank"
-            >
-              Sign in
-            </Link>
-          </Button>
+          {session?.user ? (
+            /* User Avatar Menu */
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" className="h-10 w-10 rounded-full p-0">
+                  <Avatar className="h-9 w-9">
+                    <AvatarImage 
+                      src={session.user.image || ''} 
+                      alt={session.user.name || session.user.email || 'User'} 
+                    />
+                    <AvatarFallback className="bg-blue-600 text-white">
+                      {(session.user.name || session.user.email || 'U').charAt(0).toUpperCase()}
+                    </AvatarFallback>
+                  </Avatar>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56">
+                <div className="flex items-center justify-start gap-2 p-2">
+                  <div className="flex flex-col space-y-1 leading-none">
+                    {session.user.name && (
+                      <p className="font-medium">{session.user.name}</p>
+                    )}
+                    {session.user.email && (
+                      <p className="w-[200px] truncate text-sm text-muted-foreground">
+                        {session.user.email}
+                      </p>
+                    )}
+                  </div>
+                </div>
+                <DropdownMenuItem asChild>
+                  <Link href="https://dash.intuipay.xyz/">
+                    Dashboard
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={handleSignOut}>
+                  <SignOut className="mr-2 h-4 w-4" />
+                  Sign out
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          ) : (
+            /* Sign In / Get Started Buttons for non-authenticated users */
+            <>
+              <Button
+                asChild
+                className="text-base font-medium px-6 py-2 bg-white text-black rounded-[32px] hover:bg-gray-50 transition-colors"
+                variant="ghost"
+              >
+                <Link
+                  aria-label="Sign in"
+                  href="https://dash.intuipay.xyz/login"
+                  target="_blank"
+                >
+                  Sign in
+                </Link>
+              </Button>
 
-          {/* Get Started Button */}
-          <Button
-            asChild
-            className="text-base font-medium bg-black rounded-[32px] text-white hover:bg-gray-800 transition-colors px-6 py-2"
-          >
-            <Link
-              href="https://dash.intuipay.xyz/signup"
-              target="_blank"
-              aria-label="Get Started"
-            >
-              Get Started
-            </Link>
-          </Button>
+              <Button
+                asChild
+                className="text-base font-medium bg-black rounded-[32px] text-white hover:bg-gray-800 transition-colors px-6 py-2"
+              >
+                <Link
+                  href="https://dash.intuipay.xyz/signup"
+                  target="_blank"
+                  aria-label="Get Started"
+                >
+                  Get Started
+                </Link>
+              </Button>
+            </>
+          )}
         </div>
 
         {/* Mobile Menu Button */}
@@ -141,34 +192,86 @@ export function SiteHeader() {
 
             {/* Mobile Action Buttons */}
             <div className="flex flex-col space-y-3 pt-2">
-              <Button
-                asChild
-                className="text-base font-medium px-6 py-3 bg-white text-black rounded-[32px] border border-gray-200 hover:bg-gray-50 transition-colors"
-                variant="ghost"
-              >
-                <Link
-                  aria-label="Sign in"
-                  href="https://dash.intuipay.xyz/login"
-                  target="_blank"
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  Sign in
-                </Link>
-              </Button>
-              
-              <Button
-                asChild
-                className="text-base font-medium bg-black rounded-[32px] text-white hover:bg-gray-800 transition-colors px-6 py-3"
-              >
-                <Link
-                  href="https://dash.intuipay.xyz/signup"
-                  target="_blank"
-                  aria-label="Get Started"
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  Get Started
-                </Link>
-              </Button>
+              {session?.user ? (
+                /* User Info and Sign Out for authenticated users */
+                <>
+                  <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
+                    <Avatar className="h-8 w-8">
+                      <AvatarImage 
+                        src={session.user.image || ''} 
+                        alt={session.user.name || session.user.email || 'User'} 
+                      />
+                      <AvatarFallback className="bg-blue-600 text-white text-sm">
+                        {(session.user.name || session.user.email || 'U').charAt(0).toUpperCase()}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div className="flex flex-col">
+                      {session.user.name && (
+                        <p className="font-medium text-sm">{session.user.name}</p>
+                      )}
+                      {session.user.email && (
+                        <p className="text-xs text-muted-foreground truncate">
+                          {session.user.email}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                  
+                  <Button
+                    asChild
+                    className="text-base font-medium px-6 py-3 bg-white text-black rounded-[32px] border border-gray-200 hover:bg-gray-50 transition-colors"
+                    variant="ghost"
+                  >
+                    <Link
+                      href="https://dash.intuipay.xyz/"
+                      target="_blank"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      Dashboard
+                    </Link>
+                  </Button>
+                  
+                  <Button
+                    onClick={handleSignOut}
+                    className="text-base font-medium bg-red-600 rounded-[32px] text-white hover:bg-red-700 transition-colors px-6 py-3"
+                  >
+                    <SignOut className="mr-2 h-4 w-4" />
+                    Sign out
+                  </Button>
+                </>
+              ) : (
+                /* Sign In / Get Started Buttons for non-authenticated users */
+                <>
+                  <Button
+                    asChild
+                    className="text-base font-medium px-6 py-3 bg-white text-black rounded-[32px] border border-gray-200 hover:bg-gray-50 transition-colors"
+                    variant="ghost"
+                  >
+                    <Link
+                      aria-label="Sign in"
+                      href="https://dash.intuipay.xyz/login"
+                      target="_blank"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      Sign in
+                    </Link>
+                  </Button>
+                  
+                  <Button
+                    asChild
+                    className="text-base font-medium bg-black rounded-[32px] text-white hover:bg-gray-800 transition-colors px-6 py-3"
+                  >
+                    <Link
+                      href="https://dash.intuipay.xyz/signup"
+                      target="_blank"
+                      aria-label="Get Started"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      Get Started
+                    </Link>
+                  </Button>
+                </>
+              )}
             </div>
           </div>
         </div>

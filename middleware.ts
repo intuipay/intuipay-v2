@@ -5,6 +5,30 @@ import { NextRequest, NextResponse } from "next/server";
 type Session = typeof auth.$Infer.Session;
 
 export async function middleware(request: NextRequest) {
+  // 本地开发启用，上线要注释掉
+  // const mockUser = {
+  //   id: 'jXqDtVMvNv1vf81izMoLabAkoOlQX5P1',
+  //   email: process.env.MOCK_USER_EMAIL || 'dev@example.com',
+  //   name: process.env.MOCK_USER_NAME || 'Dev User',
+  //   image: process.env.MOCK_USER_IMAGE || '',
+  // };
+
+  // const mockRequestHeaders = new Headers(request.headers);
+  // mockRequestHeaders.set('x-user-id', mockUser.id);
+  // mockRequestHeaders.set('x-user-email', mockUser.email);
+  // mockRequestHeaders.set('x-user-name', mockUser.name);
+  // mockRequestHeaders.set('x-user-image', mockUser.image);
+
+  // const mockModifiedRequest = new NextRequest(request.url, {
+  //   headers: mockRequestHeaders,
+  //   method: request.method,
+  //   body: request.body
+  // });
+
+  // return NextResponse.next({
+  //   request: mockModifiedRequest
+  // });
+
   const response = await fetch(`${process.env.NEXT_PUBLIC_DASHBOARD_URL}/api/auth/get-session`, {
     headers: {
       cookie: request.headers.get("cookie") || "",
@@ -43,6 +67,7 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    // "/api/profile",
+    "/api/profile",
+    "/profile",
   ],
 };

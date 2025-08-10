@@ -20,8 +20,7 @@ export async function GET(req: Request) {
 
 export async function POST(req: Request) {
   const headersList = await headers();
-  // TODO: 改 middleware.ts 里获取 userId
-  const userId = headersList.get('x-user-id') ?? 'jXqDtVMvNv1vf81izMoLabAkoOlQX5P1';
+  const userId = headersList.get('x-user-id') ?? '';
 
   const params = await req.json() as Record<string, any>;
   const { location, timezone, bio, social_links, number, first_name, last_name, display_image } = params;
