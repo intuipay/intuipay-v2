@@ -14,7 +14,7 @@ SELECT
     dp.project_subtitle,
     dp.status,
     dp.campaign_id,
-    r.created_at AS refund_at
+    MAX(r.created_at) AS refund_at
 FROM
     donation d
 JOIN
