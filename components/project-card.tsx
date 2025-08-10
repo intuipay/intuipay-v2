@@ -81,46 +81,39 @@ export function ProjectCard({ project, onWithdrawPledge, isRefunded }: ProjectCa
         <CardFooter className="whitespace-nowrap overflow-hidden flex-grow group-hover:pb-0">
           {isProjectFailed ? (
             // 失败项目的UI
-            <div className="flex flex-col w-full">
-              <div className="flex items-center justify-between w-full">
-                <div className="flex items-center">
-                  <div className="border border-[#ff8a70] rounded px-2 py-1">
-                    <span className="text-[#ff593d] text-sm font-medium">Goal Failed</span>
-                  </div>
+            <>
+              <div className="flex justify-between items-center bg-white mb-2">
+                <div className="border border-[#ff8a70] rounded px-2 py-1">
+                  <span className="text-[#ff593d] text-xs font-medium">Goal Failed</span>
                 </div>
-                <div className="flex items-center">
-                  {isBackedView && (
-                    isRefunded ? (
-                      // 已退款状态
-                      <span className="text-sm text-black/60 font-medium">
-                        The funds returned to my wallet
-                      </span>
-                    ) : (
-                      // 可以退款状态 - 使用钱包连接对话框
-                      <>
-                        <Button 
-                          className="bg-[#2461f2] hover:bg-[#1a4cc7] text-white text-sm px-4 py-1 h-auto"
-                          onClick={() => setIsWalletDialogOpen(true)}
-                        >
-                          Withdraw my pledge
-                        </Button>
-                        <WalletConnectDialog 
-                          open={isWalletDialogOpen}
-                          onOpenChange={setIsWalletDialogOpen}
-                          onWalletConnected={handleWalletConnected}
-                          projectId={project.campaign_id || project.id}
-                          contractAddress={process.env.NEXT_PUBLIC_CROWDFUNDING_CONTRACT_ADDRESS || '0x1234567890123456789012345678901234567890'}
-                        />
-                      </>
-                    )
-                  )}
-                </div>
+                {isBackedView && (
+                  isRefunded ? (
+                    // 已退款状态
+                    <span className="text-sm text-black/60 font-medium">
+                      Refunded
+                    </span>
+                  ) : (
+                    // 可以退款状态 - 使用钱包连接对话框
+                    <>
+                      <Button 
+                        className="bg-[#2461f2] hover:bg-[#1a4cc7] text-white text-sm px-4 py-1 h-auto"
+                        onClick={() => setIsWalletDialogOpen(true)}
+                      >
+                        Withdraw my pledge
+                      </Button>
+                      <WalletConnectDialog 
+                        open={isWalletDialogOpen}
+                        onOpenChange={setIsWalletDialogOpen}
+                        onWalletConnected={handleWalletConnected}
+                        projectId={project.campaign_id || project.id}
+                        contractAddress={process.env.NEXT_PUBLIC_CROWDFUNDING_CONTRACT_ADDRESS || '0x1234567890123456789012345678901234567890'}
+                      />
+                    </>
+                  )
+                )}
               </div>
-              {/* Hover状态下显示的"Ended"信息 */}
-              <p className="group-hover:block hidden text-sm text-black/60 mt-4 font-medium">
-                Ended • {progress}% funded
-              </p>
-            </div>
+              <p className="group-hover:block absolute bottom-4 text-sm text-black mt-4 hidden opacity-0 group-hover:opacity-60 transition-opacity">Ended • {progress}% funded</p>
+            </>
           ) : (
             // 正常项目的UI
             <>
