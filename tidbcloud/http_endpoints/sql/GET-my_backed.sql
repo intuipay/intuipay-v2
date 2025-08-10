@@ -24,6 +24,6 @@ LEFT JOIN
 LEFT JOIN
     project_refund r ON dp.id = r.project_id AND r.user_id = d.user_id
 WHERE
-    d.user_id = ${user_id} AND d.project_id=${project_id}
+    d.user_id = ${user_id}
 GROUP BY
     dp.id, o.id;
