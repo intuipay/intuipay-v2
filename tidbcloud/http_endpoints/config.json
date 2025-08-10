@@ -2197,7 +2197,7 @@
         "name": "images",
         "type": "string",
         "required": 0,
-        "default": "",
+        "default": "[]",
         "description": ""
       },
       {
