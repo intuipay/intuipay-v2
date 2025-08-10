@@ -2,7 +2,7 @@ USE `test`;
 
 SELECT `p`.*,
   IF(
-    COUNT(r.id) = 0, -- 1. 先判断有没有 reward
+    COUNT(r.id) = 0,
     JSON_ARRAY(), 
     JSON_ARRAYAGG(
       JSON_OBJECT(
@@ -10,7 +10,7 @@ SELECT `p`.*,
         'title', r.`title`,
         'description', r.`description`,
         'amount', r.`amount`,
-        'images', r.`images`,
+        'image', r.`image`,
         'number', r.`number`,
         'count', r.`count`,
         'year', r.`year`,
