@@ -8,11 +8,13 @@ INSERT INTO `donation`
 (`project_id`,`first_name`,`last_name`,`company_name`,`address1`,
   `address2`,`country`,`state`,`city`,`zip`,`email`,`account`,
   `currency`,`tx_hash`,`method`,`status`,`has_tax_invoice`,`dollar`,
-  `is_anonymous`,`note`,`amount`,`wallet`,`wallet_address`,`reward_id`) 
+  `is_anonymous`,`note`,`amount`,`wallet`,`wallet_address`,`reward_id`,
+  `user_id`) 
 VALUES(${project_id},${first_name},${last_name},${company_name},${address1},
   ${address2},${country},${state},${city},${zip},${email},${account},
   ${currency},${tx_hash},${method},${status},${has_tax_invoice},@donation_amount,
-  ${is_anonymous},${note},${amount},${wallet},${wallet_address},${reward_id});
+  ${is_anonymous},${note},${amount},${wallet},${wallet_address},${reward_id},
+  ${user_id});
 
 SET @new_donation_id = LAST_INSERT_ID();
 
