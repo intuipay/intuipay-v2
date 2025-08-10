@@ -1,4 +1,5 @@
 import { ProjectCard } from '@/components/project-card';
+import { ProjectStatus } from '@/data/project';
 import { BackedProject } from '@/types';
 
 interface BackedTabProps {
@@ -29,12 +30,13 @@ export default function BackedTab({ projects }: BackedTabProps) {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {projectsToShow.map((project: BackedProject) => {
           // 直接使用 BackedProject 的 isRefunded 字段
+          project.status = ProjectStatus.PaymentFailed;
           return (
             <div key={project.id} className="w-full">
               <ProjectCard 
                 project={project} 
                 onWithdrawPledge={handleWithdrawPledge}
-                isRefunded={project.isRefunded}
+                isRefunded={false}
               />
             </div>
           );
