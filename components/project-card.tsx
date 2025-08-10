@@ -5,6 +5,8 @@ import { ProjectInfo } from '@/types';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { ProjectStatus, DonationStatus } from '@/data/project';
 import { Button } from '@/components/ui/button';
+import { WalletConnectDialog } from '@/components/wallet-connect-dialog';
+import { useState } from 'react';
 
 type ProjectCardProps = {
   project: ProjectInfo;
@@ -15,6 +17,8 @@ type ProjectCardProps = {
 }
 
 export function ProjectCard({ project, onWithdrawPledge, isRefunded }: ProjectCardProps) {
+  const [isWalletDialogOpen, setIsWalletDialogOpen] = useState(false);
+
   const progress = project.goal_amount > 0
     ? Math.round(project.amount / project.goal_amount * 1000) / 10 : 0;
   const daysLeft = Math.ceil((new Date(project.end_at).getTime() - Date.now()) / 1000 / 60 / 60 / 24);
@@ -28,21 +32,20 @@ export function ProjectCard({ project, onWithdrawPledge, isRefunded }: ProjectCa
   // 判断是否为backed状态（传入了isRefunded参数）
   const isBackedView = isRefunded !== undefined;
 
-  // 处理退款按钮点击
-  const handleWithdrawClick = (e: React.MouseEvent) => {
-    e.preventDefault(); // 防止Link导航
-    e.stopPropagation();
+  // 处理钱包连接成功后的退款请求
+  const handleWalletConnected = (address: string) => {
+    console.log('Wallet connected:', address);
     if (onWithdrawPledge) {
       onWithdrawPledge(project.id);
     }
   };
 
   return (
-    <Link
-      href={`/project/${project.project_slug}`}
-      className="block hover:shadow-lg transition-shadow duration-800 rounded-lg h-101 drop-shadow-custom1"
-    >
-      <Card className="group overflow-hidden flex flex-col h-full border-transparent hover:border-action-blue/50 transition-colors">
+    <Card className="group overflow-hidden flex flex-col h-full border-transparent hover:border-action-blue/50 transition-colors rounded-lg h-101 drop-shadow-custom1 hover:shadow-lg transition-shadow duration-800">
+      <Link
+        href={`/project/${project.project_slug}`}
+        className="block"
+      >
         <div className="relative w-full h-53 group-hover:h-40 transition-all duration-800">
           <Image
             src={project.banner || '/images/placeholder.svg'}
@@ -52,10 +55,16 @@ export function ProjectCard({ project, onWithdrawPledge, isRefunded }: ProjectCa
             loading="lazy"
           />
         </div>
+      </Link>
+      <Link
+        href={`/project/${project.project_slug}`}
+        className="block"
+      >
         <CardHeader className="min-h-20">
           <CardTitle className="text-lg text-neutral-text">{project.project_name}</CardTitle>
           <p className="text-base text-black/70 text-neutral-darkgray mt-1 line-clamp-1 group-hover:line-clamp-2">{project.project_subtitle}</p>
         </CardHeader>
+      </Link>
         <CardContent>
           <div className="flex items-center text-xs gap-2">
             <Avatar className="size-8">
@@ -84,13 +93,22 @@ export function ProjectCard({ project, onWithdrawPledge, isRefunded }: ProjectCa
                         The funds returned to my wallet
                       </span>
                     ) : (
-                      // 可以退款状态
-                      <Button 
-                        onClick={handleWithdrawClick}
-                        className="bg-[#2461f2] hover:bg-[#1a4cc7] text-white text-sm px-4 py-1 h-auto"
-                      >
-                        Withdraw my pledge
-                      </Button>
+                      // 可以退款状态 - 使用钱包连接对话框
+                      <>
+                        <Button 
+                          className="bg-[#2461f2] hover:bg-[#1a4cc7] text-white text-sm px-4 py-1 h-auto"
+                          onClick={() => setIsWalletDialogOpen(true)}
+                        >
+                          Withdraw my pledge
+                        </Button>
+                        <WalletConnectDialog 
+                          open={isWalletDialogOpen}
+                          onOpenChange={setIsWalletDialogOpen}
+                          onWalletConnected={handleWalletConnected}
+                          projectId={project.campaign_id || project.id}
+                          contractAddress={process.env.NEXT_PUBLIC_CROWDFUNDING_CONTRACT_ADDRESS || '0x1234567890123456789012345678901234567890'}
+                        />
+                      </>
                     )
                   )}
                 </div>
@@ -114,6 +132,5 @@ export function ProjectCard({ project, onWithdrawPledge, isRefunded }: ProjectCa
           )}
         </CardFooter>
       </Card>
-    </Link>
-  )
-}
+    )
+  }

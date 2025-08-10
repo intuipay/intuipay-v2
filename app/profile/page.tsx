@@ -1,5 +1,6 @@
 import ProfilePage from '@/app/_components/profile/profile-page';
 import { getProfile, getMyBacked, getMyProjects, getMyOrg } from '@/lib/data';
+import { Web3Provider } from '@/components/providers/web3-provider';
 
 export default async function Page() {
   const profile = await getProfile('jXqDtVMvNv1vf81izMoLabAkoOlQX5P1');
@@ -27,5 +28,9 @@ export default async function Page() {
   const backedProjects = Array.isArray(myBacked) ? myBacked : (myBacked ? [myBacked] : []);
   const raisedProjects = Array.isArray(myProjects) ? myProjects : (myProjects ? [myProjects] : []);
   
-  return <ProfilePage profile={profile} myBacked={backedProjects} myProjects={raisedProjects} />;
+  return (
+    <Web3Provider>
+      <ProfilePage profile={profile} myBacked={backedProjects} myProjects={raisedProjects} />
+    </Web3Provider>
+  )
 }
