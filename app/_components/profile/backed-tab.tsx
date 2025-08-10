@@ -29,14 +29,12 @@ export default function BackedTab({ projects }: BackedTabProps) {
       {/* Project Cards Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {projectsToShow.map((project: BackedProject) => {
-          // 直接使用 BackedProject 的 isRefunded 字段
-          project.status = ProjectStatus.PaymentFailed;
           return (
             <div key={project.id} className="w-full">
               <ProjectCard 
                 project={project} 
                 onWithdrawPledge={handleWithdrawPledge}
-                isRefunded={false}
+                isRefunded={project.refund_at ? true : false} // 根据 refund_at 字段判断是否已退款
               />
             </div>
           );

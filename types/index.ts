@@ -216,5 +216,5 @@ export interface Profile {
 
 // 用户支持的项目类型，包含项目信息和用户的退款状态
 export type BackedProject = ProjectInfo & {
-  isRefunded: boolean;         // 是否已经退款
+  refund_at: string;           // 退款时间，如果有值说明用户退款过，如果为空字符串说明用户未退款过
 };

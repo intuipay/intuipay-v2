@@ -31,12 +31,6 @@ export const getDonationProjectBySlug = cache(async function getDonationProjectB
   return project;
 });
 
-export const getWidgetById = cache(async function (id: string) {
-  const result = await fetchTidb<ProjectInfo>(`/donation_project?id=${id}`);
-  console.log('getWidgetById', id, result);
-  return result[0];
-});
-
 export const getProfile = cache(async function (userId: string) {
   const result = await fetchTidb<Profile>(`/dash/my_profile?user_id=${userId}`);
   if (result.length === 0) return DEFAULT_PROFILE_VALUES;
@@ -47,7 +41,6 @@ export const getProfile = cache(async function (userId: string) {
 
 export const getMyBacked = cache(async function (userId: string) {
   const result = await fetchTidb<ProjectInfo>(`/my_backed?user_id=${userId}`);
-  console.log('getMyBacked', userId, result);
   if (result.length === 0) {
     return null;
   }
@@ -71,18 +64,6 @@ export const getMyOrg = cache(async function (userId: string) {
     id: Number(item.id),
     org_type: Number(item.org_type),
   };
-});
-
-export const getCrowdFundingProjectBySlug = cache(async function getDonationProjectBySlug(slug: string) {
-  const data = await fetchTidb<ProjectInfo>(`/donation_project?slug=${slug}`);
-  const project = data[ 0 ];
-
-  project.project_slug = slug;
-  project.networks = ['ethereum-sepolia'];
-  project.tokens = { 'ethereum-sepolia': ['eth'] };
-  project.wallets = { 'ethereum-sepolia': '0x1b5078503369855e23bd0ec38e335ae1c36e5776' };
-
-  return project;
 });
 
 export const getProjects = cache(async function getProjects(
@@ -145,9 +126,9 @@ export const getProjectDetail = cache(async function getProjectDetail(
   const {
     amount,
     goal_amount,
+    campaign_id,
     ...rest
   } = data[ 0 ];
-  console.log('data0', data);
   return {
     ...rest,
     amount: Number(amount),
@@ -155,7 +136,7 @@ export const getProjectDetail = cache(async function getProjectDetail(
 
     // 测试的众筹合约信息，等后台接入钱包后，应该从后台读取
     project_slug: slug,
-    campaign_id: 1, // 区块链上的活动id，每个项目不同
+    campaign_id: campaign_id ? Number(campaign_id) : undefined, // 每个众筹项目都应该有一个区块链上的 campaign_id
     networks: ['ethereum-sepolia'],
     tokens: { 'ethereum-sepolia': ['usdc'] },
     wallets: { 'ethereum-sepolia': '0xbDE5c24B7c8551f93B95a8f27C6d926B3bCcF5aD' }, // 众筹合约地址

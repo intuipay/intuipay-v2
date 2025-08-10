@@ -31,6 +31,7 @@ export function ProjectCard({ project, onWithdrawPledge, isRefunded }: ProjectCa
                          project.status === ProjectStatus.Suspended ||
                          (daysLeft <= 0 && progress < 100);
 
+  console.log('isproject failed', isProjectFailed, project.status, daysLeft, progress);
   // 判断是否为backed状态（传入了isRefunded参数）
   const isBackedView = isRefunded !== undefined;
 

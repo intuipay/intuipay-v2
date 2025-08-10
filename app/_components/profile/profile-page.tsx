@@ -5,11 +5,11 @@ import { PencilSimpleIcon } from '@phosphor-icons/react/ssr';
 import ProfileTabs from '@/app/_components/profile/profile-tabs';
 import { EditProfileDialog } from '@/app/_components/profile/edit-profile-dialog';
 import { useState } from 'react';
-import { Profile, ProjectInfo } from '@/types';
+import { Profile, ProjectInfo, BackedProject } from '@/types';
 
 interface ProfilePageProps {
   profile: Profile;
-  myBacked?: ProjectInfo[];
+  myBacked?: BackedProject[];
   myProjects?: ProjectInfo[];
 }
 
