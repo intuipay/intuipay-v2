@@ -2194,10 +2194,10 @@
         "description": ""
       },
       {
-        "name": "images",
+        "name": "image",
         "type": "string",
         "required": 0,
-        "default": "[]",
+        "default": "",
         "description": ""
       },
       {
