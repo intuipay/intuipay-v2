@@ -1,6 +1,6 @@
 # Project Listing & Reward Rules
 
-**Last Updated: 07.20.2025**
+**Last Updated: 04.08.2025**
 
 For Creators on Intuipay.
 
@@ -22,11 +22,12 @@ Projects shall be listed by Intuipay, and shall continue to be listed by Intuipa
 
 - The Project must match the selected category.
 - The Project must have a clear description explaining who you are and how you are planning to use the funds.
-- The Project must not raise funds for a charitable purpose.
+- The Project must not raise funds for charitable purposes.
+- The Project must not raise funds for investment purposes and/or make promises (whether explicitly or implicitly) of financial returns.
 - A non-financial reward must be offered in exchange for the pledged/contributed digital assets. Examples of rewards include access to a product or service, digital content such as artwork, music or NFTs, exclusive updates or access, experiences or limited edition items, etc..
-- Pledged/contributed digital assets must be used for the Project and the purposes outlined on the Project Listing page – not for donations or other purposes.
+- Pledged/contributed digital assets must be used for the Project and the purposes outlined on the Project Listing page not for donations or other purposes.
 - Graphics and information associated with the Project must not be misleading – no false advertising and no use of non-original or unrelated images.
-- Project must not be prohibited under the "Prohibited Projects" section.
+- Project must not be prohibited under the “Prohibited Projects” section.
 
 Please note that even if your Project satisfies all of the requirements above, Intuipay has the right to remove or suspend your Project Listing in its sole and absolute discretion.
 
@@ -38,7 +39,7 @@ Projects involving the following are not permitted to be listed on Intuipay thro
 
 - Contests, coupons, gambling, and raffles;
 - Offensive content (e.g., hate speech, incitement of violence);
-- Live animals—Projects may not offer live animals as rewards;
+- Live animals — Projects may not offer live animals as rewards;
 - Alcohol as rewards;
 - Financial, currency exchange, or credit services; financial intermediaries or cash equivalents; travel services (e.g., vacation packages); phone services; and commercial marketing services;
 - Charity or political fundraising;
