@@ -938,6 +938,41 @@
         "required": 0,
         "default": "1",
         "description": ""
+      },
+      {
+        "name": "networks",
+        "type": "string",
+        "required": 0,
+        "default": "",
+        "description": ""
+      },
+      {
+        "name": "tokens",
+        "type": "string",
+        "required": 0,
+        "default": "",
+        "description": ""
+      },
+      {
+        "name": "wallets",
+        "type": "string",
+        "required": 0,
+        "default": "",
+        "description": ""
+      },
+      {
+        "name": "campaign_id",
+        "type": "string",
+        "required": 0,
+        "default": "",
+        "description": ""
+      },
+      {
+        "name": "create_tx_hash",
+        "type": "string",
+        "required": 0,
+        "default": "",
+        "description": ""
       }
     ],
     "settings": {
