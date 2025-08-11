@@ -2,14 +2,17 @@ import ProfilePage from '@/app/_components/profile/profile-page';
 import { getProfile, getMyBacked, getMyProjects, getMyOrg } from '@/lib/data';
 import { Web3Provider } from '@/components/providers/web3-provider';
 import { headers } from 'next/headers';
+import { auth } from "@/lib/auth";
 
 export const runtime = 'edge';
 
 export default async function Page() {
   // 获取当前用户会话，从 header里取，或者从session拿都可以
-  const headersList = await headers();
-  const userId = headersList.get('x-user-id') || '';
-  console.log('Current user ID:', userId);
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  const userId = session?.user?.id ?? '';
+  console.log("session in profile page", session);
 
   const profile = await getProfile(userId);
   console.log('my profile', profile);

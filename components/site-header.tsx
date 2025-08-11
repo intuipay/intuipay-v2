@@ -6,8 +6,9 @@ import { IntuipayLogo } from '@/components/intuipay-logo'
 import { Button } from '@/components/ui/button'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { authClient } from '@/lib/auth-client'
+import { authClient } from '@/lib/auth-client';
 import { GlobeIcon, CaretDownIcon, ListIcon, XLogoIcon, SignOutIcon } from '@phosphor-icons/react';
+import { User } from 'better-auth';
 
 const navLinks = [
   { href: '#', label: 'Donate' },
@@ -16,9 +17,12 @@ const navLinks = [
   { href: '#', label: 'Support' },
 ]
 
-export function SiteHeader() {
+interface SiteHeaderProps {
+  user?: User | null;
+}
+
+export function SiteHeader({ user }: SiteHeaderProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const { data: session } = authClient.useSession()
 
   const handleSignOut = async () => {
     await authClient.signOut()
@@ -66,18 +70,18 @@ export function SiteHeader() {
             </DropdownMenuContent>
           </DropdownMenu>
 
-          {session?.user ? (
+          {user ? (
             /* User Avatar Menu */
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" className="h-10 w-10 rounded-full p-0">
                   <Avatar className="h-9 w-9">
                     <AvatarImage 
-                      src={session.user.image || ''} 
-                      alt={session.user.name || session.user.email || 'User'} 
+                      src={user.image || ''} 
+                      alt={user.name || user.email || 'User'} 
                     />
                     <AvatarFallback className="bg-blue-600 text-white">
-                      {(session.user.name || session.user.email || 'U').charAt(0).toUpperCase()}
+                      {(user.name || user.email || 'U').charAt(0).toUpperCase()}
                     </AvatarFallback>
                   </Avatar>
                 </Button>
@@ -85,12 +89,12 @@ export function SiteHeader() {
               <DropdownMenuContent align="end" className="w-56">
                 <div className="flex items-center justify-start gap-2 p-2">
                   <div className="flex flex-col space-y-1 leading-none">
-                    {session.user.name && (
-                      <p className="font-medium">{session.user.name}</p>
+                    {user.name && (
+                      <p className="font-medium">{user.name}</p>
                     )}
-                    {session.user.email && (
+                    {user.email && (
                       <p className="w-[200px] truncate text-sm text-muted-foreground">
-                        {session.user.email}
+                        {user.email}
                       </p>
                     )}
                   </div>
@@ -192,26 +196,26 @@ export function SiteHeader() {
 
             {/* Mobile Action Buttons */}
             <div className="flex flex-col space-y-3 pt-2">
-              {session?.user ? (
+              {user ? (
                 /* User Info and Sign Out for authenticated users */
                 <>
                   <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
                     <Avatar className="h-8 w-8">
                       <AvatarImage 
-                        src={session.user.image || ''} 
-                        alt={session.user.name || session.user.email || 'User'} 
+                        src={user.image || ''} 
+                        alt={user.name || user.email || 'User'} 
                       />
                       <AvatarFallback className="bg-blue-600 text-white text-sm">
-                        {(session.user.name || session.user.email || 'U').charAt(0).toUpperCase()}
+                        {(user.name || user.email || 'U').charAt(0).toUpperCase()}
                       </AvatarFallback>
                     </Avatar>
                     <div className="flex flex-col">
-                      {session.user.name && (
-                        <p className="font-medium text-sm">{session.user.name}</p>
+                      {user.name && (
+                        <p className="font-medium text-sm">{user.name}</p>
                       )}
-                      {session.user.email && (
+                      {user.email && (
                         <p className="text-xs text-muted-foreground truncate">
-                          {session.user.email}
+                          {user.email}
                         </p>
                       )}
                     </div>

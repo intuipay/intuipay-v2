@@ -1,11 +1,13 @@
 import { SiteHeader } from '@/components/site-header'
 import { SiteFooter } from '@/components/site-footer'
 
-export default function ProjectsLayout({
+
+export default async function ProjectsLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
+
   return (
     <div className="flex flex-col min-h-screen bg-neutral-white text-neutral-text">
       <SiteHeader />

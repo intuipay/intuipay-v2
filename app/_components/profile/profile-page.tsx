@@ -6,14 +6,16 @@ import ProfileTabs from '@/app/_components/profile/profile-tabs';
 import { EditProfileDialog } from '@/app/_components/profile/edit-profile-dialog';
 import { useState } from 'react';
 import { Profile, ProjectInfo, BackedProject } from '@/types';
+import { User } from 'better-auth';
 
 interface ProfilePageProps {
   profile: Profile;
   myBacked?: BackedProject[];
   myProjects?: ProjectInfo[];
+  user?: User;
 }
 
-export default function ProfilePage({ profile, myBacked, myProjects }: ProfilePageProps) {
+export default function ProfilePage({ profile, myBacked, myProjects, user }: ProfilePageProps) {
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   
   const handleProfileUpdate = () => {
@@ -23,7 +25,7 @@ export default function ProfilePage({ profile, myBacked, myProjects }: ProfilePa
 
   return (
     <>
-      <SiteHeader />
+      <SiteHeader user={user} />
       <main className="min-h-screen">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-12 xl:max-w-6xl 2xl:max-w-8xl">
           {/* User Profile Header */}
