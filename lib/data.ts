@@ -1,6 +1,6 @@
 import { cache } from 'react';
 import { fetchTidb } from '@/services/fetch-tidb';
-import { ProjectInfo, ProjectFilter, Donation, Donations, Update, Updates, Profile, OrganizationInfo } from '@/types';
+import { ProjectInfo, ProjectFilter, Donation, Donations, Update, Updates, Profile, OrganizationInfo, BackedProject } from '@/types';
 import { DEFAULT_PROFILE_VALUES } from '@/data';
 
 type CountResult = {
@@ -40,12 +40,9 @@ export const getProfile = cache(async function (userId: string) {
 });
 
 export const getMyBacked = cache(async function (userId: string) {
-  const result = await fetchTidb<ProjectInfo>(`/my_backed?user_id=${userId}`);
-  if (result.length === 0) {
-    return null;
-  }
+  const result = await fetchTidb<BackedProject>(`/my_backed?user_id=${userId}`);
 
-  return result[0];
+  return result;
 });
 
 export const getMyProjects = cache(async function (params: URLSearchParams) {

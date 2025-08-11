@@ -35,13 +35,9 @@ export default async function Page() {
   const myProjects = await getMyProjects(projectsParams);
   console.log('my projects', myProjects);
   
-  // 确保数据格式正确
-  const backedProjects = Array.isArray(myBacked) ? myBacked : (myBacked ? [myBacked] : []);
-  const raisedProjects = Array.isArray(myProjects) ? myProjects : (myProjects ? [myProjects] : []);
-  
   return (
     <Web3Provider>
-      <ProfilePage profile={profile} myBacked={backedProjects} myProjects={raisedProjects} />
+      <ProfilePage profile={profile} myBacked={myBacked} myProjects={myProjects} />
     </Web3Provider>
   )
 }
