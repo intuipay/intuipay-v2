@@ -14,12 +14,13 @@ SET @project_id_to_refund=${project_id};
 -- 2. 检查 `donation.refund_at IS NULL`，确保我们只汇总尚未退款的捐赠。
 -- 3. 使用 `HAVING SUM(d.dollar) > 0` 来避免创建金额为 0 的无效退款记录。
 INSERT INTO project_refund 
-  (project_id, user_id, amount, status)
+  (project_id, user_id, amount, status, tx_hash)
 SELECT
     d.project_id,
     d.user_id,
     SUM(d.dollar),
-    2
+    2,
+  ${tx_hash}
 FROM
     donation d
 JOIN
