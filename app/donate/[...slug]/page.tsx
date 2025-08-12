@@ -1,10 +1,12 @@
 import { Metadata } from 'next';
 import { getDonationProjectBySlug } from '@/lib/data';
 import DonationPageComp from '@/app/_components/donate/donate-page';
+import CrowdFundingPageComp from '@/app/_components/crowdfunding/donate-page';
 import { notFound } from 'next/navigation';
 import BackButton from '@/components/back-button';
 import { Button } from '@/components/ui/button';
 import type React from 'react';
+import { ProjectTypes } from '@/data';
 
 export const runtime = 'edge';
 
@@ -56,6 +58,24 @@ export default async function DonatePage({
     return notFound();
   }
 
+  if (project.type === ProjectTypes.Crownfunding) {
+    return <>
+      <header className="flex items-center justify-between px-8 sm:px-30 py-4 bg-white lg:bg-gray-50 border-b">
+        <div className="flex items-center gap-3">
+          <BackButton className="hidden" />
+          <div>
+            <p className="text-sm text-gray-600">Crownfund to</p>
+            <p className="font-medium text-gray-900 truncate">{pageTitle}</p>
+          </div>
+        </div>
+      </header>
+      <CrowdFundingPageComp
+        project={project}
+        slug={slug}
+      />
+    </>;
+  }
+
   return <>
     {!isPreview && <header className="flex items-center justify-between px-8 sm:px-30 py-4 bg-white lg:bg-gray-50 border-b">
       <div className="flex items-center gap-3">
@@ -65,11 +85,8 @@ export default async function DonatePage({
           <p className="font-medium text-gray-900 truncate">{pageTitle}</p>
         </div>
       </div>
-      <Button
-        className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-full hidden"
-        type="button"
-      >Sign In</Button>
     </header>}
+
     <DonationPageComp
       isPreview={isPreview}
       project={project}
