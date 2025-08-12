@@ -6,7 +6,7 @@ SELECT `p`.`id`,`project_name`,`banner`,`status`,
   `org_description`,`org_type`,`org_contact`,`org_location`,`org_website`,
   `org_logo`,`banners`,`backers`,`o`.`email` as `org_email`,
   `org_title`,p.`social_links`,`o`.`social_links` as `org_social_links`,
-  `networks`,`tokens`,`wallets`,`o`.`networks` as `org_networks`,
+  `p`.`networks`,`p`.`tokens`,`p`.`wallets`,`o`.`networks` as `org_networks`,
   `o`.`tokens` as `org_tokens`,`o`.`wallets` as `org_wallets`,
   IF(
     COUNT(r.id) = 0,
