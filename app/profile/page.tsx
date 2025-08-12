@@ -8,11 +8,12 @@ export const runtime = 'edge';
 
 export default async function Page() {
   // 获取当前用户会话，从 header里取，或者从session拿都可以
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
-  const userId = session?.user?.id ?? '';
-  console.log("session in profile page", session);
+  // const session = await auth.api.getSession({
+  //   headers: await headers(),
+  // });
+  // const userId = session?.user?.id ?? '';
+  const userId = 'jXqDtVMvNv1vf81izMoLabAkoOlQX5P1';
+  // console.log("session in profile page", session);
 
   const profile = await getProfile(userId);
   console.log('my profile', profile);
@@ -37,7 +38,7 @@ export default async function Page() {
   
   return (
     <Web3Provider>
-      <ProfilePage profile={profile} myBacked={myBacked} myProjects={myProjects} user={session?.user} />
+      <ProfilePage profile={profile} myBacked={myBacked} myProjects={myProjects} />
     </Web3Provider>
   )
 }

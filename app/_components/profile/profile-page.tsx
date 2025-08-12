@@ -7,6 +7,7 @@ import { EditProfileDialog } from '@/app/_components/profile/edit-profile-dialog
 import { useState } from 'react';
 import { Profile, ProjectInfo, BackedProject } from '@/types';
 import { User } from 'better-auth';
+import { useRouter } from 'next/navigation'
 
 interface ProfilePageProps {
   profile: Profile;
@@ -17,10 +18,11 @@ interface ProfilePageProps {
 
 export default function ProfilePage({ profile, myBacked, myProjects, user }: ProfilePageProps) {
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const router = useRouter();
   
   const handleProfileUpdate = () => {
     // 刷新页面以获取最新数据
-    window.location.reload();
+    router.refresh();
   };
 
   return (

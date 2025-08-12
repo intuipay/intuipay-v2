@@ -40,8 +40,6 @@ const WALLET_OPTIONS = [
 ]
 
 export function RefundDialog({ open, onOpenChange, projectId, campaignId, contractAddress }: RefundDialogProps) {
-  campaignId = 1;
-  console.log('in refund dialog', projectId, campaignId, contractAddress);
   const [connecting, setConnecting] = useState<string | null>(null)
   const [error, setError] = useState<string>('')
   const [isProcessingRefund, setIsProcessingRefund] = useState(false)

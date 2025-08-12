@@ -4,6 +4,7 @@ import { BLOCKCHAIN_CONFIG } from '@/config/blockchain';
 import { getProjectDetail } from '@/lib/data';
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
+import { ProjectTypes } from '@/data';
 
 export const runtime = 'edge';
 
@@ -71,7 +72,7 @@ export async function POST(req: Request) {
     }
 
     // 非众筹项目才要验证交易
-    if (project_type != 101) {
+    if (project_type != ProjectTypes.Crownfunding) {
       // 执行交易验证（amount 已经在前端转换为最小单位）
       const validationResult = await validateDonationTransaction(
         network,

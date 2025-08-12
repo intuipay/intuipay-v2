@@ -126,6 +126,7 @@ export const getProjectDetail = cache(async function getProjectDetail(
   const {
     amount,
     goal_amount,
+    type,
     campaign_id,
     networks,
     tokens,
@@ -136,6 +137,7 @@ export const getProjectDetail = cache(async function getProjectDetail(
     ...rest,
     amount: Number(amount),
     goal_amount: Number(goal_amount),
+    type: Number(type),
 
     // 测试的众筹合约信息，等后台接入钱包后，应该从后台读取
     project_slug: slug,

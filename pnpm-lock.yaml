@@ -15,8 +15,8 @@ importers:
         specifier: ^3.10.0
         version: 3.10.0(react-hook-form@7.60.0(react@19.1.0))
       '@intuipay/shared':
-        specifier: ^0.1.0
-        version: 0.1.0
+        specifier: ^0.1.4
+        version: 0.1.4
       '@lifi/widget':
         specifier: ^3.24.3
         version: 3.24.3(785951cd8511b6d421166fdaebc6cf29)
@@ -1377,8 +1377,8 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@intuipay/shared@0.1.0':
-    resolution: {integrity: sha512-GikNWf+hupYPYdA6K1HmJRoo9BdOCo9iMgfNKxUdHLz8KxdiSklLfTESYiNP5tFNUGicooFRFh2YcGDMnFjiUg==}
+  '@intuipay/shared@0.1.4':
+    resolution: {integrity: sha512-k/FADe8jYS3XnffceyOcZuZZ7qz7JDy+Rn73Bqr8g/FGouQyg3dXo/+GzvHHMYV2r5H9v54/7kfeH2sVqs/Tww==}
 
   '@isaacs/cliui@8.0.2':
     resolution: {integrity: sha512-O8jcjabXaleOG9DQ0+ARXWZBTfnP4WNAqzuiJK7ll44AmxGKv/J2M4TPjxjY3znBCfvBXFzucm1twdyFybFqEA==}
@@ -9508,7 +9508,7 @@ snapshots:
   '@img/sharp-win32-x64@0.34.3':
     optional: true
 
-  '@intuipay/shared@0.1.0': {}
+  '@intuipay/shared@0.1.4': {}
 
   '@isaacs/cliui@8.0.2':
     dependencies:

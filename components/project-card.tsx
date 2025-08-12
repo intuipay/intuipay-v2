@@ -30,7 +30,7 @@ export function ProjectCard({ project, isRefunded }: ProjectCardProps) {
   const isBackedView = isRefunded !== undefined;
 
   return (
-    <Card className="group overflow-hidden flex flex-col h-full border-transparent hover:border-action-blue/50 transition-colors rounded-lg h-101 drop-shadow-custom1 hover:shadow-lg transition-shadow duration-800">
+    <Card className="group overflow-hidden flex flex-col h-full border-transparent hover:border-action-blue/50 transition rounded-lg h-101 drop-shadow-custom1 hover:shadow-lg duration-800">
       <Link
         href={`/project/${project.project_slug}`}
         className="block"

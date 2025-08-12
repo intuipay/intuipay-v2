@@ -239,10 +239,33 @@ export function EditProfileDialog({ open, onOpenChange, profile, onProfileUpdate
                     className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none bg-white"
                     {...field}
                   >
+                    <option value="(GMT-12:00) International Date Line West">(GMT-12:00) International Date Line West</option>
+                    <option value="(GMT-11:00) Midway Island, Samoa">(GMT-11:00) Midway Island, Samoa</option>
                     <option value="(GMT-10:00) Hawaii">(GMT-10:00) Hawaii</option>
+                    <option value="(GMT-09:00) Alaska">(GMT-09:00) Alaska</option>
                     <option value="(GMT-08:00) Pacific Time">(GMT-08:00) Pacific Time</option>
+                    <option value="(GMT-07:00) Mountain Time">(GMT-07:00) Mountain Time</option>
+                    <option value="(GMT-06:00) Central Time">(GMT-06:00) Central Time</option>
                     <option value="(GMT-05:00) Eastern Time">(GMT-05:00) Eastern Time</option>
+                    <option value="(GMT-04:00) Atlantic Time">(GMT-04:00) Atlantic Time</option>
+                    <option value="(GMT-03:00) Brazil, Argentina">(GMT-03:00) Brazil, Argentina</option>
+                    <option value="(GMT-02:00) Mid-Atlantic">(GMT-02:00) Mid-Atlantic</option>
+                    <option value="(GMT-01:00) Azores">(GMT-01:00) Azores</option>
+                    <option value="(GMT+00:00) Greenwich Mean Time">(GMT+00:00) Greenwich Mean Time</option>
+                    <option value="(GMT+01:00) Central European Time">(GMT+01:00) Central European Time</option>
+                    <option value="(GMT+02:00) Eastern European Time">(GMT+02:00) Eastern European Time</option>
+                    <option value="(GMT+03:00) Moscow Time">(GMT+03:00) Moscow Time</option>
+                    <option value="(GMT+04:00) Gulf Standard Time">(GMT+04:00) Gulf Standard Time</option>
+                    <option value="(GMT+05:00) Pakistan Standard Time">(GMT+05:00) Pakistan Standard Time</option>
+                    <option value="(GMT+05:30) India Standard Time">(GMT+05:30) India Standard Time</option>
+                    <option value="(GMT+06:00) Bangladesh Standard Time">(GMT+06:00) Bangladesh Standard Time</option>
+                    <option value="(GMT+07:00) Thailand, Vietnam">(GMT+07:00) Thailand, Vietnam</option>
                     <option value="(GMT+08:00) China Standard Time">(GMT+08:00) China Standard Time</option>
+                    <option value="(GMT+09:00) Japan Standard Time">(GMT+09:00) Japan Standard Time</option>
+                    <option value="(GMT+09:30) Australian Central Standard Time">(GMT+09:30) Australian Central Standard Time</option>
+                    <option value="(GMT+10:00) Australian Eastern Standard Time">(GMT+10:00) Australian Eastern Standard Time</option>
+                    <option value="(GMT+11:00) Solomon Islands">(GMT+11:00) Solomon Islands</option>
+                    <option value="(GMT+12:00) New Zealand Standard Time">(GMT+12:00) New Zealand Standard Time</option>
                   </select>
                 </FormControl>
                 <FormMessage />
