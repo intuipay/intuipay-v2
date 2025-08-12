@@ -13,14 +13,14 @@ export async function POST(req: Request) {
   };
 
   // check if email already exist; if exist, return success
-  const checkSql = `SELECT id FROM waitlist WHERE email = ? LIMIT 1`;
+  const checkSql = 'SELECT id FROM waitlist WHERE email = ? LIMIT 1';
   const existing = await d1.prepare(checkSql).bind(email).all();
   if (existing.results && existing.results.length > 0) {
     return new Response(
       JSON.stringify({
         code: 0,
         message: 'Email already registered',
-        data: existing.results[0].id,
+        data: existing.results[ 0 ].id,
       }),
       { status: 200 },
     );

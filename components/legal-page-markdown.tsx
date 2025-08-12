@@ -1,15 +1,15 @@
-"use client"
+'use client'
 
-import ReactMarkdown from "react-markdown"
-import remarkGfm from "remark-gfm"
-import remarkBreaks from "remark-breaks"
+import ReactMarkdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
+import remarkBreaks from 'remark-breaks'
 
 interface LegalPageMarkdownProps {
   content: string
   className?: string
 }
 
-export function LegalPageMarkdown({ content, className = "" }: LegalPageMarkdownProps) {
+export function LegalPageMarkdown({ content, className = '' }: LegalPageMarkdownProps) {
   return (
     <div className="max-w-7xl mx-auto px-6 py-8">
       <div className={`prose prose-sm max-w-none
