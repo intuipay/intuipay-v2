@@ -1,7 +1,8 @@
 import { cache } from 'react';
 import { fetchTidb } from '@/services/fetch-tidb';
 import { ProjectInfo } from '@intuipay/shared/types';
-import { ProjectFilter, Donation, Donations, Update, Updates } from '@/types';
+import { ProjectFilter, Donation, Donations, Update, Updates, Profile, OrganizationInfo, BackedProject } from '@/types';
+import { DEFAULT_PROFILE_VALUES } from '@/data';
 
 type CountResult = {
   count: number;
@@ -13,9 +14,9 @@ export const getDonationProjectBySlug = cache(async function getDonationProjectB
 
   project.project_slug = slug; // 确保 slug 正确
   // tidb endpoint返回的是string，所以需要手动转为json
-  project.networks = JSON.parse((project.networks as unknown) as string);
-  project.tokens = JSON.parse((project.tokens as unknown) as string);
-  project.wallets = JSON.parse((project.wallets as unknown) as string);
+  project.networks = project.networks ? JSON.parse((project.networks as unknown) as string) : [];
+  project.tokens = project.tokens ? JSON.parse((project.tokens as unknown) as string) : {};
+  project.wallets = project.wallets ? JSON.parse((project.wallets as unknown) as string) : {};
 
   // TODO: 给每个项目都加了 edu 测试环境配置，记得删掉
   project.networks?.push('edu-testnet');
@@ -29,6 +30,38 @@ export const getDonationProjectBySlug = cache(async function getDonationProjectB
     project.wallets[ 'solana-devnet' ] = 'Ft7m7qrY3spLNKo6aMAHMArAT3oLSSy4DnJ3y3SF1DP1';
   }
   return project;
+});
+
+export const getProfile = cache(async function (userId: string) {
+  const result = await fetchTidb<Profile>(`/dash/my_profile?user_id=${userId}`);
+  if (result.length === 0) return DEFAULT_PROFILE_VALUES;
+
+  const [item] = result;
+  return item;
+});
+
+export const getMyBacked = cache(async function (userId: string) {
+  const result = await fetchTidb<BackedProject>(`/my_backed?user_id=${userId}`);
+
+  return result;
+});
+
+export const getMyProjects = cache(async function (params: URLSearchParams) {
+  return await fetchTidb<ProjectInfo>(`/dash/my_projects?${params.toString()}`);
+});
+
+export const getMyOrg = cache(async function (userId: string) {
+  const result = await fetchTidb<OrganizationInfo>(`/admin/my_orgs?user_id=${userId}`);
+  if (result.length === 0) {
+    return null;
+  }
+
+  const [item] = result;
+  return {
+    ...item,
+    id: Number(item.id),
+    org_type: Number(item.org_type),
+  };
 });
 
 export const getProjects = cache(async function getProjects(
@@ -88,15 +121,31 @@ export const getProjectDetail = cache(async function getProjectDetail(
     searchParams.set('slug', slug);
   }
   const data = await fetchTidb<ProjectInfo>(`/project_detailed?${searchParams.toString()}`);
+  if (data.length === 0) {
+    return null;
+  }
   const {
     amount,
     goal_amount,
+    type,
+    campaign_id,
+    networks,
+    tokens,
+    wallets,
     ...rest
   } = data[ 0 ];
   return {
     ...rest,
     amount: Number(amount),
     goal_amount: Number(goal_amount),
+    type: Number(type),
+
+    // 测试的众筹合约信息，等后台接入钱包后，应该从后台读取
+    project_slug: slug,
+    campaign_id: campaign_id ? Number(campaign_id) : undefined, // 每个众筹项目都应该有一个区块链上的 campaign_id
+    networks: networks ? JSON.parse(networks) : ['ethereum-sepolia'],
+    tokens: tokens ? JSON.parse(tokens) : { 'ethereum-sepolia': ['usdc'] },
+    wallets: wallets ? JSON.parse(wallets) : { 'ethereum-sepolia': '0xbDE5c24B7c8551f93B95a8f27C6d926B3bCcF5aD' }, // 众筹合约地址
   };
 });
 
