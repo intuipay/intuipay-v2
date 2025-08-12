@@ -85,6 +85,11 @@ export type DonationInfo = {
   wallet: string;
   zip: string;
 
+  // 奖励相关字段
+  selected_reward?: Reward | null;
+  has_selected_reward?: boolean;
+  pledge_without_reward?: boolean;
+
   created_at?: string;
   updated_at?: string;
 }
@@ -123,12 +128,16 @@ export type ProjectInfo = {
   project_cta: string;
   thanks_note: string;
   brand_color: string;
+  rewards?: string; // JSON string containing reward data
 
   created_at: string;
   deleted_at?: string;
   updated_at: string;
 
-  rewards: string;
+  campaign_id?: number; // 区块链上的活动id，每个项目不同
+  networks?: string;
+  tokens?: string;
+  wallets: string;
 }
 
 export type ProjectFilter = {
@@ -183,4 +192,35 @@ export type RewardDraft = {
   destinations: ShippingOption[];
   address?: string;
   count?: number;
+}
+
+export type Reward = {
+  id: string;
+  name: string;
+  description: string;
+  amount: number; // in USD
+  image?: string;
+  shipping_method?: string;
+  estimated_delivery?: string;
+  availability?: string;
+  quantity_limit?: number;
+}
+
+export type Rewards = Reward[];
+
+export interface Profile {
+  id?: string;
+  location: string;
+  timezone: string;
+  bio: string;
+  social_links: string; // JSON stringified object
+  number: string;
+  first_name: string;
+  last_name: string;
+  display_image: string;
+}
+
+// 用户支持的项目类型，包含项目信息和用户的退款状态
+export type BackedProject = ProjectInfo & {
+  refund_at: string;           // 退款时间，如果有值说明用户退款过，如果为空字符串说明用户未退款过
 };

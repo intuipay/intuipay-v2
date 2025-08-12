@@ -2,6 +2,7 @@ import { betterAuth } from 'better-auth';
 import { db } from './db';
 
 export const auth = betterAuth({
+  baseURL: process.env.NEXT_PUBLIC_DASHBOARD_URL,
   advanced: {
     crossSubDomainCookies: {
       enabled: true
@@ -10,21 +11,5 @@ export const auth = betterAuth({
   database: {
     db,
     type: 'sqlite',
-  },
-  emailAndPassword: {
-    enabled: true,
-    requireEmailVerification: true,
-  },
-  socialProviders: {
-    github: {
-      enabled: true,
-      clientId: process.env.GITHUB_CLIENT_ID!,
-      clientSecret: process.env.GITHUB_CLIENT_SECRET!,
-    },
-    google: {
-      enabled: true,
-      clientId: process.env.GOOGLE_CLIENT_ID!,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-    },
   },
 })
