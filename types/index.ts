@@ -152,6 +152,9 @@ export type ProjectInfo = {
   deleted_at?: string;
   updated_at: string;
   campaign_id?: number; // 区块链上的活动id，每个项目不同
+  networks?: string;
+  tokens?: string;
+  wallets: string;
 }
 
 export type ProjectFilter = {

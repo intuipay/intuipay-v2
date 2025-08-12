@@ -13,9 +13,9 @@ export const getDonationProjectBySlug = cache(async function getDonationProjectB
 
   project.project_slug = slug; // 确保 slug 正确
   // tidb endpoint返回的是string，所以需要手动转为json
-  project.networks = JSON.parse((project.networks as unknown) as string);
-  project.tokens = JSON.parse((project.tokens as unknown) as string);
-  project.wallets = JSON.parse((project.wallets as unknown) as string);
+  project.networks = project.networks ? JSON.parse((project.networks as unknown) as string) : [];
+  project.tokens = project.tokens ? JSON.parse((project.tokens as unknown) as string) : {};
+  project.wallets = project.wallets ? JSON.parse((project.wallets as unknown) as string) : {};
 
   // TODO: 给每个项目都加了 edu 测试环境配置，记得删掉
   project.networks?.push('edu-testnet');
@@ -120,10 +120,16 @@ export const getProjectDetail = cache(async function getProjectDetail(
     searchParams.set('slug', slug);
   }
   const data = await fetchTidb<ProjectInfo>(`/project_detailed?${searchParams.toString()}`);
+  if (data.length === 0) {
+    return null;
+  }
   const {
     amount,
     goal_amount,
     campaign_id,
+    networks,
+    tokens,
+    wallets,
     ...rest
   } = data[ 0 ];
   return {
@@ -134,9 +140,9 @@ export const getProjectDetail = cache(async function getProjectDetail(
     // 测试的众筹合约信息，等后台接入钱包后，应该从后台读取
     project_slug: slug,
     campaign_id: campaign_id ? Number(campaign_id) : undefined, // 每个众筹项目都应该有一个区块链上的 campaign_id
-    networks: ['ethereum-sepolia'],
-    tokens: { 'ethereum-sepolia': ['usdc'] },
-    wallets: { 'ethereum-sepolia': '0xbDE5c24B7c8551f93B95a8f27C6d926B3bCcF5aD' }, // 众筹合约地址
+    networks: networks ? JSON.parse(networks) : ['ethereum-sepolia'],
+    tokens: tokens ? JSON.parse(tokens) : { 'ethereum-sepolia': ['usdc'] },
+    wallets: wallets ? JSON.parse(wallets) : { 'ethereum-sepolia': '0xbDE5c24B7c8551f93B95a8f27C6d926B3bCcF5aD' }, // 众筹合约地址
   };
 });
 

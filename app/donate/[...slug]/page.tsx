@@ -52,8 +52,11 @@ export default async function DonatePage({
   }
 
   const projectDetail = await getProjectDetail(slug);
+  if (!projectDetail) {
+    return notFound();
+  }
   // 目前返回的type是 '101' ，所以不能用全等号
-  if (projectDetail && projectDetail.type == ProjectTypes.Crownfunding) {
+  if (projectDetail.type == ProjectTypes.Crownfunding) {
     return <CrowdFundingPageComp
       project={projectDetail}
       slug={slug}
