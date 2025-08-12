@@ -21,7 +21,7 @@ export const sectionMotionVariants = {
       y: 0,
       transition: {
         duration: 0.5,
-        ease: "easeOut"
+        ease: 'easeOut'
       }
     }
   }
@@ -30,7 +30,7 @@ export const sectionMotionVariants = {
 // Common motion props for section containers
 export const sectionMotionProps = {
   variants: sectionMotionVariants.containerVariants,
-  initial: "hidden",
-  whileInView: "visible",
+  initial: 'hidden',
+  whileInView: 'visible',
   viewport: { once: true, amount: 0.1 }
 };

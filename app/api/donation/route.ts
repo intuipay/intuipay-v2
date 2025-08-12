@@ -2,8 +2,8 @@ import { fetchTidb } from '@/services/fetch-tidb';
 import { validateDonationTransaction } from '@/services/transaction-validator';
 import { BLOCKCHAIN_CONFIG } from '@/config/blockchain';
 import { getProjectDetail } from '@/lib/data';
-import { auth } from "@/lib/auth";
-import { headers } from "next/headers";
+import { auth } from '@/lib/auth';
+import { headers } from 'next/headers';
 import { ProjectTypes } from '@/data';
 
 export const runtime = 'edge';
@@ -34,7 +34,7 @@ export async function POST(req: Request) {
       // 使用已有的函数通过 project_slug 获取项目信息
       const project = await getProjectDetail(project_slug);
       if (project && project.wallets) {
-        project_wallet = project.wallets[network];
+        project_wallet = project.wallets[ network ];
         project_type = project.type;
       }
     } catch (e) {

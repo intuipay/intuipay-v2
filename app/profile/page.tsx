@@ -2,7 +2,7 @@ import ProfilePage from '@/app/_components/profile/profile-page';
 import { getProfile, getMyBacked, getMyProjects, getMyOrg } from '@/lib/data';
 import { Web3Provider } from '@/components/providers/web3-provider';
 import { headers } from 'next/headers';
-import { auth } from "@/lib/auth";
+import { auth } from '@/lib/auth';
 
 export const runtime = 'edge';
 
@@ -25,13 +25,13 @@ export default async function Page() {
   console.log('my organization', myOrg);
 
   const projectsParams = new URLSearchParams();
-  projectsParams.set("is_widget", "1");
-  projectsParams.set("start", "0");
-  projectsParams.set("pagesize", "100");
-  projectsParams.set("user_id", userId);
-  projectsParams.set("status", '10');
+  projectsParams.set('is_widget', '1');
+  projectsParams.set('start', '0');
+  projectsParams.set('pagesize', '100');
+  projectsParams.set('user_id', userId);
+  projectsParams.set('status', '10');
   if (myOrg?.id) {
-    projectsParams.set("org_id", myOrg.id.toString());
+    projectsParams.set('org_id', myOrg.id.toString());
   }
   const myProjects = await getMyProjects(projectsParams);
   console.log('my projects', myProjects);
