@@ -943,21 +943,21 @@
         "name": "networks",
         "type": "string",
         "required": 0,
-        "default": "",
+        "default": "{}",
         "description": ""
       },
       {
         "name": "tokens",
         "type": "string",
         "required": 0,
-        "default": "",
+        "default": "{}",
         "description": ""
       },
       {
         "name": "wallets",
         "type": "string",
         "required": 0,
-        "default": "",
+        "default": "{}",
         "description": ""
       },
       {
