@@ -1,7 +1,9 @@
 import { Metadata } from 'next';
-import { getDonationProjectBySlug } from '@/lib/data';
+import { getDonationProjectBySlug, getProjectDetail } from '@/lib/data';
 import DonationPageComp from '@/app/_components/donate/donate-page';
+import CrowdFundingPageComp from '@/app/_components/crowdfunding/donate-page';
 import { notFound } from 'next/navigation';
+import { ProjectTypes } from '@/data';
 
 export const runtime = 'edge';
 
@@ -47,6 +49,17 @@ export default async function DonatePage({
 
   if (!project) {
     return notFound();
+  }
+
+  const projectDetail = await getProjectDetail(slug);
+  if (!projectDetail) {
+    return notFound();
+  }
+  if (projectDetail.type === ProjectTypes.Crownfunding) {
+    return <CrowdFundingPageComp
+      project={projectDetail}
+      slug={slug}
+    />;
   }
 
   return <DonationPageComp

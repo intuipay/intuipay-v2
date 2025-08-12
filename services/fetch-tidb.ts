@@ -7,6 +7,7 @@ export async function fetchTidb<T>(
 ): Promise<T[]> {
   const credentials = btoa(process.env.TIDB_CLOUD_API_KEY || '');
   url = `${process.env.TIDB_CLOUD_ENDPOINT}${url}`;
+
   const response = await fetch(url, {
     headers: {
       Authorization: `Basic ${credentials}`,
