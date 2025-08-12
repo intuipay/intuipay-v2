@@ -19,7 +19,7 @@ export async function POST(req: Request) {
     return new Response(
       JSON.stringify({
         code: 0,
-        message: 'Email already exists',
+        message: 'Email already registered',
         data: existing.results[0].id,
       }),
       { status: 200 },
