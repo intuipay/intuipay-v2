@@ -10,6 +10,7 @@ import { authClient } from '@/lib/auth-client';
 import { GlobeIcon, CaretDownIcon, ListIcon, XLogoIcon, SignOutIcon } from '@phosphor-icons/react';
 import { User } from 'better-auth';
 import { Href } from '@react-types/shared';
+import { useRouter } from "next/navigation";
 
 const navLinks = [
   { href: '#', label: 'Donate' },
@@ -18,16 +19,23 @@ const navLinks = [
   { href: '#', label: 'Support' },
 ]
 
+const userMenuItems = [
+  { href: '/profile', label: 'Profile' },
+  { href: process.env.NEXT_PUBLIC_DASHBOARD_URL, label: 'Dashboard' },
+]
+
 interface SiteHeaderProps {
   user?: User | null;
 }
 
 export function SiteHeader({ user }: SiteHeaderProps) {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const router = useRouter();
 
   const handleSignOut = async () => {
-    await authClient.signOut()
-    setMobileMenuOpen(false)
+    setMobileMenuOpen(false);
+    await authClient.signOut();
+    router.replace("/");
   }
 
   return (
@@ -100,11 +108,13 @@ export function SiteHeader({ user }: SiteHeaderProps) {
                     )}
                   </div>
                 </div>
-                <DropdownMenuItem asChild>
-                  <Link href={process.env.NEXT_PUBLIC_DASHBOARD_URL as Href}>
-                    Dashboard
-                  </Link>
-                </DropdownMenuItem>
+                {userMenuItems.map((item) => (
+                  <DropdownMenuItem key={item.label} asChild>
+                    <Link href={item.href as Href}>
+                      {item.label}
+                    </Link>
+                  </DropdownMenuItem>
+                ))}
                 <DropdownMenuItem onClick={handleSignOut}>
                   <SignOutIcon className="mr-2 h-4 w-4" />
                   Sign out
@@ -196,7 +206,7 @@ export function SiteHeader({ user }: SiteHeaderProps) {
             {/* Mobile Action Buttons */}
             <div className="flex flex-col space-y-3 pt-2">
               {user ? (
-                /* User Info and Sign Out for authenticated users */
+                /* User Info and Actions for authenticated users */
                 <>
                   <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
                     <Avatar className="h-8 w-8">
@@ -220,18 +230,21 @@ export function SiteHeader({ user }: SiteHeaderProps) {
                     </div>
                   </div>
 
-                  <Button
-                    asChild
-                    className="text-base font-medium px-6 py-3 bg-white text-black rounded-[32px] border border-gray-200 hover:bg-gray-50 transition-colors"
-                    variant="ghost"
-                  >
-                    <Link
-                      href={process.env.NEXT_PUBLIC_DASHBOARD_URL as Href}
-                      onClick={() => setMobileMenuOpen(false)}
+                  {userMenuItems.map((item) => (
+                    <Button
+                      key={item.label}
+                      asChild
+                      className="text-base font-medium px-6 py-3 bg-white text-black rounded-[32px] border border-gray-200 hover:bg-gray-50 transition-colors"
+                      variant="ghost"
                     >
-                      Dashboard
-                    </Link>
-                  </Button>
+                      <Link
+                        href={item.href as Href}
+                        onClick={() => setMobileMenuOpen(false)}
+                      >
+                        {item.label}
+                      </Link>
+                    </Button>
+                  ))}
 
                   <Button
                     onClick={handleSignOut}
