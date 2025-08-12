@@ -13,6 +13,7 @@ export enum ProjectStatus {
   PaymentSuccessful,
   PaymentRefunded,
   PaymentCancelled,
+  Failed = 50,
   Archived = 100,
 }
 

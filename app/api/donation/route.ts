@@ -1,7 +1,10 @@
 import { fetchTidb } from '@/services/fetch-tidb';
 import { validateDonationTransaction } from '@/services/transaction-validator';
 import { BLOCKCHAIN_CONFIG } from '@/config/blockchain';
-import { getDonationProjectBySlug } from '@/lib/data';
+import { getProjectDetail } from '@/lib/data';
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
+import { ProjectTypes } from '@/data';
 
 export const runtime = 'edge';
 
@@ -23,14 +26,16 @@ export async function POST(req: Request) {
     // 验证交易哈希
     const { tx_hash, network, currency, amount, wallet_address, project_slug } = json;
 
-    // 获取项目钱包地址
+    // 获取项目钱包地址 或 众筹合约地址
     let project_wallet: string | undefined;
+    let project_type: number | undefined;
 
     try {
       // 使用已有的函数通过 project_slug 获取项目信息
-      const project = await getDonationProjectBySlug(project_slug);
+      const project = await getProjectDetail(project_slug);
       if (project && project.wallets) {
-        project_wallet = project.wallets[ network ];
+        project_wallet = project.wallets[network];
+        project_type = project.type;
       }
     } catch (e) {
       console.warn('Failed to fetch project wallet for validation:', e);
@@ -66,33 +71,45 @@ export async function POST(req: Request) {
       );
     }
 
-    // 执行交易验证（amount 已经在前端转换为最小单位）
-    const validationResult = await validateDonationTransaction(
-      network,
-      tx_hash,
-      project_wallet, // expectedTo - 项目钱包地址
-      BigInt(amount), // 前端已经转换为最小单位，直接转换为 BigInt
-      wallet_address, // expectedFrom - 捐赠者钱包地址
-      currencyConfig
-    );
-
-    // 如果交易验证失败，返回错误
-    if (!validationResult.isValid) {
-      return new Response(
-        JSON.stringify({
-          code: 1,
-          message: `Transaction validation failed: ${validationResult.error}`,
-        }),
-        { status: 400 },
+    // 非众筹项目才要验证交易
+    if (project_type !== ProjectTypes.Crownfunding) {
+      // 执行交易验证（amount 已经在前端转换为最小单位）
+      const validationResult = await validateDonationTransaction(
+        network,
+        tx_hash,
+        project_wallet, // expectedTo - 项目钱包地址
+        BigInt(amount), // 前端已经转换为最小单位，直接转换为 BigInt
+        wallet_address, // expectedFrom - 捐赠者钱包地址
+        currencyConfig
       );
+
+      // 如果交易验证失败，返回错误
+      if (!validationResult.isValid) {
+        return new Response(
+          JSON.stringify({
+            code: 1,
+            message: `Transaction validation failed: ${validationResult.error}`,
+          }),
+          { status: 400 },
+        );
+      }
     }
 
     // 验证通过，保存到数据库
-    const data = await fetchTidb<{ id: number }>('/donation', 'POST', json);
+    const session = await auth.api.getSession({
+      headers: await headers(),
+    });
+    let user_id = null;
+    if (session?.user?.id) {
+      user_id = session.user.id;
+    }
+    json.user_id = user_id;
+    const data = await fetchTidb<{ last_insert_id: number }>('/donation', 'POST', json);
+    console.log('save donation result', data);
     return new Response(
       JSON.stringify({
         code: 0,
-        data: data[ 0 ].id,
+        data: data[ 0 ].last_insert_id,
         validation: {
           verified: true,
         },
