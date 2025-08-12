@@ -1,11 +1,11 @@
-"use client"
+'use client'
 
-import { Button } from "@/components/ui/button"
-import { Separator } from "@/components/ui/separator"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { useState } from "react"
+import { Button } from '@/components/ui/button'
+import { Separator } from '@/components/ui/separator'
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { useState } from 'react'
 import {
   TextB as TextBIcon,
   TextItalic as TextItalicIcon,
@@ -18,7 +18,7 @@ import {
   Link as LinkIcon,
   Image as ImageIcon,
 } from '@phosphor-icons/react';
-import type { EditorAction } from "@/types/editor"
+import type { EditorAction } from '@/types/editor'
 
 interface EditorToolbarProps {
   onAction: (action: EditorAction) => void
@@ -26,20 +26,20 @@ interface EditorToolbarProps {
 }
 
 export function EditorToolbar({ onAction, disabled = false }: EditorToolbarProps) {
-  const [linkUrl, setLinkUrl] = useState("")
-  const [imageUrl, setImageUrl] = useState("")
+  const [linkUrl, setLinkUrl] = useState('')
+  const [imageUrl, setImageUrl] = useState('')
   const [isLinkDialogOpen, setIsLinkDialogOpen] = useState(false)
   const [isImageDialogOpen, setIsImageDialogOpen] = useState(false)
 
   const handleLinkSubmit = () => {
-    onAction({ type: "link", url: linkUrl })
-    setLinkUrl("")
+    onAction({ type: 'link', url: linkUrl })
+    setLinkUrl('')
     setIsLinkDialogOpen(false)
   }
 
   const handleImageSubmit = () => {
-    onAction({ type: "image", url: imageUrl })
-    setImageUrl("")
+    onAction({ type: 'image', url: imageUrl })
+    setImageUrl('')
     setIsImageDialogOpen(false)
   }
 
@@ -49,7 +49,7 @@ export function EditorToolbar({ onAction, disabled = false }: EditorToolbarProps
         <Button
           variant="ghost"
           size="sm"
-            onClick={() => onAction({ type: "heading", level: 1 })}
+            onClick={() => onAction({ type: 'heading', level: 1 })}
           title="Heading 1"
           className="h-8 w-8 p-0"
           disabled={disabled}
@@ -59,7 +59,7 @@ export function EditorToolbar({ onAction, disabled = false }: EditorToolbarProps
         <Button
           variant="ghost"
           size="sm"
-          onClick={() => onAction({ type: "heading", level: 2 })}
+          onClick={() => onAction({ type: 'heading', level: 2 })}
           title="Heading 2"
           className="h-8 w-8 p-0"
           disabled={disabled}
@@ -69,7 +69,7 @@ export function EditorToolbar({ onAction, disabled = false }: EditorToolbarProps
         <Button
           variant="ghost"
           size="sm"
-          onClick={() => onAction({ type: "paragraph" })}
+          onClick={() => onAction({ type: 'paragraph' })}
           title="Underline"
           className="h-8 w-8 p-0"
           disabled={disabled}
@@ -82,7 +82,7 @@ export function EditorToolbar({ onAction, disabled = false }: EditorToolbarProps
         <Button
           variant="ghost"
           size="sm"
-          onClick={() => onAction({ type: "bold" })}
+          onClick={() => onAction({ type: 'bold' })}
           title="Bold (Ctrl+B)"
           className="h-8 w-8 p-0"
           disabled={disabled}
@@ -92,7 +92,7 @@ export function EditorToolbar({ onAction, disabled = false }: EditorToolbarProps
         <Button
           variant="ghost"
           size="sm"
-          onClick={() => onAction({ type: "italic" })}
+          onClick={() => onAction({ type: 'italic' })}
           title="Italic (Ctrl+I)"
           className="h-8 w-8 p-0"
           disabled={disabled}
@@ -102,7 +102,7 @@ export function EditorToolbar({ onAction, disabled = false }: EditorToolbarProps
         <Button
           variant="ghost"
           size="sm"
-          onClick={() => onAction({ type: "underline" })}
+          onClick={() => onAction({ type: 'underline' })}
           title="Underline"
           className="h-8 w-8 p-0"
           disabled={disabled}
@@ -112,7 +112,7 @@ export function EditorToolbar({ onAction, disabled = false }: EditorToolbarProps
         <Button
           variant="ghost"
           size="sm"
-          onClick={() => onAction({ type: "unordered-list" })}
+          onClick={() => onAction({ type: 'unordered-list' })}
           title="Bullet List"
           className="h-8 w-8 p-0"
           disabled={disabled}
@@ -122,7 +122,7 @@ export function EditorToolbar({ onAction, disabled = false }: EditorToolbarProps
         <Button
           variant="ghost"
           size="sm"
-          onClick={() => onAction({ type: "ordered-list" })}
+          onClick={() => onAction({ type: 'ordered-list' })}
           title="Numbered List"
           className="h-8 w-8 p-0"
           disabled={disabled}
@@ -152,7 +152,7 @@ export function EditorToolbar({ onAction, disabled = false }: EditorToolbarProps
                   value={linkUrl}
                   onChange={(e) => setLinkUrl(e.target.value)}
                   placeholder="https://example.com"
-                  onKeyDown={(e) => e.key === "Enter" && handleLinkSubmit()}
+                  onKeyDown={(e) => e.key === 'Enter' && handleLinkSubmit()}
                 />
               </div>
               <div className="flex justify-end gap-2">
@@ -183,7 +183,7 @@ export function EditorToolbar({ onAction, disabled = false }: EditorToolbarProps
                   value={imageUrl}
                   onChange={(e) => setImageUrl(e.target.value)}
                   placeholder="https://example.com/image.jpg"
-                  onKeyDown={(e) => e.key === "Enter" && handleImageSubmit()}
+                  onKeyDown={(e) => e.key === 'Enter' && handleImageSubmit()}
                 />
               </div>
               <div className="flex justify-end gap-2">

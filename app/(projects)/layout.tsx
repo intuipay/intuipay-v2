@@ -1,6 +1,6 @@
 import { SiteHeader } from '@/components/site-header'
 import { SiteFooter } from '@/components/site-footer'
-import { auth } from "@/lib/auth";
+import { auth } from '@/lib/auth';
 import { headers } from 'next/headers';
 
 export const runtime = 'edge';

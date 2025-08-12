@@ -1,9 +1,9 @@
-"use client"
+'use client'
 
-import { useMemo } from "react"
-import ReactMarkdown from "react-markdown"
-import remarkGfm from "remark-gfm"
-import remarkBreaks from "remark-breaks"
+import { useMemo } from 'react'
+import ReactMarkdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
+import remarkBreaks from 'remark-breaks'
 
 interface MarkdownPreviewProps {
   content: string
@@ -11,12 +11,12 @@ interface MarkdownPreviewProps {
   minHeight?: string
 }
 
-export function MarkdownPreview({ content, className = "", minHeight = "500px" }: MarkdownPreviewProps) {
+export function MarkdownPreview({ content, className = '', minHeight = '500px' }: MarkdownPreviewProps) {
   const components = useMemo(
     () => ({
       code({ node, inline, className, children, ...props }: any) {
-        const match = /language-(\w+)/.exec(className || "")
-        const language = match ? match[1] : ""
+        const match = /language-(\w+)/.exec(className || '')
+        const language = match ? match[ 1 ] : ''
 
         return !inline ? (
           <div className="relative">
@@ -27,7 +27,7 @@ export function MarkdownPreview({ content, className = "", minHeight = "500px" }
             )}
             <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto my-4">
               <code className="text-sm font-mono" {...props}>
-                {String(children).replace(/\n$/, "")}
+                {String(children).replace(/\n$/, '')}
               </code>
             </pre>
           </div>
@@ -105,8 +105,8 @@ export function MarkdownPreview({ content, className = "", minHeight = "500px" }
       img({ src, alt }: any) {
         return (
           <img
-            src={src || "/placeholder.svg?height=200&width=400"}
-            alt={alt || "Image"}
+            src={src || '/placeholder.svg?height=200&width=400'}
+            alt={alt || 'Image'}
             className="max-w-full h-auto rounded-lg shadow-md my-4 border"
           />
         )

@@ -9,6 +9,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { authClient } from '@/lib/auth-client';
 import { GlobeIcon, CaretDownIcon, ListIcon, XLogoIcon, SignOutIcon } from '@phosphor-icons/react';
 import { User } from 'better-auth';
+import { Href } from '@react-types/shared';
 
 const navLinks = [
   { href: '#', label: 'Donate' },
@@ -76,9 +77,9 @@ export function SiteHeader({ user }: SiteHeaderProps) {
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" className="h-10 w-10 rounded-full p-0">
                   <Avatar className="h-9 w-9">
-                    <AvatarImage 
-                      src={user.image || ''} 
-                      alt={user.name || user.email || 'User'} 
+                    <AvatarImage
+                      src={user.image || ''}
+                      alt={user.name || user.email || 'User'}
                     />
                     <AvatarFallback className="bg-blue-600 text-white">
                       {(user.name || user.email || 'U').charAt(0).toUpperCase()}
@@ -100,7 +101,7 @@ export function SiteHeader({ user }: SiteHeaderProps) {
                   </div>
                 </div>
                 <DropdownMenuItem asChild>
-                  <Link href="https://dash.intuipay.xyz/">
+                  <Link href={process.env.NEXT_PUBLIC_DASHBOARD_URL as Href}>
                     Dashboard
                   </Link>
                 </DropdownMenuItem>
@@ -120,7 +121,7 @@ export function SiteHeader({ user }: SiteHeaderProps) {
               >
                 <Link
                   aria-label="Sign in"
-                  href="https://dash.intuipay.xyz/login"
+                  href={`${process.env.NEXT_PUBLIC_DASHBOARD_URL}/login`}
                   target="_blank"
                 >
                   Sign in
@@ -132,7 +133,7 @@ export function SiteHeader({ user }: SiteHeaderProps) {
                 className="text-base font-medium bg-black rounded-[32px] text-white hover:bg-gray-800 transition-colors px-6 py-2"
               >
                 <Link
-                  href="https://dash.intuipay.xyz/signup"
+                  href={`${process.env.NEXT_PUBLIC_DASHBOARD_URL}/signup`}
                   target="_blank"
                   aria-label="Get Started"
                 >
@@ -201,9 +202,9 @@ export function SiteHeader({ user }: SiteHeaderProps) {
                 <>
                   <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
                     <Avatar className="h-8 w-8">
-                      <AvatarImage 
-                        src={user.image || ''} 
-                        alt={user.name || user.email || 'User'} 
+                      <AvatarImage
+                        src={user.image || ''}
+                        alt={user.name || user.email || 'User'}
                       />
                       <AvatarFallback className="bg-blue-600 text-white text-sm">
                         {(user.name || user.email || 'U').charAt(0).toUpperCase()}
@@ -220,21 +221,21 @@ export function SiteHeader({ user }: SiteHeaderProps) {
                       )}
                     </div>
                   </div>
-                  
+
                   <Button
                     asChild
                     className="text-base font-medium px-6 py-3 bg-white text-black rounded-[32px] border border-gray-200 hover:bg-gray-50 transition-colors"
                     variant="ghost"
                   >
                     <Link
-                      href="https://dash.intuipay.xyz/"
+                      href={process.env.NEXT_PUBLIC_DASHBOARD_URL as Href}
                       target="_blank"
                       onClick={() => setMobileMenuOpen(false)}
                     >
                       Dashboard
                     </Link>
                   </Button>
-                  
+
                   <Button
                     onClick={handleSignOut}
                     className="text-base font-medium bg-red-600 rounded-[32px] text-white hover:bg-red-700 transition-colors px-6 py-3"
@@ -253,20 +254,20 @@ export function SiteHeader({ user }: SiteHeaderProps) {
                   >
                     <Link
                       aria-label="Sign in"
-                      href="https://dash.intuipay.xyz/login"
+                      href={`${process.env.NEXT_PUBLIC_DASHBOARD_URL}/login`}
                       target="_blank"
                       onClick={() => setMobileMenuOpen(false)}
                     >
                       Sign in
                     </Link>
                   </Button>
-                  
+
                   <Button
                     asChild
                     className="text-base font-medium bg-black rounded-[32px] text-white hover:bg-gray-800 transition-colors px-6 py-3"
                   >
                     <Link
-                      href="https://dash.intuipay.xyz/signup"
+                      href={`${process.env.NEXT_PUBLIC_DASHBOARD_URL}/signup`}
                       target="_blank"
                       aria-label="Get Started"
                       onClick={() => setMobileMenuOpen(false)}
