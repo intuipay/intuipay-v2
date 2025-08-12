@@ -9,8 +9,8 @@ import DashboardSection from '@/app/_components/waitlist/dashboard-section';
 import TestimonialSection from '@/app/_components/waitlist/testimonial-section';
 import CtaSection from '@/app/_components/waitlist/cta-section';
 import FooterLinksSection from '@/app/_components/waitlist/footer-links-section';
-import { auth } from "@/lib/auth";
-import { headers } from "next/headers";
+import { auth } from '@/lib/auth';
+import { headers } from 'next/headers';
 
 export const runtime = 'edge';
 
@@ -18,7 +18,7 @@ export default async function Home() {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
-  console.log("session in landing page", session);
+  console.log('session in landing page', session);
   return (
     <>
       <StructuredData />

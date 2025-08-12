@@ -43,7 +43,7 @@ export default function ProfilePage({ profile, myBacked, myProjects, user }: Pro
                   />
                 ) : (
                   <div className="w-full h-full bg-blue-600 flex items-center justify-center text-white text-xl font-semibold">
-                    {profile.first_name?.[0]}{profile.last_name?.[0]}
+                    {profile.first_name?.[ 0 ]}{profile.last_name?.[ 0 ]}
                   </div>
                 )}
               </div>

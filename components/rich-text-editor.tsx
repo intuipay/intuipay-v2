@@ -1,14 +1,14 @@
-"use client"
+'use client'
 
-import type React from "react"
-import { useState, useRef, useCallback, useEffect } from "react"
-import { Card, CardContent } from "@/components/ui/card"
-import { Tabs, TabsContent } from "@/components/ui/tabs"
-import { Textarea } from "@/components/ui/textarea"
-import { EditorToolbar } from "@/components/editor-toolbar"
-import { MarkdownPreview } from "@/components/markdown-preview"
-import { cn } from "@/lib/utils"
-import type { EditorAction } from "@/types/editor"
+import type React from 'react'
+import { useState, useRef, useCallback, useEffect } from 'react'
+import { Card, CardContent } from '@/components/ui/card'
+import { Tabs, TabsContent } from '@/components/ui/tabs'
+import { Textarea } from '@/components/ui/textarea'
+import { EditorToolbar } from '@/components/editor-toolbar'
+import { MarkdownPreview } from '@/components/markdown-preview'
+import { cn } from '@/lib/utils'
+import type { EditorAction } from '@/types/editor'
 
 interface RichTextEditorProps {
   initialValue?: string
@@ -20,15 +20,15 @@ interface RichTextEditorProps {
 }
 
 export default function RichTextEditor({
-  initialValue = "",
-  placeholder = "Start writing your markdown...",
+  initialValue = '',
+  placeholder = 'Start writing your markdown...',
   onChange,
-  className = "",
-  height = "200px",
+  className = '',
+  height = '200px',
   disabled = false,
 }: RichTextEditorProps) {
   const [value, setValue] = useState(initialValue)
-  const [activeTab, setActiveTab] = useState<"write" | "preview" | "split">("write")
+  const [activeTab, setActiveTab] = useState<'write' | 'preview' | 'split'>('write')
   const textareaRef = useRef<HTMLTextAreaElement>(null)
 
   // Keep latest onChange in ref to avoid effect loops when parent passes new function each render
@@ -60,47 +60,47 @@ export default function RichTextEditor({
       let newCursorPos = start
 
       switch (action.type) {
-        case "bold":
-          newValue = value.substring(0, start) + `**${selectedText || "bold text"}**` + value.substring(end)
+        case 'bold':
+          newValue = value.substring(0, start) + `**${selectedText || 'bold text'}**` + value.substring(end)
           newCursorPos = start + 2
           break
-        case "italic":
-          newValue = value.substring(0, start) + `*${selectedText || "italic text"}*` + value.substring(end)
+        case 'italic':
+          newValue = value.substring(0, start) + `*${selectedText || 'italic text'}*` + value.substring(end)
           newCursorPos = start + 1
           break
-        case "heading":
+        case 'heading':
           const level = action.level || 1
-          const prefix = "#".repeat(level) + " "
+          const prefix = '#'.repeat(level) + ' '
           const headingText = selectedText || `Heading ${level}`
           newValue = value.substring(0, start) + prefix + headingText + value.substring(end)
           newCursorPos = start + prefix.length
           break
-        case "link":
-          const linkText = selectedText || "link text"
-          const linkUrl = action.url || "https://example.com"
+        case 'link':
+          const linkText = selectedText || 'link text'
+          const linkUrl = action.url || 'https://example.com'
           newValue = value.substring(0, start) + `[${linkText}](${linkUrl})` + value.substring(end)
           newCursorPos = start + 1
           break
-        case "image":
-          const altText = selectedText || "alt text"
-          const imageUrl = action.url || "https://example.com/image.jpg"
+        case 'image':
+          const altText = selectedText || 'alt text'
+          const imageUrl = action.url || 'https://example.com/image.jpg'
           newValue = value.substring(0, start) + `![${altText}](${imageUrl})` + value.substring(end)
           newCursorPos = start + 2
           break
-        case "unordered-list":
-          newValue = value.substring(0, start) + `- ${selectedText || "list item"}` + value.substring(end)
+        case 'unordered-list':
+          newValue = value.substring(0, start) + `- ${selectedText || 'list item'}` + value.substring(end)
           newCursorPos = start + 2
           break
-        case "ordered-list":
-          newValue = value.substring(0, start) + `1. ${selectedText || "list item"}` + value.substring(end)
+        case 'ordered-list':
+          newValue = value.substring(0, start) + `1. ${selectedText || 'list item'}` + value.substring(end)
           newCursorPos = start + 3
           break
-        case "paragraph":
-          newValue = value.substring(0, start) + `\n\n${selectedText || "paragraph"}\n\n` + value.substring(end)
+        case 'paragraph':
+          newValue = value.substring(0, start) + `\n\n${selectedText || 'paragraph'}\n\n` + value.substring(end)
           newCursorPos = start + 2
           break
-        case "underline":
-          const underlineText = selectedText || "underlined text"
+        case 'underline':
+          const underlineText = selectedText || 'underlined text'
           newValue = value.substring(0, start) + `<u>${underlineText}</u>` + value.substring(end)
           newCursorPos = selectedText ? start + underlineText.length + 7 : start + 3
           break
@@ -118,7 +118,7 @@ export default function RichTextEditor({
   )
 
   return (
-    <div className={cn("w-full", className)}>
+    <div className={cn('w-full', className)}>
       <Card>
         <CardContent className="p-0">
           <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as typeof activeTab)}>

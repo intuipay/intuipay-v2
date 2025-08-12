@@ -108,7 +108,7 @@ export default function DonationStep1({
         if (month && year) {
           const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 
                              'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-          return `${monthNames[month - 1]} ${year}`;
+          return `${monthNames[ month - 1 ]} ${year}`;
         }
         return 'TBD';
       };
@@ -747,7 +747,7 @@ export default function DonationStep1({
             <Input
               className="text-sm h-12 flex-1 px-4 focus:outline-none"
               hasRing={false}
-              min={selectedReward ? selectedReward.amount.toString() : "0"}
+              min={selectedReward ? selectedReward.amount.toString() : '0'}
               onChange={onAmountChange}
               placeholder={!(isConnected || isPhantomConnected) ? 'Connect wallet first' : selectedReward ? selectedReward.amount.toString() : '1.0'}
               type="number"
@@ -763,7 +763,7 @@ export default function DonationStep1({
             <Input
               className="text-sm h-12 flex-1 px-4 focus:outline-none"
               hasRing={false}
-              min={selectedReward ? selectedReward.amount.toString() : "0"}
+              min={selectedReward ? selectedReward.amount.toString() : '0'}
               onChange={onDollarChange}
               placeholder={!(isConnected || isPhantomConnected) ? 'Connect wallet first' : selectedReward ? selectedReward.amount.toString() : '1.00'}
               type="number"
