@@ -122,7 +122,6 @@ export function SiteHeader({ user }: SiteHeaderProps) {
                 <Link
                   aria-label="Sign in"
                   href={`${process.env.NEXT_PUBLIC_DASHBOARD_URL}/login`}
-                  target="_blank"
                 >
                   Sign in
                 </Link>
@@ -134,7 +133,6 @@ export function SiteHeader({ user }: SiteHeaderProps) {
               >
                 <Link
                   href={`${process.env.NEXT_PUBLIC_DASHBOARD_URL}/signup`}
-                  target="_blank"
                   aria-label="Get Started"
                 >
                   Get Started
@@ -229,7 +227,6 @@ export function SiteHeader({ user }: SiteHeaderProps) {
                   >
                     <Link
                       href={process.env.NEXT_PUBLIC_DASHBOARD_URL as Href}
-                      target="_blank"
                       onClick={() => setMobileMenuOpen(false)}
                     >
                       Dashboard
@@ -255,7 +252,6 @@ export function SiteHeader({ user }: SiteHeaderProps) {
                     <Link
                       aria-label="Sign in"
                       href={`${process.env.NEXT_PUBLIC_DASHBOARD_URL}/login`}
-                      target="_blank"
                       onClick={() => setMobileMenuOpen(false)}
                     >
                       Sign in
@@ -268,7 +264,6 @@ export function SiteHeader({ user }: SiteHeaderProps) {
                   >
                     <Link
                       href={`${process.env.NEXT_PUBLIC_DASHBOARD_URL}/signup`}
-                      target="_blank"
                       aria-label="Get Started"
                       onClick={() => setMobileMenuOpen(false)}
                     >

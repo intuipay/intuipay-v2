@@ -38,7 +38,7 @@ export default async function Page() {
   
   return (
     <Web3Provider>
-      <ProfilePage profile={profile} myBacked={myBacked} myProjects={myProjects} />
+      <ProfilePage profile={profile} myBacked={myBacked} myProjects={myProjects} user={session?.user} />
     </Web3Provider>
   )
 }
