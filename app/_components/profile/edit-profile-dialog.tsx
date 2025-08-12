@@ -167,7 +167,7 @@ export function EditProfileDialog({ open, onOpenChange, profile, onProfileUpdate
                 }}
                 placeholder={
                   <span className="text-white text-xl font-semibold">
-                    {firstName?.[0] || ''}{lastName?.[0] || ''}
+                    {firstName?.[ 0 ] || ''}{lastName?.[ 0 ] || ''}
                   </span>
                 }
               />

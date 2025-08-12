@@ -72,7 +72,7 @@ export function RefundDialog({ open, onOpenChange, projectId, campaignId, contra
       connector.id === 'coinbaseWalletSDK' ? 'coinbase' :
         connector.id === 'walletConnect' ? 'wallet-connect' : 'wallet-connect'
     
-    return WALLET_OPTIONS.find(wallet => wallet.id === walletName) || WALLET_OPTIONS[2] // fallback to WalletConnect
+    return WALLET_OPTIONS.find(wallet => wallet.id === walletName) || WALLET_OPTIONS[ 2 ] // fallback to WalletConnect
   }
 
   const currentWallet = getCurrentWalletInfo()
