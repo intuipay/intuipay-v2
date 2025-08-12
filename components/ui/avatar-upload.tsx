@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-import React, { useCallback, useRef, useState, Dispatch, SetStateAction } from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { Slider } from "@/components/ui/slider";
-import slugify from "slugify";
-import { cn } from "@/lib/utils";
-import { APIResponse } from "@/types";
+import React, { useCallback, useRef, useState, Dispatch, SetStateAction } from 'react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+import { Slider } from '@/components/ui/slider';
+import slugify from 'slugify';
+import { cn } from '@/lib/utils';
+import { APIResponse } from '@/types';
 
 interface AvatarUploadProps {
   value?: string;
@@ -43,8 +43,8 @@ export function AvatarUpload({
   const containerRef = useRef<HTMLDivElement>(null);
 
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file && file.type.startsWith("image/")) {
+    const file = event.target.files?.[ 0 ];
+    if (file && file.type.startsWith('image/')) {
       const reader = new FileReader();
       reader.onload = (e) => {
         setSelectedImage(e.target?.result as string);
@@ -96,11 +96,11 @@ export function AvatarUpload({
 
   React.useEffect(() => {
     if (isDragging) {
-      document.addEventListener("mousemove", handleMouseMove);
-      document.addEventListener("mouseup", handleMouseUp);
+      document.addEventListener('mousemove', handleMouseMove);
+      document.addEventListener('mouseup', handleMouseUp);
       return () => {
-        document.removeEventListener("mousemove", handleMouseMove);
-        document.removeEventListener("mouseup", handleMouseUp);
+        document.removeEventListener('mousemove', handleMouseMove);
+        document.removeEventListener('mouseup', handleMouseUp);
       };
     }
   }, [isDragging, handleMouseMove, handleMouseUp]);
@@ -109,7 +109,7 @@ export function AvatarUpload({
     if (!imageRef.current || !canvasRef.current) return null;
 
     const canvas = canvasRef.current;
-    const ctx = canvas.getContext("2d");
+    const ctx = canvas.getContext('2d');
     if (!ctx) return null;
 
     const cropSize = 300;
@@ -134,7 +134,7 @@ export function AvatarUpload({
     ctx.drawImage(imageRef.current, drawX, drawY, scaledWidth, scaledHeight);
     ctx.restore();
 
-    return canvas.toDataURL("image/png");
+    return canvas.toDataURL('image/png');
   };
 
   const uploadImage = async (file: File) => {
@@ -142,22 +142,22 @@ export function AvatarUpload({
       const { type, name } = file;
       const slugifiedName = slugify(name, { lower: true, strict: true, trim: true });
 
-      const presignResponse = await fetch("https://dash.intuipay.xyz/api/upload", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+      const presignResponse = await fetch(`${process.env.NEXT_PUBLIC_DASHBOARD_URL}/api/upload`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name: slugifiedName }),
       });
-      if (!presignResponse.ok) throw new Error("Failed to get upload URL");
+      if (!presignResponse.ok) throw new Error('Failed to get upload URL');
 
       const { data: { preSignedUrl, objectKey } } = (await presignResponse.json()) as APIResponse<{ preSignedUrl: string; objectKey: string; }>;
 
-      const uploadResponse = await fetch(preSignedUrl, { method: "PUT", headers: { "Content-Type": type }, body: file });
-      if (!uploadResponse.ok) throw new Error("Failed to upload file");
+      const uploadResponse = await fetch(preSignedUrl, { method: 'PUT', headers: { 'Content-Type': type }, body: file });
+      if (!uploadResponse.ok) throw new Error('Failed to upload file');
 
       const onlineUrl = `${process.env.NEXT_PUBLIC_ASSET_DOMAIN}/${objectKey}`;
       return onlineUrl;
     } catch (error) {
-      console.error("Upload error:", error);
+      console.error('Upload error:', error);
       throw new Error(error instanceof Error ? error.message : String(error));
     }
   };
@@ -165,7 +165,7 @@ export function AvatarUpload({
   const handleConfirm = async () => {
     setIsUploading(true);
     try {
-      const file = fileInputRef.current?.files?.[0];
+      const file = fileInputRef.current?.files?.[ 0 ];
       const croppedDataUrl = getCroppedImage();
       if (croppedDataUrl && file) {
         setIsOpen(false);
@@ -174,7 +174,7 @@ export function AvatarUpload({
         onUploaded(onlineUrl, croppedDataUrl);
       }
     } catch (error) {
-      console.error("Error in handleConfirm", error);
+      console.error('Error in handleConfirm', error);
     } finally {
       setIsUploading(false);
     }
@@ -185,11 +185,11 @@ export function AvatarUpload({
 
   return (
     <>
-      <div className={cn("relative inline-block", className)}>
+      <div className={cn('relative inline-block', className)}>
         <div
           className={cn(
-            "group relative flex items-center justify-center overflow-hidden rounded-full bg-blue-600 text-white cursor-pointer",
-            disabled && "opacity-60 cursor-not-allowed",
+            'group relative flex items-center justify-center overflow-hidden rounded-full bg-blue-600 text-white cursor-pointer',
+            disabled && 'opacity-60 cursor-not-allowed',
           )}
           style={{ width: size, height: size }}
           onClick={() => !disabled && fileInputRef.current?.click()}
@@ -224,8 +224,8 @@ export function AvatarUpload({
                   className="absolute left-1/2 top-1/2 origin-center"
                   style={{
                     transform: `translate(-50%, -50%) translate(${position.x}px, ${position.y}px) scale(${zoom})`,
-                    userSelect: "none",
-                    WebkitUserDrag: "none",
+                    userSelect: 'none',
+                    WebkitUserDrag: 'none',
                   }}
                   draggable={false}
                   onLoad={handleImageLoad}
@@ -237,7 +237,7 @@ export function AvatarUpload({
               <Button type="button" variant="outline" size="sm" onClick={handleZoomOut}>-</Button>
               <Slider
                 value={[zoom] as unknown as number[]}
-                onValueChange={(v) => setZoom(v[0] as unknown as number)}
+                onValueChange={(v) => setZoom(v[ 0 ] as unknown as number)}
                 max={3}
                 min={0.1}
                 step={0.05}
@@ -246,7 +246,7 @@ export function AvatarUpload({
             </div>
             <div className="flex justify-end gap-2 pt-2">
               <Button type="button" variant="outline" onClick={() => setIsOpen(false)} disabled={isUploading}>取消</Button>
-              <Button type="button" onClick={handleConfirm} disabled={isUploading}>保存{isUploading && "..."}</Button>
+              <Button type="button" onClick={handleConfirm} disabled={isUploading}>保存{isUploading && '...'}</Button>
             </div>
           </div>
         </DialogContent>

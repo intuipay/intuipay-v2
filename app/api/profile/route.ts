@@ -1,6 +1,6 @@
-import { fetchTidb } from "@/services/fetch-tidb";
-import { headers } from "next/headers";
-import { NextResponse } from "next/server";
+import { fetchTidb } from '@/services/fetch-tidb';
+import { headers } from 'next/headers';
+import { NextResponse } from 'next/server';
 
 export const runtime = 'edge';
 
@@ -13,7 +13,7 @@ export async function GET(req: Request) {
   } catch (e) {
     return NextResponse.json({
       code: 1,
-      message: "Failed to get profile"
+      message: 'Failed to get profile'
     })
   }
 }
@@ -27,7 +27,7 @@ export async function POST(req: Request) {
 
   console.log('Updating profile for user:', userId, location, timezone, bio, social_links, number, first_name, last_name, display_image);
   try {
-    const res = await fetchTidb(`/dash/my_profile`, 'POST', {
+    const res = await fetchTidb('/dash/my_profile', 'POST', {
       user_id: userId,
       location,
       timezone,
@@ -42,7 +42,7 @@ export async function POST(req: Request) {
   } catch (e) {
     return NextResponse.json({
       code: 1,
-      message: "Failed to submit profile",
+      message: 'Failed to submit profile',
     })
   }
 }

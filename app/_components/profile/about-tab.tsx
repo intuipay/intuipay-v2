@@ -48,7 +48,7 @@ export default function AboutTab({ profile }: AboutTabProps) {
             <div className="flex flex-wrap gap-3">
               {SocialMedias.map(sm => {
                 const key = sm.label.toLowerCase()
-                const url = socialLinks[key]
+                const url = socialLinks[ key ]
                 const Icon = sm.icon as any
                 const common = 'p-2 transition-colors'
                 if (url) {

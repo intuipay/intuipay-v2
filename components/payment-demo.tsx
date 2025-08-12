@@ -39,7 +39,7 @@ const fiatExchangeRates: Record<string, number> = {
 // 首页中用到的捐款的demo widget
 export default function PaymentDemo() {
   const [donationType, setDonationType] = useState<'crypto' | 'cash'>('crypto');
-  const [paymentMethod, setPaymentMethod] = useState(paymentMethods[0].value);
+  const [paymentMethod, setPaymentMethod] = useState(paymentMethods[ 0 ].value);
   const [dollar, setDollar] = useState<number | ''>(1);
   const [currency, setCurrency] = useState<string>('USD');
   const [targetCurrency, setTargetCurrency] = useState<string>('CNY');
@@ -53,7 +53,7 @@ export default function PaymentDemo() {
 
     // 根据当前支付方式和汇率计算美元价值
     if (value !== '' && typeof value === 'number') {
-      const rate = exchangeRates[paymentMethod as keyof typeof exchangeRates];
+      const rate = exchangeRates[ paymentMethod as keyof typeof exchangeRates ];
       const dollarValue = value * rate;
       setDollar(Number(dollarValue.toFixed(2)));
     } else {
@@ -69,7 +69,7 @@ export default function PaymentDemo() {
 
     // 根据当前支付方式和汇率计算加密货币数量
     if (value !== '' && typeof value === 'number') {
-      const rate = exchangeRates[paymentMethod as keyof typeof exchangeRates];
+      const rate = exchangeRates[ paymentMethod as keyof typeof exchangeRates ];
       const cryptoAmount = value / rate;
       setAmount(Number(cryptoAmount.toFixed(6)));
     } else {
@@ -85,7 +85,7 @@ export default function PaymentDemo() {
     const newAmount = 1;
     setAmount(newAmount);
 
-    const rate = exchangeRates[value as keyof typeof exchangeRates];
+    const rate = exchangeRates[ value as keyof typeof exchangeRates ];
     const dollarValue = newAmount * rate;
     setDollar(Number(dollarValue.toFixed(2)));
   }
@@ -252,8 +252,8 @@ function CashPaymentContent({
 
     // 计算并更新转换后的金额
     if (value !== '' && typeof value === 'number') {
-      const baseRate = fiatExchangeRates[currency] || 1;
-      const targetRate = fiatExchangeRates[targetCurrency] || 1;
+      const baseRate = fiatExchangeRates[ currency ] || 1;
+      const targetRate = fiatExchangeRates[ targetCurrency ] || 1;
 
       // 先转换为美元，再转换为目标货币
       const usdAmount = value / baseRate;
@@ -281,8 +281,8 @@ function CashPaymentContent({
     }
 
     if (typeof value === 'number') {
-      const baseRate = fiatExchangeRates[currency] || 1;
-      const targetRate = fiatExchangeRates[targetCurrency] || 1;
+      const baseRate = fiatExchangeRates[ currency ] || 1;
+      const targetRate = fiatExchangeRates[ targetCurrency ] || 1;
 
       // 从目标货币转换为美元，再转换为基础货币
       const usdAmount = value / targetRate;

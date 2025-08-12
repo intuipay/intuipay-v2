@@ -1,6 +1,6 @@
 import { fetchTidb } from '@/services/fetch-tidb';
-import { auth } from "@/lib/auth";
-import { headers } from "next/headers";
+import { auth } from '@/lib/auth';
+import { headers } from 'next/headers';
 
 export const runtime = 'edge';
 
@@ -10,12 +10,12 @@ export async function POST(req: Request) {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
-  let user_id = session?.user.id;
+  const user_id = session?.user.id;
   if (!user_id) {
     return new Response(
       JSON.stringify({
         code: 1,
-        message: `Failed to create refund: no user id specified`,
+        message: 'Failed to create refund: no user id specified',
       }),
       { status: 400 },
     );
@@ -27,7 +27,7 @@ export async function POST(req: Request) {
   return new Response(
     JSON.stringify({
       code: 0,
-      data: data[0].last_insert_id,
+      data: data[ 0 ].last_insert_id,
       validation: {
         verified: true,
       },
