@@ -5,6 +5,7 @@ import { MoneyIcon, ReceiptIcon, FilesIcon, ArrowUpRightIcon } from '@phosphor-i
 import { AnimatedCounter } from '@/components/animated-counter';
 import { motion } from 'framer-motion';
 import { sectionMotionVariants, sectionMotionProps } from './motion';
+import { Href } from '@react-types/shared';
 
 export default function DashboardSection() {
   const { itemVariants } = sectionMotionVariants;
@@ -105,7 +106,10 @@ export default function DashboardSection() {
               </div>
             </div>
 
-            <Link href="https://dash.intuipay.xyz" className="flex items-center gap-2 px-6 lg:px-8 py-3 lg:py-4 border border-black/70 rounded-full w-fit">
+            <Link
+              href={process.env.NEXT_PUBLIC_DASHBOARD_URL as Href}
+              className="flex items-center gap-2 px-6 lg:px-8 py-3 lg:py-4 border border-black/70 rounded-full w-fit"
+            >
               <span className="text-black/70 text-base md:text-xl font-semibold leading-tight md:leading-normal">
                 Create account
               </span>
