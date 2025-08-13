@@ -50,8 +50,10 @@ export default async function DonatePage({
   if (!project) {
     return notFound();
   }
+  console.log('project', slug, project);
 
   const projectDetail = await getProjectDetail(slug);
+  console.log('Project Detail:', projectDetail, slug);
   if (!projectDetail) {
     return notFound();
   }
