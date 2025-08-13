@@ -119,3 +119,45 @@ function getRewardById(rewardId: number, rewardsString: string): Reward | null {
     image: targetReward.image || '', // 确保有图片字段
   };
 }
+
+type RefundProps = BaseProps & {
+  amount: number;
+  hashId: string;
+  projectName: string;
+  to: string;
+  wallet: string;
+}
+
+export async function sendRefundEmail(params: RefundProps) {
+  try {
+    const res = await fetch('https://resend.intuipay.xyz', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        type: 'donated',
+        ...params,
+      }),
+    });
+    if (!res.ok) {
+      throw new Error(`Failed to send donation email: ${res.status}`);
+    }
+    return await res.json();
+  } catch (err) {
+    console.error('sendDonationEmail error:', err);
+    return null;
+  }
+}
+
+export function getRefundProps(project: ProjectInfo, refundInfo: {
+  tx_hash: string;
+  wallet_address: string;
+  to: string;
+}): RefundProps {
+  return {
+    amount: 1, // TODO: 查询数据库获取退款金额
+    hashId: refundInfo.tx_hash,
+    projectName: project.project_name,
+    to: refundInfo.to,
+    wallet: refundInfo.wallet_address, 
+  }
+}
