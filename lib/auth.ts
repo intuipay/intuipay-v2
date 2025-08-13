@@ -12,4 +12,12 @@ export const auth = betterAuth({
     db,
     type: 'sqlite',
   },
+  trustedOrigins: [
+    "https://intuipay.xyz",
+    "https://dash.intuipay.xyz",
+    "https://dev.intuipay.xyz",
+    "https://dash.dev.intuipay.xyz",
+    "https://crowdfunding.dev.intuipay.xyz",
+    "http://localhost:3000",
+  ],
 })
