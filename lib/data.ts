@@ -1,6 +1,6 @@
 import { cache } from 'react';
 import { fetchTidb } from '@/services/fetch-tidb';
-import { ProjectInfo, ProjectFilter, Donation, Donations, Update, Updates, Profile, OrganizationInfo, BackedProject } from '@/types';
+import { ProjectInfo, ProjectFilter, Donation, Donations, Update, Updates, Profile, OrganizationInfo, BackedProject, UserRefund } from '@/types';
 import { DEFAULT_PROFILE_VALUES } from '@/data';
 
 type CountResult = {
@@ -120,6 +120,7 @@ export const getProjectDetail = cache(async function getProjectDetail(
     searchParams.set('slug', slug);
   }
   const data = await fetchTidb<ProjectInfo>(`/project_detailed?${searchParams.toString()}`);
+  console.log('getProjectDetail data:', data);
   if (data.length === 0) {
     return null;
   }
@@ -173,4 +174,21 @@ export const getUpdatesCount = cache(async function getUpdatesCount(projectId: n
   searchParams.set('project_id', projectId.toString());
   const data = await fetchTidb<CountResult>(`/project_updates_count?${searchParams.toString()}`);
   return data[ 0 ].count;
+});
+
+export const getUserRefund = cache(async function getUserRefund(userId: string, projectId: number): Promise<UserRefund> {
+  const searchParams = new URLSearchParams();
+  searchParams.set('user_id', userId);
+  searchParams.set('project_id', projectId.toString());
+  const data = await fetchTidb<UserRefund>(`/my_amount_in_project?${searchParams.toString()}`);
+  const {
+    amount, // crypto金额
+    count,  // 捐款次数
+    dollar  // 对应美元金额
+  } = data [ 0 ];
+  return {
+    amount: Number(amount),
+    count: Number(count),
+    dollar: Number(dollar)
+  }
 });
