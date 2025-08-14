@@ -2,8 +2,6 @@ import ProjectHomepage from '@/app/_components/projects/project-homepage';
 import ProjectList, { ProjectListSkeleton } from '@/app/_components/projects/project-list';
 import { Suspense } from 'react';
 
-export const runtime = 'edge';
-
 export const metadata = {
   title: 'Projects',
   description: 'Projects',

@@ -3,8 +3,6 @@ import { SiteFooter } from '@/components/site-footer'
 import { auth } from '@/lib/auth';
 import { headers } from 'next/headers';
 
-export const runtime = 'edge';
-
 export default async function ProjectsLayout({
   children,
 }: {

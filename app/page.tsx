@@ -12,8 +12,6 @@ import FooterLinksSection from '@/app/_components/waitlist/footer-links-section'
 import { auth } from '@/lib/auth';
 import { headers } from 'next/headers';
 
-export const runtime = 'edge';
-
 export default async function Home() {
   const session = await auth.api.getSession({
     headers: await headers(),

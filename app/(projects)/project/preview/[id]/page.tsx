@@ -1,13 +1,7 @@
 // This is now a SERVER COMPONENT by default
-import type { Metadata, ResolvingMetadata } from 'next'
 import ProjectDetailClientLayout from '@/app/_components/projects/project-detail';
 import { getProjectDetail, getProjects } from '@/lib/data'
-import { ProjectCategories } from '@/data';
 
-export const runtime = 'edge';
-
-
-// Dynamic Metadata Generation for SEO
 type Props = {
   params: Promise<{ id: string }>
 }
