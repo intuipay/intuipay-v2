@@ -149,12 +149,13 @@ export async function sendRefundEmail(params: RefundProps) {
 }
 
 export function getRefundProps(project: ProjectInfo, refundInfo: {
+  amount: number;
   tx_hash: string;
   wallet_address: string;
   to: string;
 }): RefundProps {
   return {
-    amount: 1, // TODO: 查询数据库获取退款金额
+    amount: refundInfo.amount,
     hashId: refundInfo.tx_hash,
     projectName: project.project_name,
     to: refundInfo.to,
