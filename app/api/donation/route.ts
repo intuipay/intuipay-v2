@@ -106,7 +106,7 @@ export async function POST(req: Request) {
       user_id = session.user.id;
     }
     json.user_id = user_id;
-    const data = await fetchTidb<{ last_insert_id: number }>('/donation', 'POST', json);
+    const data = await fetchTidb<{ last_insert_id: number, index: number }>('/donation', 'POST', json);
     console.log('save donation result', data);
     
     let finalEmail = email;
@@ -117,6 +117,8 @@ export async function POST(req: Request) {
     if (finalEmail && finalEmail.trim()) {
       try {
         // 构建发送邮件所需的参数
+        json.id = data[ 0 ].last_insert_id; // 将捐款id 带上，发送邮件
+        json.index = data[ 0 ].index; // 捐款序号，表示第几位捐款人
         const emailParams = getDonationProps(project, json);
         await sendDonationEmail(emailParams);
         console.log('Donation email sent successfully to:', email);

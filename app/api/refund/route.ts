@@ -2,7 +2,7 @@ import { fetchTidb } from '@/services/fetch-tidb';
 import { auth } from '@/lib/auth';
 import { headers } from 'next/headers';
 import { getRefundProps, sendRefundEmail } from '@/lib/send-email';
-import { getProjectDetail } from '@/lib/data';
+import { getProjectDetail, getUserRefund } from '@/lib/data';
 
 export const runtime = 'edge';
 
@@ -47,8 +47,11 @@ export async function POST(req: Request) {
   // 如果邮箱不为空，发送捐款成功邮件
   if (finalEmail && finalEmail.trim()) {
     try {
+      // 取退款金额
+      const userRefundInfo = await getUserRefund(session.user.id, project.id);
       // 构建发送邮件所需的参数
       const emailParams = getRefundProps(project, {
+        amount: userRefundInfo.amount,
         to: finalEmail,
         tx_hash: json.tx_hash,
         wallet_address: json.wallet_address,

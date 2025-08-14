@@ -205,3 +205,10 @@ export interface Profile {
 export type BackedProject = ProjectInfo & {
   refund_at: string;           // 退款时间，如果有值说明用户退款过，如果为空字符串说明用户未退款过
 };
+
+// 用户退款信息
+export type UserRefund = {
+  amount: number;
+  count: number;
+  dollar: number;
+}
