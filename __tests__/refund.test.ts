@@ -3,8 +3,9 @@ import { getUserRefund } from "@/lib/data";
 
 describe('Test Refund', () => {
     describe('getUserRefund', () => {
-        it('should return user refund information', async () => {
-            process.loadEnvFile('./.env');
+        // process.loadEnvFile('./.env'); // 本地测试时开启
+
+        it.skipIf(!process.env.TIDB_CLOUD_API_KEY)('should return user refund information', async () => {
             const userId = 'jXqDtVMvNv1vf81izMoLabAkoOlQX5P1';
             const projectId = 120002;
             const refund = await getUserRefund(userId, projectId);
