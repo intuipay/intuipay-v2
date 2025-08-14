@@ -1,8 +1,13 @@
+main = ".open-next/worker.js"
 name = "intuipay-waitlist"
-compatibility_date = "2025-05-22" # Use a recent date
-compatibility_flags = ["nodejs_compat"]
+compatibility_date = "2025-08-14" # Use a recent date
+compatibility_flags = ["nodejs_compat", "global_fetch_strictly_public"]
 
 account_id = "07ee1a1a1cf0da549eaaf6d3c5c80b62"
+
+[assets]
+directory = ".open-next/assets"
+binding = "ASSETS"
 
 [[d1_databases]]
 binding = "DB" # This is how you'll access it in your code

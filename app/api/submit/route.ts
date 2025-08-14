@@ -1,9 +1,7 @@
-import { getRequestContext } from '@cloudflare/next-on-pages';
-
-export const runtime = 'edge';
+import { getCloudflareContext } from '@opennextjs/cloudflare';
 
 export async function POST(req: Request) {
-  const { env } = getRequestContext();
+  const { env } = getCloudflareContext();
   const d1 = (env as NodeJS.ProcessEnv).DB;
 
   const { email, name, refer } = (await req.json()) as {
