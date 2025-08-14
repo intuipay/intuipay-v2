@@ -6,8 +6,6 @@ import { auth } from '@/lib/auth';
 import { headers } from 'next/headers';
 import { ProjectTypes } from '@/data';
 
-export const runtime = 'edge';
-
 export async function POST(req: Request) {
   const json = await req.json();
 
