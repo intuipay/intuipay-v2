@@ -1,7 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getRequestContext } from '@cloudflare/next-on-pages';
-
-export const runtime = 'edge';
+import { getCloudflareContext } from '@opennextjs/cloudflare';
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
@@ -11,7 +9,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: 'target and source are required' }, { status: 400 });
   }
 
-  const { env } = getRequestContext();
+  const { env } = getCloudflareContext();
   const kv = (env as NodeJS.ProcessEnv).KV;
   const cachedData = await kv.get(`exchange-rate:${source}-${target}`);
   if (cachedData) {

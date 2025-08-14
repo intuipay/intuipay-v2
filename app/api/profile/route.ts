@@ -2,8 +2,6 @@ import { fetchTidb } from '@/services/fetch-tidb';
 import { headers } from 'next/headers';
 import { NextResponse } from 'next/server';
 
-export const runtime = 'edge';
-
 export async function GET(req: Request) {
   const headersList = await headers();
   const userId = headersList.get('x-user-id');
@@ -46,4 +44,3 @@ export async function POST(req: Request) {
     })
   }
 }
-

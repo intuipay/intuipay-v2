@@ -8,8 +8,6 @@ import { Button } from '@/components/ui/button';
 import type React from 'react';
 import { ProjectTypes } from '@/data';
 
-export const runtime = 'edge';
-
 type Props = {
   params: Promise<{ slug: string }>;
   searchParams: Promise<{ preview?: string }>;
