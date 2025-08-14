@@ -120,7 +120,6 @@ export const getProjectDetail = cache(async function getProjectDetail(
     searchParams.set('slug', slug);
   }
   const data = await fetchTidb<ProjectInfo>(`/project_detailed?${searchParams.toString()}`);
-  console.log('getProjectDetail data:', data);
   if (data.length === 0) {
     return null;
   }

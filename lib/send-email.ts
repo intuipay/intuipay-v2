@@ -52,12 +52,12 @@ export function getDonationProps(project: ProjectInfo, donation: DonationInfo): 
   }
   return {
     to: donation.email,
-    amount: donation.amount as number, // 这里的 amount 是 string 类型，不能转为number，因为数字很大，所以使用 as 愚弄一下编译器
+    amount: donation.amount as number, // amount is string type, keep as string for large values
     creator: project.org_name,
     currency: donation.currency,
     deliveryMethod: reward && reward.shipping_method ? reward.shipping_method : 'Digital delivery',
     deliveryTime: reward && reward.estimated_delivery ? reward.estimated_delivery : 'To be determined',
-    reward: reward ? reward.name : 'reward name',
+    reward: reward && reward.name ? reward.name : 'No reward selected',
     dollar: donation.dollar || 0,
     endAt: project.end_at,
     from: project.org_name,
@@ -134,16 +134,16 @@ export async function sendRefundEmail(params: RefundProps) {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        type: 'donated',
+        type: 'refund',
         ...params,
       }),
     });
     if (!res.ok) {
-      throw new Error(`Failed to send donation email: ${res.status}`);
+      throw new Error(`Failed to send refund email: ${res.status}`);
     }
     return await res.json();
   } catch (err) {
-    console.error('sendDonationEmail error:', err);
+    console.error('sendRefundEmail error:', err);
     return null;
   }
 }
