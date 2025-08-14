@@ -1,11 +1,11 @@
-import { getRequestContext } from '@cloudflare/next-on-pages';
+import { getCloudflareContext } from '@opennextjs/cloudflare';
 
 import { D1Dialect } from 'kysely-d1';
 import { Kysely } from 'kysely';
 import { D1Database } from '@cloudflare/workers-types';
 
 function initDbConnectionDev() {
-  const { env } = getRequestContext();
+  const { env } = getCloudflareContext();
   return new D1Dialect({
     database: (env as { DB: D1Database }).DB,
   });

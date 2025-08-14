@@ -1,7 +1,5 @@
 import { fetchTidb } from '@/services/fetch-tidb';
 
-export const runtime = 'edge';
-
 export async function GET(_: Request, { params }: { params: { id: string } }) {
   const { id } = await params;
   if (!id) {

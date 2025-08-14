@@ -4,8 +4,6 @@ import { Web3Provider } from '@/components/providers/web3-provider';
 import { headers } from 'next/headers';
 import { auth } from '@/lib/auth';
 
-export const runtime = 'edge';
-
 export default async function Page() {
   // 获取当前用户会话，从 header里取，或者从session拿都可以
   const session = await auth.api.getSession({
@@ -34,7 +32,7 @@ export default async function Page() {
   }
   const myProjects = await getMyProjects(projectsParams);
   console.log('my projects', myProjects);
-  
+
   return (
     <Web3Provider>
       <ProfilePage profile={profile} myBacked={myBacked} myProjects={myProjects} user={session?.user} />
