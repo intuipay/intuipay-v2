@@ -24,15 +24,12 @@ const Slider = React.forwardRef<
         <SliderPrimitive.Range className="absolute h-full bg-primary" />
       </SliderPrimitive.Track>
       {Array.from({ length: thumbs }).map((_, index) => (
-        <>
-          <SliderPrimitive.Thumb
-            key={index}
-            className="block h-5 w-5 rounded-full border-2 border-primary bg-background ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
-          />
-          <div className="absolute left-1" style={{ transform: `translate(${Number(props.value?.[ index ] ?? 0) * 3.5}px, -1.5rem)` }} key={index}>
+        <React.Fragment key={index}>
+          <SliderPrimitive.Thumb className="block h-5 w-5 rounded-full border-2 border-primary bg-background ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50" />
+          <div className="absolute left-1" style={{ transform: `translate(${Number(props.value?.[ index ] ?? 0) * 3.5}px, -1.5rem)` }}>
             {props.value?.[ index ] ?? 0}%
           </div>
-        </>
+        </React.Fragment>
       ))}
     </SliderPrimitive.Root>
   )
