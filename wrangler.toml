@@ -1,5 +1,5 @@
 main = ".open-next/worker.js"
-name = "intuipay-waitlist"
+name = "intuipay-website-dev"
 compatibility_date = "2025-08-14" # Use a recent date
 compatibility_flags = ["nodejs_compat", "global_fetch_strictly_public"]
 
