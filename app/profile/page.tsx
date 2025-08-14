@@ -25,7 +25,6 @@ export default async function Page() {
   console.log('my organization', myOrg);
 
   const projectsParams = new URLSearchParams();
-  projectsParams.set('is_widget', '1');
   projectsParams.set('start', '0');
   projectsParams.set('pagesize', '100');
   projectsParams.set('user_id', userId);
