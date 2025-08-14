@@ -1,11 +1,7 @@
 {
-  "plugins": [
-    "next-on-pages"
-  ],
   "extends": [
     "next/core-web-vitals",
-    "next/typescript",
-    "plugin:next-on-pages/recommended"
+    "next/typescript"
   ],
   "rules": {
     "@typescript-eslint/no-dynamic-delete": "off",

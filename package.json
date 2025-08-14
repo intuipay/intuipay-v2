@@ -1,6 +1,6 @@
 {
   "name": "intuipay-waitlist",
-  "version": "0.5.3",
+  "version": "0.5.4",
   "private": true,
   "type": "module",
   "scripts": {
@@ -110,5 +110,6 @@
     "wagmi": "^2.15.6",
     "wrangler": "^4.30.0"
   },
-  "packageManager": "pnpm@10.14.0"
+  "packageManager": "pnpm@10.14.0",
+  "type": "module"
 }

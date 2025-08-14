@@ -1,5 +1,5 @@
 main = ".open-next/worker.js"
-name = "intuipay-waitlist"
+name = "intuipay-website-dev"
 compatibility_date = "2025-08-14" # Use a recent date
 compatibility_flags = ["nodejs_compat", "global_fetch_strictly_public"]
 
@@ -11,10 +11,19 @@ binding = "ASSETS"
 
 [[d1_databases]]
 binding = "DB" # This is how you'll access it in your code
-database_name = "waitlist"
-database_id = "a8ec52c6-d6c9-455b-b8b0-55d2d4a007e2"
+database_name = "dashboard"
+database_id = "ce69bdf0-4220-43f9-b6dc-e5eaf27e4850"
 
 [[kv_namespaces]]
 binding = "KV"
 id = "f199722e3f7e4bdabd77a428770d7ed5"
 preview_id = "14a383e6cf6f466ba8c535f0ab64d4ac"
+
+[observability.logs]
+enabled = true
+
+[vars]
+TIDB_CLOUD_ENDPOINT = "https://ap-northeast-1.data.tidbcloud.com/api/v1beta/app/dataapp-bAAuMlJm/endpoint"
+NEXT_PUBLIC_USDC_CONTRACT_ADDRESS = "0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238"
+NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID = "2056cd0f53ff3372b3b40ad4c0508c44"
+NEXT_PUBLIC_DASHBOARD_URL = "https://dash.dev.intuipay.xyz"
