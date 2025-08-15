@@ -108,5 +108,6 @@
     "wagmi": "^2.15.6",
     "wrangler": "^4.30.0"
   },
-  "packageManager": "pnpm@10.14.0"
+  "packageManager": "pnpm@10.14.0",
+  "type": "module"
 }
