@@ -11,8 +11,8 @@ binding = "ASSETS"
 
 [[d1_databases]]
 binding = "DB" # This is how you'll access it in your code
-database_name = "waitlist"
-database_id = "a8ec52c6-d6c9-455b-b8b0-55d2d4a007e2"
+database_name = "dashboard"
+database_id = "ce69bdf0-4220-43f9-b6dc-e5eaf27e4850"
 
 [[kv_namespaces]]
 binding = "KV"
