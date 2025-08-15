@@ -10,7 +10,7 @@ import { authClient } from '@/lib/auth-client';
 import { GlobeIcon, CaretDownIcon, ListIcon, XLogoIcon, SignOutIcon } from '@phosphor-icons/react';
 import { User } from 'better-auth';
 import { Href } from '@react-types/shared';
-import { useRouter } from "next/navigation";
+import { useRouter } from 'next/navigation';
 
 const navLinks = [
   { href: '#', label: 'Donate' },
@@ -35,7 +35,7 @@ export function SiteHeader({ user }: SiteHeaderProps) {
   const handleSignOut = async () => {
     setMobileMenuOpen(false);
     await authClient.signOut();
-    router.replace("/");
+    router.replace('/');
   }
 
   return (
