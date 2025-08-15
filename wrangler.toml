@@ -21,3 +21,9 @@ preview_id = "14a383e6cf6f466ba8c535f0ab64d4ac"
 
 [observability.logs]
 enabled = true
+
+[vars]
+TIDB_CLOUD_ENDPOINT = "https://ap-northeast-1.data.tidbcloud.com/api/v1beta/app/dataapp-bAAuMlJm/endpoint"
+NEXT_PUBLIC_USDC_CONTRACT_ADDRESS = "0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238"
+NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID = "2056cd0f53ff3372b3b40ad4c0508c44"
+NEXT_PUBLIC_DASHBOARD_URL = "https://dash.dev.intuipay.xyz"
