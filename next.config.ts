@@ -1,5 +1,6 @@
 import { initOpenNextCloudflareForDev } from "@opennextjs/cloudflare";
 import pkg from './package.json' with { type: 'json' };
+import { WebpackConfigContext } from "next/dist/server/config-shared";
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -29,7 +30,7 @@ const nextConfig = {
   experimental: {
     optimizePackageImports: ["@phosphor-icons/react"],
   },
-  webpack: (config) => {
+  webpack: (config: WebpackConfigContext) => {
     config.module.rules.push({
       test: /\.md$/i,
       type: 'asset/source',
