@@ -18,3 +18,6 @@ database_id = "a8ec52c6-d6c9-455b-b8b0-55d2d4a007e2"
 binding = "KV"
 id = "f199722e3f7e4bdabd77a428770d7ed5"
 preview_id = "14a383e6cf6f466ba8c535f0ab64d4ac"
+
+[observability.logs]
+enabled = true
