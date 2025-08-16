@@ -84,11 +84,13 @@ export type DonationInfo = {
   state: string;
   wallet: string;
   zip: string;
+  tx_hash: string;
 
   // 奖励相关字段
   selected_reward?: Reward | null;
   has_selected_reward?: boolean;
   pledge_without_reward?: boolean;
+  reward_id?: number;
 
   created_at?: string;
   updated_at?: string;
@@ -203,3 +205,10 @@ export interface Profile {
 export type BackedProject = ProjectInfo & {
   refund_at: string;           // 退款时间，如果有值说明用户退款过，如果为空字符串说明用户未退款过
 };
+
+// 用户退款信息
+export type UserRefund = {
+  amount: number;
+  count: number;
+  dollar: number;
+}
