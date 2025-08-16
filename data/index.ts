@@ -1,6 +1,7 @@
 import {Currency, PaymentMethod, University} from "@/types";
 // 为了保持向后兼容，使用新的区块链配置系统
 import { getNetworkDropdownOptions, getWalletDropdownOptions } from '@/config/blockchain';
+import { RewardShipMethod } from "@intuipay/shared/constants";
 
 export const CurrencyList: Currency[] = [
   {
@@ -440,16 +441,6 @@ export const PaymentMethodsOther: PaymentMethod[] = [
 export const Networks = getNetworkDropdownOptions();
 export const Wallets = getWalletDropdownOptions();
 
-export enum OrganizationType {
-  Business = 1,
-  NonProfit = 2,
-  Government = 3,
-  Academic = 4,
-  Philanthropic = 5,
-  Personal = 100,
-  Other = 200,
-}
-
 export enum ProjectCategories {
   All = 0,
   'Addiction Recovery' = 1,
@@ -497,3 +488,14 @@ export enum ProjectTypes {
   'Crowdsourced / Open Science' = 5,
   'Student Organization' = 6,
 }
+
+export enum Availabilities {
+  Unlimited = 0,
+  Limited = 1,
+}
+
+export const REWARD_SHIP_METHOD_LABELS: Record<keyof typeof RewardShipMethod, string> = {
+  ByMyself: "Ships by myself",
+  LocalPickup: "Local pickup, event, or service",
+  Digital: "Digital method",
+};

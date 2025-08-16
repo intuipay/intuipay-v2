@@ -127,6 +127,8 @@ export type ProjectInfo = {
   created_at: string;
   deleted_at?: string;
   updated_at: string;
+
+  rewards: string;
 }
 
 export type ProjectFilter = {
@@ -162,3 +164,21 @@ export type Update = {
 }
 
 export type Updates = Update[];
+
+export type ShippingOption = { destination: string; shippingCost: number };
+
+export type RewardDraft = {
+  id?: number;
+  title: string;
+  description: string;
+  amount: number;
+  image: string;
+  availability?: string;
+  number: number;
+  month: string | number;
+  year: string | number;
+  ship_method: string | number;
+  destinations: ShippingOption[];
+  address?: string;
+  count?: number;
+};

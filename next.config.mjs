@@ -36,6 +36,7 @@ const nextConfig = {
     })
     return config
   },
+  transpilePackages: ["@intuipay/shared"],
 };
 
 export default nextConfig;
