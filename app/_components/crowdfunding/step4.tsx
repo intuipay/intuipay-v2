@@ -193,7 +193,7 @@ export default function DonationStep4({
         address: recipientAddress as `0x${string}`,
         abi: crowdFundingABI,
         functionName: 'contributeERC20',
-        args: [project.campaign_id, amount],
+        args: [project.campaign_id ?? 1, amount],
       });
     } catch (e) {
       setMessage(getReadableErrorMessage(e));
@@ -317,7 +317,7 @@ export default function DonationStep4({
           address: recipientAddress as `0x${string}`,
           abi: crowdFundingABI,
           functionName: 'contribute',
-          args: [project.campaign_id], // campaignId, 1 is the default campaign ID
+          args: [project.campaign_id ?? 1], // campaignId, 1 is the default campaign ID
           value: amount,
         });
       } else if (currencyNetworkConfig?.contractAddress) {
