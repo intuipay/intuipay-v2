@@ -5,6 +5,7 @@ import { getProjectDetail } from '@/lib/data';
 import { auth } from '@/lib/auth';
 import { headers } from 'next/headers';
 import { ProjectTypes } from '@/data';
+import { getDonationProps, sendDonationEmail } from '@/lib/send-email';
 
 export async function POST(req: Request) {
   const json = await req.json();
@@ -22,15 +23,16 @@ export async function POST(req: Request) {
     }
 
     // 验证交易哈希
-    const { tx_hash, network, currency, amount, wallet_address, project_slug } = json;
+    const { tx_hash, network, currency, amount, wallet_address, project_slug, email } = json;
 
     // 获取项目钱包地址 或 众筹合约地址
     let project_wallet: string | undefined;
     let project_type: number | undefined;
+    let project: any = null;
 
     try {
       // 使用已有的函数通过 project_slug 获取项目信息
-      const project = await getProjectDetail(project_slug);
+      project = await getProjectDetail(project_slug);
       if (project && project.wallets) {
         project_wallet = project.wallets[ network ];
         project_type = project.type;
@@ -102,8 +104,28 @@ export async function POST(req: Request) {
       user_id = session.user.id;
     }
     json.user_id = user_id;
-    const data = await fetchTidb<{ last_insert_id: number }>('/donation', 'POST', json);
+    const data = await fetchTidb<{ last_insert_id: number, index: number }>('/donation', 'POST', json);
     console.log('save donation result', data);
+    
+    let finalEmail = email;
+    if (!email && session?.user.email) {
+      finalEmail = session.user.email;
+    }
+    // 如果邮箱不为空，发送捐款成功邮件
+    if (finalEmail && finalEmail.trim()) {
+      try {
+        // 构建发送邮件所需的参数
+        json.id = data[ 0 ].last_insert_id; // 将捐款id 带上，发送邮件
+        json.index = data[ 0 ].index; // 捐款序号，表示第几位捐款人
+        const emailParams = getDonationProps(project, json);
+        await sendDonationEmail(emailParams);
+        console.log('Donation email sent successfully to:', email);
+      } catch (emailError) {
+        // 邮件发送失败不影响捐款流程，只记录错误
+        console.error('Failed to send donation email:', emailError);
+      }
+    }
+
     return new Response(
       JSON.stringify({
         code: 0,
