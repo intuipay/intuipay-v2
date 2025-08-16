@@ -91,7 +91,7 @@ export function Reward({
             className="w-auto h-9 rounded-full bg-primary hover:bg-primary/90 text-base px-4 py-2"
             size="lg"
           >
-            <Link href={`/donate/${projectName}?reward_id=${id}`}>
+            <Link href={`/donate/${encodeURIComponent(projectName)}?reward_id=${encodeURIComponent(id)}`}>
               Pledge ${amount}
             </Link>
           </Button>
