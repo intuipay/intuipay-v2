@@ -10,7 +10,7 @@ import { getDonationProps, sendDonationEmail } from '@/lib/send-email';
 export const runtime = 'edge';
 
 export async function POST(req: Request) {
-  const json: any = await req.json();
+  const json = await req.json();
 
   try {
     // 验证必要的字段

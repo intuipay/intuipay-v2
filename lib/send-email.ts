@@ -1,4 +1,4 @@
-import { DonationInfo, ProjectInfo, Reward } from "@/types";
+import { DonationInfo, ProjectInfo, Reward } from '@/types';
 
 type BaseProps = {
   to: string;
@@ -64,7 +64,7 @@ export function getDonationProps(project: ProjectInfo, donation: DonationInfo): 
     id: donation.id,
     index: donation.id,
     projectName: project.project_name,
-    status: "successful",
+    status: 'successful',
     txHash: donation.tx_hash || '',
   };
 }
@@ -87,17 +87,18 @@ function getRewardById(rewardId: number, rewardsString: string): Reward | null {
     if (month && year) {
       const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
         'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-      return `${monthNames[month - 1]} ${year}`;
+      return `${monthNames[ month - 1 ]} ${year}`;
     }
     return 'TBD';
   };
 
   // 格式化可用性信息
-  // number: 总量, count: 剩余数量
-  const getAvailability = (number: number, count: number | null): string => {
-    if (number === 0) return 'Unlimited';
-    if (count !== null) return `Limited (${count} left of ${number})`;
-    return `Limited (${number} available)`;
+  // number: 总量, count: 已用的, number - count: 剩余可用的
+  const getAvailability = (number: number | null, count: number): string => {
+    if (!number) return 'Unlimited';
+    const used = Number.isFinite(count) ? count : 0; // 兜底：非数字/空值按0处理
+    const left = Math.max(0, number - used);
+    return `Limited (${left} left of ${number})`;
   };
 
   // 查找匹配的奖励
@@ -159,6 +160,6 @@ export function getRefundProps(project: ProjectInfo, refundInfo: {
     hashId: refundInfo.tx_hash,
     projectName: project.project_name,
     to: refundInfo.to,
-    wallet: refundInfo.wallet_address, 
+    wallet: refundInfo.wallet_address,
   }
 }

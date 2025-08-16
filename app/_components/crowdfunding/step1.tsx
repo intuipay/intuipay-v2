@@ -114,11 +114,12 @@ export default function DonationStep1({
       };
       
       // 格式化可用性信息
-      // number: 总量, count: 剩余数量
-      const getAvailability = (number: number, count: number | null): string => {
-        if (number === 0) return 'Unlimited';
-        if (count !== null) return `Limited (${count} left of ${number})`;
-        return `Limited (${number} available)`;
+      // number: 总量, count: 已用的, number - count: 剩余可用的
+      const getAvailability = (number: number | null, count: number): string => {
+        if (!number) return 'Unlimited';
+        const used = Number.isFinite(count) ? count : 0; // 兜底：非数字/空值按0处理
+        const left = Math.max(0, number - used);
+        return `Limited (${left} left of ${number})`;
       };
       
       return rawRewards.map((reward: any) => ({

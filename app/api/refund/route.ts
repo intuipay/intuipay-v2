@@ -27,14 +27,14 @@ export async function POST(req: Request) {
   const project = await getProjectDetail(json.project_id);
   if (!project) {
     return new Response(
-        JSON.stringify({
-          code: 1,
-          message: `Failed to fetch project ${json.project_id}`,
-        }),
-        { status: 400 },
-      );
+      JSON.stringify({
+        code: 1,
+        message: `Failed to fetch project ${json.project_id}`,
+      }),
+      { status: 400 },
+    );
   }
-  
+
 
   const data = await fetchTidb<{ last_insert_id: number }>('/refund', 'POST', json);
   console.log('save refund result', data);
