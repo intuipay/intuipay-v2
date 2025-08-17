@@ -6,9 +6,7 @@ import { ChangeEvent, useState, useEffect, FormEvent, useCallback, useRef } from
 import CtaFooter from '@/app/_components/donate/cta-footer';
 import { clsx } from 'clsx';
 import Image from 'next/image';
-import { WalletConnectButton } from '@/components/wallet-connect-button';
 import { useAccount, useConnect, useDisconnect, useChainId, useSwitchChain } from 'wagmi';
-import { appkit } from '@/lib/appkit';
 import { useMultiWalletBalance } from '@/hooks/use-multi-wallet-balance';
 import {
   BLOCKCHAIN_CONFIG,
@@ -267,12 +265,6 @@ export default function DonationStep1({
         }
       }
 
-      // Handle WalletConnect specially (直接打开，不需要网络切换逻辑)
-      if (selectedWallet === 'wallet-connect') {
-        appkit.open();
-        return;
-      }
-
       // Handle Phantom wallet for Solana
       if (selectedWallet === 'phantom') {
         if (window?.phantom?.solana?.isConnected) {
@@ -402,17 +394,6 @@ export default function DonationStep1({
           {(!isConnected && !isPhantomConnected) ? (
             <div className="grid sm:grid-cols-2 gap-2.5 sm:gap-y-6">
               {getFilteredWallets().map(wallet => {
-                // Handle WalletConnect separately
-                if (wallet.id === 'wallet-connect') {
-                  return (
-                    <WalletConnectButton
-                      key={wallet.id}
-                      isSelected={selectedWallet === wallet.id}
-                      onClick={() => setSelectedWallet(wallet.id)}
-                    />
-                  )
-                }
-
                 // Handle other wallets normally
                 return (
                   <label
@@ -447,7 +428,7 @@ export default function DonationStep1({
             <div className="flex items-center justify-between p-3 border rounded-lg bg-gray-50">
               <div className="flex items-center gap-3">
                 <Image
-                  src={`/images/logo/${allWallets.find(w => w.id === selectedWallet)?.icon}.svg`}
+                  src={`/images/logo/${allWallets.find(w => w.id === selectedWallet)?.icon || 'metamask'}.svg`}
                   width={24}
                   height={24}
                   className="size-6"
