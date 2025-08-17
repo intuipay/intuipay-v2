@@ -5,6 +5,8 @@ import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { HandHeartIcon, CardholderIcon } from '@phosphor-icons/react';
 import { Donation } from '@/types'
+import { AcceptMethod } from '@intuipay/shared/constants';
+import { getEnumKey } from '@/lib/utils';
 
 type DonationsTabProps = {
   projectId: number;
@@ -74,7 +76,7 @@ export function DonationsTab({ projectId }: DonationsTabProps) {
                   </AvatarFallback>
                 </Avatar>
                 <div className="flex flex-col">
-                  <p className="text-xs text-neutral-darkgray">{donation.timeAgo || "-- ago"}</p>
+                  <p className="text-xs text-neutral-darkgray">{donation.timeAgo ??  ""}</p>
                   <p className="font-medium text-neutral-text">{donation.first_name || donation.last_name ? `${donation.first_name} ${donation.last_name}` : "Anonymous"}</p>
                 </div>
               </div>
@@ -90,14 +92,16 @@ export function DonationsTab({ projectId }: DonationsTabProps) {
                 <p className="text-xs text-neutral-darkgray mb-0.5">Pledge from</p>
                 <div className="flex items-center">
                   {/* <span className="mr-1.5 text-base">{donation.countryFlag}</span> */}
-                  <span className="text-neutral-text">{donation.country || "--"}</span>
+                  <span className="text-neutral-text">{donation.country}</span>
                 </div>
               </div>
               <div className="sm:col-span-3 text-left sm:text-left">
                 <p className="text-xs text-neutral-darkgray mb-0.5">Pledge via</p>
                 <div className="flex items-center space-x-2">
                   <CardholderIcon className="size-4" />
-                  <span className="text-neutral-text">{donation.paymentMethod || "--"}</span>
+                  <span className="text-neutral-text">
+                    {getEnumKey(AcceptMethod, donation.method)}
+                  </span>
                 </div>
               </div>
             </div>

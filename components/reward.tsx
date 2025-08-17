@@ -43,7 +43,11 @@ export function Reward({
                 className="h-44 object-cover"
               />
             ) : (
-              <div className="w-full h-full bg-gray-200 flex items-center justify-center">
+              <div
+                className="w-full h-full bg-gray-200 flex items-center justify-center"
+                role="img"
+                aria-label="No image available"
+              >
                 <span className="text-gray-400 text-sm">No image</span>
               </div>
             )}

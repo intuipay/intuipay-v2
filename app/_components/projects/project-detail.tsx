@@ -306,13 +306,12 @@ export default function ProjectDetailClientLayout({
               {rewards && rewards.length > 0 ? (
                 rewards.map((reward) => (
                   <li key={reward.id}>
-                    <a
-                      href={`#reward-${reward.id}`}
+                    <div
                       className="text-sm font-medium text-gray-700 border-transparent border-l-2 hover:border-primary pl-3 py-1 block transition-colors"
                     >
                       <p className="truncate font-semibold">{reward.title}</p>
                       <p className="text-xs text-gray-500 font-medium">${reward.amount}</p>
-                    </a>
+                    </div>
                   </li>
                 ))
               ) : (
