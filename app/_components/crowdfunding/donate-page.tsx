@@ -1,23 +1,19 @@
 'use client'
 
-import { useMemo, useState, lazy, useEffect } from 'react'
+import { useMemo, useState, useEffect } from 'react'
 import { CircleDotIcon, HeadsetIcon } from 'lucide-react'
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link'
 import { DonationInfo, ProjectInfo, Reward } from '@/types';
 import { clsx } from 'clsx';
-import Step1NoWagmi from '@/app/_components/crowdfunding/step1-no-wagmi';
+import DonationStep1 from '@/app/_components/crowdfunding/step1';
 import DonationStep2 from '@/app/_components/crowdfunding/step2';
 import DonationStep4 from '@/app/_components/crowdfunding/step4';
 import DonationStep5 from '@/app/_components/crowdfunding/step5';
 import { createDonationInfo } from '@/utils';
-import { useWagmiReady } from '@/components/providers/web3-provider';
 import { getNetworkDropdownOptionsFromProject } from '@/config/blockchain';
 import { CheckCircleIcon } from '@phosphor-icons/react/dist/ssr';
-
-// 动态导入包含 wagmi hooks 的组件，否则会在服务端执行，因为edge runtime的原因出现500报错
-const DonationStep1 = lazy(() => import('@/app/_components/crowdfunding/step1'));
 
 type Step = 'initialization' | 'contacts' | 'payment' | 'complete'
 type Props = {
@@ -60,8 +56,6 @@ export default function DonationPageComp({
   project,
   slug,
 }: Props) {
-  // Check if wagmi is ready
-  const isWagmiReady = useWagmiReady();
   // State
   const [currentStep, setCurrentStep] = useState<Step>('initialization')
   const [slideDirection, setSlideDirection] = useState<'right' | 'left'>('right')
@@ -264,55 +258,29 @@ export default function DonationPageComp({
           >
             {/* Initialization Step */}
             {currentStep === 'initialization' && (
-              isWagmiReady ? (
-                <DonationStep1
-                    amount={info.amount}
-                    goToNextStep={goToNextStep}
-                    paymentMethod={info.currency}
-                    setAmount={value => updateInfo({ amount: value })}
-                    setPaymentMethod={value => updateInfo({ currency: value })}
-                    selectedWallet={info.wallet}
-                    setSelectedWallet={value => updateInfo({ wallet: value })}
-                    network={network}
-                    setNetwork={handleSetNetwork}
-                    dollar={dollar}
-                    setDollar={value => {
-                      setDollar(value);
-                      updateInfo({ dollar: typeof value === 'number' ? value : null });
-                    }}
-                    project={projectInfo}
-                    selectedReward={info.selected_reward}
-                    setSelectedReward={handleSetSelectedReward}
-                    hasSelectedReward={info.has_selected_reward || false}
-                    setHasSelectedReward={handleSetHasSelectedReward}
-                    pledgeWithoutReward={info.pledge_without_reward || false}
-                    setPledgeWithoutReward={handleSetPledgeWithoutReward}
-                />
-              ) : (
-                <Step1NoWagmi
-                  amount={info.amount}
-                  goToNextStep={goToNextStep}
-                  paymentMethod={info.currency}
-                  setAmount={value => updateInfo({ amount: value })}
-                  setPaymentMethod={value => updateInfo({ currency: value })}
-                  selectedWallet={info.wallet}
-                  setSelectedWallet={value => updateInfo({ wallet: value })}
-                  network={network}
-                  setNetwork={handleSetNetwork}
-                  dollar={dollar}
-                  setDollar={value => {
-                    setDollar(value);
-                    updateInfo({ dollar: typeof value === 'number' ? value : null });
-                  }}
-                  project={projectInfo}
-                  selectedReward={info.selected_reward}
-                  setSelectedReward={handleSetSelectedReward}
-                  hasSelectedReward={info.has_selected_reward || false}
-                  setHasSelectedReward={handleSetHasSelectedReward}
-                  pledgeWithoutReward={info.pledge_without_reward || false}
-                  setPledgeWithoutReward={handleSetPledgeWithoutReward}
-                />
-              )
+              <DonationStep1
+                amount={info.amount}
+                goToNextStep={goToNextStep}
+                paymentMethod={info.currency}
+                setAmount={value => updateInfo({ amount: value })}
+                setPaymentMethod={value => updateInfo({ currency: value })}
+                selectedWallet={info.wallet}
+                setSelectedWallet={value => updateInfo({ wallet: value })}
+                network={network}
+                setNetwork={handleSetNetwork}
+                dollar={dollar}
+                setDollar={value => {
+                  setDollar(value);
+                  updateInfo({ dollar: typeof value === 'number' ? value : null });
+                }}
+                project={projectInfo}
+                selectedReward={info.selected_reward}
+                setSelectedReward={handleSetSelectedReward}
+                hasSelectedReward={info.has_selected_reward || false}
+                setHasSelectedReward={handleSetHasSelectedReward}
+                pledgeWithoutReward={info.pledge_without_reward || false}
+                setPledgeWithoutReward={handleSetPledgeWithoutReward}
+              />
             )}
 
             {/* Contracts Step */}
