@@ -16,7 +16,7 @@ import { UpdatesTab } from '@/components/project-detail-tabs/updates-tab'
 import { DonationsTab } from '@/components/project-detail-tabs/donations-tab'
 import { RewardsTab } from '@/components/project-detail-tabs/rewards-tab'
 
-import { ProjectInfo } from '@/types'
+import { ProjectInfo, RewardDraft } from '@/types'
 import { useMemo, useState } from 'react'
 import { enumToKeyLabel } from '@/lib/utils'
 import { ProjectCategories, ProjectTypes } from '@/data'
@@ -90,6 +90,16 @@ export default function ProjectDetailClientLayout({
   const rewards = useMemo(() => {
     return project.rewards ? JSON.parse(project.rewards) : [];
   }, [project]);
+
+  const handleRewardClick = (rewardId: number | undefined, index: number) => {
+    const rewardElement = document.getElementById(`reward-${rewardId || index}`);
+    if (rewardElement) {
+      rewardElement.scrollIntoView({ 
+        behavior: 'smooth',
+        block: 'start'
+      });
+    }
+  };
 
   return (
     <div className="container">
@@ -304,14 +314,19 @@ export default function ProjectDetailClientLayout({
           <div className='mt-24 flex-1'>
             <ul className="space-y-3">
               {rewards && rewards.length > 0 ? (
-                rewards.map((reward) => (
+                rewards.map((reward: RewardDraft, index: number) => (
                   <li key={reward.id}>
-                    <div
-                      className="text-sm font-medium text-gray-700 border-transparent border-l-2 hover:border-primary pl-3 py-1 block transition-colors"
+                    <a
+                      href="#"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        handleRewardClick(reward.id, index);
+                      }}
+                      className="text-sm font-medium text-gray-700 border-transparent border-l-2 hover:border-primary pl-3 py-1 block transition-colors w-full text-left cursor-pointer"
                     >
                       <p className="truncate font-semibold">{reward.title}</p>
                       <p className="text-xs text-gray-500 font-medium">${reward.amount}</p>
-                    </div>
+                    </a>
                   </li>
                 ))
               ) : (

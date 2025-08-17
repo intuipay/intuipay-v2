@@ -76,7 +76,7 @@ export function DonationsTab({ projectId }: DonationsTabProps) {
                   </AvatarFallback>
                 </Avatar>
                 <div className="flex flex-col">
-                  <p className="text-xs text-neutral-darkgray">{donation.timeAgo ??  ""}</p>
+                  <p className="text-xs text-neutral-darkgray">{donation.timeAgo ?? ""}</p>
                   <p className="font-medium text-neutral-text">{donation.first_name || donation.last_name ? `${donation.first_name} ${donation.last_name}` : "Anonymous"}</p>
                 </div>
               </div>

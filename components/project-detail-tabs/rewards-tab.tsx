@@ -16,11 +16,12 @@ export function RewardsTab({ project, rewards }: RewardsTabProps) {
           </h2>
           <div className="flex flex-col gap-4">
             {rewards.map((reward) => (
-              <Reward
-                key={reward.id}
-                projectName={project.project_name}
-                {...reward}
-              />
+              <div key={reward.id} id={`reward-${reward.id}`}>
+                <Reward
+                  projectName={project.project_name}
+                  {...reward}
+                />
+              </div>
             ))}
           </div>
         </>
