@@ -127,6 +127,8 @@ export type ProjectInfo = {
   created_at: string;
   deleted_at?: string;
   updated_at: string;
+
+  rewards: string;
 }
 
 export type ProjectFilter = {
@@ -146,6 +148,8 @@ export type Donation = {
   first_name: string;
   last_name: string;
   method: string;
+  amountUSD?: string;
+  timeAgo?: string;
 }
 
 export type Donations = Donation[]
@@ -162,3 +166,21 @@ export type Update = {
 }
 
 export type Updates = Update[];
+
+export type ShippingOption = { destination: string; shippingCost: number };
+
+export type RewardDraft = {
+  id?: number;
+  title: string;
+  description: string;
+  amount: number;
+  image: string;
+  availability?: string;
+  number: number;
+  month: string | number;
+  year: string | number;
+  ship_method: string | number;
+  destinations: ShippingOption[];
+  address?: string;
+  count?: number;
+};

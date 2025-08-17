@@ -14,8 +14,9 @@ import { CampaignTab } from '@/components/project-detail-tabs/campaign-tab'
 import { AboutTab } from '@/components/project-detail-tabs/about-tab'
 import { UpdatesTab } from '@/components/project-detail-tabs/updates-tab'
 import { DonationsTab } from '@/components/project-detail-tabs/donations-tab'
+import { RewardsTab } from '@/components/project-detail-tabs/rewards-tab'
 
-import { ProjectInfo } from '@/types'
+import { ProjectInfo, RewardDraft } from '@/types'
 import { useMemo, useState } from 'react'
 import { enumToKeyLabel } from '@/lib/utils'
 import { ProjectCategories, ProjectTypes } from '@/data'
@@ -96,6 +97,10 @@ export default function ProjectDetailClientLayout({
   const titles = extractSecondLevelHeadings(project.campaign)
 
   const daysLeft = useMemo(() => Math.floor((new Date(project.end_at).getTime() - Date.now()) / (1000 * 60 * 60 * 24)), [project])
+
+  const rewards = useMemo(() => {
+    return project.rewards ? JSON.parse(project.rewards) : [];
+  }, [project]);
 
   return (
     <div className="container">
@@ -243,12 +248,15 @@ export default function ProjectDetailClientLayout({
 
       <div className="flex gap-12">
         <Tabs defaultValue={tab} className="mb-8 lg:w-2/3" onValueChange={(val) => { setTab(val) }}>
-          <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4">
+          <TabsList className="grid w-full grid-cols-2 sm:grid-cols-5">
             <TabsTrigger value="campaign" className="py-2.5">
               Campaign
             </TabsTrigger>
             <TabsTrigger value="about" className="py-2.5">
               About
+            </TabsTrigger>
+            <TabsTrigger value="rewards" className="py-2.5">
+              Rewards
             </TabsTrigger>
             <TabsTrigger
               value="updates"
@@ -266,11 +274,11 @@ export default function ProjectDetailClientLayout({
               )}
             </TabsTrigger>
             <TabsTrigger
-              value="donations"
+              value="history"
               className="py-2.5"
               disabled={slug === 'preview'}
             >
-              Donations
+              History
             </TabsTrigger>
           </TabsList>
 
@@ -280,10 +288,13 @@ export default function ProjectDetailClientLayout({
           <TabsContent value="about" className="mt-14">
             <AboutTab project={project} />
           </TabsContent>
+          <TabsContent value="rewards" className="mt-14">
+            <RewardsTab project={project} rewards={rewards} />
+          </TabsContent>
           <TabsContent value="updates" className="mt-14">
             <UpdatesTab projectId={project.id} onUpdate={setUpdatesCount} />
           </TabsContent>
-          <TabsContent value="donations" className="mt-14">
+          <TabsContent value="history" className="mt-14">
             <DonationsTab projectId={project.id} />
           </TabsContent>
         </Tabs>
@@ -302,6 +313,31 @@ export default function ProjectDetailClientLayout({
             ))}
           </ul>
         </div>}
+        
+        {
+          tab === 'rewards' &&
+          <div className='mt-24 flex-1'>
+            <ul className="space-y-3">
+              {rewards && rewards.length > 0 ? (
+                rewards.map((reward: RewardDraft, index: number) => (
+                  <li key={reward.id}>
+                    <a
+                      href={`#reward-${reward.id || index}`}
+                      className="text-sm font-medium text-gray-700 border-transparent border-l-2 hover:border-primary pl-3 py-1 block transition-colors w-full text-left cursor-pointer"
+                    >
+                      <p className="truncate font-semibold">{reward.title}</p>
+                      <p className="text-xs text-gray-500 font-medium">${reward.amount}</p>
+                    </a>
+                  </li>
+                ))
+              ) : (
+                <li className="text-sm text-gray-500 pl-3 py-1">
+                  No rewards available
+                </li>
+              )}
+            </ul>
+          </div>
+        }
       </div>
 
       {similarProjects.length > 0 && <section className="mt-16 pt-12 border-t border-neutral-mediumgray/50">
