@@ -24,10 +24,18 @@ export const getEnumKey = <T extends Record<string, string | number>>(
   return entry ? entry[ 0 ] : value.toString();
 };
 
-export const getRewardShipMethodLabel = (value: string): string => {
-  const entry = Object.entries(RewardShipMethod).find(([key, val]) => 
-    (val as number | string).toString() === value && isNaN(Number(key))
+// Shared helper to find enum entry by value, filtering out numeric keys
+function findEnumEntryByValue<T extends Record<string, string | number>>(
+  enumValue: T,
+  value: string | number
+): [string, string | number] | undefined {
+  return Object.entries(enumValue).find(([key, val]) =>
+    (val as number | string).toString() === value.toString() && isNaN(Number(key))
   );
+}
+
+export const getRewardShipMethodLabel = (value: string): string => {
+  const entry = findEnumEntryByValue(RewardShipMethod, value);
   
   if (entry) {
     const key = entry[ 0 ] as keyof typeof RewardShipMethod;

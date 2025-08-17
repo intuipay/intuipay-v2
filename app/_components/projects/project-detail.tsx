@@ -91,16 +91,6 @@ export default function ProjectDetailClientLayout({
     return project.rewards ? JSON.parse(project.rewards) : [];
   }, [project]);
 
-  const handleRewardClick = (rewardId: number | undefined, index: number) => {
-    const rewardElement = document.getElementById(`reward-${rewardId || index}`);
-    if (rewardElement) {
-      rewardElement.scrollIntoView({ 
-        behavior: 'smooth',
-        block: 'start'
-      });
-    }
-  };
-
   return (
     <div className="container">
       <div className="text-center mb-10">
@@ -317,11 +307,7 @@ export default function ProjectDetailClientLayout({
                 rewards.map((reward: RewardDraft, index: number) => (
                   <li key={reward.id}>
                     <a
-                      href="#"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        handleRewardClick(reward.id, index);
-                      }}
+                      href={`#reward-${reward.id || index}`}
                       className="text-sm font-medium text-gray-700 border-transparent border-l-2 hover:border-primary pl-3 py-1 block transition-colors w-full text-left cursor-pointer"
                     >
                       <p className="truncate font-semibold">{reward.title}</p>
