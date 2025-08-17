@@ -39,30 +39,41 @@ export default function ProjectDetailClientLayout({
 
   function formatSocialLinks(socialLinks: Record<string, string> | string, name = '') {
     const domainReg = /^https?:\/\//;
-    if (typeof socialLinks === 'string') {
+    if (typeof socialLinks === 'string') { // process github
+      if (!socialLinks) return '';
       socialLinks = socialLinks.replace('@', '');
       if (!domainReg.test(socialLinks)) {
         socialLinks = `https://www.${name}.com/${socialLinks}`;
       }
-    } else {
+    } else { // process social_links
       for (const key in socialLinks) {
         const isTikTok = key.toLocaleLowerCase() === 'tiktok';
         const isLinkedIn = key.toLocaleLowerCase() === 'linkedin';
+        const isTelegram = key.toLocaleLowerCase() === 'telegram';
+
         if (socialLinks.hasOwnProperty(key)) {
+          if (!socialLinks[ key ] || socialLinks[ key ].trim() === '') {
+            continue;
+          }
           if (!isTikTok && socialLinks[ key ].startsWith('@')) { // tiktok is a special case
             socialLinks[ key ] = socialLinks[ key ].replace('@', '');
           }
+
           if (!domainReg.test(socialLinks[ key ])) {
             if (isLinkedIn && !socialLinks[ key ].startsWith('school')) {
               socialLinks[ key ] = `school/${socialLinks[ key ]}`;
             }
             socialLinks[ key ] = `https://www.${key.toLowerCase()}.com/${isTikTok && !socialLinks[ key ].includes('@') ? '@' + socialLinks[ key ] : socialLinks[ key ]}`;
           }
+
+          if (isTelegram && socialLinks[ key ]) {
+            socialLinks[ key ] = `https://t.me/${socialLinks[ key ]}`;
+          }
         }
       }
     }
     return socialLinks;
-}
+  }
   const socialLinks = formatSocialLinks(project.social_links ? JSON.parse(project.social_links as string) : {});
   const [tab, setTab] = useState('campaign');
   const [updatesCount, setUpdatesCount] = useState(0);
@@ -140,7 +151,7 @@ export default function ProjectDetailClientLayout({
                 }
 
               </Avatar>
-              <span className="font-semibold text-lg">{project.org_name}</span>
+              <span className="font-semibold text-lg truncate">{project.org_name}</span>
             </div>
             <div>
               <p className="text-2xl sm:text-3xl font-bold mb-2">${project.amount.toLocaleString() || 0}</p>
@@ -164,51 +175,55 @@ export default function ProjectDetailClientLayout({
               </div>
             </div>
             <div className="text-sm grid grid-cols-2 gap-4">
-              <Link
-                href={`mailto:${project.email}`}
-                className="flex items-center gap-1 text-neutral-darkgray hover:text-action-blue"
-              >
-                <EnvelopeIcon size={16} /> <span className="truncate text-primary">{project.email}</span>
-              </Link>
-              <Link
-                href={project.website || ''}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-1 text-neutral-darkgray hover:text-action-blue"
-              >
-                <LinkIcon size={16} /> <span className="truncate text-primary">{project.website.replace(/^https?:\/\//, '')}</span>
-              </Link>
-              {project.github && <Link
-                href={formatSocialLinks(project.github, 'github')}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-1 text-neutral-darkgray hover:text-action-blue"
-              >
-                <GithubLogoIcon size={16} /> <span className="truncate text-primary">{project.github}</span>
-              </Link>}
-              {
-                socialLinks && (
-                  Object.entries(socialLinks).map(([key, value]) => (
-                    <Link
-                      href={value as string}
-                      key={key}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center gap-1 text-neutral-darkgray hover:text-action-blue"
-                    >
-                      <Image
-                        className="size-3.5"
-                        src={`/images/logos/${key === 'Twitter' ? 'x' : key.toLowerCase()}.svg`}
-                        alt={key}
-                        width={14}
-                        height={14}
-                        loading="lazy"
-                      />
-                      <span className="truncate text-primary">{key}</span>
-                    </Link>
-                  ))
+              {project.email && (
+                <Link
+                  href={`mailto:${project.email}`}
+                  className="flex items-center gap-1 text-neutral-darkgray hover:text-action-blue"
+                >
+                  <EnvelopeIcon size={16} /> <span className="truncate text-primary">{project.email}</span>
+                </Link>
+              )}
+              {project.website && (
+                <Link
+                  href={project.website}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-1 text-neutral-darkgray hover:text-action-blue"
+                >
+                  <LinkIcon size={16} /> <span className="truncate text-primary">{project.website.replace(/^https?:\/\//, '')}</span>
+                </Link>
+              )}
+              {project.github && (
+                <Link
+                  href={formatSocialLinks(project.github, 'github')}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-1 text-neutral-darkgray hover:text-action-blue"
+                >
+                  <GithubLogoIcon size={16} /> <span className="truncate text-primary">{project.github}</span>
+                </Link>
+              )}
+              {socialLinks && Object.entries(socialLinks).map(([key, value]) => 
+                value && (
+                  <Link
+                    href={value as string}
+                    key={key}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-1 text-neutral-darkgray hover:text-action-blue"
+                  >
+                    <Image
+                      className="size-3.5"
+                      src={`/images/logos/${key.toLowerCase() === 'twitter' ? 'x' : key.toLowerCase()}.svg`}
+                      alt={key}
+                      width={14}
+                      height={14}
+                      loading="lazy"
+                    />
+                    <span className="truncate text-primary">{key}</span>
+                  </Link>
                 )
-              }
+              )}
             </div>
             <Button
               asChild
@@ -216,7 +231,7 @@ export default function ProjectDetailClientLayout({
               size="lg"
             >
               <Link
-                href={`https://intuipay.xyz/donate/${slug}`}
+                href={`/donate/${slug}`}
                 target="_blank"
               >
                 Donate Now
