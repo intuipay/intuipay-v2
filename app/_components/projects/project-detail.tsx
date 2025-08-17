@@ -39,18 +39,22 @@ export default function ProjectDetailClientLayout({
 
   function formatSocialLinks(socialLinks: Record<string, string> | string, name = '') {
     const domainReg = /^https?:\/\//;
-    if (typeof socialLinks === 'string') {
+    if (typeof socialLinks === 'string') { // process github
+      if (!socialLinks) return '';
       socialLinks = socialLinks.replace('@', '');
       if (!domainReg.test(socialLinks)) {
         socialLinks = `https://www.${name}.com/${socialLinks}`;
       }
-    } else {
+    } else { // process social_links
       for (const key in socialLinks) {
         const isTikTok = key.toLocaleLowerCase() === 'tiktok';
         const isLinkedIn = key.toLocaleLowerCase() === 'linkedin';
         const isTelegram = key.toLocaleLowerCase() === 'telegram';
 
         if (socialLinks.hasOwnProperty(key)) {
+          if (!socialLinks[ key ] || socialLinks[ key ].trim() === '') {
+            continue;
+          }
           if (!isTikTok && socialLinks[ key ].startsWith('@')) { // tiktok is a special case
             socialLinks[ key ] = socialLinks[ key ].replace('@', '');
           }
@@ -62,18 +66,14 @@ export default function ProjectDetailClientLayout({
             socialLinks[ key ] = `https://www.${key.toLowerCase()}.com/${isTikTok && !socialLinks[ key ].includes('@') ? '@' + socialLinks[ key ] : socialLinks[ key ]}`;
           }
 
-          if (isTelegram) {
-            if (!socialLinks[ key ].trim()) {
-              socialLinks[ key ] = "https://telegram.org"
-            } else {
-              socialLinks[ key ] = `https://t.me/${socialLinks[ key ]}`;
-            }
+          if (isTelegram && socialLinks[ key ]) {
+            socialLinks[ key ] = `https://t.me/${socialLinks[ key ]}`;
           }
         }
       }
     }
     return socialLinks;
-}
+  }
   const socialLinks = formatSocialLinks(project.social_links ? JSON.parse(project.social_links as string) : {});
   const [tab, setTab] = useState('campaign');
   const [updatesCount, setUpdatesCount] = useState(0);
