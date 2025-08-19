@@ -70,7 +70,7 @@ export function EditProfileDialog({ open, onOpenChange, profile, onProfileUpdate
     bio: profile.bio || '',
     number: profile.number || '',
     displayImage: profile.display_image || '',
-    privacyOnly: false,
+    privacyOnly: profile.privacy_level === 1,
     socialLinks: {
       website: parsedLinks.website || '',
       facebook: parsedLinks.facebook || '',
@@ -110,6 +110,7 @@ export function EditProfileDialog({ open, onOpenChange, profile, onProfileUpdate
             number: values.number,
             display_image: values.displayImage,
             social_links: JSON.stringify(values.socialLinks),
+            privacy_level: values.privacyOnly ? 1 : 0,
         }),
       })
       const result = await response.json() as { code: number; message?: string; data?: any }
