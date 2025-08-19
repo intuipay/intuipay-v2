@@ -1,13 +1,14 @@
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import MyCombobox from '@/components/my-combobox';
 import { DropdownItemProps } from '@/types';
 import { ChangeEvent, useState, useEffect, FormEvent, useCallback, useRef } from 'react';
 import CtaFooter from '@/app/_components/donate/cta-footer';
 import { clsx } from 'clsx';
 import Image from 'next/image';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, AlertCircle } from 'lucide-react';
 import { useAccount, useConnect, useDisconnect, useChainId, useSwitchChain } from 'wagmi';
 import { useMultiWalletBalance } from '@/hooks/use-multi-wallet-balance';
 import {
@@ -526,10 +527,33 @@ export default function DonationStep1({
           ))}
         </div>
         
-        <div className="text-right">
-          <span className="text-blue-600 underline text-sm cursor-pointer">
-            Rewards aren't guaranteed
-          </span>
+        <div className="flex items-center justify-end gap-1">
+          <Popover>
+            <PopoverTrigger asChild>
+              <button className="flex items-center gap-1 text-blue-600 hover:text-blue-700 transition-colors">
+                <AlertCircle className="h-4 w-4" />
+                <span className="text-sm underline cursor-pointer">
+                  Rewards aren't guaranteed
+                </span>
+              </button>
+            </PopoverTrigger>
+            <PopoverContent 
+              align="end" 
+              side="top"
+              sideOffset={8}
+              className="w-80 bg-black/80 text-white border-none p-3 rounded-lg"
+            >
+              <p className="text-xs leading-4 text-center">
+                While the creator agrees to use best endeavors to deliver the reward to you, please note that your 
+                receipt of the reward is not guaranteed and will depend on the nature and development of the 
+                project. Your receipt of the reward is also subject to any additional terms and requirements 
+                specified by creator, and your fulfillment of any requirements specified by the creator.
+              </p>
+              <div
+                className="absolute top-full right-6 w-0 h-0 border-l-[8px] border-r-[8px] border-t-[8px] border-l-transparent border-r-transparent border-t-black/80"
+              />
+            </PopoverContent>
+          </Popover>
         </div>
         
         {/* 继续按钮 */}
