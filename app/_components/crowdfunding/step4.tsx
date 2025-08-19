@@ -1,4 +1,4 @@
-import { ArrowLeft, TerminalIcon } from 'lucide-react';
+import { ArrowLeftIcon, TerminalIcon } from '@phosphor-icons/react';
 import { APIResponse, DonationInfo } from '@/types';
 import { useState, useEffect } from 'react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
@@ -358,7 +358,7 @@ export default function DonationStep4({
           title="Go back to previous step"
           aria-label="Go back to previous step"
         >
-          <ArrowLeft className="h-5 w-5" />
+          <ArrowLeftIcon className="h-5 w-5" />
         </button>
         <h1 className="text-xl font-semibold text-center text-gray-900">Finish your pledge</h1>
       </div>
@@ -367,7 +367,7 @@ export default function DonationStep4({
       <div className="mb-12 text-center">
         <p className="text-sm text-gray-900 leading-5">
           Your payment method will be charged immediately if the project hits its goal and you'll receive a confirmation email at{' '}
-          <span className="font-semibold">{info.email || info?.ship_info.email || 'your registered email'}</span>. Your pledge cannot be canceled or modified.
+          <span className="font-semibold">{info.email || info?.ship_info?.email || 'your registered email'}</span>. Your pledge cannot be canceled or modified.
         </p>
         <p className="text-sm text-gray-900 leading-5 mt-4">
           Any shipping costs and applicable taxes will be charged separately, when the creator is ready to begin fulfillment.
