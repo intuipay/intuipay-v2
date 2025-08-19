@@ -52,7 +52,7 @@ export default function DonationStep5({
         <h1 className="text-xl font-semibold text-black">
           Thank you for your support! You are the {info.index || 1} backer now.
         </h1>
-        <p className="text-sm text-black font-medium">{project.thanks_note || `You are the ${index} backer now.`} We apperiate your support, stay tuned for our future progress.</p>
+        <p className="text-sm text-black font-medium">{project.thanks_note || `You are the ${index} backer now.`} We appreciate your support, stay tuned for our future progress.</p>
       </div>
 
       <div className="w-full px-6 py-4 bg-neutral-100 rounded-lg border border-black/10 space-y-4">

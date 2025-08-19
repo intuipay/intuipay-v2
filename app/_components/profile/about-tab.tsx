@@ -26,7 +26,7 @@ export default function AboutTab({ profile }: AboutTabProps) {
               <p className="block leading-5">Location</p>
             </div>
             <div className="relative shrink-0 text-black w-full">
-              <p className="block leading-5">{profile.location || 'Shanghai, China'}</p>
+              <p className="block leading-5">{profile.location || 'Not specified'}</p>
             </div>
           </div>
           <div className="box-border flex flex-col font-semibold gap-2 items-start justify-start p-0 relative shrink-0 text-[14px] w-full">
