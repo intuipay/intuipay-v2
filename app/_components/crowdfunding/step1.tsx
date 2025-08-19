@@ -7,6 +7,7 @@ import { ChangeEvent, useState, useEffect, FormEvent, useCallback, useRef } from
 import CtaFooter from '@/app/_components/donate/cta-footer';
 import { clsx } from 'clsx';
 import Image from 'next/image';
+import { ArrowLeft } from 'lucide-react';
 import { useAccount, useConnect, useDisconnect, useChainId, useSwitchChain } from 'wagmi';
 import { useMultiWalletBalance } from '@/hooks/use-multi-wallet-balance';
 import {
@@ -85,6 +86,19 @@ export default function DonationStep1({
   const [error, setError] = useState<string>('');
   const lifiModalRef = useRef<HTMLDialogElement>(null);
   
+  // 内部子步骤管理
+  type SubStep = 'reward-selection' | 'wallet-connection';
+  const [currentSubStep, setCurrentSubStep] = useState<SubStep>('reward-selection');
+  
+  // 根据 hasSelectedReward 状态初始化子步骤
+  useEffect(() => {
+    if (hasSelectedReward) {
+      setCurrentSubStep('wallet-connection');
+    } else {
+      setCurrentSubStep('reward-selection');
+    }
+  }, [hasSelectedReward]);
+  
   // 将 project.rewards 字符串转换为 Reward[] 格式
   const parseProjectRewards = (rewardsString: string): Reward[] => {
     try {
@@ -157,6 +171,13 @@ export default function DonationStep1({
   // 处理继续到下一步
   const handleRewardNext = () => {
     setHasSelectedReward(true);
+    setCurrentSubStep('wallet-connection');
+  };
+
+  // 处理回到上一步
+  const handleGoBackToRewards = () => {
+    setCurrentSubStep('reward-selection');
+    setHasSelectedReward(false);
   };
   
   // 获取配置数据 - 从项目配置中获取
@@ -441,8 +462,8 @@ export default function DonationStep1({
     }
   }
   
-  // 如果还没有选择奖励，显示奖励选择界面
-  if (!hasSelectedReward) {
+  // 根据当前子步骤显示不同界面
+  if (currentSubStep === 'reward-selection') {
     return (
       <div className="space-y-6 pt-8">
         <h2 className="text-xl font-semibold text-center text-black">
@@ -541,51 +562,23 @@ export default function DonationStep1({
     );
   }
   
+  // 钱包连接界面
   return (
     <>
     <form onSubmit={handleConnect}>
       <div className="space-y-6 pt-8">
-        <h2 className="text-xl font-semibold text-center text-black">
-          {project.project_cta || 'Make your pledge today'}
-        </h2>
-        
-        {/* 显示所选奖励信息 */}
-        {selectedReward && (
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-            <div className="flex justify-between items-center">
-              <div>
-                <h3 className="font-semibold">Selected Reward: {selectedReward.name}</h3>
-                <p className="text-sm text-gray-600 mt-1">{selectedReward.description}</p>
-                <p className="text-sm font-medium mt-2">Minimum: ${selectedReward.amount}</p>
-              </div>
-              <button
-                type="button"
-                onClick={() => setHasSelectedReward(false)}
-                className="text-blue-600 hover:text-blue-700 text-sm underline"
-              >
-                Change
-              </button>
-            </div>
-          </div>
-        )}
-        
-        {pledgeWithoutReward && (
-          <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
-            <div className="flex justify-between items-center">
-              <div>
-                <h3 className="font-semibold">Pledge without reward</h3>
-                <p className="text-sm text-gray-600 mt-1">Supporting the project without expecting a reward</p>
-              </div>
-              <button
-                type="button"
-                onClick={() => setHasSelectedReward(false)}
-                className="text-gray-600 hover:text-gray-700 text-sm underline"
-              >
-                Change
-              </button>
-            </div>
-          </div>
-        )}
+        <div className="flex items-center justify-center relative">
+          <button
+            type="button"
+            onClick={handleGoBackToRewards}
+            className="absolute left-0 hidden sm:block"
+          >
+            <ArrowLeft className="h-5 w-5" />
+          </button>
+          <h2 className="text-xl font-semibold text-center text-black">
+            {project.project_cta || 'Make your pledge today'}
+          </h2>
+        </div>
         
         {/* Error message */}
         {error && (
@@ -760,6 +753,7 @@ export default function DonationStep1({
           isSubmittable={(isConnected || isPhantomConnected) ? !!amount : true}
           isLoading={isPending || isSwitchingChain}
           onSubmit={(isConnected || isPhantomConnected) ? handleSubmit : undefined}
+          goToPreviousStep={handleGoBackToRewards}
         />
       </div>
     </form>
