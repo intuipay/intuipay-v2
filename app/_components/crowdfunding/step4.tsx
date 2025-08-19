@@ -209,7 +209,8 @@ export default function DonationStep4({
           'content-type': 'application/json',
         },
         body: JSON.stringify({
-          ...omit(info, ['id', 'amount', 'created_at', 'updated_at', 'selected_reward', 'has_selected_reward', 'pledge_without_reward']),
+          ...omit(info, ['id', 'amount', 'email', 'created_at', 'updated_at', 'selected_reward', 'has_selected_reward', 'pledge_without_reward']),
+          email: info.email ? info.email : (info.contact_email || ''),
           amount: convertAmountBasedOnCurrency(info.amount as number, info.currency),
           has_tax_invoice: Number(info.has_tax_invoice),
           is_anonymous: Number(info.is_anonymous),
@@ -362,7 +363,7 @@ export default function DonationStep4({
       <div className="mb-12 text-center">
         <p className="text-sm text-gray-900 leading-5">
           Your payment method will be charged immediately if the project hits its goal and you'll receive a confirmation email at{' '}
-          <span className="font-semibold">{info.email || 'your registered email'}</span>. Your pledge cannot be canceled or modified.
+          <span className="font-semibold">{info.email || info.contact_email || 'your registered email'}</span>. Your pledge cannot be canceled or modified.
         </p>
         <p className="text-sm text-gray-900 leading-5 mt-4">
           Any shipping costs and applicable taxes will be charged separately, when the creator is ready to begin fulfillment.
