@@ -237,6 +237,7 @@ export interface Profile {
   first_name: string;
   last_name: string;
   display_image: string;
+  privacy_level?: number; // 0: 未选择隐私条件, 1: 选中了隐私条件
 }
 
 // 用户支持的项目类型，包含项目信息和用户的退款状态
