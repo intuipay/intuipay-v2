@@ -92,6 +92,18 @@ export type DonationInfo = {
   pledge_without_reward?: boolean;
   reward_id?: number;
 
+  // 收货地址相关字段
+  same_as_contact?: boolean;
+  shipping_name?: string;
+  shipping_address1?: string;
+  shipping_address2?: string;
+  shipping_country?: string;
+  shipping_state?: string;
+  shipping_city?: string;
+  shipping_zip?: string;
+  contact_email?: string;
+  contact_phone?: string;
+
   created_at?: string;
   updated_at?: string;
 }
