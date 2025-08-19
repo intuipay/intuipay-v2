@@ -266,7 +266,7 @@ export default function DonationStep4({
   async function doSubmit() {
     // Check donation amount validity
     if (!info.amount || info.amount <= 0) {
-      setMessage('Invalid donation amount');
+      setMessage('Invalid amount');
       return;
     }
 
