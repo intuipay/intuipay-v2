@@ -8,7 +8,7 @@ import { ChangeEvent, useState, useEffect, FormEvent, useCallback, useRef } from
 import CtaFooter from '@/app/_components/donate/cta-footer';
 import { clsx } from 'clsx';
 import Image from 'next/image';
-import { ArrowLeft, AlertCircle } from 'lucide-react';
+import { ArrowLeftIcon, WarningCircleIcon } from '@phosphor-icons/react';
 import { useAccount, useConnect, useDisconnect, useChainId, useSwitchChain } from 'wagmi';
 import { useMultiWalletBalance } from '@/hooks/use-multi-wallet-balance';
 import {
@@ -531,7 +531,7 @@ export default function DonationStep1({
           <Popover>
             <PopoverTrigger asChild>
               <button className="flex items-center gap-1 text-blue-600 hover:text-blue-700 transition-colors">
-                <AlertCircle className="h-4 w-4" />
+                <WarningCircleIcon className="h-4 w-4" />
                 <span className="text-sm underline cursor-pointer">
                   Rewards aren't guaranteed
                 </span>
@@ -597,7 +597,7 @@ export default function DonationStep1({
             onClick={handleGoBackToRewards}
             className="absolute left-0 hidden sm:block"
           >
-            <ArrowLeft className="h-5 w-5" />
+            <ArrowLeftIcon className="h-5 w-5" />
           </button>
           <h2 className="text-xl font-semibold text-center text-black">
             {project.project_cta || 'Make your pledge today'}

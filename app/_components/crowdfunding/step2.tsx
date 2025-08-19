@@ -1,8 +1,7 @@
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeftIcon } from '@phosphor-icons/react';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
 import { FormEvent, useEffect, useRef, useState } from 'react';
 import { DonationInfo, ShipInfo } from '@/types';
 import { Textarea } from '@/components/ui/textarea';
@@ -101,7 +100,7 @@ export default function DonationStep2({
             onClick={goToPreviousStep}
             className="absolute left-0 hidden sm:block"
           >
-            <ArrowLeft className="h-5 w-5" />
+            <ArrowLeftIcon className="h-5 w-5" />
           </button>
           <h1 className="text-xl font-semibold text-center text-gray-900">Leave your contact information</h1>
         </div>
@@ -326,7 +325,7 @@ export default function DonationStep2({
           onClick={handleGoBackToContact}
           className="absolute left-0 hidden sm:block"
         >
-          <ArrowLeft className="h-5 w-5" />
+          <ArrowLeftIcon className="h-5 w-5" />
         </button>
         <h1 className="text-xl font-semibold text-center text-gray-900">Your shipping address</h1>
       </div>
