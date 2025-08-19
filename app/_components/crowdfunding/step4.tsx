@@ -484,14 +484,14 @@ export default function DonationStep4({
         <p className="text-xs font-normal text-black/80 leading-4">
           By submitting your pledge, you agree to Intuipay's{' '}
           <a
-            href="#"
+            href="/terms-of-use"
             className="underline hover:no-underline"
           >
             Terms of Use
           </a>
           {', and '}
           <a
-            href="#"
+            href="/privacy-policy"
             className="underline hover:no-underline"
           >
             Privacy Policy
