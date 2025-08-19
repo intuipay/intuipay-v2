@@ -13,6 +13,18 @@ export type Currency = DropdownItemProps & {
   anotherSymbol: string;
 }
 
+export type ShipInfo = {
+  name: string;
+  address1: string;
+  address2?: string;
+  country: string;
+  state: string;
+  city: string;
+  zip: string;
+  email: string;
+  phone: string;
+}
+
 export type University = DropdownItemProps & {
   country?: string;
   countryIcon: string;
@@ -94,15 +106,8 @@ export type DonationInfo = {
 
   // 收货地址相关字段
   same_as_contact?: boolean;
-  shipping_name?: string;
-  shipping_address1?: string;
-  shipping_address2?: string;
-  shipping_country?: string;
-  shipping_state?: string;
-  shipping_city?: string;
-  shipping_zip?: string;
-  contact_email?: string;
-  contact_phone?: string;
+  ship_info?: ShipInfo; // 收货地址信息对象
+  index?: number;
 
   created_at?: string;
   updated_at?: string;

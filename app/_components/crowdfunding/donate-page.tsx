@@ -301,7 +301,7 @@ export default function DonationPageComp({
 
             {/* Complete Step */}
             {currentStep === 'complete' && <DonationStep5
-              index={info.id}
+              index={info.index || 1}
               reset={resetForm}
               project={projectInfo}
               info={info}
