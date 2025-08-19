@@ -1,7 +1,7 @@
 import { type ClassValue, clsx } from 'clsx'
 import { twMerge } from 'tailwind-merge'
-import { RewardShipMethod } from "@intuipay/shared/constants";
-import { REWARD_SHIP_METHOD_LABELS } from "@/data";
+import { RewardShipMethod } from '@intuipay/shared/constants';
+import { REWARD_SHIP_METHOD_LABELS } from '@/data';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))

@@ -1,6 +1,7 @@
 import { cache } from 'react';
 import { fetchTidb } from '@/services/fetch-tidb';
-import { ProjectInfo, ProjectFilter, Donation, Donations, Update, Updates } from '@/types';
+import { ProjectInfo } from '@intuipay/shared/types';
+import { ProjectFilter, Donation, Donations, Update, Updates } from '@/types';
 
 type CountResult = {
   count: number;

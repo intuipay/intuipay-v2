@@ -76,8 +76,8 @@ export function DonationsTab({ projectId }: DonationsTabProps) {
                   </AvatarFallback>
                 </Avatar>
                 <div className="flex flex-col">
-                  <p className="text-xs text-neutral-darkgray">{donation.timeAgo ?? ""}</p>
-                  <p className="font-medium text-neutral-text">{donation.first_name || donation.last_name ? `${donation.first_name} ${donation.last_name}` : "Anonymous"}</p>
+                  <p className="text-xs text-neutral-darkgray">{donation.timeAgo ?? ''}</p>
+                  <p className="font-medium text-neutral-text">{donation.first_name || donation.last_name ? `${donation.first_name} ${donation.last_name}` : 'Anonymous'}</p>
                 </div>
               </div>
               <div className="sm:col-span-3 text-left sm:text-left">
@@ -86,7 +86,7 @@ export function DonationsTab({ projectId }: DonationsTabProps) {
                     {donation.amount / 100} {donation.currency.toUpperCase()}
                   </span>
                 </div>
-                <p className="text-xs text-neutral-darkgray">$ {donation.amountUSD || "--"}</p>
+                <p className="text-xs text-neutral-darkgray">$ {donation.amountUSD || '--'}</p>
               </div>
               <div className="sm:col-span-3 text-left sm:text-left">
                 <p className="text-xs text-neutral-darkgray mb-0.5">Pledge from</p>

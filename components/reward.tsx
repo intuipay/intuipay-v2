@@ -1,11 +1,11 @@
-import React from "react";
-import { Card, CardContent } from "@/components/ui/card";
-import Image from "next/image";
-import { Availabilities } from "@/data";
-import { getRewardShipMethodLabel } from "@/lib/utils";
-import { RewardDraft } from "@/types";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
+import React from 'react';
+import { Card, CardContent } from '@/components/ui/card';
+import Image from 'next/image';
+import { Availabilities } from '@/data';
+import { getRewardShipMethodLabel } from '@/lib/utils';
+import { RewardDraft } from '@/types';
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
 
 export function Reward({
   id,
@@ -25,7 +25,7 @@ export function Reward({
 }) {
   const getAvailabilityText = () => {
     if (availability === Availabilities.Unlimited.toString())
-      return "Unlimited";
+      return 'Unlimited';
     else return `Limited (${number - count} left of ${number})`;
   };
 

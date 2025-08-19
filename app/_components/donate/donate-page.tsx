@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo, useState, lazy, useEffect } from 'react'
+import { useMemo, useState, lazy, useEffect, CSSProperties } from 'react'
 import { CircleDotIcon, HeadsetIcon } from 'lucide-react'
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion';
@@ -21,6 +21,7 @@ const DonationStep1 = lazy(() => import('@/app/_components/donate/step1'));
 
 type Step = 'initialization' | 'contacts' | 'payment' | 'complete'
 type Props = {
+  isPreview?: boolean;
   project: ProjectInfo;
   slug: string;
 }
@@ -57,6 +58,7 @@ const slideVariants = {
 }
 
 export default function DonationPageComp({
+  isPreview,
   project,
   slug,
 }: Props) {
@@ -166,12 +168,17 @@ export default function DonationPageComp({
   }, [network]);
 
   return (
-    <main className="lg:flex lg:items-center lg:justify-center lg:py-20">
+    <main
+      className={clsx(
+        'lg:flex lg:items-center lg:justify-center',
+        isPreview ? 'min-h-dvh' : 'lg:py-20',
+      )}
+    >
       <div
         className="w-full max-w-xl mx-auto bg-white lg:rounded-2xl lg:shadow-lg px-8 pt-6  lg:px-10"
         style={{
           '--brand-color': projectInfo.brand_color,
-        } as React.CSSProperties}
+        } as CSSProperties}
       >
         {/* Hero Image */}
         <div className="relative w-full aspect-[3/1] rounded-lg mb-4">

@@ -1,5 +1,5 @@
-import { ProjectInfo, RewardDraft } from "@/types";
-import Reward from "@/components/reward";
+import { ProjectInfo, RewardDraft } from '@/types';
+import Reward from '@/components/reward';
 
 interface RewardsTabProps {
   project: ProjectInfo;
