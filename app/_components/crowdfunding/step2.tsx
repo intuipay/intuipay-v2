@@ -257,7 +257,7 @@ export default function DonationStep2({
             onCheckedChange={(checked) => setIsAnonymous(checked as boolean)}
           />
           <Label htmlFor="anonymous" className="text-sm font-medium">
-            Make my donation anonymous
+            Make my pledge anonymous
           </Label>
         </div>
       </CtaFooter>
