@@ -1,4 +1,4 @@
-import { ArrowLeft, TerminalIcon } from 'lucide-react';
+import { ArrowLeftIcon, TerminalIcon } from '@phosphor-icons/react';
 import { APIResponse, DonationInfo } from '@/types';
 import { useState, useEffect } from 'react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
@@ -209,7 +209,8 @@ export default function DonationStep4({
           'content-type': 'application/json',
         },
         body: JSON.stringify({
-          ...omit(info, ['id', 'amount', 'created_at', 'updated_at', 'selected_reward', 'has_selected_reward', 'pledge_without_reward']),
+          ...omit(info, ['id', 'amount', 'email', 'created_at', 'updated_at', 'selected_reward', 'has_selected_reward', 'pledge_without_reward', 'same_as_contact']),
+          email: info.email ? info.email : (info.ship_info?.email || ''),
           amount: convertAmountBasedOnCurrency(info.amount as number, info.currency),
           has_tax_invoice: Number(info.has_tax_invoice),
           is_anonymous: Number(info.is_anonymous),
@@ -220,12 +221,14 @@ export default function DonationStep4({
           wallet_address: walletAddress || address || '',
           project_slug: project.project_slug,
           reward_id: info.selected_reward?.id || null,
+          // 将 ship_info 对象转换为 JSON 字符串
+          ship_info: info.ship_info ? JSON.stringify(info.ship_info) : null,
         }),
       });
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({ message: response.statusText }));
-        const errorMessage = errorData.message || response.statusText;
+        const errorMessage = (errorData as Error).message || response.statusText;
 
         // 检查是否是交易验证错误
         if (errorMessage.includes('Transaction validation failed')) {
@@ -237,7 +240,8 @@ export default function DonationStep4({
         return;
       }
 
-      const { data, validation } = (await response.json()) as APIResponse<number> & {
+      const { data, tx_id, validation } = (await response.json()) as APIResponse<number> & {
+        tx_id: number,
         validation?: { verified: boolean }
       };
 
@@ -246,15 +250,16 @@ export default function DonationStep4({
         console.log('Transaction verified successfully:');
       }
 
-      info.id = data;
-      
+      info.id = tx_id;
+      info.index = data;
+
       // Set transaction info for step 5
       onTransactionInfo?.({
         hash: transactionHash,
         walletAddress: walletAddress || address || '',
         recipientAddress: recipientAddress || '',
       });
-      
+
       setIsSubmitting(false);
       goToNextStep();
     } catch (e) {
@@ -266,7 +271,7 @@ export default function DonationStep4({
   async function doSubmit() {
     // Check donation amount validity
     if (!info.amount || info.amount <= 0) {
-      setMessage('Invalid donation amount');
+      setMessage('Invalid amount');
       return;
     }
 
@@ -353,7 +358,7 @@ export default function DonationStep4({
           title="Go back to previous step"
           aria-label="Go back to previous step"
         >
-          <ArrowLeft className="h-5 w-5" />
+          <ArrowLeftIcon className="h-5 w-5" />
         </button>
         <h1 className="text-xl font-semibold text-center text-gray-900">Finish your pledge</h1>
       </div>
@@ -362,7 +367,7 @@ export default function DonationStep4({
       <div className="mb-12 text-center">
         <p className="text-sm text-gray-900 leading-5">
           Your payment method will be charged immediately if the project hits its goal and you'll receive a confirmation email at{' '}
-          <span className="font-semibold">{info.email || 'your registered email'}</span>. Your pledge cannot be canceled or modified.
+          <span className="font-semibold">{info.email || info?.ship_info?.email || 'your registered email'}</span>. Your pledge cannot be canceled or modified.
         </p>
         <p className="text-sm text-gray-900 leading-5 mt-4">
           Any shipping costs and applicable taxes will be charged separately, when the creator is ready to begin fulfillment.
@@ -483,14 +488,14 @@ export default function DonationStep4({
         <p className="text-xs font-normal text-black/80 leading-4">
           By submitting your pledge, you agree to Intuipay's{' '}
           <a
-            href="#"
+            href="/terms-of-use"
             className="underline hover:no-underline"
           >
             Terms of Use
           </a>
           {', and '}
           <a
-            href="#"
+            href="/privacy-policy"
             className="underline hover:no-underline"
           >
             Privacy Policy

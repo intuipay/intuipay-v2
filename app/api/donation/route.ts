@@ -129,7 +129,8 @@ export async function POST(req: Request) {
     return new Response(
       JSON.stringify({
         code: 0,
-        data: data[ 0 ].last_insert_id,
+        data: data[ 0 ].index,
+        tx_id: data[ 0 ].last_insert_id,
         validation: {
           verified: true,
         },

@@ -21,7 +21,7 @@ export async function POST(req: Request) {
   const userId = headersList.get('x-user-id') ?? '';
 
   const params = await req.json() as Record<string, any>;
-  const { location, timezone, bio, social_links, number, first_name, last_name, display_image } = params;
+  const { location, timezone, bio, social_links, number, first_name, last_name, display_image, privacy_level } = params;
 
   console.log('Updating profile for user:', userId, location, timezone, bio, social_links, number, first_name, last_name, display_image);
   try {
@@ -35,6 +35,7 @@ export async function POST(req: Request) {
       first_name,
       last_name,
       display_image,
+      privacy_level,
     });
     return NextResponse.json({ code: 0, data: res });
   } catch (e) {

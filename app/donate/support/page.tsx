@@ -50,10 +50,10 @@ export default function SupportPage() {
                 <p>
                   <a
                     className="hover:text-blue-600"
-                    href="mailto:help@intuipay.com"
+                    href="mailto:support@intuipay.xyz"
                     target="_blank"
                   >
-                    help@intuipay.com
+                    support@intuipay.xyz
                   </a>
                 </p>
               </div>
@@ -78,7 +78,7 @@ export default function SupportPage() {
             />
           </Link>
           <Link
-            href="/donate/tos"
+            href="/terms-of-use"
             className="hover:text-blue-600 transition-colors flex items-center gap-2"
           >
             Terms & Conditions
