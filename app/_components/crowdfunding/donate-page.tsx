@@ -19,6 +19,7 @@ type Step = 'initialization' | 'contacts' | 'payment' | 'complete'
 type Props = {
   project: ProjectInfo;
   slug: string;
+  defaultSelectedRewardId?: string;
 }
 
 // Steps configuration
@@ -55,6 +56,7 @@ const slideVariants = {
 export default function DonationPageComp({
   project,
   slug,
+  defaultSelectedRewardId,
 }: Props) {
   // State
   const [currentStep, setCurrentStep] = useState<Step>('initialization')
@@ -99,6 +101,74 @@ export default function DonationPageComp({
   const handleSetPledgeWithoutReward = (pledgeWithout: boolean) => {
     updateInfo({ pledge_without_reward: pledgeWithout });
   };
+
+  // 解析项目奖励数据
+  const parseProjectRewards = (rewardsString: string): Reward[] => {
+    try {
+      const rawRewards = JSON.parse(rewardsString);
+      
+      // 映射 ship_method 数字到描述
+      const getShippingMethod = (shipMethod: number): string => {
+        switch (shipMethod) {
+          case 1: return 'By myself';
+          case 2: return 'Local pickup';
+          case 3: return 'Digital delivery';
+          default: return 'Digital delivery';
+        }
+      };
+      
+      // 格式化预计交付时间
+      const getEstimatedDelivery = (month: number | null, year: number | null): string => {
+        if (month && year) {
+          const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 
+                             'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+          return `${monthNames[ month - 1 ]} ${year}`;
+        }
+        return 'TBD';
+      };
+      
+      // 格式化可用性信息
+      const getAvailability = (number: number | null, count: number): string => {
+        if (!number) return 'Unlimited';
+        const used = Number.isFinite(count) ? count : 0;
+        const left = Math.max(0, number - used);
+        return `Limited (${left} left of ${number})`;
+      };
+      
+      return rawRewards.map((reward: any) => ({
+        id: reward.id.toString(),
+        name: reward.title || 'Untitled Reward',
+        description: reward.description || 'No description available',
+        amount: reward.amount || 0,
+        shipping_method: getShippingMethod(reward.ship_method),
+        estimated_delivery: getEstimatedDelivery(reward.month, reward.year),
+        availability: getAvailability(reward.number, reward.count),
+        image: reward.image || '',
+      }));
+    } catch (error) {
+      console.error('Error parsing project rewards:', error);
+      return [];
+    }
+  };
+
+  // 从项目数据中获取转换后的奖励
+  const projectRewards = project.rewards ? parseProjectRewards(project.rewards) : [];
+
+  // 处理 URL 中的 defaultSelectedRewardId 参数
+  useEffect(() => {
+    if (defaultSelectedRewardId && projectRewards.length > 0) {
+      const targetReward = projectRewards.find(reward => reward.id === defaultSelectedRewardId);
+      if (targetReward) {
+        // 自动选中对应的奖励
+        handleSetSelectedReward(targetReward);
+        setDollar(targetReward.amount);
+        handleSetPledgeWithoutReward(false);
+        // 直接跳转到钱包连接步骤
+        handleSetHasSelectedReward(true);
+        console.log(`Auto-selected reward: ${targetReward.name} (ID: ${defaultSelectedRewardId})`);
+      }
+    }
+  }, [defaultSelectedRewardId, projectRewards.length]);
 
   function onMessage(event: MessageEvent) {
     console.log('onMessage', event);
