@@ -18,11 +18,11 @@ export default function BackedTab({ projects }: BackedTabProps) {
         <p className="text-black/60 text-center text-base font-medium leading-6 max-w-[440px]">
           You are not backing any projects.
         </p>
-        <Link href="/projects">
-          <Button className="bg-blue-600 hover:bg-blue-600/90 text-white px-4 py-2 rounded-[40px] text-sm font-medium leading-5">
+        <Button asChild type="button" className="bg-blue-600 hover:bg-blue-600/90 text-white px-4 py-2 rounded-[40px] text-sm font-medium leading-5">
+          <Link href="/projects">
             Browse Projects
-          </Button>
-        </Link>
+          </Link>
+        </Button>
       </div>
     );
   }

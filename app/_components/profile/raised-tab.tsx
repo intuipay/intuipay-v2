@@ -17,11 +17,11 @@ export default function RaisedTab({ projects }: RaisedTabProps) {
         <p className="text-black/60 text-center text-base font-medium leading-6 max-w-[440px]">
           You are not raising any projects.
         </p>
-        <Link href={`${process.env.NEXT_PUBLIC_DASHBOARD_URL}/project/new`} target="_blank" rel="noopener noreferrer">
-          <Button className="bg-blue-600 hover:bg-blue-600/90 text-white px-4 py-2 rounded-[40px] text-sm font-medium leading-5">
+        <Button asChild type="button" className="bg-blue-600 hover:bg-blue-600/90 text-white px-4 py-2 rounded-[40px] text-sm font-medium leading-5">
+          <Link href={`${process.env.NEXT_PUBLIC_DASHBOARD_URL}/project/new`} target="_blank" rel="noopener noreferrer">
             Raise Now
-          </Button>
-        </Link>
+          </Link>
+        </Button>
       </div>
     );
   }

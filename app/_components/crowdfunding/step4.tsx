@@ -228,7 +228,7 @@ export default function DonationStep4({
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({ message: response.statusText }));
-        const errorMessage = (errorData as any).message || response.statusText;
+        const errorMessage = (errorData as Error).message || response.statusText;
 
         // 检查是否是交易验证错误
         if (errorMessage.includes('Transaction validation failed')) {
