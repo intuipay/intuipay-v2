@@ -120,7 +120,14 @@ export default function DonationPageComp({
         console.log(`Auto-selected reward: ${targetReward.name} (ID: ${defaultSelectedRewardId})`);
       }
     }
-  }, [defaultSelectedRewardId, projectRewards.length]);
+  }, [
+    defaultSelectedRewardId, 
+    projectRewards.length, 
+    handleSetSelectedReward, 
+    setDollar, 
+    handleSetPledgeWithoutReward, 
+    handleSetHasSelectedReward
+  ]);
 
   function onMessage(event: MessageEvent) {
     console.log('onMessage', event);
