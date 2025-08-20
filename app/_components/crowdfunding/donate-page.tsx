@@ -14,11 +14,13 @@ import DonationStep5 from '@/app/_components/crowdfunding/step5';
 import { createDonationInfo } from '@/utils';
 import { getNetworkDropdownOptionsFromProject } from '@/config/blockchain';
 import { CheckCircleIcon } from '@phosphor-icons/react/dist/ssr';
+import { getProjectRewards } from '@/lib/rewards';
 
 type Step = 'initialization' | 'contacts' | 'payment' | 'complete'
 type Props = {
   project: ProjectInfo;
   slug: string;
+  defaultSelectedRewardId?: string;
 }
 
 // Steps configuration
@@ -55,6 +57,7 @@ const slideVariants = {
 export default function DonationPageComp({
   project,
   slug,
+  defaultSelectedRewardId,
 }: Props) {
   // State
   const [currentStep, setCurrentStep] = useState<Step>('initialization')
@@ -100,6 +103,32 @@ export default function DonationPageComp({
     updateInfo({ pledge_without_reward: pledgeWithout });
   };
 
+  // 从项目数据中获取转换后的奖励
+  const projectRewards = getProjectRewards(project);
+
+  // 处理 URL 中的 defaultSelectedRewardId 参数
+  useEffect(() => {
+    if (defaultSelectedRewardId && projectRewards.length > 0) {
+      const targetReward = projectRewards.find(reward => reward.id === defaultSelectedRewardId);
+      if (targetReward) {
+        // 自动选中对应的奖励
+        handleSetSelectedReward(targetReward);
+        setDollar(targetReward.amount);
+        handleSetPledgeWithoutReward(false);
+        // 直接跳转到钱包连接步骤
+        handleSetHasSelectedReward(true);
+        console.log(`Auto-selected reward: ${targetReward.name} (ID: ${defaultSelectedRewardId})`);
+      }
+    }
+  }, [
+    defaultSelectedRewardId, 
+    projectRewards.length, 
+    handleSetSelectedReward, 
+    setDollar, 
+    handleSetPledgeWithoutReward, 
+    handleSetHasSelectedReward
+  ]);
+
   function onMessage(event: MessageEvent) {
     console.log('onMessage', event);
     const allowedOrigins = [
@@ -138,7 +167,7 @@ export default function DonationPageComp({
     setSlideDirection('right')
     if (currentStep === 'initialization') setCurrentStep('contacts')
     else if (currentStep === 'contacts') setCurrentStep('payment')
-    else  if (currentStep === 'payment') setCurrentStep('complete')
+    else if (currentStep === 'payment') setCurrentStep('complete')
   }
   const goToPreviousStep = () => {
     setSlideDirection('left')
@@ -190,12 +219,12 @@ export default function DonationPageComp({
         <div className="relative w-full aspect-[3/1] rounded-lg mb-4 overflow-hidden">
           {projectInfo.banner
             ? <Image
-                src={projectInfo.banner}
-                alt={projectInfo.project_name}
-                fill
-                className="object-cover object-center"
-                priority
-                />
+              src={projectInfo.banner}
+              alt={projectInfo.project_name}
+              fill
+              className="object-cover object-center"
+              priority
+            />
             : <div className="w-full h-full bg-gray-100 flex items-center justify-center text-2xl font-bold text-black/50">
               {projectInfo.project_name}
             </div>}

@@ -1,16 +1,15 @@
 import { Metadata } from 'next';
-import { getDonationProjectBySlug } from '@/lib/data';
+import { getDonationProjectBySlug, getProjectDetail } from '@/lib/data';
 import DonationPageComp from '@/app/_components/donate/donate-page';
 import CrowdFundingPageComp from '@/app/_components/crowdfunding/donate-page';
 import { notFound } from 'next/navigation';
 import BackButton from '@/components/back-button';
-import { Button } from '@/components/ui/button';
 import type React from 'react';
 import { ProjectTypes } from '@/data';
 
 type Props = {
   params: Promise<{ slug: string }>;
-  searchParams: Promise<{ preview?: string }>;
+  searchParams: Promise<{ preview?: string; reward_id?: string }>;
 }
 
 export async function generateMetadata({
@@ -48,8 +47,9 @@ export default async function DonatePage({
   searchParams,
 }: Props) {
   const slug = (await params).slug[ 0 ]; // 目前定义的是动态路由 ...slug，所以返回的是数组，要提取第一个元素
-  const isPreview = !!(await searchParams).preview;
-  const project = await getDonationProjectBySlug(slug);
+  const resolvedSearchParams = await searchParams;
+  const isPreview = !!resolvedSearchParams.preview;
+  const project = await getProjectDetail(slug);
   const pageTitle = project?.project_name || 'Support';
 
   if (!project) {
@@ -62,7 +62,7 @@ export default async function DonatePage({
         <div className="flex items-center gap-3">
           <BackButton className="hidden" />
           <div>
-            <p className="text-sm text-gray-600">Crownfund to</p>
+            <p className="text-sm text-gray-600">Pledging to</p>
             <p className="font-medium text-gray-900 truncate">{pageTitle}</p>
           </div>
         </div>
@@ -70,6 +70,7 @@ export default async function DonatePage({
       <CrowdFundingPageComp
         project={project}
         slug={slug}
+        defaultSelectedRewardId={resolvedSearchParams.reward_id as string | undefined}
       />
     </>;
   }
