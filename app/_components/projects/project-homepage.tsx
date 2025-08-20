@@ -11,6 +11,7 @@ import { ProjectFilter } from '@/types'
 import { DropdownMenuRadioGroup, DropdownMenuRadioItem } from '@radix-ui/react-dropdown-menu'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { ProjectCategories, ProjectDonationMethods, ProjectTypes } from '@/data'
+import Link from 'next/link'
 
 type ProjectHomepageProps = PropsWithChildren & {
   initialSearch?: string;
@@ -236,7 +237,9 @@ export default function ProjectHomepage({
         <h2 className="font-bold mb-4 sm:text-4xl text-3xl">Have A Project That Needs Support?</h2>
         <p className="mb-8 font-normal text-black/50">We&apos;re building a platform to support groundbreaking, university-affiliated research. If you&apos;re leading a verified academic or institutional project, you can share it here and start receiving donations.</p>
         <Button className="w-60 h-14 border-neutral-mediumgray text-base rounded-full text-white font-semibold">
-          Create project
+          <Link target="_blank" href={`${process.env.NEXT_PUBLIC_DASHBOARD_URL}/project/new`}>
+            Create project
+          </Link>
         </Button>
       </section>
     </div>

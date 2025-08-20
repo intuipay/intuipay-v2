@@ -5,15 +5,15 @@ import Link from 'next/link'
 import { marked } from 'marked'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import {
-  Envelope,
-  MapPin,
-  Link as LinkIcon,
-  ArrowSquareOut,
-  LinkedinLogo,
-  InstagramLogo,
-  TwitterLogo,
-  YoutubeLogo,
-  FacebookLogo
+  EnvelopeIcon,
+  MapPinIcon,
+  LinkIcon,
+  ArrowSquareOutIcon,
+  LinkedinLogoIcon,
+  InstagramLogoIcon,
+  TwitterLogoIcon,
+  YoutubeLogoIcon,
+  FacebookLogoIcon
 } from '@phosphor-icons/react';
 import type { ProjectInfo } from '@/types'
 
@@ -45,23 +45,38 @@ export function AboutTab({ project }: AboutTabProps) {
       />
 
       <div className="space-y-2 mb-10 text-sm">
-        <Link
-          href={`mailto:${email}`}
-          className="flex items-center text-neutral-darkgray hover:text-action-blue"
-        >
-          <Envelope size={16} className="mr-2" /> Contact Us
-        </Link>
-        <p className="flex items-center text-neutral-darkgray">
-          <MapPin size={16} className="mr-2" /> {org_location}
-        </p>
-        <Link
-          href={org_website}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex items-center text-neutral-darkgray hover:text-action-blue"
-        >
-          <LinkIcon size={16} className="mr-2" /> {org_website} <ArrowSquareOut size={12} className="ml-1" />
-        </Link>
+        {
+          email && <Link
+            href={`mailto:${email}`}
+            className="flex items-center text-neutral-darkgray hover:text-action-blue"
+          >
+            <EnvelopeIcon className="size-4 mr-2" />{" "}
+            <span className="text-primary font-medium">Contact Us</span>
+          </Link>
+        }
+        {
+          org_location &&
+          <div className="flex">
+            <MapPinIcon className="size-4 mr-2" /> 
+            <span className="flex items-center text-neutral-darkgray">
+              {org_location}
+            </span>
+          </div>
+        }
+        {
+          org_website && <Link
+            href={org_website}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center text-neutral-darkgray hover:text-action-blue"
+          >
+            <LinkIcon className="size-4 mr-2" />
+            <div className="flex">
+              <span>{org_website}</span>
+              <ArrowSquareOutIcon className="size-4 ml-1" />
+            </div>
+          </Link>
+        }
       </div>
 
       <div className="flex space-x-3 mb-6">
@@ -73,7 +88,7 @@ export function AboutTab({ project }: AboutTabProps) {
             aria-label="LinkedIn"
             className="text-neutral-darkgray hover:text-action-blue"
           >
-            <LinkedinLogo size={20} />
+            <LinkedinLogoIcon className="size-5" />
           </Link>
         )}
         {(
@@ -84,7 +99,7 @@ export function AboutTab({ project }: AboutTabProps) {
             aria-label="Instagram"
             className="text-neutral-darkgray hover:text-action-blue"
           >
-            <InstagramLogo size={20} />
+            <InstagramLogoIcon className="size-5" />
           </Link>
         )}
         {(
@@ -95,7 +110,7 @@ export function AboutTab({ project }: AboutTabProps) {
             aria-label="Twitter"
             className="text-neutral-darkgray hover:text-action-blue"
           >
-            <TwitterLogo size={20} />
+            <TwitterLogoIcon className="size-5" />
           </Link>
         )}
         {(
@@ -106,7 +121,7 @@ export function AboutTab({ project }: AboutTabProps) {
             aria-label="YouTube"
             className="text-neutral-darkgray hover:text-action-blue"
           >
-            <YoutubeLogo size={20} />
+            <YoutubeLogoIcon className="size-5" />
           </Link>
         )}
         {(
@@ -117,7 +132,7 @@ export function AboutTab({ project }: AboutTabProps) {
             aria-label="Facebook"
             className="text-neutral-darkgray hover:text-action-blue"
           >
-            <FacebookLogo size={20} />
+            <FacebookLogoIcon className="size-5" />
           </Link>
         )}
       </div>
