@@ -27,3 +27,4 @@ TIDB_CLOUD_ENDPOINT = "https://ap-northeast-1.data.tidbcloud.com/api/v1beta/app/
 NEXT_PUBLIC_USDC_CONTRACT_ADDRESS = "0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238"
 NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID = "2056cd0f53ff3372b3b40ad4c0508c44"
 NEXT_PUBLIC_DASHBOARD_URL = "https://dash.dev.intuipay.xyz"
+NEXT_PUBLIC_ASSET_DOMAIN = "https://assets.intuipay.xyz"
