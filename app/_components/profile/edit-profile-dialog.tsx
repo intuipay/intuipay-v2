@@ -70,7 +70,7 @@ export function EditProfileDialog({ open, onOpenChange, profile, onProfileUpdate
     bio: profile.bio || '',
     number: profile.number || '',
     displayImage: profile.display_image || '',
-    privacyOnly: profile.privacy_level === 1,
+    privacyOnly: (profile.privacy_level && Number(profile.privacy_level) === 1) ? true : false, // privacy_level 是 '0', '1'，要注意区分
     socialLinks: {
       website: parsedLinks.website || '',
       facebook: parsedLinks.facebook || '',
@@ -90,8 +90,6 @@ export function EditProfileDialog({ open, onOpenChange, profile, onProfileUpdate
     defaultValues,
   })
 
-  const firstName = form.watch('firstName') || ''
-  const lastName = form.watch('lastName') || ''
   const displayImageVal = form.watch('displayImage') || ''
 
   const onSubmit = async (values: ProfileFormValues) => {

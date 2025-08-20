@@ -43,7 +43,7 @@ export default function AboutTab({ profile }: AboutTabProps) {
             </div>
             <div className="box-border flex gap-3 items-center justify-start p-0 relative shrink-0">
               <div className="font-semibold relative shrink-0 text-black text-[14px]">
-                <p className="block leading-5">{profile.privacy_level ? 'Only show my name and avatar' : 'Show all my profile info'}</p>
+                <p className="block leading-5">{profile.privacy_level && Number(profile.privacy_level) === 1 ? 'Only show my name and avatar' : 'Show all my profile info'}</p>
               </div>
             </div>
           </div>
