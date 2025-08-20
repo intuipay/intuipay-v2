@@ -62,7 +62,7 @@ export function getDonationProps(project: ProjectInfo, donation: DonationInfo): 
     endAt: project.end_at,
     from: project.org_name,
     id: donation.id,
-    index: donation.id,
+    index: donation.index || 1,
     projectName: project.project_name,
     status: 'successful',
     txHash: donation.tx_hash || '',

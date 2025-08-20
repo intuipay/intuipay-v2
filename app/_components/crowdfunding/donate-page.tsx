@@ -187,13 +187,13 @@ export default function DonationPageComp({
         } as React.CSSProperties}
       >
         {/* Hero Image */}
-        <div className="relative w-full aspect-[3/1] rounded-lg mb-4">
+        <div className="relative w-full aspect-[3/1] rounded-lg mb-4 overflow-hidden">
           {projectInfo.banner
             ? <Image
                 src={projectInfo.banner}
                 alt={projectInfo.project_name}
                 fill
-                className="object-contain object-center"
+                className="object-cover object-center"
                 priority
                 />
             : <div className="w-full h-full bg-gray-100 flex items-center justify-center text-2xl font-bold text-black/50">
@@ -301,7 +301,7 @@ export default function DonationPageComp({
 
             {/* Complete Step */}
             {currentStep === 'complete' && <DonationStep5
-              index={info.id}
+              index={info.index || 1}
               reset={resetForm}
               project={projectInfo}
               info={info}

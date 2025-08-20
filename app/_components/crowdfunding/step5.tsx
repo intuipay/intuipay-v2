@@ -50,9 +50,9 @@ export default function DonationStep5({
     <div className="space-y-6 flex flex-col items-center">
       <div className="text-center space-y-2">
         <h1 className="text-xl font-semibold text-black">
-          Thank you for your support!
+          Thank you for your support! You are the {info.index || 1} backer now.
         </h1>
-        <p className="text-sm text-black font-medium">{project.thanks_note || `You are the ${index} backer now.`} We apperiate your support, stay tuned for our future progress.</p>
+        <p className="text-sm text-black font-medium">{project.thanks_note || `You are the ${index} backer now.`} We appreciate your support, stay tuned for our future progress.</p>
       </div>
 
       <div className="w-full px-6 py-4 bg-neutral-100 rounded-lg border border-black/10 space-y-4">
@@ -78,11 +78,6 @@ export default function DonationStep5({
         
         <div className="flex justify-between items-center">
           <span className="text-black/60 text-xs">Pledge Amount</span>
-          <span className="text-black text-xs">{(info.dollar ?? 0).toLocaleString()} USD</span>
-        </div>
-        
-        <div className="flex justify-between items-center">
-          <span className="text-black/60 text-xs">Currency</span>
           <span className="text-black text-xs">{info.amount} {info.currency}</span>
         </div>
         

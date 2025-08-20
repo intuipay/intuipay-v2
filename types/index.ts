@@ -13,6 +13,18 @@ export type Currency = DropdownItemProps & {
   anotherSymbol: string;
 }
 
+export type ShipInfo = {
+  name: string;
+  address1: string;
+  address2?: string;
+  country: string;
+  state: string;
+  city: string;
+  zip: string;
+  email: string;
+  phone: string;
+}
+
 export type University = DropdownItemProps & {
   country?: string;
   countryIcon: string;
@@ -91,6 +103,11 @@ export type DonationInfo = {
   has_selected_reward?: boolean;
   pledge_without_reward?: boolean;
   reward_id?: number;
+
+  // 收货地址相关字段
+  same_as_contact?: boolean;
+  ship_info?: ShipInfo; // 收货地址信息对象
+  index?: number;
 
   created_at?: string;
   updated_at?: string;
@@ -220,6 +237,7 @@ export interface Profile {
   first_name: string;
   last_name: string;
   display_image: string;
+  privacy_level?: number; // 0: 未选择隐私条件, 1: 选中了隐私条件
 }
 
 // 用户支持的项目类型，包含项目信息和用户的退款状态

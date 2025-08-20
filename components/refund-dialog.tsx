@@ -408,7 +408,7 @@ export function RefundDialog({ open, onOpenChange, projectId, campaignId, contra
               <Button
                 onClick={handleRefundRequest}
                 disabled={isProcessingRefund || isContractPending || isConfirming}
-                className="flex-1 bg-[#2461f2] hover:bg-[#1a4cc7] disabled:opacity-50"
+                className="flex-1 bg-blue-600 hover:bg-[#1a4cc7] disabled:opacity-50"
               >
                 {isProcessingRefund || isContractPending ? (
                   <div className="flex items-center gap-2">

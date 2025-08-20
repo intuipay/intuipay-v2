@@ -77,9 +77,9 @@ export const config = createConfig({
     }),
   ] : [],
   transports: {
-    [mainnet.id]: http(),
-    [sepolia.id]: http(),
-    [pharosTestnet.id]: http(),
-    [eduTestnet.id]: http(),
+    [ mainnet.id ]: http(),
+    [ sepolia.id ]: http(),
+    [ pharosTestnet.id ]: http(),
+    [ eduTestnet.id ]: http(),
   },
 })

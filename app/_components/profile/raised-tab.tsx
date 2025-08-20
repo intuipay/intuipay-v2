@@ -1,5 +1,7 @@
 import { ProjectCard } from '@/components/project-card';
 import { ProjectInfo } from '@/types';
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
 
 interface RaisedTabProps {
   projects?: ProjectInfo[];
@@ -11,9 +13,15 @@ export default function RaisedTab({ projects }: RaisedTabProps) {
 
   if (projectsToShow.length === 0) {
     return (
-      <div className="w-full text-center py-12">
-        <p className="text-gray-500 text-lg">No projects created yet</p>
-        <p className="text-gray-400 text-sm mt-2">Projects you create will appear here</p>
+      <div className="w-full flex flex-col items-center justify-center gap-10 py-12">
+        <p className="text-black/60 text-center text-base font-medium leading-6 max-w-[440px]">
+          You are not raising any projects.
+        </p>
+        <Button asChild type="button" className="bg-blue-600 hover:bg-blue-600/90 text-white px-4 py-2 rounded-[40px] text-sm font-medium leading-5">
+          <Link href={`${process.env.NEXT_PUBLIC_DASHBOARD_URL}/project/new`} target="_blank" rel="noopener noreferrer">
+            Raise Now
+          </Link>
+        </Button>
       </div>
     );
   }

@@ -1,6 +1,8 @@
 import { ProjectCard } from '@/components/project-card';
 import { ProjectStatus } from '@/data/project';
 import { BackedProject } from '@/types';
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
 
 interface BackedTabProps {
   projects?: BackedProject[]; // 用户支持的项目列表，包含退款状态
@@ -12,8 +14,15 @@ export default function BackedTab({ projects }: BackedTabProps) {
 
   if (projectsToShow.length === 0) {
     return (
-      <div className="w-full text-center py-12">
-        <p className="text-black-600">You are not backing any projects.</p>
+      <div className="w-full flex flex-col items-center justify-center gap-10 py-12">
+        <p className="text-black/60 text-center text-base font-medium leading-6 max-w-[440px]">
+          You are not backing any projects.
+        </p>
+        <Button asChild type="button" className="bg-blue-600 hover:bg-blue-600/90 text-white px-4 py-2 rounded-[40px] text-sm font-medium leading-5">
+          <Link href="/projects">
+            Browse Projects
+          </Link>
+        </Button>
       </div>
     );
   }
