@@ -20,6 +20,7 @@ import {
 import { useExchangeRates } from '@/hooks/use-exchange-rates';
 import { ProjectInfo, Reward } from '@/types';
 import { Widget as WidgetPage } from './LifiWidget';
+import { getProjectRewards } from '@/lib/rewards';
 
 // 钱包官网链接
 const WALLET_INSTALL_LINKS = {
@@ -54,7 +55,7 @@ type Props = {
   dollar: number | null;
   setDollar: (value: number | null) => void;
   project: ProjectInfo;
-  
+
   // 奖励相关props
   selectedReward?: Reward | null;
   setSelectedReward: (reward: Reward | null) => void;
@@ -86,11 +87,11 @@ export default function DonationStep1({
 }: Props) {
   const [error, setError] = useState<string>('');
   const lifiModalRef = useRef<HTMLDialogElement>(null);
-  
+
   // 内部子步骤管理
   type SubStep = 'reward-selection' | 'wallet-connection';
   const [currentSubStep, setCurrentSubStep] = useState<SubStep>('reward-selection');
-  
+
   // 根据 hasSelectedReward 状态初始化子步骤
   useEffect(() => {
     if (hasSelectedReward) {
@@ -99,60 +100,9 @@ export default function DonationStep1({
       setCurrentSubStep('reward-selection');
     }
   }, [hasSelectedReward]);
-  
-  // 将 project.rewards 字符串转换为 Reward[] 格式
-  const parseProjectRewards = (rewardsString: string): Reward[] => {
-    try {
-      const rawRewards = JSON.parse(rewardsString);
-      console.log('project reward', rawRewards);
-      
-      // 映射 ship_method 数字到描述
-      const getShippingMethod = (shipMethod: number): string => {
-        switch (shipMethod) {
-          case 1: return 'By myself';
-          case 2: return 'Local pickup';
-          case 3: return 'Digital delivery';
-          default: return 'Digital delivery';
-        }
-      };
-      
-      // 格式化预计交付时间
-      const getEstimatedDelivery = (month: number | null, year: number | null): string => {
-        if (month && year) {
-          const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 
-                             'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-          return `${monthNames[ month - 1 ]} ${year}`;
-        }
-        return 'TBD';
-      };
-      
-      // 格式化可用性信息
-      // number: 总量, count: 已用的, number - count: 剩余可用的
-      const getAvailability = (number: number | null, count: number): string => {
-        if (!number) return 'Unlimited';
-        const used = Number.isFinite(count) ? count : 0; // 兜底：非数字/空值按0处理
-        const left = Math.max(0, number - used);
-        return `Limited (${left} left of ${number})`;
-      };
-      
-      return rawRewards.map((reward: any) => ({
-        id: reward.id.toString(),
-        name: reward.title || 'Untitled Reward',
-        description: reward.description || 'No description available',
-        amount: reward.amount || 0,
-        shipping_method: getShippingMethod(reward.ship_method),
-        estimated_delivery: getEstimatedDelivery(reward.month, reward.year),
-        availability: getAvailability(reward.number, reward.count),
-        image: reward.image || '', // 确保有图片字段
-      }));
-    } catch (error) {
-      console.error('Error parsing project rewards:', error);
-      return [];
-    }
-  };
-  
+
   // 从项目数据中获取转换后的奖励
-  const projectRewards = project.rewards ? parseProjectRewards(project.rewards) : [];
+  const projectRewards = getProjectRewards(project);
 
   // 处理奖励选择
   const handleRewardSelect = (reward: Reward) => {
@@ -180,7 +130,7 @@ export default function DonationStep1({
     setCurrentSubStep('reward-selection');
     setHasSelectedReward(false);
   };
-  
+
   // 获取配置数据 - 从项目配置中获取
   const networkOptions = getNetworkDropdownOptionsFromProject(project);
   const allWallets = Object.values(BLOCKCHAIN_CONFIG.wallets);
@@ -425,12 +375,12 @@ export default function DonationStep1({
   function onAmountChange(event: ChangeEvent<HTMLInputElement>) {
     const input = event.target as HTMLInputElement;
     let value = input.value ? Number(input.value) : 0;
-    
+
     // 如果选择了奖励，确保金额不低于奖励的最小金额
     if (selectedReward && value < selectedReward.amount) {
       value = selectedReward.amount;
     }
-    
+
     setAmount(value);
 
     // 使用真实汇率转换为美元金额
@@ -446,12 +396,12 @@ export default function DonationStep1({
   function onDollarChange(event: ChangeEvent<HTMLInputElement>) {
     const input = event.target as HTMLInputElement;
     let value = input.value ? Number(input.value) : 0;
-    
+
     // 如果选择了奖励，确保美元金额不低于奖励的最小金额
     if (selectedReward && value < selectedReward.amount) {
       value = selectedReward.amount;
     }
-    
+
     setDollar(value);
 
     // 使用真实汇率转换为加密货币金额
@@ -462,7 +412,7 @@ export default function DonationStep1({
       setAmount(value);
     }
   }
-  
+
   // 根据当前子步骤显示不同界面
   if (currentSubStep === 'reward-selection') {
     return (
@@ -470,17 +420,16 @@ export default function DonationStep1({
         <h2 className="text-xl font-semibold text-center text-black">
           Select your reward
         </h2>
-        
+
         {/* 奖励列表 */}
         <div className="space-y-4">
           {projectRewards.map((reward) => (
             <div
               key={reward.id}
-              className={`border rounded-lg p-4 cursor-pointer transition-all ${
-                selectedReward?.id === reward.id 
-                  ? 'border-blue-500 bg-blue-50' 
+              className={`border rounded-lg p-4 cursor-pointer transition-all ${selectedReward?.id === reward.id
+                  ? 'border-blue-500 bg-blue-50'
                   : 'border-gray-200 hover:border-gray-300'
-              }`}
+                }`}
               onClick={() => handleRewardSelect(reward)}
             >
               {/* 奖励图片 */}
@@ -500,14 +449,14 @@ export default function DonationStep1({
                   <span className="text-gray-500 text-sm">No image available</span>
                 </div>
               )}
-              
+
               <div className="flex justify-between items-start mb-2">
                 <h3 className="font-semibold text-lg">{reward.name}</h3>
                 <span className="font-bold text-lg">${reward.amount}</span>
               </div>
-              
+
               <p className="text-gray-600 text-sm mb-4">{reward.description}</p>
-              
+
               <div className="grid grid-cols-2 gap-4 text-sm text-gray-500">
                 <div>
                   <div className="font-medium">Shipping method</div>
@@ -518,7 +467,7 @@ export default function DonationStep1({
                   <div>{reward.estimated_delivery}</div>
                 </div>
               </div>
-              
+
               <div className="mt-2 text-sm text-gray-500">
                 <div className="font-medium">Availability</div>
                 <div>{reward.availability}</div>
@@ -526,7 +475,7 @@ export default function DonationStep1({
             </div>
           ))}
         </div>
-        
+
         <div className="flex items-center justify-end gap-1">
           <Popover>
             <PopoverTrigger asChild>
@@ -537,16 +486,16 @@ export default function DonationStep1({
                 </span>
               </button>
             </PopoverTrigger>
-            <PopoverContent 
-              align="end" 
+            <PopoverContent
+              align="end"
               side="top"
               sideOffset={8}
               className="w-80 bg-black/80 text-white border-none p-3 rounded-lg"
             >
               <p className="text-xs leading-4 text-center">
-                While the creator agrees to use best endeavors to deliver the reward to you, please note that your 
-                receipt of the reward is not guaranteed and will depend on the nature and development of the 
-                project. Your receipt of the reward is also subject to any additional terms and requirements 
+                While the creator agrees to use best endeavors to deliver the reward to you, please note that your
+                receipt of the reward is not guaranteed and will depend on the nature and development of the
+                project. Your receipt of the reward is also subject to any additional terms and requirements
                 specified by creator, and your fulfillment of any requirements specified by the creator.
               </p>
               <div
@@ -555,7 +504,7 @@ export default function DonationStep1({
             </PopoverContent>
           </Popover>
         </div>
-        
+
         {/* 继续按钮 */}
         <CtaFooter
           buttonLabel="Next"
@@ -585,223 +534,223 @@ export default function DonationStep1({
       </div>
     );
   }
-  
+
   // 钱包连接界面
   return (
     <>
-    <form onSubmit={handleConnect}>
-      <div className="space-y-6 pt-8">
-        <div className="flex items-center justify-center relative">
-          <button
-            type="button"
-            onClick={handleGoBackToRewards}
-            className="absolute left-0 hidden sm:block"
-          >
-            <ArrowLeftIcon className="h-5 w-5" />
-          </button>
-          <h2 className="text-xl font-semibold text-center text-black">
-            {project.project_cta || 'Make your pledge today'}
-          </h2>
-        </div>
-        
-        {/* Error message */}
-        {error && (
-          <div className="bg-red-50 border border-red-200 rounded-lg p-3">
-            <p className="text-red-600 text-sm">{error}</p>
+      <form onSubmit={handleConnect}>
+        <div className="space-y-6 pt-8">
+          <div className="flex items-center justify-center relative">
+            <button
+              type="button"
+              onClick={handleGoBackToRewards}
+              className="absolute left-0 hidden sm:block"
+            >
+              <ArrowLeftIcon className="h-5 w-5" />
+            </button>
+            <h2 className="text-xl font-semibold text-center text-black">
+              {project.project_cta || 'Make your pledge today'}
+            </h2>
           </div>
-        )}
-        {/* Exchange rate error */}
-        {ratesError && (
-          <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
-            <p className="text-yellow-600 text-sm">
-              fetch rate failed: {ratesError}，use fallback rate instead.
-            </p>
-          </div>
-        )}
-        {/* Network Selection */}
-        <div className="space-y-2">
-          <Label className="text-sm font-semibold text-black/50">Network</Label>
-          {(isConnected || isPhantomConnected) ? (
-            <div className="flex items-center justify-between p-3 border rounded-lg bg-gray-50">
-              <div className="flex items-center gap-3">
-                <Image
-                  src={`/images/logo/${currentNetwork?.icon || 'ethereum'}.svg`}
-                  width={24}
-                  height={24}
-                  className="size-6"
-                  alt={currentNetwork?.name || 'Network'}
-                  loading="lazy"
-                />
-                <span className="font-medium">{currentNetwork?.name || network}</span>
-              </div>
-              <span className="text-sm text-gray-500">Connected</span>
+
+          {/* Error message */}
+          {error && (
+            <div className="bg-red-50 border border-red-200 rounded-lg p-3">
+              <p className="text-red-600 text-sm">{error}</p>
             </div>
-          ) : (
+          )}
+          {/* Exchange rate error */}
+          {ratesError && (
+            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
+              <p className="text-yellow-600 text-sm">
+                fetch rate failed: {ratesError}，use fallback rate instead.
+              </p>
+            </div>
+          )}
+          {/* Network Selection */}
+          <div className="space-y-2">
+            <Label className="text-sm font-semibold text-black/50">Network</Label>
+            {(isConnected || isPhantomConnected) ? (
+              <div className="flex items-center justify-between p-3 border rounded-lg bg-gray-50">
+                <div className="flex items-center gap-3">
+                  <Image
+                    src={`/images/logo/${currentNetwork?.icon || 'ethereum'}.svg`}
+                    width={24}
+                    height={24}
+                    className="size-6"
+                    alt={currentNetwork?.name || 'Network'}
+                    loading="lazy"
+                  />
+                  <span className="font-medium">{currentNetwork?.name || network}</span>
+                </div>
+                <span className="text-sm text-gray-500">Connected</span>
+              </div>
+            ) : (
+              <MyCombobox
+                className="rounded-lg h-12"
+                iconClass="top-3"
+                iconPath="logo"
+                options={networkOptions}
+                onChange={setNetwork}
+                value={network}
+              />
+            )}
+          </div>
+          {/* Wallet Selection */}
+          <div className="space-y-2">
+            <Label className="text-sm font-semibold text-black/50">Select Wallet</Label>
+            {(!isConnected && !isPhantomConnected) ? (
+              <div className="grid sm:grid-cols-2 gap-2.5 sm:gap-y-6">
+                {getFilteredWallets().map(wallet => {
+                  // Handle other wallets normally
+                  return (
+                    <label
+                      className={clsx(
+                        'flex items-center p-3 gap-3 border rounded-lg cursor-pointer',
+                        { 'bg-blue-50 border-blue-500': selectedWallet === wallet.id },
+                      )}
+                      key={wallet.id}
+                    >
+                      <input
+                        checked={selectedWallet === wallet.id}
+                        className="hidden"
+                        name="wallet"
+                        type="radio"
+                        onChange={event => setSelectedWallet(event.target.value)}
+                        value={wallet.id}
+                      />
+                      <Image
+                        src={`/images/logo/${wallet.icon}.svg`}
+                        width={24}
+                        height={24}
+                        className="size-6"
+                        alt={wallet.name}
+                        loading="lazy"
+                      />
+                      <span className="font-medium">{wallet.name}</span>
+                    </label>
+                  )
+                })}
+              </div>
+            ) : (
+              <div className="flex items-center justify-between p-3 border rounded-lg bg-gray-50">
+                <div className="flex items-center gap-3">
+                  <Image
+                    src={`/images/logo/${allWallets.find(w => w.id === selectedWallet)?.icon || 'metamask'}.svg`}
+                    width={24}
+                    height={24}
+                    className="size-6"
+                    alt={allWallets.find(w => w.id === selectedWallet)?.name || ''}
+                    loading="lazy"
+                  />
+                  <span className="font-medium">
+                    {allWallets.find(w => w.id === selectedWallet)?.name}
+                  </span>
+                </div>
+                <button
+                  type="button"
+                  onClick={handleDisconnect}
+                  className="text-red-600 hover:text-red-700 text-sm font-medium"
+                >
+                  Disconnect Wallet
+                </button>
+              </div>
+            )}
+          </div>
+          {/* Currency Selection */}
+          <div className="space-y-2">
+            <div className="flex items-center justify-between">
+              <Label className="text-sm font-semibold text-black/50">Donate with</Label>
+              {(isConnected || isPhantomConnected) && (
+                <button
+                  type="button"
+                  onClick={() => lifiModalRef.current?.showModal()}
+                  className="text-sm text-gray-500 mr-3"
+                >
+                  Swap
+                </button>
+              )}
+            </div>
             <MyCombobox
               className="rounded-lg h-12"
               iconClass="top-3"
-              iconPath="logo"
-              options={networkOptions}
-              onChange={setNetwork}
-              value={network}
+              iconPath="information"
+              iconExtension="png"
+              options={getFilteredPaymentMethods()}
+              onChange={setPaymentMethod}
+              value={paymentMethod}
+              showBalance={isConnected || isPhantomConnected}
+              balances={balances}
             />
-          )}
-        </div>
-        {/* Wallet Selection */}
-        <div className="space-y-2">
-          <Label className="text-sm font-semibold text-black/50">Select Wallet</Label>
-          {(!isConnected && !isPhantomConnected) ? (
-            <div className="grid sm:grid-cols-2 gap-2.5 sm:gap-y-6">
-              {getFilteredWallets().map(wallet => {
-                // Handle other wallets normally
-                return (
-                  <label
-                    className={clsx(
-                      'flex items-center p-3 gap-3 border rounded-lg cursor-pointer',
-                      { 'bg-blue-50 border-blue-500': selectedWallet === wallet.id },
-                    )}
-                    key={wallet.id}
-                  >
-                    <input
-                      checked={selectedWallet === wallet.id}
-                      className="hidden"
-                      name="wallet"
-                      type="radio"
-                      onChange={event => setSelectedWallet(event.target.value)}
-                      value={wallet.id}
-                    />
-                    <Image
-                      src={`/images/logo/${wallet.icon}.svg`}
-                      width={24}
-                      height={24}
-                      className="size-6"
-                      alt={wallet.name}
-                      loading="lazy"
-                    />
-                    <span className="font-medium">{wallet.name}</span>
-                  </label>
-                )
-              })}
-            </div>
-          ) : (
-            <div className="flex items-center justify-between p-3 border rounded-lg bg-gray-50">
-              <div className="flex items-center gap-3">
-                <Image
-                  src={`/images/logo/${allWallets.find(w => w.id === selectedWallet)?.icon || 'metamask'}.svg`}
-                  width={24}
-                  height={24}
-                  className="size-6"
-                  alt={allWallets.find(w => w.id === selectedWallet)?.name || ''}
-                  loading="lazy"
-                />
-                <span className="font-medium">
-                  {allWallets.find(w => w.id === selectedWallet)?.name}
-                </span>
-              </div>
-              <button
-                type="button"
-                onClick={handleDisconnect}
-                className="text-red-600 hover:text-red-700 text-sm font-medium"
-              >
-                Disconnect Wallet
-              </button>
-            </div>
-          )}
-        </div>
-        {/* Currency Selection */}
-        <div className="space-y-2">
-          <div className="flex items-center justify-between">
-            <Label className="text-sm font-semibold text-black/50">Donate with</Label>
-            {(isConnected || isPhantomConnected) && (
-              <button
-                type="button"
-                onClick={() => lifiModalRef.current?.showModal()}
-                className="text-sm text-gray-500 mr-3"
-              >
-                Swap
-              </button>
-            )}
           </div>
-          <MyCombobox
-            className="rounded-lg h-12"
-            iconClass="top-3"
-            iconPath="information"
-            iconExtension="png"
-            options={getFilteredPaymentMethods()}
-            onChange={setPaymentMethod}
-            value={paymentMethod}
-            showBalance={isConnected || isPhantomConnected}
-            balances={balances}
+          {/* Amount Input */}
+          <div className="space-y-2">
+            <Label className="text-sm font-semibold text-black/50">Amount</Label>
+            {selectedReward && (
+              <div className="text-sm text-gray-600 mb-2">
+                Minimum amount for "{selectedReward.name}": ${selectedReward.amount}
+              </div>
+            )}
+            <div className={`flex items-center border border-black/10 rounded-lg focus-within:outline focus-within:outline-1 focus-within:outline-blue-400 ${!(isConnected || isPhantomConnected) ? 'bg-gray-50' : ''}`}>
+              <Input
+                className="text-sm h-12 flex-1 px-4 focus:outline-none"
+                hasRing={false}
+                min={selectedReward ? selectedReward.amount.toString() : '0'}
+                onChange={onAmountChange}
+                placeholder={!(isConnected || isPhantomConnected) ? 'Connect wallet first' : selectedReward ? selectedReward.amount.toString() : '1.0'}
+                type="number"
+                value={amount}
+                disabled={!(isConnected || isPhantomConnected)}
+              />
+              <div className="text-sm w-fit flex-none px-4 flex items-center gap-1">
+                {paymentMethod} ≈ $
+                {ratesLoading && (
+                  <span className="inline-block w-3 h-3 border-2 border-gray-300 border-t-blue-500 rounded-full animate-spin"></span>
+                )}
+              </div>
+              <Input
+                className="text-sm h-12 flex-1 px-4 focus:outline-none"
+                hasRing={false}
+                min={selectedReward ? selectedReward.amount.toString() : '0'}
+                onChange={onDollarChange}
+                placeholder={!(isConnected || isPhantomConnected) ? 'Connect wallet first' : selectedReward ? selectedReward.amount.toString() : '1.00'}
+                type="number"
+                value={dollar || 0}
+                disabled={!(isConnected || isPhantomConnected)}
+              />
+            </div>
+          </div>
+          <CtaFooter
+            buttonLabel={(isConnected || isPhantomConnected) ? 'Next' : 'Connect Wallet'}
+            buttonType={(isConnected || isPhantomConnected) ? 'button' : 'submit'}
+            isSubmittable={(isConnected || isPhantomConnected) ? !!amount : true}
+            isLoading={isPending || isSwitchingChain}
+            onSubmit={(isConnected || isPhantomConnected) ? handleSubmit : undefined}
+            goToPreviousStep={handleGoBackToRewards}
           />
         </div>
-        {/* Amount Input */}
-        <div className="space-y-2">
-          <Label className="text-sm font-semibold text-black/50">Amount</Label>
-          {selectedReward && (
-            <div className="text-sm text-gray-600 mb-2">
-              Minimum amount for "{selectedReward.name}": ${selectedReward.amount}
-            </div>
-          )}
-          <div className={`flex items-center border border-black/10 rounded-lg focus-within:outline focus-within:outline-1 focus-within:outline-blue-400 ${!(isConnected || isPhantomConnected) ? 'bg-gray-50' : ''}`}>
-            <Input
-              className="text-sm h-12 flex-1 px-4 focus:outline-none"
-              hasRing={false}
-              min={selectedReward ? selectedReward.amount.toString() : '0'}
-              onChange={onAmountChange}
-              placeholder={!(isConnected || isPhantomConnected) ? 'Connect wallet first' : selectedReward ? selectedReward.amount.toString() : '1.0'}
-              type="number"
-              value={amount}
-              disabled={!(isConnected || isPhantomConnected)}
-            />
-            <div className="text-sm w-fit flex-none px-4 flex items-center gap-1">
-              {paymentMethod} ≈ $
-              {ratesLoading && (
-                <span className="inline-block w-3 h-3 border-2 border-gray-300 border-t-blue-500 rounded-full animate-spin"></span>
-              )}
-            </div>
-            <Input
-              className="text-sm h-12 flex-1 px-4 focus:outline-none"
-              hasRing={false}
-              min={selectedReward ? selectedReward.amount.toString() : '0'}
-              onChange={onDollarChange}
-              placeholder={!(isConnected || isPhantomConnected) ? 'Connect wallet first' : selectedReward ? selectedReward.amount.toString() : '1.00'}
-              type="number"
-              value={dollar || 0}
-              disabled={!(isConnected || isPhantomConnected)}
-            />
+      </form>
+
+      {/* LiFi Widget Modal */}
+      <dialog ref={lifiModalRef} className="modal">
+        <div className="modal-box w-11/12 max-w-2xl">
+          <div className="flex justify-between items-center mb-4">
+            <h3 className="font-bold text-lg">Swap</h3>
+            <button
+              className="btn btn-sm btn-circle btn-ghost"
+              onClick={() => lifiModalRef.current?.close()}
+            >
+              ✕
+            </button>
+          </div>
+          <div className="py-4">
+            <WidgetPage />
           </div>
         </div>
-        <CtaFooter
-          buttonLabel={(isConnected || isPhantomConnected) ? 'Next' : 'Connect Wallet'}
-          buttonType={(isConnected || isPhantomConnected) ? 'button' : 'submit'}
-          isSubmittable={(isConnected || isPhantomConnected) ? !!amount : true}
-          isLoading={isPending || isSwitchingChain}
-          onSubmit={(isConnected || isPhantomConnected) ? handleSubmit : undefined}
-          goToPreviousStep={handleGoBackToRewards}
-        />
-      </div>
-    </form>
-
-    {/* LiFi Widget Modal */}
-    <dialog ref={lifiModalRef} className="modal">
-      <div className="modal-box w-11/12 max-w-2xl">
-        <div className="flex justify-between items-center mb-4">
-          <h3 className="font-bold text-lg">Swap</h3>
-          <button
-            className="btn btn-sm btn-circle btn-ghost"
-            onClick={() => lifiModalRef.current?.close()}
-          >
-            ✕
-          </button>
-        </div>
-        <div className="py-4">
-          <WidgetPage />
-        </div>
-      </div>
-      <form method="dialog" className="modal-backdrop">
-        <button>close</button>
-      </form>
-    </dialog>
+        <form method="dialog" className="modal-backdrop">
+          <button>close</button>
+        </form>
+      </dialog>
     </>
   )
 }
