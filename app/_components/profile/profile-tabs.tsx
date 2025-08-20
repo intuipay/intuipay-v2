@@ -23,19 +23,19 @@ export default function ProfileTabs({ profile, myBacked, myProjects }: ProfileTa
           <TabsList className="bg-transparent p-0 h-auto gap-5">
             <TabsTrigger
               value="about"
-              className="px-6 py-3 font-semibold text-sm leading-5 border-b-2 border-transparent data-[state=active]:bg-transparent data-[state=active]:text-[#2461f2] data-[state=active]:border-[#2461f2] data-[state=active]:shadow-none hover:text-[#2461f2] rounded-none"
+              className="px-6 py-3 font-semibold text-sm leading-5 border-b-2 border-transparent data-[state=active]:bg-transparent data-[state=active]:text-blue-600 data-[state=active]:border-blue-600 data-[state=active]:shadow-none hover:text-blue-600 rounded-none"
             >
               About
             </TabsTrigger>
             <TabsTrigger
               value="backed"
-              className="px-6 py-3 font-medium text-sm leading-5 border-b-2 border-transparent data-[state=active]:bg-transparent data-[state=active]:text-[#2461f2] data-[state=active]:border-[#2461f2] data-[state=active]:shadow-none hover:text-[#2461f2] rounded-none"
+              className="px-6 py-3 font-medium text-sm leading-5 border-b-2 border-transparent data-[state=active]:bg-transparent data-[state=active]:text-blue-600 data-[state=active]:border-blue-600 data-[state=active]:shadow-none hover:text-blue-600 rounded-none"
             >
               Backed
             </TabsTrigger>
             <TabsTrigger
               value="raised"
-              className="px-6 py-3 font-medium text-sm leading-5 border-b-2 border-transparent data-[state=active]:bg-transparent data-[state=active]:text-[#2461f2] data-[state=active]:border-[#2461f2] data-[state=active]:shadow-none hover:text-[#2461f2] rounded-none"
+              className="px-6 py-3 font-medium text-sm leading-5 border-b-2 border-transparent data-[state=active]:bg-transparent data-[state=active]:text-blue-600 data-[state=active]:border-blue-600 data-[state=active]:shadow-none hover:text-blue-600 rounded-none"
             >
               Raised
             </TabsTrigger>

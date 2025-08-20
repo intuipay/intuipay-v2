@@ -18,7 +18,7 @@ export default function RaisedTab({ projects }: RaisedTabProps) {
           You are not raising any projects.
         </p>
         <Link href={`${process.env.NEXT_PUBLIC_DASHBOARD_URL}/project/new`} target="_blank" rel="noopener noreferrer">
-          <Button className="bg-[#2461f2] hover:bg-[#2461f2]/90 text-white px-4 py-2 rounded-[40px] text-sm font-medium leading-5">
+          <Button className="bg-blue-600 hover:bg-blue-600/90 text-white px-4 py-2 rounded-[40px] text-sm font-medium leading-5">
             Raise Now
           </Button>
         </Link>

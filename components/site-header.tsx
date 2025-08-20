@@ -178,7 +178,7 @@ export function SiteHeader({ user }: SiteHeaderProps) {
                   href={link.href}
                   className={`text-base font-medium py-2 transition-colors ${
                     link.label === 'Donate' 
-                      ? 'text-[#2461F2]' 
+                      ? 'text-blue-600' 
                       : 'text-black hover:text-gray-600'
                   }`}
                   onClick={() => setMobileMenuOpen(false)}
