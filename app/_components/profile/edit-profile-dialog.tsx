@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import RichTextEditor from '@/components/rich-text-editor'
-import { MagnifyingGlassIcon } from '@phosphor-icons/react/ssr'
+import { MagnifyingGlassIcon, SpinnerIcon } from '@phosphor-icons/react/ssr'
 import {
   Dialog,
   DialogContent,
@@ -70,7 +70,7 @@ export function EditProfileDialog({ open, onOpenChange, profile, onProfileUpdate
     bio: profile.bio || '',
     number: profile.number || '',
     displayImage: profile.display_image || '',
-    privacyOnly: (profile.privacy_level && Number(profile.privacy_level) === 1) ? true : false, // privacy_level 是 '0', '1'，要注意区分
+    privacyOnly: Number(profile.privacy_level) === 1, // privacy_level 是 '0', '1'，要注意区分
     socialLinks: {
       website: parsedLinks.website || '',
       facebook: parsedLinks.facebook || '',
@@ -353,10 +353,7 @@ export function EditProfileDialog({ open, onOpenChange, profile, onProfileUpdate
             <div className="flex justify-end pt-6">
               <Button type="submit" disabled={isLoading} className="px-8 py-2 rounded-full flex items-center gap-2">
                 {isLoading && (
-                  <svg className="w-4 h-4 animate-spin" viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-                  </svg>
+                  <SpinnerIcon className="w-4 h-4 animate-spin" />
                 )}
                 {isLoading ? 'Saving...' : 'Save'}
               </Button>
