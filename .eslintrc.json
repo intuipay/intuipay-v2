@@ -8,6 +8,7 @@
     "@typescript-eslint/no-unused-vars": "off",
     "quotes": [ "error", "single" ],
     "object-curly-spacing": [ "error", "always" ],
-    "computed-property-spacing": [ "error", "always" ]
+    "computed-property-spacing": [ "error", "always" ],
+    "semi": ["error", "always"]
   }
 }
