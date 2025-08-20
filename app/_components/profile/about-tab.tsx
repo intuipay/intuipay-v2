@@ -43,7 +43,7 @@ export default function AboutTab({ profile }: AboutTabProps) {
             </div>
             <div className="box-border flex gap-3 items-center justify-start p-0 relative shrink-0">
               <div className="font-semibold relative shrink-0 text-black text-[14px]">
-                <p className="block leading-5">{profile.privacy_level ? "Only show my name and avatar" : "Show all my profile info"}</p>
+                <p className="block leading-5">{profile.privacy_level ? 'Only show my name and avatar' : 'Show all my profile info'}</p>
               </div>
             </div>
           </div>
@@ -75,8 +75,8 @@ export default function AboutTab({ profile }: AboutTabProps) {
                   .sort((a, b) => {
                     const keyA = a.label.toLowerCase()
                     const keyB = b.label.toLowerCase()
-                    const urlA = socialLinks[keyA]
-                    const urlB = socialLinks[keyB]
+                    const urlA = socialLinks[ keyA ]
+                    const urlB = socialLinks[ keyB ]
 
                     // 有链接的排在前面，没有链接的排在后面
                     if (urlA && !urlB) return -1
@@ -85,7 +85,7 @@ export default function AboutTab({ profile }: AboutTabProps) {
                   })
                   .map(sm => {
                     const key = sm.label.toLowerCase()
-                    const url = socialLinks[key]
+                    const url = socialLinks[ key ]
                     const Icon = sm.icon as any
 
                     if (url) {

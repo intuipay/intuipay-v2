@@ -47,8 +47,8 @@ export default function DonationStep4({
   const [isSolanaTransaction, setIsSolanaTransaction] = useState<boolean>(false);
   const [riskAcknowledged, setRiskAcknowledged] = useState<boolean>(false);
   // 动态获取配置
-  const networkConfig = BLOCKCHAIN_CONFIG.networks[info.network as keyof typeof BLOCKCHAIN_CONFIG.networks];
-  const currencyConfig = BLOCKCHAIN_CONFIG.currencies[info.currency as keyof typeof BLOCKCHAIN_CONFIG.currencies];
+  const networkConfig = BLOCKCHAIN_CONFIG.networks[ info.network as keyof typeof BLOCKCHAIN_CONFIG.networks ];
+  const currencyConfig = BLOCKCHAIN_CONFIG.currencies[ info.currency as keyof typeof BLOCKCHAIN_CONFIG.currencies ];
   const currencyNetworkConfig = getCurrencyNetworkConfig(info.currency, info.network);
   const recipientAddress = getProjectWalletAddress(project, info.network); // 读出众筹合约地址
 
