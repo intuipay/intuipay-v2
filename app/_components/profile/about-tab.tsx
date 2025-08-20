@@ -7,7 +7,7 @@ interface AboutTabProps {
 
 export default function AboutTab({ profile }: AboutTabProps) {
   const socialLinks: Record<string, string> = (() => {
-    try { return profile.social_links ? JSON.parse(profile.social_links) : {} } catch { return {} }
+    try { return profile.social_links ? JSON.parse(profile.social_links) : {}; } catch { return {}; }
   })();
 
   return (
@@ -71,20 +71,20 @@ export default function AboutTab({ profile }: AboutTabProps) {
               <div className="flex items-center gap-2">
                 {SocialMedias
                   .sort((a, b) => {
-                    const keyA = a.label.toLowerCase()
-                    const keyB = b.label.toLowerCase()
-                    const urlA = socialLinks[ keyA ]
-                    const urlB = socialLinks[ keyB ]
+                    const keyA = a.label.toLowerCase();
+                    const keyB = b.label.toLowerCase();
+                    const urlA = socialLinks[ keyA ];
+                    const urlB = socialLinks[ keyB ];
 
                     // 有链接的排在前面，没有链接的排在后面
-                    if (urlA && !urlB) return -1
-                    if (!urlA && urlB) return 1
-                    return 0
+                    if (urlA && !urlB) return -1;
+                    if (!urlA && urlB) return 1;
+                    return 0;
                   })
                   .map(sm => {
-                    const key = sm.label.toLowerCase()
-                    const url = socialLinks[ key ]
-                    const Icon = sm.icon as any
+                    const key = sm.label.toLowerCase();
+                    const url = socialLinks[ key ];
+                    const Icon = sm.icon as any;
 
                     if (url) {
                       return (
@@ -99,7 +99,7 @@ export default function AboutTab({ profile }: AboutTabProps) {
                         >
                           <Icon size={20} weight="fill" />
                         </a>
-                      )
+                      );
                     }
                     return (
                       <div
@@ -109,7 +109,7 @@ export default function AboutTab({ profile }: AboutTabProps) {
                       >
                         <Icon size={20} weight="regular" />
                       </div>
-                    )
+                    );
                   })}
               </div>
             </div>
@@ -117,5 +117,5 @@ export default function AboutTab({ profile }: AboutTabProps) {
         </div>
       </div>
     </div>
-  )
+  );
 }

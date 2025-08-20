@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import * as React from 'react';
 import { useState, useRef, useCallback, Dispatch, SetStateAction } from 'react';
@@ -53,10 +53,10 @@ export function AvatarUpload({
         setZoom(1);
         setPosition({ x: 0, y: 0 });
         setIsOpen(true);
-      }
+      };
       reader.readAsDataURL(file);
     }
-  }
+  };
 
   const handleImageLoad = () => {
     if (imageRef.current) {
@@ -71,7 +71,7 @@ export function AvatarUpload({
         setZoom(scale);
       }
     }
-  }
+  };
 
   const handleMouseDown = (e: React.MouseEvent) => {
     setIsDragging(true);
@@ -79,7 +79,7 @@ export function AvatarUpload({
       x: e.clientX - position.x,
       y: e.clientY - position.y,
     });
-  }
+  };
 
   const handleMouseMove = useCallback(
     (e: MouseEvent) => {
@@ -87,7 +87,7 @@ export function AvatarUpload({
         setPosition({
           x: e.clientX - dragStart.x,
           y: e.clientY - dragStart.y,
-        })
+        });
       }
     },
     [isDragging, dragStart],
@@ -99,48 +99,48 @@ export function AvatarUpload({
 
   React.useEffect(() => {
     if (isDragging) {
-      document.addEventListener('mousemove', handleMouseMove)
-      document.addEventListener('mouseup', handleMouseUp)
+      document.addEventListener('mousemove', handleMouseMove);
+      document.addEventListener('mouseup', handleMouseUp);
       return () => {
-        document.removeEventListener('mousemove', handleMouseMove)
-        document.removeEventListener('mouseup', handleMouseUp)
-      }
+        document.removeEventListener('mousemove', handleMouseMove);
+        document.removeEventListener('mouseup', handleMouseUp);
+      };
     }
   }, [isDragging, handleMouseMove, handleMouseUp]);
 
   const getCroppedImage = (): string | null => {
-    if (!imageRef.current || !canvasRef.current) return null
+    if (!imageRef.current || !canvasRef.current) return null;
 
-    const canvas = canvasRef.current
-    const ctx = canvas.getContext('2d')
-    if (!ctx) return null
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return null;
 
-    const cropSize = 300
-    canvas.width = cropSize
-    canvas.height = cropSize
+    const cropSize = 300;
+    canvas.width = cropSize;
+    canvas.height = cropSize;
 
     // Calculate the crop area
-    const containerSize = 300
-    const centerX = containerSize / 2
-    const centerY = containerSize / 2
-    const radius = containerSize / 2
+    const containerSize = 300;
+    const centerX = containerSize / 2;
+    const centerY = containerSize / 2;
+    const radius = containerSize / 2;
 
     // Create circular clipping path
-    ctx.save()
-    ctx.beginPath()
-    ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI)
-    ctx.clip()
+    ctx.save();
+    ctx.beginPath();
+    ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
+    ctx.clip();
 
     // Draw the image
-    const scaledWidth = imageSize.width * zoom
-    const scaledHeight = imageSize.height * zoom
-    const drawX = centerX + position.x - scaledWidth / 2
-    const drawY = centerY + position.y - scaledHeight / 2
+    const scaledWidth = imageSize.width * zoom;
+    const scaledHeight = imageSize.height * zoom;
+    const drawX = centerX + position.x - scaledWidth / 2;
+    const drawY = centerY + position.y - scaledHeight / 2;
 
-    ctx.drawImage(imageRef.current, drawX, drawY, scaledWidth, scaledHeight)
-    ctx.restore()
+    ctx.drawImage(imageRef.current, drawX, drawY, scaledWidth, scaledHeight);
+    ctx.restore();
 
-    return canvas.toDataURL('image/png')
+    return canvas.toDataURL('image/png');
   };
 
   const uploadImage = async (file: File) => {
@@ -189,8 +189,8 @@ export function AvatarUpload({
         throw new Error('Failed to upload file');
       }
 
-      const onlineUrl = `${process.env.NEXT_PUBLIC_ASSET_DOMAIN}/${objectKey}`
-      return onlineUrl
+      const onlineUrl = `${process.env.NEXT_PUBLIC_ASSET_DOMAIN}/${objectKey}`;
+      return onlineUrl;
     } catch (error) {
       console.error('Upload error:', error);
       throw new Error(error instanceof Error ? error.message : String(error));
@@ -216,15 +216,15 @@ export function AvatarUpload({
     } finally {
       setIsUploading(false);
     }
-  }
+  };
 
   const handleZoomIn = () => {
     setZoom((prev) => Math.min(prev + 0.1, 3));
-  }
+  };
 
   const handleZoomOut = () => {
     setZoom((prev) => Math.max(prev - 0.1, 0.1));
-  }
+  };
 
   return (
     <>
@@ -346,5 +346,5 @@ export function AvatarUpload({
         </DialogContent>
       </Dialog>
     </>
-  )
+  );
 }

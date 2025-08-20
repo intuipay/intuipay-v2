@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import { useState } from 'react';
 import RichTextEditor from '@/components/rich-text-editor';
@@ -59,7 +59,7 @@ export function EditProfileDialog({ open, onOpenChange, profile, onProfileUpdate
   const [isUploadingAvatar, setIsUploadingAvatar] = useState(false);
 
   const parsedLinks = (() => {
-    try { return profile.social_links ? JSON.parse(profile.social_links) : {} } catch { return {} }
+    try { return profile.social_links ? JSON.parse(profile.social_links) : {}; } catch { return {}; }
   })();
 
   const defaultValues: ProfileFormValues = {
@@ -123,7 +123,7 @@ export function EditProfileDialog({ open, onOpenChange, profile, onProfileUpdate
     } finally {
       setIsLoading(false);
     }
-  }
+  };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -162,7 +162,7 @@ export function EditProfileDialog({ open, onOpenChange, profile, onProfileUpdate
                     setIsUploading={setIsUploadingAvatar}
                     size={80}
                     onUploaded={(url) => {
-                      form.setValue('displayImage', url, { shouldDirty: true })
+                      form.setValue('displayImage', url, { shouldDirty: true });
                     }}
                     className="mx-auto"
                   />
@@ -321,7 +321,7 @@ export function EditProfileDialog({ open, onOpenChange, profile, onProfileUpdate
               {/* Social Media Links */}
               <div className="space-y-4">
                 {SocialMedias.map(sm => {
-                  const key = sm.label.toLowerCase() as keyof ProfileFormValues['socialLinks']
+                  const key = sm.label.toLowerCase() as keyof ProfileFormValues['socialLinks'];
                   return (
                     <FormField
                       key={sm.label}
@@ -346,7 +346,7 @@ export function EditProfileDialog({ open, onOpenChange, profile, onProfileUpdate
                         </FormItem>
                       )}
                     />
-                  )
+                  );
                 })}
               </div>
             </div>
@@ -362,5 +362,5 @@ export function EditProfileDialog({ open, onOpenChange, profile, onProfileUpdate
         </Form>
       </DialogContent>
     </Dialog>
-  )
+  );
 }
