@@ -1,4 +1,5 @@
 import { DonationInfo, ProjectInfo, Reward } from '@/types';
+import { getRewardById } from '@/lib/rewards';
 
 type BaseProps = {
   to: string;
@@ -66,58 +67,6 @@ export function getDonationProps(project: ProjectInfo, donation: DonationInfo): 
     projectName: project.project_name,
     status: 'successful',
     txHash: donation.tx_hash || '',
-  };
-}
-
-function getRewardById(rewardId: number, rewardsString: string): Reward | null {
-  const rawRewards = JSON.parse(rewardsString);
-
-  // 映射 ship_method 数字到描述
-  const getShippingMethod = (shipMethod: number): string => {
-    switch (shipMethod) {
-      case 1: return 'By myself';
-      case 2: return 'Local pickup';
-      case 3: return 'Digital delivery';
-      default: return 'Digital delivery';
-    }
-  };
-
-  // 格式化预计交付时间
-  const getEstimatedDelivery = (month: number | null, year: number | null): string => {
-    if (month && year) {
-      const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-        'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-      return `${monthNames[ month - 1 ]} ${year}`;
-    }
-    return 'TBD';
-  };
-
-  // 格式化可用性信息
-  // number: 总量, count: 已用的, number - count: 剩余可用的
-  const getAvailability = (number: number | null, count: number): string => {
-    if (!number) return 'Unlimited';
-    const used = Number.isFinite(count) ? count : 0; // 兜底：非数字/空值按0处理
-    const left = Math.max(0, number - used);
-    return `Limited (${left} left of ${number})`;
-  };
-
-  // 查找匹配的奖励
-  const targetReward = rawRewards.find((reward: any) => reward.id === rewardId);
-
-  if (!targetReward) {
-    return null;
-  }
-
-  // 转换为 Reward 格式
-  return {
-    id: targetReward.id.toString(),
-    name: targetReward.title || 'Untitled Reward',
-    description: targetReward.description || 'No description available',
-    amount: targetReward.amount || 0,
-    shipping_method: getShippingMethod(targetReward.ship_method),
-    estimated_delivery: getEstimatedDelivery(targetReward.month, targetReward.year),
-    availability: getAvailability(targetReward.number, targetReward.count),
-    image: targetReward.image || '', // 确保有图片字段
   };
 }
 

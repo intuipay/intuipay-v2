@@ -14,6 +14,7 @@ import DonationStep5 from '@/app/_components/crowdfunding/step5';
 import { createDonationInfo } from '@/utils';
 import { getNetworkDropdownOptionsFromProject } from '@/config/blockchain';
 import { CheckCircleIcon } from '@phosphor-icons/react/dist/ssr';
+import { getProjectRewards } from '@/lib/rewards';
 
 type Step = 'initialization' | 'contacts' | 'payment' | 'complete'
 type Props = {
@@ -102,57 +103,8 @@ export default function DonationPageComp({
     updateInfo({ pledge_without_reward: pledgeWithout });
   };
 
-  // 解析项目奖励数据
-  const parseProjectRewards = (rewardsString: string): Reward[] => {
-    try {
-      const rawRewards = JSON.parse(rewardsString);
-      
-      // 映射 ship_method 数字到描述
-      const getShippingMethod = (shipMethod: number): string => {
-        switch (shipMethod) {
-          case 1: return 'By myself';
-          case 2: return 'Local pickup';
-          case 3: return 'Digital delivery';
-          default: return 'Digital delivery';
-        }
-      };
-      
-      // 格式化预计交付时间
-      const getEstimatedDelivery = (month: number | null, year: number | null): string => {
-        if (month && year) {
-          const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 
-                             'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-          return `${monthNames[ month - 1 ]} ${year}`;
-        }
-        return 'TBD';
-      };
-      
-      // 格式化可用性信息
-      const getAvailability = (number: number | null, count: number): string => {
-        if (!number) return 'Unlimited';
-        const used = Number.isFinite(count) ? count : 0;
-        const left = Math.max(0, number - used);
-        return `Limited (${left} left of ${number})`;
-      };
-      
-      return rawRewards.map((reward: any) => ({
-        id: reward.id.toString(),
-        name: reward.title || 'Untitled Reward',
-        description: reward.description || 'No description available',
-        amount: reward.amount || 0,
-        shipping_method: getShippingMethod(reward.ship_method),
-        estimated_delivery: getEstimatedDelivery(reward.month, reward.year),
-        availability: getAvailability(reward.number, reward.count),
-        image: reward.image || '',
-      }));
-    } catch (error) {
-      console.error('Error parsing project rewards:', error);
-      return [];
-    }
-  };
-
   // 从项目数据中获取转换后的奖励
-  const projectRewards = project.rewards ? parseProjectRewards(project.rewards) : [];
+  const projectRewards = getProjectRewards(project);
 
   // 处理 URL 中的 defaultSelectedRewardId 参数
   useEffect(() => {
@@ -208,7 +160,7 @@ export default function DonationPageComp({
     setSlideDirection('right')
     if (currentStep === 'initialization') setCurrentStep('contacts')
     else if (currentStep === 'contacts') setCurrentStep('payment')
-    else  if (currentStep === 'payment') setCurrentStep('complete')
+    else if (currentStep === 'payment') setCurrentStep('complete')
   }
   const goToPreviousStep = () => {
     setSlideDirection('left')
@@ -260,12 +212,12 @@ export default function DonationPageComp({
         <div className="relative w-full aspect-[3/1] rounded-lg mb-4 overflow-hidden">
           {projectInfo.banner
             ? <Image
-                src={projectInfo.banner}
-                alt={projectInfo.project_name}
-                fill
-                className="object-cover object-center"
-                priority
-                />
+              src={projectInfo.banner}
+              alt={projectInfo.project_name}
+              fill
+              className="object-cover object-center"
+              priority
+            />
             : <div className="w-full h-full bg-gray-100 flex items-center justify-center text-2xl font-bold text-black/50">
               {projectInfo.project_name}
             </div>}
