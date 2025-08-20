@@ -1,17 +1,15 @@
-import { Profile } from '@/types'
-import { SocialMedias } from '@/data/social-medias'
+import { Profile } from '@/types';
+import { SocialMedias } from '@/data/social-medias';
 
 interface AboutTabProps {
   profile: Profile;
 }
 
 export default function AboutTab({ profile }: AboutTabProps) {
-  // 解析社交链接
   const socialLinks: Record<string, string> = (() => {
     try { return profile.social_links ? JSON.parse(profile.social_links) : {} } catch { return {} }
-  })()
+  })();
 
-  // 提供一个伪表单上下文（只读展示，用于复用 Form 生态样式，未真正提交）
   return (
     <div className="space-y-6">
       <div className="bg-white box-border flex flex-col gap-8 items-start justify-start p-6 relative rounded-lg border border-black/10">

@@ -1,14 +1,14 @@
 'use client'
 
-import * as React from 'react'
-import { useState, useRef, useCallback, Dispatch, SetStateAction } from 'react'
-import { Camera, Plus, Minus, NotePencil } from '@phosphor-icons/react'
-import { Button } from '@/components/ui/button'
-import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog'
-import { Slider } from '@/components/ui/slider'
-import { cn } from '@/lib/utils'
-import slugify from 'slugify'
-import { APIResponse } from '@/types'
+import * as React from 'react';
+import { useState, useRef, useCallback, Dispatch, SetStateAction } from 'react';
+import { Camera, Plus, Minus, NotePencil } from '@phosphor-icons/react';
+import { Button } from '@/components/ui/button';
+import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
+import { Slider } from '@/components/ui/slider';
+import { cn } from '@/lib/utils';
+import slugify from 'slugify';
+import { APIResponse } from '@/types';
 
 interface AvatarUploadProps {
   value?: string
@@ -31,54 +31,54 @@ export function AvatarUpload({
   disabled = false,
   placeholder,
 }: AvatarUploadProps) {
-  const [isOpen, setIsOpen] = useState(false)
-  const [selectedImage, setSelectedImage] = useState<string | null>(null)
-  const [zoom, setZoom] = useState(1)
-  const [position, setPosition] = useState({ x: 0, y: 0 })
-  const [isDragging, setIsDragging] = useState(false)
-  const [dragStart, setDragStart] = useState({ x: 0, y: 0 })
-  const [imageSize, setImageSize] = useState({ width: 0, height: 0 })
+  const [isOpen, setIsOpen] = useState(false);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [zoom, setZoom] = useState(1);
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
+  const [imageSize, setImageSize] = useState({ width: 0, height: 0 });
 
-  const fileInputRef = useRef<HTMLInputElement>(null)
-  const imageRef = useRef<HTMLImageElement>(null)
-  const canvasRef = useRef<HTMLCanvasElement>(null)
-  const containerRef = useRef<HTMLDivElement>(null)
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const imageRef = useRef<HTMLImageElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[ 0 ]
+    const file = event.target.files?.[ 0 ];
     if (file && file.type.startsWith('image/')) {
-      const reader = new FileReader()
+      const reader = new FileReader();
       reader.onload = (e) => {
-        setSelectedImage(e.target?.result as string)
-        setZoom(1)
-        setPosition({ x: 0, y: 0 })
-        setIsOpen(true)
+        setSelectedImage(e.target?.result as string);
+        setZoom(1);
+        setPosition({ x: 0, y: 0 });
+        setIsOpen(true);
       }
-      reader.readAsDataURL(file)
+      reader.readAsDataURL(file);
     }
   }
 
   const handleImageLoad = () => {
     if (imageRef.current) {
-      const { naturalWidth, naturalHeight } = imageRef.current
-      setImageSize({ width: naturalWidth, height: naturalHeight })
+      const { naturalWidth, naturalHeight } = imageRef.current;
+      setImageSize({ width: naturalWidth, height: naturalHeight });
 
       // Center the image initially
-      const container = containerRef.current
+      const container = containerRef.current;
       if (container) {
-        const containerSize = 300 // Fixed container size
-        const scale = Math.max(containerSize / naturalWidth, containerSize / naturalHeight)
-        setZoom(scale)
+        const containerSize = 300; // Fixed container size
+        const scale = Math.max(containerSize / naturalWidth, containerSize / naturalHeight);
+        setZoom(scale);
       }
     }
   }
 
   const handleMouseDown = (e: React.MouseEvent) => {
-    setIsDragging(true)
+    setIsDragging(true);
     setDragStart({
       x: e.clientX - position.x,
       y: e.clientY - position.y,
-    })
+    });
   }
 
   const handleMouseMove = useCallback(
@@ -91,11 +91,11 @@ export function AvatarUpload({
       }
     },
     [isDragging, dragStart],
-  )
+  );
 
   const handleMouseUp = useCallback(() => {
-    setIsDragging(false)
-  }, [])
+    setIsDragging(false);
+  }, []);
 
   React.useEffect(() => {
     if (isDragging) {
@@ -106,7 +106,7 @@ export function AvatarUpload({
         document.removeEventListener('mouseup', handleMouseUp)
       }
     }
-  }, [isDragging, handleMouseMove, handleMouseUp])
+  }, [isDragging, handleMouseMove, handleMouseUp]);
 
   const getCroppedImage = (): string | null => {
     if (!imageRef.current || !canvasRef.current) return null
@@ -141,7 +141,7 @@ export function AvatarUpload({
     ctx.restore()
 
     return canvas.toDataURL('image/png')
-  }
+  };
 
   const uploadImage = async (file: File) => {
     try {
@@ -195,18 +195,18 @@ export function AvatarUpload({
       console.error('Upload error:', error);
       throw new Error(error instanceof Error ? error.message : String(error));
     }
-  }
+  };
 
   const handleConfirm = async () => {
-    setIsUploading(true)
+    setIsUploading(true);
     try {
-      const file = fileInputRef.current?.files?.[ 0 ]
-      const croppedDataUrl = getCroppedImage()
+      const file = fileInputRef.current?.files?.[ 0 ];
+      const croppedDataUrl = getCroppedImage();
       if (croppedDataUrl && file) {
-        setIsOpen(false)
-        setSelectedImage(null)
+        setIsOpen(false);
+        setSelectedImage(null);
         const onlineUrl = await uploadImage(file);
-        onUploaded(onlineUrl, croppedDataUrl)
+        onUploaded(onlineUrl, croppedDataUrl);
       }
     } catch (error) {
       console.error('Error in handleConfirm: Failed to upload image or process cropped data URL.', {
@@ -214,16 +214,16 @@ export function AvatarUpload({
         stack: error instanceof Error ? error.stack : undefined,
       });
     } finally {
-      setIsUploading(false)
+      setIsUploading(false);
     }
   }
 
   const handleZoomIn = () => {
-    setZoom((prev) => Math.min(prev + 0.1, 3))
+    setZoom((prev) => Math.min(prev + 0.1, 3));
   }
 
   const handleZoomOut = () => {
-    setZoom((prev) => Math.max(prev - 0.1, 0.1))
+    setZoom((prev) => Math.max(prev - 0.1, 0.1));
   }
 
   return (

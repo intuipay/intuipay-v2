@@ -1,23 +1,23 @@
 'use client'
 
-import { useState } from 'react'
-import RichTextEditor from '@/components/rich-text-editor'
-import { MagnifyingGlassIcon, SpinnerIcon } from '@phosphor-icons/react/ssr'
+import { useState } from 'react';
+import RichTextEditor from '@/components/rich-text-editor';
+import { MagnifyingGlassIcon, SpinnerIcon } from '@phosphor-icons/react/ssr';
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog'
-import { Profile } from '@/types'
-import { AvatarUpload } from '@/components/ui/avatar-upload'
-import { SocialMedias } from '@/data/social-medias'
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
-import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form'
-import { useForm } from 'react-hook-form'
-import * as z from 'zod'
-import { zodResolver } from '@hookform/resolvers/zod'
+} from '@/components/ui/dialog';
+import { Profile } from '@/types';
+import { AvatarUpload } from '@/components/ui/avatar-upload';
+import { SocialMedias } from '@/data/social-medias';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
+import { useForm } from 'react-hook-form';
+import * as z from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
 
 interface EditProfileDialogProps {
   open: boolean
@@ -37,7 +37,7 @@ const socialLinksSchema = z.object({
   instagram: z.string().optional(),
   reddit: z.string().optional(),
   youtube: z.string().optional(),
-})
+});
 
 const formSchema = z.object({
   firstName: z.string().optional(),
@@ -49,18 +49,18 @@ const formSchema = z.object({
   displayImage: z.string().optional(),
   privacyOnly: z.boolean().optional(),
   socialLinks: socialLinksSchema,
-})
+});
 
-type ProfileFormValues = z.infer<typeof formSchema>
+type ProfileFormValues = z.infer<typeof formSchema>;
 
 export function EditProfileDialog({ open, onOpenChange, profile, onProfileUpdate }: EditProfileDialogProps) {
-  const [isLoading, setIsLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-  const [isUploadingAvatar, setIsUploadingAvatar] = useState(false)
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [isUploadingAvatar, setIsUploadingAvatar] = useState(false);
 
   const parsedLinks = (() => {
     try { return profile.social_links ? JSON.parse(profile.social_links) : {} } catch { return {} }
-  })()
+  })();
 
   const defaultValues: ProfileFormValues = {
     firstName: profile.first_name || '',
@@ -83,18 +83,18 @@ export function EditProfileDialog({ open, onOpenChange, profile, onProfileUpdate
       reddit: parsedLinks.reddit || '',
       youtube: parsedLinks.youtube || '',
     },
-  }
+  };
 
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(formSchema),
     defaultValues,
-  })
+  });
 
-  const displayImageVal = form.watch('displayImage') || ''
+  const displayImageVal = form.watch('displayImage') || '';
 
   const onSubmit = async (values: ProfileFormValues) => {
-    setIsLoading(true)
-    setError(null)
+    setIsLoading(true);
+    setError(null);
     try {
       const response = await fetch('/api/profile', {
         method: 'POST',
@@ -110,18 +110,18 @@ export function EditProfileDialog({ open, onOpenChange, profile, onProfileUpdate
           social_links: JSON.stringify(values.socialLinks),
           privacy_level: values.privacyOnly ? 1 : 0,
         }),
-      })
-      const result = await response.json() as { code: number; message?: string; data?: any }
+      });
+      const result = await response.json() as { code: number; message?: string; data?: any };
       if (!response.ok || result.code !== 0) {
-        throw new Error(result.message || 'Failed to update profile')
+        throw new Error(result.message || 'Failed to update profile');
       }
-      onOpenChange(false)
-      if (onProfileUpdate) onProfileUpdate()
+      onOpenChange(false);
+      if (onProfileUpdate) onProfileUpdate();
     } catch (err) {
-      console.error('Error updating profile:', err)
-      setError(err instanceof Error ? err.message : 'Failed to update profile')
+      console.error('Error updating profile:', err);
+      setError(err instanceof Error ? err.message : 'Failed to update profile');
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
   }
 
