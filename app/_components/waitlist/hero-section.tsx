@@ -26,7 +26,7 @@ export default function HeroSection() {
             </h1>
 
             <p className="text-base mb-8 md:mb-12 lg:mb-16 text-black/50 max-w-md">
-              Accept borderless donations and connect with donors who support education, research, and innovation.
+              Accept borderless donations and connect with donors who supporting cross-border tuition and donation payments to universities globally with speed, trust, and simplicity.
             </p>
 
             <div className="flex flex-col sm:flex-row justify-start items-center sm:items-center gap-4 sm:gap-8">
