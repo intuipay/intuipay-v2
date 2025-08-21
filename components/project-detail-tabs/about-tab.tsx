@@ -45,7 +45,7 @@ export function AboutTab({ project }: AboutTabProps) {
             href={`mailto:${email}`}
             className="flex items-center text-neutral-darkgray hover:text-action-blue"
           >
-            <EnvelopeIcon className="size-4 mr-2" />{" "}
+            <EnvelopeIcon className="size-4 mr-2" />
             <span className="text-primary font-medium">Contact Us</span>
           </Link>
         }
