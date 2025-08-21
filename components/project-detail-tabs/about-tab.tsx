@@ -9,11 +9,6 @@ import {
   MapPinIcon,
   LinkIcon,
   ArrowSquareOutIcon,
-  LinkedinLogoIcon,
-  InstagramLogoIcon,
-  TwitterLogoIcon,
-  YoutubeLogoIcon,
-  FacebookLogoIcon
 } from '@phosphor-icons/react';
 import type { ProjectInfo } from '@/types'
 
@@ -56,12 +51,9 @@ export function AboutTab({ project }: AboutTabProps) {
         }
         {
           org_location &&
-          <div className="flex">
-            <MapPinIcon className="size-4 mr-2" /> 
-            <span className="flex items-center text-neutral-darkgray">
-              <MapPinIcon className="size-4 mr-2" />
-              {org_location}
-            </span>
+          <div className="flex items-center text-neutral-darkgray">
+            <MapPinIcon className="size-4 mr-2" />
+            <span>{org_location}</span>
           </div>
         }
         {
@@ -72,71 +64,10 @@ export function AboutTab({ project }: AboutTabProps) {
             className="flex items-center text-neutral-darkgray hover:text-action-blue"
           >
             <LinkIcon className="size-4 mr-2" />
-            <div className="flex">
-              <span>{org_website}</span>
-              <ArrowSquareOutIcon className="size-4 ml-1" />
             <span>{org_website}</span>
             <ArrowSquareOutIcon className="size-4 ml-1" />
           </Link>
         }
-      </div>
-
-      <div className="flex space-x-3 mb-6">
-        {(
-          <Link
-            href=''
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="LinkedIn"
-            className="text-neutral-darkgray hover:text-action-blue"
-          >
-            <LinkedinLogoIcon className="size-5" />
-          </Link>
-        )}
-        {(
-          <Link
-            href=''
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Instagram"
-            className="text-neutral-darkgray hover:text-action-blue"
-          >
-            <InstagramLogoIcon className="size-5" />
-          </Link>
-        )}
-        {(
-          <Link
-            href=''
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Twitter"
-            className="text-neutral-darkgray hover:text-action-blue"
-          >
-            <TwitterLogoIcon className="size-5" />
-          </Link>
-        )}
-        {(
-          <Link
-            href={''}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="YouTube"
-            className="text-neutral-darkgray hover:text-action-blue"
-          >
-            <YoutubeLogoIcon className="size-5" />
-          </Link>
-        )}
-        {(
-          <Link
-            href={''}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Facebook"
-            className="text-neutral-darkgray hover:text-action-blue"
-          >
-            <FacebookLogoIcon className="size-5" />
-          </Link>
-        )}
       </div>
 
       {project.banners.length > 0 && (
