@@ -10,7 +10,7 @@ const socialLinks = [
 
 export function SiteFooter() {
   return (
-    <footer className="bg-brand-blue py-4 md:py-16">
+    <footer className="bg-brand-blue-100 py-4 md:py-16">
       <div className="w-full max-w-7xl px-12 md:px-10 mx-auto">
         <div className="flex flex-col md:flex-row justify-between items-center md:items-end text-center md:text-left">
           <p className="text-xs text-neutral-darkgray text-[#737373]">

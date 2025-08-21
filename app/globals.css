@@ -223,3 +223,23 @@ input[type=number] {
 .ms-rest {
   margin-inline-start: calc(50% - 50vw);
 }
+
+#toc {
+  display: none;
+
+  + ul {
+    @apply w-70 absolute top-0 right-0 text-sm font-bold text-secondary;
+
+    li {
+      @apply list-none p-2 mt-0;
+
+      &:has(a:target) {
+        @apply rounded-lg bg-black/5;
+      }
+    }
+
+    a {
+      @apply text-secondary hover:text-brand-blue-500 hover:underline;
+    }
+  }
+}

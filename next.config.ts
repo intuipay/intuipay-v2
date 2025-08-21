@@ -2,9 +2,9 @@ import { initOpenNextCloudflareForDev } from "@opennextjs/cloudflare";
 import pkg from './package.json' with { type: 'json' };
 import { WebpackConfigContext } from "next/dist/server/config-shared";
 import createMDX from '@next/mdx';
+import { NextConfig } from 'next';
 
-/** @type {import('next').NextConfig} */
-const nextConfig = {
+const nextConfig: NextConfig = {
   compress: true,
   env: {
     NEXT_PUBLIC_APP_VERSION: pkg.version,
@@ -33,17 +33,18 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
-  webpack: (config: WebpackConfigContext) => {
-    config.module.rules.push({
-      test: /\.md$/i,
-      type: 'asset/source',
-    })
-    return config
-  },
 };
 
 const withMDX = createMDX({
   extension: /\.(md|mdx)$/,
+  options: {
+    remarkPlugins: [
+      ['remark-toc', { heading: 'toc' }],
+    ],
+    rehypePlugins: [
+      'rehype-slug',
+    ],
+  },
 });
 
 export default withMDX(nextConfig);

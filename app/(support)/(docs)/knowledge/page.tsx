@@ -1,4 +1,4 @@
-export default function DocsPage() {
+export default function KnowledgePage() {
   return (
     <div>Knowledge</div>
   );

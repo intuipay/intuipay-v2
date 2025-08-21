@@ -6,7 +6,7 @@ export default function UpdatesSidebar() {
     <div className="uppercase text-xs font-bold text-black/50 mb-4">Announcements</div>
     <div className="space-y-2.5">
       <Link
-        className="px-3 h-9 bg-brand-blue/50 text-sm font-semibold flex items-center"
+        className="px-3 h-9 bg-brand-blue-100/50 text-sm font-semibold flex items-center"
         href="/about"
       >
         About
@@ -15,7 +15,7 @@ export default function UpdatesSidebar() {
     <div className="uppercase text-xs font-bold text-black/50 my-4">Release notes</div>
     <div className="space-y-2.5">
       <Link
-        className="px-3 h-9 bg-brand-blue/50 text-sm font-semibold flex items-center"
+        className="px-3 h-9 bg-brand-blue-100/50 text-sm font-semibold flex items-center"
         href="/about"
       >
         About
