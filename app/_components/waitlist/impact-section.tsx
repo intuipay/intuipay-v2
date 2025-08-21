@@ -8,7 +8,7 @@ export default function ImpactSection() {
   const { itemVariants } = sectionMotionVariants;
 
   return (
-    <section className="py-12 md:py-16 px-8 xl:max-w-6xl 2xl:max-w-8xl 2xl:px-22 mx-auto">
+    <section className="py-12 md:py-20 lg:py-30 px-8 xl:max-w-6xl 2xl:max-w-8xl 2xl:px-22 mx-auto">
       <motion.div
         className="flex flex-col items-center gap-8 md:gap-24"
         {...sectionMotionProps}
@@ -34,14 +34,14 @@ export default function ImpactSection() {
             variants={itemVariants}
           >
             <div className="flex flex-col gap-4 md:gap-8">
-              <div className="text-black text-6xl font-medium font-neue-montreal capitalize">
+              <div className="text-black text-3xl md:text-6xl font-medium font-neue-montreal capitalize">
                 <AnimatedIncrCounter
                   end={70}
                   suffix="%"
                   duration={2000}
                 />
               </div>
-              <div className="text-black/50 text-sm md:text-base font-normal leading-normal">
+              <div className="text-black/50 text-sm text-base font-normal leading-normal">
                 of Forbes' top 100 charities accept crypto donations
               </div>
             </div>
@@ -52,14 +52,14 @@ export default function ImpactSection() {
             variants={itemVariants}
           >
             <div className="flex flex-col gap-4 md:gap-8">
-              <div className="text-black text-6xl font-medium font-neue-montreal capitalize">
+              <div className="text-black text-3xl md:text-6xl font-medium font-neue-montreal capitalize">
                 <AnimatedIncrCounter
                   end={600}
                   suffix="Mn"
                   duration={2200}
                 />
               </div>
-              <div className="text-black/50 text-sm md:text-base font-normal leading-normal">
+              <div className="text-black/50 text-sm text-base font-normal leading-normal">
                 crypto users worldwide
               </div>
             </div>
@@ -78,7 +78,7 @@ export default function ImpactSection() {
                   duration={500}
                 />
               </div>
-              <div className="text-black/50 text-sm md:text-base font-normal leading-normal">
+              <div className="text-black/50 text-sm text-base font-normal leading-normal">
                 crypto giving expected in 2025 with growing trends
               </div>
             </div>
