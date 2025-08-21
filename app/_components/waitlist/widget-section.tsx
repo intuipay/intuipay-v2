@@ -79,7 +79,7 @@ export default function WidgetSection() {
             variants={itemVariants}
           >
             <CodeIcon size={32} className="text-black/70" />
-            <div className="text-black/70 text-sm md:text-base font-normal leading-6">
+            <div className="text-black/70 text-sm text-base font-normal leading-6">
               Simple HTML iframe embedding set-up
             </div>
           </motion.div>
@@ -89,7 +89,7 @@ export default function WidgetSection() {
             variants={itemVariants}
           >
             <CoinsIcon size={32} className="text-black/70" />
-            <div className="text-black/70 text-sm md:text-base font-normal leading-6">
+            <div className="text-black/70 text-sm text-base font-normal leading-6">
               30+ cryptocurrencies accepted
             </div>
           </motion.div>
@@ -99,7 +99,7 @@ export default function WidgetSection() {
             variants={itemVariants}
           >
             <GlobeIcon size={32} className="text-black/70" />
-            <div className="text-black/70 text-sm md:text-base font-normal leading-6">
+            <div className="text-black/70 text-sm text-base font-normal leading-6">
               Automatic conversion to local fiat currencies
             </div>
           </motion.div>
