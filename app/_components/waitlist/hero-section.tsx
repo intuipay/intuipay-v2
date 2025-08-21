@@ -1,4 +1,4 @@
-import PaymentDemo from '@/components/payment-demo'
+import PaymentDemo from '@/components/payment-demo';
 
 export default function HeroSection() {
   return (
@@ -48,5 +48,5 @@ export default function HeroSection() {
         </div>
       </div>
     </section>
-  )
+  );
 }

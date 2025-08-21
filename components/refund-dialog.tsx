@@ -1,14 +1,14 @@
-'use client'
+'use client';
 
-import { useState, useEffect } from 'react'
-import Image from 'next/image'
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
-import { Button } from '@/components/ui/button'
-import { useAccount, useConnect, useDisconnect, useWriteContract, useWaitForTransactionReceipt, useSwitchChain } from 'wagmi'
-import { clsx } from 'clsx'
-import crowdFundingABI from '@/lib/crowdFunding.abi.json'
-import { sepolia } from 'wagmi/chains'
-import { getExplorerUrl, formatAddress } from '@/config/blockchain'
+import { useState, useEffect } from 'react';
+import Image from 'next/image';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+import { useAccount, useConnect, useDisconnect, useWriteContract, useWaitForTransactionReceipt, useSwitchChain } from 'wagmi';
+import { clsx } from 'clsx';
+import crowdFundingABI from '@/lib/crowdFunding.abi.json';
+import { sepolia } from 'wagmi/chains';
+import { getExplorerUrl, formatAddress } from '@/config/blockchain';
 
 interface RefundDialogProps {
   open: boolean
@@ -37,21 +37,21 @@ const WALLET_OPTIONS = [
     icon: 'wallet-connect',
     connectorId: 'walletConnect'
   }
-]
+];
 
 export function RefundDialog({ open, onOpenChange, projectId, campaignId, contractAddress }: RefundDialogProps) {
-  const [connecting, setConnecting] = useState<string | null>(null)
-  const [error, setError] = useState<string>('')
-  const [isProcessingRefund, setIsProcessingRefund] = useState(false)
-  const [transactionHash, setTransactionHash] = useState<string>('')
+  const [connecting, setConnecting] = useState<string | null>(null);
+  const [error, setError] = useState<string>('');
+  const [isProcessingRefund, setIsProcessingRefund] = useState(false);
+  const [transactionHash, setTransactionHash] = useState<string>('');
 
-  const { address, isConnected, connector, chain } = useAccount()
-  const { connect, connectors, isPending, error: connectError } = useConnect()
-  const { disconnect } = useDisconnect()
-  const { switchChain } = useSwitchChain()
+  const { address, isConnected, connector, chain } = useAccount();
+  const { connect, connectors, isPending, error: connectError } = useConnect();
+  const { disconnect } = useDisconnect();
+  const { switchChain } = useSwitchChain();
 
   // 合约写入hook
-  const { writeContract, data: hash, isPending: isContractPending, error: contractError } = useWriteContract()
+  const { writeContract, data: hash, isPending: isContractPending, error: contractError } = useWriteContract();
   
   // 等待交易确认
   const { 
@@ -61,21 +61,21 @@ export function RefundDialog({ open, onOpenChange, projectId, campaignId, contra
     error: transactionError 
   } = useWaitForTransactionReceipt({
     hash: transactionHash as `0x${string}` | undefined,
-  })
+  });
 
   // 获取当前连接的钱包信息efund request
   const getCurrentWalletInfo = () => {
-    if (!isConnected || !connector) return null
+    if (!isConnected || !connector) return null;
     
     // 根据 connector id 匹配钱包信息
     const walletName = connector.id === 'metaMaskSDK' || connector.id === 'io.metamask' ? 'metamask' :
       connector.id === 'coinbaseWalletSDK' ? 'coinbase' :
-        connector.id === 'walletConnect' ? 'wallet-connect' : 'wallet-connect'
+        connector.id === 'walletConnect' ? 'wallet-connect' : 'wallet-connect';
     
-    return WALLET_OPTIONS.find(wallet => wallet.id === walletName) || WALLET_OPTIONS[ 2 ] // fallback to WalletConnect
-  }
+    return WALLET_OPTIONS.find(wallet => wallet.id === walletName) || WALLET_OPTIONS[ 2 ]; // fallback to WalletConnect
+  };
 
-  const currentWallet = getCurrentWalletInfo()
+  const currentWallet = getCurrentWalletInfo();
 
   // 处理用户友好的错误信息
   const getReadableErrorMessage = (error: Error | any) => {
@@ -139,51 +139,51 @@ export function RefundDialog({ open, onOpenChange, projectId, campaignId, contra
   // 当钱包连接成功时
   useEffect(() => {
     if (isConnected && address && connecting) {
-      setConnecting(null)
-      setError('')
-      onOpenChange(false)
+      setConnecting(null);
+      setError('');
+      onOpenChange(false);
     }
-  }, [isConnected, address, connecting, onOpenChange])
+  }, [isConnected, address, connecting, onOpenChange]);
 
   // 监听连接错误
   useEffect(() => {
     if (connectError) {
-      setConnecting(null)
+      setConnecting(null);
       if (connectError.message.includes('User rejected')) {
-        setError('User rejected the connection request')
+        setError('User rejected the connection request');
       } else if (connectError.message.includes('Already processing')) {
-        setError('Request is already being processed, please check your wallet')
+        setError('Request is already being processed, please check your wallet');
       } else {
-        setError(`Connection failed: ${connectError.message}`)
+        setError(`Connection failed: ${connectError.message}`);
       }
     }
-  }, [connectError])
+  }, [connectError]);
 
   // 监听合约错误
   useEffect(() => {
     if (contractError) {
-      setIsProcessingRefund(false)
-      console.error('Contract error:', contractError)
-      setError(`Refund request failed: ${getReadableErrorMessage(contractError)}`)
+      setIsProcessingRefund(false);
+      console.error('Contract error:', contractError);
+      setError(`Refund request failed: ${getReadableErrorMessage(contractError)}`);
     }
-  }, [contractError])
+  }, [contractError]);
 
   // 监听交易确认
   useEffect(() => {
     if (isConfirmed && transactionHash) {
       // 交易确认成功，保存退款信息到数据库
-      saveRefundToDatabase(transactionHash)
+      saveRefundToDatabase(transactionHash);
     }
-  }, [isConfirmed, transactionHash])
+  }, [isConfirmed, transactionHash]);
 
   // 保存退款数据到数据库
   async function saveRefundToDatabase(txHash: string) {
     try {
       if (!projectId) {
-        console.error('Project ID is required to save refund')
-        setError('Project ID is missing')
-        setIsProcessingRefund(false)
-        return
+        console.error('Project ID is required to save refund');
+        setError('Project ID is missing');
+        setIsProcessingRefund(false);
+        return;
       }
 
       const response = await fetch('/api/refund', {
@@ -197,98 +197,98 @@ export function RefundDialog({ open, onOpenChange, projectId, campaignId, contra
           tx_hash: txHash,
           wallet_address: address || '',
         }),
-      })
+      });
 
       if (!response.ok) {
-        const errorData = await response.json().catch(() => ({ message: response.statusText }))
-        const errorMessage = errorData.message || response.statusText
-        console.error('Failed to save refund:', errorMessage)
-        setError('Error saving refund: ' + errorMessage)
-        setIsProcessingRefund(false)
-        return
+        const errorData = await response.json().catch(() => ({ message: response.statusText }));
+        const errorMessage = errorData.message || response.statusText;
+        console.error('Failed to save refund:', errorMessage);
+        setError('Error saving refund: ' + errorMessage);
+        setIsProcessingRefund(false);
+        return;
       }
 
-      const { data, validation } = await response.json()
+      const { data, validation } = await response.json();
       
       // 显示验证成功的信息
       if (validation?.verified) {
-        console.log('Refund saved successfully with ID:', data)
+        console.log('Refund saved successfully with ID:', data);
       }
 
-      setIsProcessingRefund(false)
+      setIsProcessingRefund(false);
       // 延迟关闭 dialog 和清除状态，让用户看到成功状态
       setTimeout(() => {
-        setTransactionHash('')
-        onOpenChange(false)
-      }, 2000)
+        setTransactionHash('');
+        onOpenChange(false);
+      }, 2000);
     } catch (e) {
-      console.error('Error saving refund:', e)
-      setError(`Error saving refund: ${getReadableErrorMessage(e)}`)
-      setIsProcessingRefund(false)
+      console.error('Error saving refund:', e);
+      setError(`Error saving refund: ${getReadableErrorMessage(e)}`);
+      setIsProcessingRefund(false);
     }
   }
 
   // 监听交易失败
   useEffect(() => {
     if (isTransactionFailed && transactionError) {
-      setIsProcessingRefund(false)
-      console.error('Transaction failed:', transactionError)
-      setError(`Transaction failed: ${getReadableErrorMessage(transactionError)}`)
+      setIsProcessingRefund(false);
+      console.error('Transaction failed:', transactionError);
+      setError(`Transaction failed: ${getReadableErrorMessage(transactionError)}`);
       // 失败后停止处理，保留 hash 显示失败状态
     }
-  }, [isTransactionFailed, transactionError])
+  }, [isTransactionFailed, transactionError]);
 
   const handleWalletConnect = async (walletOption: typeof WALLET_OPTIONS[0]) => {
-    setError('')
-    setConnecting(walletOption.id)
+    setError('');
+    setConnecting(walletOption.id);
 
     // 查找对应的连接器
     const connector = connectors.find(c => 
       c.id === walletOption.connectorId || 
       (walletOption.id === 'metamask' && c.id === 'io.metamask')
-    )
+    );
 
     if (!connector) {
-      setError(`${walletOption.name} connector not found`)
-      setConnecting(null)
-      return
+      setError(`${walletOption.name} connector not found`);
+      setConnecting(null);
+      return;
     }
 
     try {
-      connect({ connector })
+      connect({ connector });
     } catch (err) {
-      console.error('Wallet connection failed:', err)
-      setConnecting(null)
+      console.error('Wallet connection failed:', err);
+      setConnecting(null);
     }
-  }
+  };
 
   const handleDisconnect = () => {
-    disconnect()
-    setError('')
-    setConnecting(null)
-  }
+    disconnect();
+    setError('');
+    setConnecting(null);
+  };
 
   // 处理退款请求
   const handleRefundRequest = async () => {
     if (!campaignId || !contractAddress) {
-      setError('Missing campaign information for refund request')
-      return
+      setError('Missing campaign information for refund request');
+      return;
     }
 
-    setError('')
-    setIsProcessingRefund(true)
-    setTransactionHash('') // 清除之前的交易hash
+    setError('');
+    setIsProcessingRefund(true);
+    setTransactionHash(''); // 清除之前的交易hash
 
     try {
       // 检查当前网络是否为 Sepolia
       if (chain?.id !== sepolia.id) {
         try {
-          switchChain({ chainId: sepolia.id })
+          switchChain({ chainId: sepolia.id });
         } catch (switchError) {
-          console.error('Failed to switch to Sepolia:', switchError)
-          setIsProcessingRefund(false)
-          setError('Please switch to Sepolia testnet to continue')
-          return
+          console.error('Failed to switch to Sepolia:', switchError);
+          setIsProcessingRefund(false);
+          setError('Please switch to Sepolia testnet to continue');
+          return;
         }
       }
 
@@ -297,13 +297,13 @@ export function RefundDialog({ open, onOpenChange, projectId, campaignId, contra
         abi: crowdFundingABI,
         functionName: 'requestRefund',
         args: [BigInt(campaignId)],
-      })
+      });
     } catch (error) {
-      console.error('Failed to initiate refund request:', error)
-      setIsProcessingRefund(false)
-      setError(getReadableErrorMessage(error))
+      console.error('Failed to initiate refund request:', error);
+      setIsProcessingRefund(false);
+      setError(getReadableErrorMessage(error));
     }
-  }
+  };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -461,5 +461,5 @@ export function RefundDialog({ open, onOpenChange, projectId, campaignId, contra
         )}
       </DialogContent>
     </Dialog>
-  )
+  );
 }

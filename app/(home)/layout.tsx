@@ -1,12 +1,12 @@
-import { SiteHeader } from '@/components/site-header'
-import { SiteFooter } from '@/components/site-footer'
+import { SiteHeader } from '@/components/site-header';
 import { auth } from '@/lib/auth';
 import { headers } from 'next/headers';
+import { ReactNode } from 'react';
 
 export default async function ProjectsLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: ReactNode
 }) {
   const session = await auth.api.getSession({
     headers: await headers(),

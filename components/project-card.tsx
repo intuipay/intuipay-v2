@@ -1,8 +1,8 @@
 'use client';
 
-import Image from 'next/image'
-import Link from 'next/link' // Import Link
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
+import Image from 'next/image';
+import Link from 'next/link'; // Import Link
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { ProjectInfo } from '@/types';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { ProjectStatus } from '@/data/project';
@@ -114,5 +114,5 @@ export function ProjectCard({ project, isRefunded }: ProjectCardProps) {
           )}
         </CardFooter>
       </Card>
-    )
+    );
   }

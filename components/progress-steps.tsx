@@ -1,21 +1,21 @@
-'use client'
+'use client';
 
-import { usePathname } from 'next/navigation'
-import Link from 'next/link'
-import { motion } from 'framer-motion'
+import { usePathname } from 'next/navigation';
+import Link from 'next/link';
+import { motion } from 'framer-motion';
 
 export function ProgressSteps() {
-  const pathname = usePathname()
+  const pathname = usePathname();
 
   const steps = [
     { id: 'initialization', label: 'Initialization', path: '/' },
     { id: 'contracts', label: 'Contracts', path: '/contracts' },
     { id: 'payment', label: 'Payment', path: '/payment' },
     { id: 'complete', label: 'Complete', path: '/complete' },
-  ]
+  ];
 
   const currentStepIndex =
-    steps.findIndex((step) => step.path === pathname) !== -1 ? steps.findIndex((step) => step.path === pathname) : 0
+    steps.findIndex((step) => step.path === pathname) !== -1 ? steps.findIndex((step) => step.path === pathname) : 0;
 
   return (
     <div className="mb-8">
@@ -70,5 +70,5 @@ export function ProgressSteps() {
         ))}
       </div>
     </div>
-  )
+  );
 }

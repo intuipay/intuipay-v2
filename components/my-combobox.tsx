@@ -164,5 +164,5 @@ export default function MyCombobox({
         </div>}
       </ComboboxOptions>
     </Combobox>
-  )
+  );
 }

@@ -1,8 +1,8 @@
-'use client'
+'use client';
 
-import ReactMarkdown from 'react-markdown'
-import remarkGfm from 'remark-gfm'
-import remarkBreaks from 'remark-breaks'
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import remarkBreaks from 'remark-breaks';
 
 interface LegalPageMarkdownProps {
   content: string
@@ -31,5 +31,5 @@ export function LegalPageMarkdown({ content, className = '' }: LegalPageMarkdown
         </ReactMarkdown>
       </div>
     </div>
-  )
+  );
 }

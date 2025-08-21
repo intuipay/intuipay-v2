@@ -23,5 +23,5 @@ export default function BackButton({
       <ChevronLeft className="h-5 w-5" />
       <span className="sr-only">Back</span>
     </Button>
-  )
+  );
 }

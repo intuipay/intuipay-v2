@@ -1,4 +1,4 @@
-import StructuredData from '@/components/structured-data'
+import StructuredData from '@/components/structured-data';
 import HeroSection from '@/app/_components/waitlist/hero-section';
 import TrustSection from '@/app/_components/waitlist/trust-section';
 import ImpactSection from '@/app/_components/waitlist/impact-section';
@@ -46,5 +46,5 @@ export default async function Home() {
       {/* Footer Section */}
       <FooterLinksSection />
     </>
-  )
+  );
 }

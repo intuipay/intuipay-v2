@@ -504,5 +504,5 @@ export default function DonationStep4({
         </p>
       </div>
     </>
-  )
+  );
 }

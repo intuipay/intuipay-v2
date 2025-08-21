@@ -1,5 +1,5 @@
-import type { PropsWithChildren } from 'react'
-import { useHydrated } from '@/hooks/useHydrated'
+import type { PropsWithChildren } from 'react';
+import { useHydrated } from '@/hooks/useHydrated';
 
 interface ClientOnlyProps extends PropsWithChildren {
   fallback?: React.ReactNode
@@ -10,6 +10,6 @@ interface ClientOnlyProps extends PropsWithChildren {
  * fallback component if the JS is not yet loaded.
  */
 export function ClientOnly({ children, fallback = null }: ClientOnlyProps) {
-  const hydrated = useHydrated()
-  return hydrated ? children : fallback
+  const hydrated = useHydrated();
+  return hydrated ? children : fallback;
 }

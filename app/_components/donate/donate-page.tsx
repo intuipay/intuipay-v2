@@ -1,10 +1,10 @@
-'use client'
+'use client';
 
-import { useMemo, useState, lazy, useEffect, CSSProperties } from 'react'
-import { CircleDotIcon, HeadsetIcon } from 'lucide-react'
-import Image from 'next/image'
+import { useMemo, useState, lazy, useEffect, CSSProperties } from 'react';
+import { CircleDotIcon, HeadsetIcon } from 'lucide-react';
+import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
-import Link from 'next/link'
+import Link from 'next/link';
 import { DonationInfo, ProjectInfo } from '@/types';
 import { clsx } from 'clsx';
 import DonationStep1 from '@/app/_components/donate/step1';
@@ -51,7 +51,7 @@ const slideVariants = {
     x: 300,
     opacity: 0,
   },
-}
+};
 
 export default function DonationPageComp({
   isPreview,
@@ -59,8 +59,8 @@ export default function DonationPageComp({
   slug,
 }: Props) {
   // State
-  const [currentStep, setCurrentStep] = useState<Step>('initialization')
-  const [slideDirection, setSlideDirection] = useState<'right' | 'left'>('right')
+  const [currentStep, setCurrentStep] = useState<Step>('initialization');
+  const [slideDirection, setSlideDirection] = useState<'right' | 'left'>('right');
   const [info, setInfo] = useState<DonationInfo>(createDonationInfo(project.id));
   const [projectInfo, setProjectInfo] = useState<ProjectInfo>(project);
   // Network state management
@@ -118,25 +118,25 @@ export default function DonationPageComp({
 
   // Step navigation
   const goToNextStep = () => {
-    setSlideDirection('right')
-    if (currentStep === 'initialization') setCurrentStep('contacts')
-    else if (currentStep === 'contacts') setCurrentStep('payment')
-    else  if (currentStep === 'payment') setCurrentStep('complete')
-  }
+    setSlideDirection('right');
+    if (currentStep === 'initialization') setCurrentStep('contacts');
+    else if (currentStep === 'contacts') setCurrentStep('payment');
+    else  if (currentStep === 'payment') setCurrentStep('complete');
+  };
   const goToPreviousStep = () => {
-    setSlideDirection('left')
-    if (currentStep === 'contacts') setCurrentStep('initialization')
-    else if (currentStep === 'payment') setCurrentStep('contacts')
-  }
+    setSlideDirection('left');
+    if (currentStep === 'contacts') setCurrentStep('initialization');
+    else if (currentStep === 'payment') setCurrentStep('contacts');
+  };
   function resetForm() {
-    setSlideDirection('left')
-    setCurrentStep('initialization')
+    setSlideDirection('left');
+    setCurrentStep('initialization');
     setInfo(createDonationInfo(project.id));
 
     // 重置表单后，本来应该记住上一次选择的网络，但是因为createDonationInfo清空了所有信息，
     // 所以从 network 里面找到上一次选中的网络，更新 info
     setNetwork(network);
-    updateInfo({ network })
+    updateInfo({ network });
   }
   function updateInfo(newInfo: Partial<DonationInfo>) {
     setInfo((prev) => ({
@@ -155,7 +155,7 @@ export default function DonationPageComp({
     }
     return () => {
       window.removeEventListener('message', onMessage, false);
-    }
+    };
   }, []);
   useEffect(() => {
     updateInfo({ network });
@@ -315,5 +315,5 @@ export default function DonationPageComp({
         </footer>
       </div>
     </main>
-  )
+  );
 }

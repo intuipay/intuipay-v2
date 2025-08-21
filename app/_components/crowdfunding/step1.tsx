@@ -629,7 +629,7 @@ export default function DonationStep1({
                       />
                       <span className="font-medium">{wallet.name}</span>
                     </label>
-                  )
+                  );
                 })}
               </div>
             ) : (
@@ -752,5 +752,5 @@ export default function DonationStep1({
         </form>
       </dialog>
     </>
-  )
+  );
 }

@@ -44,5 +44,5 @@ export default function CtaFooter({
         {buttonLabel}
       </Button>
     </div>
-  )
+  );
 }

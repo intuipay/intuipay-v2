@@ -1,11 +1,11 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import Link from 'next/link'
-import { IntuipayLogo } from '@/components/intuipay-logo'
-import { Button } from '@/components/ui/button'
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { useState } from 'react';
+import Link from 'next/link';
+import { IntuipayLogo } from '@/components/intuipay-logo';
+import { Button } from '@/components/ui/button';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { authClient } from '@/lib/auth-client';
 import { GlobeIcon, CaretDownIcon, ListIcon, XLogoIcon, SignOutIcon } from '@phosphor-icons/react';
 import { User } from 'better-auth';
@@ -15,13 +15,13 @@ import { useRouter } from 'next/navigation';
 const navLinks = [
   { href: '/projects', label: 'Crowdfunding' },
   { href: '/about', label: 'About' },
-  { href: 'https://support.intuipay.xyz', label: 'Support' },
-]
+  { href: '/support', label: 'Support' },
+];
 
 const userMenuItems = [
   { href: '/profile', label: 'Profile' },
   { href: process.env.NEXT_PUBLIC_DASHBOARD_URL, label: 'Dashboard' },
-]
+];
 
 interface SiteHeaderProps {
   user?: User | null;
@@ -35,7 +35,7 @@ export function SiteHeader({ user }: SiteHeaderProps) {
     setMobileMenuOpen(false);
     await authClient.signOut();
     router.replace('/');
-  }
+  };
 
   return (
     <header className="sticky top-0 z-50 w-full bg-white">
@@ -292,5 +292,5 @@ export function SiteHeader({ user }: SiteHeaderProps) {
       {/* Border */}
       <div className="absolute bottom-0 left-0 right-0 h-px bg-black/10" />
     </header>
-  )
+  );
 }

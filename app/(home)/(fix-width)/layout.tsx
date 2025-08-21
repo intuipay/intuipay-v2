@@ -1,5 +1,5 @@
-import {PropsWithChildren} from "react";
-import {SiteFooter} from "@/components/site-footer";
+import { PropsWithChildren } from 'react';
+import { SiteFooter } from '@/components/site-footer';
 
 export default function FixWidthLayout({
   children

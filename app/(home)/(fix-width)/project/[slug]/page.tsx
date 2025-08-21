@@ -1,7 +1,7 @@
 // This is now a SERVER COMPONENT by default
-import type { Metadata, ResolvingMetadata } from 'next'
+import type { Metadata, ResolvingMetadata } from 'next';
 import ProjectDetailClientLayout from '@/app/_components/projects/project-detail';
-import { getProjectDetail, getProjects } from '@/lib/data'
+import { getProjectDetail, getProjects } from '@/lib/data';
 import { ProjectCategories } from '@/data';
 
 type Props = {
@@ -10,14 +10,14 @@ type Props = {
 
 export async function generateMetadata({ params }: Props, parent: ResolvingMetadata): Promise<Metadata> {
   const { slug } = await params;
-  const project = await getProjectDetail(slug)
+  const project = await getProjectDetail(slug);
 
   if (!project) {
     // Optionally, return metadata for a "not found" page
     return {
       title: 'Project Not Found',
       description: 'The project you are looking for does not exist.',
-    }
+    };
   }
 
   return {
@@ -37,7 +37,7 @@ export async function generateMetadata({ params }: Props, parent: ResolvingMetad
       type: 'article', // Or 'website' depending on the content
     },
     // You can add more metadata here (twitter cards, etc.)
-  }
+  };
 }
 
 // This is the main Server Component for the page
@@ -72,7 +72,7 @@ export default async function ProjectDetailPageServer({ params }: { params: { sl
           Sorry, we couldn&apos;t find the project you&apos;re looking for.
         </p>
       </div>
-    )
+    );
   }
 
   return (
@@ -81,5 +81,5 @@ export default async function ProjectDetailPageServer({ params }: { params: { sl
       similarProjects={similarProjects}
       slug={slug}
     />
-  )
+  );
 }

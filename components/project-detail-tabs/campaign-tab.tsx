@@ -1,9 +1,9 @@
-'use client'
+'use client';
 
-import Link from 'next/link'
-import { marked } from 'marked'
-import { Badge } from '@/components/ui/badge'
-import type { ProjectInfo } from '@/types'
+import Link from 'next/link';
+import { marked } from 'marked';
+import { Badge } from '@/components/ui/badge';
+import type { ProjectInfo } from '@/types';
 
 type CampaignTabProps = {
   project: ProjectInfo
@@ -39,5 +39,5 @@ export function CampaignTab({ project }: CampaignTabProps) {
         ))}
       </div>
     </>
-  )
+  );
 }

@@ -1,6 +1,6 @@
 // This is now a SERVER COMPONENT by default
 import ProjectDetailClientLayout from '@/app/_components/projects/project-detail';
-import { getProjectDetail, getProjects } from '@/lib/data'
+import { getProjectDetail, getProjects } from '@/lib/data';
 
 type Props = {
   params: Promise<{ id: string }>
@@ -23,7 +23,7 @@ export default async function ProjectDetailPageServer({ params }: { params: { id
           Sorry, we couldn&apos;t find the project you&apos;re looking for.
         </p>
       </div>
-    )
+    );
   }
 
   return (
@@ -32,5 +32,5 @@ export default async function ProjectDetailPageServer({ params }: { params: { id
       project={project}
       slug="preview"
     />
-  )
+  );
 }

@@ -1,10 +1,10 @@
-'use client'
+'use client';
 
-import { useEffect, useState } from 'react'
-import { Avatar, AvatarFallback } from '@/components/ui/avatar'
-import { Button } from '@/components/ui/button'
+import { useEffect, useState } from 'react';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { Button } from '@/components/ui/button';
 import { HandHeartIcon, CardholderIcon } from '@phosphor-icons/react';
-import { Donation } from '@/types'
+import { Donation } from '@/types';
 import { AcceptMethod } from '@intuipay/shared/constants';
 import { getEnumKey } from '@/lib/utils';
 
@@ -13,7 +13,7 @@ type DonationsTabProps = {
 }
 
 export function DonationsTab({ projectId }: DonationsTabProps) {
-  const [donationSort, setDonationSort] = useState<'newest' | 'top'>('newest')
+  const [donationSort, setDonationSort] = useState<'newest' | 'top'>('newest');
   const [donations, setDonations] = useState<Donation[]>([]);
   const [isLoaded, setIsLoaded] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -39,11 +39,11 @@ export function DonationsTab({ projectId }: DonationsTabProps) {
   }, [donationSort, projectId]);
 
   if (isLoaded && donations.length === 0) {
-    return <p className="text-center text-gray-500 py-4">No donations yet for this project.</p>
+    return <p className="text-center text-gray-500 py-4">No donations yet for this project.</p>;
   }
 
   if (isLoading) {
-    return <p className="text-center text-gray-500 py-4">Loading...</p>
+    return <p className="text-center text-gray-500 py-4">Loading...</p>;
   }
 
   return (
@@ -109,5 +109,5 @@ export function DonationsTab({ projectId }: DonationsTabProps) {
         ))}
       </div>
     </>
-  )
+  );
 }

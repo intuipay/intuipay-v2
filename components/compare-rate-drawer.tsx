@@ -1,16 +1,16 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import Image from 'next/image'
+import { useState } from 'react';
+import Image from 'next/image';
 import { X as XIcon } from '@phosphor-icons/react';
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
-import { Button } from '@/components/ui/button'
+import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { Button } from '@/components/ui/button';
 import useStore from '@/store';
 
 export default function CompareRateDrawer() {
   const featuredMethods = useStore(state => state.paymentMethodList);
   const otherMethods = useStore(state => state.paymentMethodOtherList);
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(false);
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
@@ -127,5 +127,5 @@ export default function CompareRateDrawer() {
         </div>
       </SheetContent>
     </Sheet>
-  )
+  );
 }

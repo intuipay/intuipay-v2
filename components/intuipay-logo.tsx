@@ -1,5 +1,5 @@
-import Link from 'next/link'
-import Image from 'next/image'
+import Link from 'next/link';
+import Image from 'next/image';
 
 export function IntuipayLogo() {
   return (
@@ -12,5 +12,5 @@ export function IntuipayLogo() {
       />
       <h1 className="sr-only">Intuipay</h1>
     </Link>
-  )
+  );
 }

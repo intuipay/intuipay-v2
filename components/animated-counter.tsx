@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import { useEffect, useState, useRef, useCallback } from 'react'
 import { motion, useInView } from 'framer-motion'
@@ -26,17 +26,17 @@ export function AnimatedCounter({
   const ref = useRef<HTMLSpanElement>(null)
   const intervalRef = useRef<NodeJS.Timeout | null>(null)
   const isInView = useInView(ref, { once: true, margin: '-100px' })
-  
+
   // 使用全局动画控制状态
   const { isGloballyPaused, pauseAllAnimations, resumeAllAnimations } = useCounterAnimation()
 
   // 生成随机数值的函数
   const generateRandomCount = useCallback(() => {
-    const range = Math.floor(end * rollRange)
-    const min = Math.max(0, end - range)
-    const max = end + range
-    return Math.floor(Math.random() * (max - min + 1)) + min
-  }, [end, rollRange])
+    const range = Math.floor(end * rollRange);
+    const min = Math.max(0, end - range);
+    const max = end + range;
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }, [end, rollRange]);
 
   // 启动随机滚动
   const startRolling = useCallback(() => {
@@ -51,10 +51,10 @@ export function AnimatedCounter({
   // 停止随机滚动
   const stopRolling = useCallback(() => {
     if (intervalRef.current) {
-      clearInterval(intervalRef.current)
-      intervalRef.current = null
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
     }
-  }, [])
+  }, []);
 
   // 鼠标进入时暂停所有动画并显示目标值
   const handleMouseEnter = useCallback(() => {
@@ -85,17 +85,17 @@ export function AnimatedCounter({
   }, [isGloballyPaused, isInView, end, isLocallyHovered, startRolling, stopRolling])
 
   useEffect(() => {
-    if (!isInView) return
+    if (!isInView) return;
 
     // 初始显示目标值
-    setCount(end)
+    setCount(end);
 
     // 延迟一点时间后开始滚动，让用户先看到目标值
     const timeout = setTimeout(() => {
       if (!isGloballyPaused && !isLocallyHovered) {
         startRolling()
       }
-    }, 1000)
+    }, 1000);
 
     return () => {
       clearTimeout(timeout)
@@ -106,16 +106,16 @@ export function AnimatedCounter({
   // 清理定时器
   useEffect(() => {
     return () => {
-      stopRolling()
-    }
-  }, [stopRolling])
+      stopRolling();
+    };
+  }, [stopRolling]);
 
   const formatNumber = (num: number) => {
     if (end >= 1000) {
-      return num.toLocaleString()
+      return num.toLocaleString();
     }
-    return num.toString()
-  }
+    return num.toString();
+  };
 
   return (
     <motion.span
@@ -133,5 +133,5 @@ export function AnimatedCounter({
     >
       {prefix}{formatNumber(count)}{suffix}
     </motion.span>
-  )
+  );
 }

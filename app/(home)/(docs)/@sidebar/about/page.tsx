@@ -1,5 +1,5 @@
-import Link from "next/link";
-import {ArrowUpRightIcon} from "@phosphor-icons/react/ssr";
+import Link from 'next/link';
+import { ArrowUpRightIcon } from '@phosphor-icons/react/ssr';
 
 export default function AboutSidebar() {
   return <>
@@ -28,5 +28,5 @@ export default function AboutSidebar() {
         <ArrowUpRightIcon className="size-4" />
       </Link>
     </div>
-  </>
+  </>;
 }

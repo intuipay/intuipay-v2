@@ -1,5 +1,5 @@
-import {PropsWithChildren, ReactNode} from "react";
-import {Metadata} from "next";
+import { PropsWithChildren, ReactNode } from 'react';
+import { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'About Us',
@@ -23,5 +23,5 @@ export default function AboutLayout({
         </div>
       </div>
     </div>
-  )
+  );
 }
