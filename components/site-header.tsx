@@ -13,10 +13,9 @@ import { Href } from '@react-types/shared';
 import { useRouter } from 'next/navigation';
 
 const navLinks = [
-  { href: '/projects', label: 'Donate' },
-  { href: '#', label: 'Pay' },
-  { href: '#', label: 'About' },
-  { href: '#', label: 'Support' },
+  { href: '/projects', label: 'Crowdfunding' },
+  { href: '/about', label: 'About' },
+  { href: 'https://support.intuipay.xyz', label: 'Support' },
 ]
 
 const userMenuItems = [
