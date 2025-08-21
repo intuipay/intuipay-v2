@@ -2,12 +2,12 @@
 
 import * as React from 'react';
 import { useState, useRef, useCallback, Dispatch, SetStateAction } from 'react';
-import { Camera, Plus, Minus, NotePencil } from '@phosphor-icons/react';
+import { CameraIcon, PlusIcon, MinusIcon, NotePencilIcon } from '@phosphor-icons/react';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
 import { Slider } from '@/components/ui/slider';
 import { cn } from '@/lib/utils';
-import slugify from 'slugify';
+import { toS3ImageName } from '@/lib/utils';
 import { APIResponse } from '@/types';
 
 interface AvatarUploadProps {
@@ -146,11 +146,7 @@ export function AvatarUpload({
   const uploadImage = async (file: File) => {
     try {
       const { type, name } = file;
-      const slugifiedName = slugify(name, {
-        lower: true,
-        strict: true,
-        trim: true,
-      });
+      const slugifiedName = toS3ImageName(name);
 
       // Step 1: Get presigned URL
       const presignResponse = await fetch(`${process.env.NEXT_PUBLIC_DASHBOARD_URL}/api/upload`, {
@@ -248,12 +244,12 @@ export function AvatarUpload({
             <>
               <img src={value || '/placeholder.svg'} alt="Avatar" className="w-full h-full object-cover" />
               <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-all duration-200 flex items-center justify-center">
-                <Camera className="w-6 h-6 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
+                <CameraIcon className="w-6 h-6 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
               </div>
             </>
           ) : (
             <div className="w-full h-full flex flex-col items-center justify-center text-gray-400 group-hover:text-gray-600 transition-colors duration-200">
-              {placeholder || <NotePencil className="w-8 h-8" />}
+              {placeholder || <NotePencilIcon className="w-8 h-8" />}
             </div>
           )}
         </div>
@@ -316,7 +312,7 @@ export function AvatarUpload({
             {/* Zoom Controls */}
             <div className="flex items-center space-x-4">
               <Button variant="ghost" size="sm" onClick={handleZoomOut} disabled={zoom <= 0.1}>
-                <Minus className="w-4 h-4" />
+                <MinusIcon className="w-4 h-4" />
               </Button>
 
               <div className="flex-1">
@@ -331,7 +327,7 @@ export function AvatarUpload({
               </div>
 
               <Button variant="ghost" size="sm" onClick={handleZoomIn} disabled={zoom >= 3}>
-                <Plus className="w-4 h-4" />
+                <PlusIcon className="w-4 h-4" />
               </Button>
             </div>
 
