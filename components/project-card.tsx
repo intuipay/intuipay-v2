@@ -30,7 +30,7 @@ export function ProjectCard({ project, isRefunded }: ProjectCardProps) {
   const isBackedView = isRefunded !== undefined;
 
   return (
-    <Card className="group overflow-hidden flex flex-col h-full border-transparent hover:border-action-blue/50 transition rounded-lg h-101 drop-shadow-custom1 hover:shadow-lg duration-800">
+    <Card className="group overflow-hidden flex flex-col border-transparent hover:border-action-blue/50 transition rounded-lg h-101 drop-shadow-custom1 hover:shadow-lg duration-800">
       <Link
         href={`/project/${project.project_slug}`}
         className="block"
@@ -81,13 +81,13 @@ export function ProjectCard({ project, isRefunded }: ProjectCardProps) {
                   ) : (
                     // 可以退款状态 - 使用钱包连接对话框
                     <>
-                      <Button 
+                      <Button
                         className="bg-[#2461f2] hover:bg-[#1a4cc7] text-white text-sm px-4 py-1 h-auto"
                         onClick={() => setIsWalletDialogOpen(true)}
                       >
                         Withdraw my pledge
                       </Button>
-                      <RefundDialog 
+                      <RefundDialog
                         open={isWalletDialogOpen}
                         onOpenChange={setIsWalletDialogOpen}
                         projectId={project.id}

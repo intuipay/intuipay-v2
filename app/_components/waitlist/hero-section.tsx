@@ -2,7 +2,7 @@ import PaymentDemo from '@/components/payment-demo'
 
 export default function HeroSection() {
   return (
-    <section className="xl:py-16 xl:px-16 2xl:px-20">
+    <section>
       <div className="bg-brand-blue xl:rounded-3xl px-8 py-12 md:px-12 lg:px-16 xl:px-28 xl:min-h-[50vh] flex items-center">
         <div className="xl:max-w-6xl 2xl:max-w-8xl mx-auto flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8 md:gap-12 lg:gap-16 w-full">
           <div className="flex-1">
