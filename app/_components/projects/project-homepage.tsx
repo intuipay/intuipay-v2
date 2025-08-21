@@ -11,7 +11,7 @@ import {
   CheckIcon,
   FadersIcon,
   MagnifyingGlassIcon,
-} from '@phosphor-icons/react/dist/ssr';
+} from '@phosphor-icons/react';
 import { FilterDrawer } from '@/components/filter-drawer'
 import { ProjectFilter } from '@/types'
 import { DropdownMenuRadioGroup, DropdownMenuRadioItem } from '@radix-ui/react-dropdown-menu'
