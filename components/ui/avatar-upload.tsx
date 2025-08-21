@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
 import { Slider } from '@/components/ui/slider';
 import { cn } from '@/lib/utils';
-import slugify from 'slugify';
+import { toS3ImageName } from '@/lib/utils';
 import { APIResponse } from '@/types';
 
 interface AvatarUploadProps {
@@ -146,11 +146,7 @@ export function AvatarUpload({
   const uploadImage = async (file: File) => {
     try {
       const { type, name } = file;
-      const slugifiedName = slugify(name, {
-        lower: true,
-        strict: true,
-        trim: true,
-      });
+      const slugifiedName = toS3ImageName(name);
 
       // Step 1: Get presigned URL
       const presignResponse = await fetch(`${process.env.NEXT_PUBLIC_DASHBOARD_URL}/api/upload`, {
