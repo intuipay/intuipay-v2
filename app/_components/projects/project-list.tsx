@@ -13,7 +13,6 @@ function ProjectListSkeleton() {
           <div className="h-7 bg-neutral-700/50 rounded mb-1 ms-5 w-1/2"></div>
           <div className="h-12 bg-neutral-700/50 rounded mx-5 mb-4"></div>
           <div className="h-8 bg-neutral-700/50 rounded mx-5 mb-4"></div>
-          <div className="h-8 bg-neutral-700/50 rounded mx-5"></div>
         </div>
       ))}
     </div>
