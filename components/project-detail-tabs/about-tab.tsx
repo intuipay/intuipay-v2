@@ -59,6 +59,7 @@ export function AboutTab({ project }: AboutTabProps) {
           <div className="flex">
             <MapPinIcon className="size-4 mr-2" /> 
             <span className="flex items-center text-neutral-darkgray">
+              <MapPinIcon className="size-4 mr-2" />
               {org_location}
             </span>
           </div>
