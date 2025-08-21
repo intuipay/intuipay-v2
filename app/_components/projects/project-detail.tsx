@@ -211,7 +211,7 @@ export default function ProjectDetailClientLayout({
               {socialLinks && Object.entries(socialLinks).map(([key, value]) => 
                 value && (
                   <Link
-                    href={value as string}
+                    href={value}
                     key={key}
                     target="_blank"
                     rel="noopener noreferrer"

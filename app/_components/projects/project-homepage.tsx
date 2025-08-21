@@ -5,12 +5,19 @@ import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
-import { MagnifyingGlass, Faders, ArrowUp, CaretDown, Check } from '@phosphor-icons/react';
+import {
+  ArrowUpIcon,
+  CaretDownIcon,
+  CheckIcon,
+  FadersIcon,
+  MagnifyingGlassIcon,
+} from '@phosphor-icons/react';
 import { FilterDrawer } from '@/components/filter-drawer'
 import { ProjectFilter } from '@/types'
 import { DropdownMenuRadioGroup, DropdownMenuRadioItem } from '@radix-ui/react-dropdown-menu'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { ProjectCategories, ProjectDonationMethods, ProjectTypes } from '@/data'
+import Link from 'next/link'
 
 type ProjectHomepageProps = PropsWithChildren & {
   initialSearch?: string;
@@ -159,7 +166,7 @@ export default function ProjectHomepage({
               type="submit"
               className="bg-action-blue hover:bg-action-blue/90 w-11 h-11 lg:w-15 lg:h-15 bg-primary rounded-full absolute right-0 top-0"
             >
-              <MagnifyingGlass className="w-6 h-6 lg:w-8 lg:h-8" color="white" />
+              <MagnifyingGlassIcon className="w-6 h-6 lg:w-8 lg:h-8" color="white" />
               <span className="sr-only">Search</span>
             </Button>
           </form>
@@ -170,7 +177,7 @@ export default function ProjectHomepage({
             onClick={() => setIsFilterDrawerOpen(true)}
           >
             Filter
-            <Faders size={16} weight="regular" className="ml-2" />
+            <FadersIcon size={16} weight="regular" className="ml-2" />
           </Button>
         </div>
       </div>
@@ -192,9 +199,9 @@ export default function ProjectHomepage({
           <div className="flex items-center gap-4 w-full md:w-auto justify-between md:justify-normal">
             <span className="text-black/50 whitespace-nowrap">Sort by</span>
             <Button variant="outline" className="sm:w-40 h-11 border-neutral-mediumgray text-base rounded-full px-6">
-              <ArrowUp size={16} weight="regular" className="me-2" />
+              <ArrowUpIcon size={16} weight="regular" className="me-2" />
               {SortOptions.find((option) => option.value === currentSortBy)?.label}
-              <CaretDown size={16} weight="regular" className="ms-2 text-icon-gray" />
+              <CaretDownIcon size={16} weight="regular" className="ms-2 text-icon-gray" />
             </Button>
           </div>
         </DropdownMenuTrigger>
@@ -212,7 +219,7 @@ export default function ProjectHomepage({
                 className="h-8 flex items-center ps-8 pe-4 relative"
                 value={option.value}
               >
-                {currentSortBy === option.value && <Check size={16} weight="regular" className="absolute left-2" />}
+                {currentSortBy === option.value && <CheckIcon size={16} weight="regular" className="absolute left-2" />}
                 {option.label}
               </DropdownMenuRadioItem>
             ))}
@@ -235,8 +242,13 @@ export default function ProjectHomepage({
       <section className="lg:ml-16">
         <h2 className="font-bold mb-4 sm:text-4xl text-3xl">Have A Project That Needs Support?</h2>
         <p className="mb-8 font-normal text-black/50">We&apos;re building a platform to support groundbreaking, university-affiliated research. If you&apos;re leading a verified academic or institutional project, you can share it here and start receiving donations.</p>
-        <Button className="w-60 h-14 border-neutral-mediumgray text-base rounded-full text-white font-semibold">
-          Create project
+        <Button
+          asChild
+          className="w-60 h-14 border-neutral-mediumgray text-base rounded-full text-white font-semibold"
+        >
+          <Link target="_blank" href={`${process.env.NEXT_PUBLIC_DASHBOARD_URL}/project/new`}>
+            Create project
+          </Link>
         </Button>
       </section>
     </div>

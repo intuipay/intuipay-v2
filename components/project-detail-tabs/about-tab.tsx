@@ -5,15 +5,10 @@ import Link from 'next/link'
 import { marked } from 'marked'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import {
-  Envelope,
-  MapPin,
-  Link as LinkIcon,
-  ArrowSquareOut,
-  LinkedinLogo,
-  InstagramLogo,
-  TwitterLogo,
-  YoutubeLogo,
-  FacebookLogo
+  EnvelopeIcon,
+  MapPinIcon,
+  LinkIcon,
+  ArrowSquareOutIcon,
 } from '@phosphor-icons/react';
 import type { ProjectInfo } from '@/types'
 
@@ -45,81 +40,34 @@ export function AboutTab({ project }: AboutTabProps) {
       />
 
       <div className="space-y-2 mb-10 text-sm">
-        <Link
-          href={`mailto:${email}`}
-          className="flex items-center text-neutral-darkgray hover:text-action-blue"
-        >
-          <Envelope size={16} className="mr-2" /> Contact Us
-        </Link>
-        <p className="flex items-center text-neutral-darkgray">
-          <MapPin size={16} className="mr-2" /> {org_location}
-        </p>
-        <Link
-          href={org_website}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex items-center text-neutral-darkgray hover:text-action-blue"
-        >
-          <LinkIcon size={16} className="mr-2" /> {org_website} <ArrowSquareOut size={12} className="ml-1" />
-        </Link>
-      </div>
-
-      <div className="flex space-x-3 mb-6">
-        {(
-          <Link
-            href=''
+        {
+          email && <Link
+            href={`mailto:${email}`}
+            className="flex items-center text-neutral-darkgray hover:text-action-blue"
+          >
+            <EnvelopeIcon className="size-4 mr-2" />
+            <span className="text-primary font-medium">Contact Us</span>
+          </Link>
+        }
+        {
+          org_location &&
+          <div className="flex items-center text-neutral-darkgray">
+            <MapPinIcon className="size-4 mr-2" />
+            <span>{org_location}</span>
+          </div>
+        }
+        {
+          org_website && <Link
+            href={org_website}
             target="_blank"
             rel="noopener noreferrer"
-            aria-label="LinkedIn"
-            className="text-neutral-darkgray hover:text-action-blue"
+            className="flex items-center text-neutral-darkgray hover:text-action-blue"
           >
-            <LinkedinLogo size={20} />
+            <LinkIcon className="size-4 mr-2" />
+            <span>{org_website}</span>
+            <ArrowSquareOutIcon className="size-4 ml-1" />
           </Link>
-        )}
-        {(
-          <Link
-            href=''
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Instagram"
-            className="text-neutral-darkgray hover:text-action-blue"
-          >
-            <InstagramLogo size={20} />
-          </Link>
-        )}
-        {(
-          <Link
-            href=''
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Twitter"
-            className="text-neutral-darkgray hover:text-action-blue"
-          >
-            <TwitterLogo size={20} />
-          </Link>
-        )}
-        {(
-          <Link
-            href={''}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="YouTube"
-            className="text-neutral-darkgray hover:text-action-blue"
-          >
-            <YoutubeLogo size={20} />
-          </Link>
-        )}
-        {(
-          <Link
-            href={''}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Facebook"
-            className="text-neutral-darkgray hover:text-action-blue"
-          >
-            <FacebookLogo size={20} />
-          </Link>
-        )}
+        }
       </div>
 
       {project.banners.length > 0 && (
