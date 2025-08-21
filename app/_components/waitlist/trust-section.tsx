@@ -23,7 +23,7 @@ export default function TrustSection() {
   ]
 
   return (
-    <section className="py-12 md:py-16 px-8 xl:max-w-6xl 2xl:max-w-8xl mx-auto">
+    <section className="py-12 md:py-16 xl:max-w-6xl 2xl:max-w-8xl mx-auto">
       <div className="flex flex-col justify-center items-center gap-12">
         <div className="text-center">
           <span className="text-black text-xl font-medium font-neue-montreal">Trust by </span>
