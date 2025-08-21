@@ -6,6 +6,7 @@ import { AnimatedCounter } from '@/components/animated-counter';
 import { motion } from 'framer-motion';
 import { sectionMotionVariants, sectionMotionProps } from './motion';
 import { Href } from '@react-types/shared';
+import { CounterAnimationProvider } from '@/components/counter-animation-context';
 
 export default function DashboardSection() {
   const { itemVariants } = sectionMotionVariants;
@@ -26,14 +27,15 @@ export default function DashboardSection() {
             className="order-1 lg:order-2 flex-1 bg-purple-100 rounded-[32px] flex items-center justify-center pl-4 lg:pl-8 pr-0 py-0"
             variants={itemVariants}
           >
-            <div className="w-full flex flex-col gap-4 py-12 lg:py-32 lg:gap-8">
+            <CounterAnimationProvider>
+            <div className="w-full flex flex-col gap-5 py-12 lg:py-32 lg:gap-8">
               {/* Main Balance Card */}
               <div className="bg-white rounded-l-2xl shadow-[0px_4px_12px_0px_rgba(0,0,0,0.08)] px-4 lg:px-8 py-3 lg:py-6">
                 <div className="w-full flex flex-col gap-2 lg:gap-3">
                   <div className="text-black text-xs lg:text-sm font-semibold leading-5">
                     Balance
                   </div>
-                  <div className="text-black text-3xl font-semibold leading-10">
+                  <div className="text-black text-xl md:text-3xl font-semibold leading-relaxed md:leading-10">
                     <AnimatedCounter
                       end={12345}
                       prefix="$"
@@ -51,7 +53,7 @@ export default function DashboardSection() {
                 {/* Total received card */}
                 <div className="flex-1 bg-white rounded-2xl shadow-[0px_4px_12px_0px_rgba(0,0,0,0.08)] p-3 lg:p-6">
                   <div className="flex flex-col gap-2 lg:gap-4">
-                    <div className="text-black text-2xl font-semibold leading-loose">
+                    <div className="text-black text-base md:text-2xl font-semibold leading-tight md:leading-loose">
                       <AnimatedCounter
                         end={1234}
                         prefix="$"
@@ -60,7 +62,7 @@ export default function DashboardSection() {
                     </div>
                     <div className="flex items-center gap-1">
                       <div className="w-2 h-2 bg-red-500 rounded-full"></div>
-                      <div className="text-black/70 text-xs lg:text-sm font-semibold leading-5">
+                      <div className="text-black/70 text-xs leading-3 md:text-sm font-semibold md:leading-tight">
                         Total received this month
                       </div>
                     </div>
@@ -70,7 +72,7 @@ export default function DashboardSection() {
                 {/* Processing received card */}
                 <div className="flex-1 bg-white rounded-l-2xl shadow-[0px_4px_12px_0px_rgba(0,0,0,0.08)] p-3 lg:p-6">
                   <div className="flex flex-col gap-2 lg:gap-4">
-                    <div className="text-black text-2xl font-semibold leading-loose">
+                    <div className="text-black text-base md:text-2xl font-semibold leading-tight md:leading-loose">
                       <AnimatedCounter
                         end={1234}
                         prefix="$"
@@ -79,7 +81,7 @@ export default function DashboardSection() {
                     </div>
                     <div className="flex items-center gap-1">
                       <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
-                      <div className="text-black/70 text-xs lg:text-sm font-semibold leading-5">
+                      <div className="text-black/70 text-xs leading-3 md:text-sm font-semibold md:leading-tight">
                         Processing received
                       </div>
                     </div>
@@ -87,6 +89,7 @@ export default function DashboardSection() {
                 </div>
               </div>
             </div>
+            </CounterAnimationProvider>
           </motion.div>
 
           {/* Text Content - Second on mobile, Left on desktop */}
