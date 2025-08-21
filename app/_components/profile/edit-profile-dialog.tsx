@@ -18,6 +18,7 @@ import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from '
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { authClient } from '@/lib/auth-client';
 
 interface EditProfileDialogProps {
   open: boolean
@@ -115,6 +116,11 @@ export function EditProfileDialog({ open, onOpenChange, profile, onProfileUpdate
       if (!response.ok || result.code !== 0) {
         throw new Error(result.message || 'Failed to update profile');
       }
+      // 这里也要更新 D1 数据库，因为 better-auth 的登录信息保存在 D1
+      await authClient.updateUser({
+          image: values.displayImage,
+          name: `${values.firstName} ${values.lastName}`,
+      });
       onOpenChange(false);
       if (onProfileUpdate) onProfileUpdate();
     } catch (err) {
