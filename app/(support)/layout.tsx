@@ -15,6 +15,5 @@ export default async function ProjectsLayout({
   return <>
     <SupportHeader user={session?.user} />
     {children}
-    <SiteFooter />
   </>;
 }

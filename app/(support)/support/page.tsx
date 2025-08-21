@@ -3,9 +3,10 @@ import SupportFeatures from '@/app/_components/support/features';
 import SupportWhatsNew from '@/app/_components/support/whats-new';
 import SupportKnowledgeSpace from '@/app/_components/support/knowledge-space';
 import SupportNeedMore from '@/app/_components/support/need-more';
+import {SiteFooter} from "@/components/site-footer";
 
 export default function SupportHome() {
-  return (
+  return <>
     <main className="flex-1">
       <SupportHeroSection />
       <SupportFeatures />
@@ -13,5 +14,6 @@ export default function SupportHome() {
       <SupportKnowledgeSpace />
       <SupportNeedMore />
     </main>
-  );
+    <SiteFooter />
+  </>;
 }
