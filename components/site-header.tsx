@@ -15,7 +15,7 @@ import { useRouter } from 'next/navigation';
 const navLinks = [
   { href: '/projects', label: 'Crowdfunding' },
   { href: '/about', label: 'About' },
-  { href: '#', label: 'Support' },
+  { href: 'https://support.intuipay.xyz', label: 'Support' },
 ]
 
 const userMenuItems = [
