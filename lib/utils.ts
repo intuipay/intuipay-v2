@@ -49,15 +49,16 @@ export const getRewardShipMethodLabel = (value: string): string => {
 export const toS3ImageName = (name: string): string => {
   // 分离文件名和扩展名
   const lastDotIndex = name.lastIndexOf('.');
-  const fileName = lastDotIndex > 0 ? name.substring(0, lastDotIndex) : name;
-  const fileExtension = lastDotIndex > 0 ? name.substring(lastDotIndex) : '';
+  const fileName = lastDotIndex >= 0 ? name.substring(0, lastDotIndex) : name;
+  const fileExtension = lastDotIndex >= 0 ? name.substring(lastDotIndex) : '';
 
   // 只对文件名部分进行 slugify 处理，保留原始扩展名
-  const slugifiedFileName = slugify(fileName, {
+  let slugifiedFileName = slugify(fileName, {
     lower: true,
     strict: true,
     trim: true,
   });
+  if (!slugifiedFileName) slugifiedFileName = 'untitled';
 
   const slugifiedName = slugifiedFileName + fileExtension;
   return slugifiedName;
