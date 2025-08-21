@@ -75,7 +75,8 @@ export function AboutTab({ project }: AboutTabProps) {
             <div className="flex">
               <span>{org_website}</span>
               <ArrowSquareOutIcon className="size-4 ml-1" />
-            </div>
+            <span>{org_website}</span>
+            <ArrowSquareOutIcon className="size-4 ml-1" />
           </Link>
         }
       </div>
