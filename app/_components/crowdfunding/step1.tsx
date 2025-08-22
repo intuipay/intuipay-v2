@@ -365,7 +365,28 @@ export default function DonationStep1({
   // update Dollar value based on amount and payment method
   function onAmountChange(event: ChangeEvent<HTMLInputElement>) {
     const input = event.target as HTMLInputElement;
-    let value = input.value ? Number(input.value) : 0;
+    const inputValue = input.value;
+
+    // 如果输入为空，允许清空（除非选择了奖励）
+    if (inputValue === '') {
+      if (selectedReward) {
+        // 如果选择了奖励，设置为奖励的最小金额
+        setAmount(selectedReward.amount);
+        if (paymentMethod && hasRates(paymentMethod)) {
+          const usdValue = toUSD(selectedReward.amount, paymentMethod);
+          setDollar(Math.round(usdValue * 100) / 100);
+        } else {
+          setDollar(selectedReward.amount);
+        }
+      } else {
+        // 如果没有选择奖励，允许完全清空
+        setAmount('');
+        setDollar(null);
+      }
+      return;
+    }
+
+    let value = Number(inputValue);
 
     // 如果选择了奖励，确保金额不低于奖励的最小金额
     if (selectedReward && value < selectedReward.amount) {
@@ -386,7 +407,28 @@ export default function DonationStep1({
   // update crypto amount based on dollar and payment method
   function onDollarChange(event: ChangeEvent<HTMLInputElement>) {
     const input = event.target as HTMLInputElement;
-    let value = input.value ? Number(input.value) : 0;
+    const inputValue = input.value;
+
+    // 如果输入为空，允许清空（除非选择了奖励）
+    if (inputValue === '') {
+      if (selectedReward) {
+        // 如果选择了奖励，设置为奖励的最小金额
+        setDollar(selectedReward.amount);
+        if (paymentMethod && hasRates(paymentMethod)) {
+          const cryptoValue = fromUSD(selectedReward.amount, paymentMethod);
+          setAmount(Math.round(cryptoValue * 1000000) / 1000000);
+        } else {
+          setAmount(selectedReward.amount);
+        }
+      } else {
+        // 如果没有选择奖励，允许完全清空
+        setDollar(null);
+        setAmount('');
+      }
+      return;
+    }
+
+    let value = Number(inputValue);
 
     // 如果选择了奖励，确保美元金额不低于奖励的最小金额
     if (selectedReward && value < selectedReward.amount) {
