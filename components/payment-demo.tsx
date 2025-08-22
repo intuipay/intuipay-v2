@@ -200,7 +200,7 @@ function CryptoPaymentContent({
             onChange={onAmountChange}
           />
           <div className="text-sm w-fit flex-none px-4 flex items-center gap-1">
-            {paymentMethod} ≈ $
+            {paymentMethods.find(method => method.value === paymentMethod)?.label ?? 'USDC'} ≈ $
           </div>
           <Input
             className="text-sm h-14 flex-1 px-4 focus:outline-none"
