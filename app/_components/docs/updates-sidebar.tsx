@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { ArrowUpRightIcon } from '@phosphor-icons/react/ssr';
-import { ActiveLink } from "@/components/view/active-link";
+import { ActiveLink } from '@/components/view/active-link';
 
 export default function UpdatesSidebar() {
   return <>

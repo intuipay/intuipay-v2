@@ -1,19 +1,21 @@
 import Link from 'next/link';
 import Image from 'next/image';
+import { PropsWithChildren } from 'react';
 
-type Props = {
+type Props = PropsWithChildren & {
   label?: string;
   link?: string;
 }
 
 export function IntuipayLogo({
+  children,
   label = 'Intuipay Home',
   link = '/',
 }: Props) {
   return (
     <Link
       href={link}
-      className="flex items-center space-x-2"
+      className="flex items-center gap-x-2"
       aria-label={label}
     >
       <Image
@@ -24,6 +26,7 @@ export function IntuipayLogo({
         height={24}
       />
       <h1 className="sr-only">Intuipay</h1>
+      {children}
     </Link>
   );
 }

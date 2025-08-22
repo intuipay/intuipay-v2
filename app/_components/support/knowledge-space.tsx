@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { ArrowUpRightIcon } from '@phosphor-icons/react/ssr';
-import {OfficialArticles} from "@/types";
+import { OfficialArticles } from '@/types';
 
 export default function SupportKnowledgeSpace() {
   const articles: OfficialArticles[] = [

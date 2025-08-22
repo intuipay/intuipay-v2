@@ -1,6 +1,6 @@
 import { LegalFiles } from '@/content';
-import Link from "next/link";
-import slugify from "slugify";
+import Link from 'next/link';
+import slugify from 'slugify';
 
 export default function LegalPage() {
   return (
@@ -18,5 +18,5 @@ export default function LegalPage() {
         ))}
       </ul>
     </main>
-  )
+  );
 }

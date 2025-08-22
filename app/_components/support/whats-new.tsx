@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import {OfficialArticles} from "@/types";
-import dayjs from "dayjs";
+import { OfficialArticles } from '@/types';
+import dayjs from 'dayjs';
 
 export default function SupportWhatsNew() {
   const updates: OfficialArticles[] = [];
