@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { authClient } from '@/lib/auth-client';
-import { GlobeIcon, CaretDownIcon, ListIcon, XLogoIcon, SignOutIcon } from '@phosphor-icons/react';
+import { GlobeIcon, CaretDownIcon, ListIcon, XIcon, SignOutIcon } from '@phosphor-icons/react';
 import { User } from 'better-auth';
 import { Href } from '@react-types/shared';
 import { useRouter } from 'next/navigation';
@@ -63,20 +63,6 @@ export function SiteHeader({ user }: SiteHeaderProps) {
 
         {/* Desktop Right Section */}
         <div className="flex-grow basis-0 min-w-0 hidden lg:flex items-center justify-end gap-2">
-          {/* Language Dropdown */}
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="rounded-lg px-3 py-2 text-base font-medium">
-                EN
-                <CaretDownIcon size={18} className="ml-1" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem>EN (English)</DropdownMenuItem>
-              <DropdownMenuItem>ES (Español)</DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-
           {user ? (
             /* User Avatar Menu */
             <DropdownMenu>
@@ -159,14 +145,14 @@ export function SiteHeader({ user }: SiteHeaderProps) {
             aria-label="Toggle menu"
             className="h-10 w-10"
           >
-            {mobileMenuOpen ? <XLogoIcon size={24} /> : <ListIcon size={24} />}
+            {mobileMenuOpen ? <XIcon size={24} /> : <ListIcon size={24} />}
           </Button>
         </div>
       </div>
 
       {/* Mobile Menu */}
       {mobileMenuOpen && (
-        <div className="lg:hidden absolute top-full left-0 right-0 bg-white shadow-lg border-t border-black/10 z-40">
+        <div className="lg:hidden absolute top-full left-0 right-0 bg-white shadow-lg border-t border-black/10">
           <div className="px-4 py-4 space-y-4">
             {/* Mobile Navigation Links */}
             <div className="flex flex-col space-y-3">
@@ -185,21 +171,6 @@ export function SiteHeader({ user }: SiteHeaderProps) {
                 </Link>
               ))}
             </div>
-
-            {/* Mobile Language Dropdown */}
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="justify-start rounded-lg w-full">
-                  <GlobeIcon size={16} className="mr-2" />
-                  EN
-                  <CaretDownIcon size={18} className="ml-1" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                <DropdownMenuItem>EN (English)</DropdownMenuItem>
-                <DropdownMenuItem>ES (Español)</DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
 
             {/* Mobile Action Buttons */}
             <div className="flex flex-col space-y-3 pt-2">

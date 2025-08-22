@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 export default function FooterLinksSection() {
   return (
     <section className="bg-brand-blue-100 w-screen ms-rest">
@@ -9,9 +11,9 @@ export default function FooterLinksSection() {
               Product
             </div>
             <div className="flex flex-col gap-2">
-              <div className="text-black/70 text-sm font-normal leading-tight">
+              <Link className="text-black/70 text-sm font-normal leading-tight" href="/projects">
                 Donation
-              </div>
+              </Link>
               <div className="text-black/70 text-sm font-normal leading-tight">
                 Payment
               </div>
@@ -24,12 +26,12 @@ export default function FooterLinksSection() {
               For organizations
             </div>
             <div className="flex flex-col gap-2">
-              <div className="text-black/70 text-sm font-normal leading-tight">
+              <Link className="text-black/70 text-sm font-normal leading-tight" href="mailto:support@intuipay.xyz">
                 Book a demo
-              </div>
-              <div className="text-black/70 text-sm font-normal leading-tight">
+              </Link>
+              <Link className="text-black/70 text-sm font-normal leading-tight" href={`${process.env.NEXT_PUBLIC_DASHBOARD_URL}/login`}>
                 Sign in
-              </div>
+              </Link>
             </div>
           </div>
 
@@ -39,18 +41,18 @@ export default function FooterLinksSection() {
               Resources
             </div>
             <div className="flex flex-col gap-2">
-              <div className="text-black/70 text-sm font-normal leading-tight">
+              <Link className="text-black/70 text-sm font-normal leading-tight" href="/updates">
                 Blog
-              </div>
-              <div className="text-black/70 text-sm font-normal leading-tight">
+              </Link>
+              <Link className="text-black/70 text-sm font-normal leading-tight" href="/help">
                 Help Center
-              </div>
-              <div className="text-black/70 text-sm font-normal leading-tight">
+              </Link>
+              <Link className="text-black/70 text-sm font-normal leading-tight" href="/knowledge">
                 Knowledge Space
-              </div>
-              <div className="text-black/70 text-sm font-normal leading-tight">
+              </Link>
+              <Link className="text-black/70 text-sm font-normal leading-tight" href="/legal">
                 Legal
-              </div>
+              </Link>
             </div>
           </div>
 
@@ -60,18 +62,9 @@ export default function FooterLinksSection() {
               Social
             </div>
             <div className="flex flex-col gap-2">
-              <div className="text-black/70 text-sm font-normal leading-tight">
+              <Link className="text-black/70 text-sm font-normal leading-tight" href="https://x.com/intuipay">
                 X
-              </div>
-              <div className="text-black/70 text-sm font-normal leading-tight">
-                Facebook
-              </div>
-              <div className="text-black/70 text-sm font-normal leading-tight">
-                Instagram
-              </div>
-              <div className="text-black/70 text-sm font-normal leading-tight">
-                Linkedin
-              </div>
+              </Link>
             </div>
           </div>
         </div>

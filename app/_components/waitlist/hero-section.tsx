@@ -1,4 +1,5 @@
-import PaymentDemo from '@/components/payment-demo';
+import PaymentDemo from '@/components/payment-demo'
+import Link from 'next/link';
 
 export default function HeroSection() {
   return (
@@ -9,11 +10,11 @@ export default function HeroSection() {
             <h1 className="text-3xl md:text-6xl font-medium font-neue-montreal mb-6 leading-tight">
               Where{' '}
               <span className="inline-flex items-center align-top w-25 relative me-1 md:me-3" aria-label="Flags">
-                <span className="size-7 md:size-11 text-base md:text-2xl border rounded-full flex justify-center items-center rotate-12 absolute z-50 top-2 left-0 bg-white">🇸🇬</span>
-                <span className="size-7 md:size-11 text-base md:text-2xl border rounded-full flex justify-center items-center rotate-12 absolute z-40 top-2 left-5 bg-white">🇺🇸</span>
-                <span className="size-7 md:size-11 text-base md:text-2xl border rounded-full flex justify-center items-center rotate-12 absolute z-30 top-2 left-10 bg-white">🇸🇦</span>
-                <span className="size-7 md:size-11 text-base md:text-2xl border rounded-full flex justify-center items-center rotate-12 absolute z-20 top-2 left-15 bg-white">🇵🇱</span>
-                <span className="size-7 md:size-11 text-base md:text-2xl border rounded-full flex justify-center items-center rotate-12 absolute z-10 top-2 left-20 bg-white">🇦🇺</span>
+                <span className="size-7 md:size-11 text-base md:text-2xl border rounded-full flex justify-center items-center rotate-12 absolute z-40 top-2 left-0 bg-white">🇸🇬</span>
+                <span className="size-7 md:size-11 text-base md:text-2xl border rounded-full flex justify-center items-center rotate-12 absolute z-30 top-2 left-5 bg-white">🇺🇸</span>
+                <span className="size-7 md:size-11 text-base md:text-2xl border rounded-full flex justify-center items-center rotate-12 absolute z-20 top-2 left-10 bg-white">🇸🇦</span>
+                <span className="size-7 md:size-11 text-base md:text-2xl border rounded-full flex justify-center items-center rotate-12 absolute z-10 top-2 left-15 bg-white">🇵🇱</span>
+                <span className="size-7 md:size-11 text-base md:text-2xl border rounded-full flex justify-center items-center rotate-12 absolute z-0 top-2 left-20 bg-white">🇦🇺</span>
               </span>{' '}
               Global
               <br />
@@ -30,13 +31,13 @@ export default function HeroSection() {
             </p>
 
             <div className="flex flex-col sm:flex-row justify-start items-center sm:items-center gap-4 sm:gap-8">
-              <button className="bg-black text-white px-8 py-3 rounded-full text-base md:text-xl font-medium hover:bg-gray-800 transition-colors w-full sm:w-auto">
+              <Link className="bg-black text-white px-8 py-3 rounded-full text-base md:text-xl font-medium hover:bg-gray-800 transition-colors w-full sm:w-auto" href={`${process.env.NEXT_PUBLIC_DASHBOARD_URL}/signup`}>
                 Get started
-              </button>
+              </Link>
 
-              <button className="text-black text-base md:text-xl font-medium underline hover:no-underline transition-all">
+              <Link className="text-black text-base md:text-xl font-medium underline hover:no-underline transition-all" href={`${process.env.NEXT_PUBLIC_DASHBOARD_URL}/login?to=dash`}>
                 I want to fund my project
-              </button>
+              </Link>
             </div>
           </div>
 
