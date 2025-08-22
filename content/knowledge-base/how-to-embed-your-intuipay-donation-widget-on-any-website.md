@@ -1,6 +1,8 @@
 How to Embed Your Intuipay Donation Widget on Any Website
 =======
 
+## toc
+
 Integrating a donation widget into your website is one of the most effective ways to streamline fundraising and maximize donor engagement. Intuipay's donation widget can be seamlessly embedded across virtually any website platform, allowing your supporters to contribute directly without leaving your site.
 
 This comprehensive guide walks you through the installation process for major website builders and content management systems, ensuring your donation widget is properly configured and optimized for conversions.

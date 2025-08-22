@@ -3,3 +3,13 @@ export const KnowledgeBaseArticles = [
   'Why Donate in Crypto: Tax Benefits and Beyond (USA)',
   'Global Cryptocurrency Charity Landscape',
 ];
+
+export const DocumentationArticles = [
+  'FAQ',
+];
+
+export const LegalFiles = [
+  'Privacy Policy',
+  'Terms of Service',
+  'Reward rules',
+];

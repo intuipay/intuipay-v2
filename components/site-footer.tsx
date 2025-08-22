@@ -1,16 +1,23 @@
-import { FacebookLogo, TwitterLogo, InstagramLogo, LinkedinLogo } from '@phosphor-icons/react/dist/ssr';
+import { FacebookLogoIcon, TwitterLogoIcon, InstagramLogoIcon, LinkedinLogoIcon } from '@phosphor-icons/react/dist/ssr';
 import Link from 'next/link';
+import { clsx } from 'clsx';
+
+type Props = {
+  hasDivider?: boolean;
+}
 
 const socialLinks = [
-  { name: 'Facebook', icon: FacebookLogo, href: '#' },
-  { name: 'Twitter', icon: TwitterLogo, href: '#' },
-  { name: 'Instagram', icon: InstagramLogo, href: '#' },
-  { name: 'LinkedIn', icon: LinkedinLogo, href: '#' },
+  { name: 'Facebook', icon: FacebookLogoIcon, href: '#' },
+  { name: 'Twitter', icon: TwitterLogoIcon, href: '#' },
+  { name: 'Instagram', icon: InstagramLogoIcon, href: '#' },
+  { name: 'LinkedIn', icon: LinkedinLogoIcon, href: '#' },
 ];
 
-export function SiteFooter() {
+export function SiteFooter({
+  hasDivider,
+}: Props) {
   return (
-    <footer className="bg-brand-blue-100 py-4 md:py-16">
+    <footer className={clsx('py-4', hasDivider ? 'border-t' : 'bg-brand-blue-100 md:py-16')}>
       <div className="w-full max-w-7xl px-12 md:px-10 mx-auto">
         <div className="flex flex-col md:flex-row justify-between items-center md:items-end text-center md:text-left">
           <p className="text-xs text-neutral-darkgray text-[#737373]">

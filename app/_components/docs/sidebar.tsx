@@ -16,6 +16,27 @@ export default function DocsAndKnowledgeSidebar() {
         >
           Getting started
         </ActiveLink>
+        <ActiveLink
+          activeClassName="bg-brand-blue-100/50"
+          className="px-3 py-2 text-sm font-semibold flex items-center"
+          href="/docs/account"
+        >
+          Account and Login
+        </ActiveLink>
+        <ActiveLink
+          activeClassName="bg-brand-blue-100/50"
+          className="px-3 py-2 text-sm font-semibold flex items-center"
+          href="/docs/donation"
+        >
+          Donation
+        </ActiveLink>
+        <ActiveLink
+          activeClassName="bg-brand-blue-100/50"
+          className="px-3 py-2 text-sm font-semibold flex items-center"
+          href="/docs/faq"
+        >
+          FAQ
+        </ActiveLink>
       </div>
       <div className="uppercase text-xs font-bold text-black/50 my-4">Knowledge Space</div>
       <div className="space-y-2.5">

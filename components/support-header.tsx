@@ -11,6 +11,7 @@ import { GlobeIcon, CaretDownIcon, ListIcon, XLogoIcon, SignOutIcon } from '@pho
 import { User } from 'better-auth';
 import { Href } from '@react-types/shared';
 import { useRouter } from 'next/navigation';
+import { ActiveLink } from '@/components/view/active-link';
 
 const navLinks = [
   { href: '/docs', label: 'Documentation' },
@@ -43,24 +44,22 @@ export function SupportHeader({ user }: SiteHeaderProps) {
       <div className="flex items-center py-3 px-8 md:px-12 lg:px-28">
         {/* Logo Section */}
         <div className="flex items-center gap-2">
-          <IntuipayLogo />
+          <IntuipayLogo link="/support" label="Intuipay Support home" />
           <span className="text-xl font-semibold">Support</span>
         </div>
 
         {/* Desktop Navigation */}
         <nav className="hidden lg:flex items-center gap-4 flex-none ms-11">
           {navLinks.map((link) => (
-            <Link
+            <ActiveLink
               key={link.label}
               href={link.href}
-              className={`px-2 py-1 text-base font-medium transition-colors rounded-lg ${
-                link.label === 'Donate' 
-                  ? 'text-blue-600' 
-                  : 'text-black hover:text-gray-600'
-              }`}
+              activeClassName="text-blue-600 hover:text-blue-500"
+              inactiveClassName="text-black hover:text-gray-600"
+              className="px-2 py-1 text-base font-medium transition-colors rounded-lg"
             >
               {link.label}
-            </Link>
+            </ActiveLink>
           ))}
         </nav>
 

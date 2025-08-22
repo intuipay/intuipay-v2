@@ -10,13 +10,13 @@ export default function SupportFeatures() {
           <h3 className="text-2xl font-semibold">Getting started</h3>
           <Link
             className="block text-sm font-semibold text-secondary"
-            href="#"
+            href="/docs"
           >
             What you need to get started
           </Link>
           <Link
             className="flex items-center py-2 gap-2.5 group"
-            href="#"
+            href="/docs"
           >
             <span className="font-semibold leading-normal underline group-hover:no-underline">View all</span>
             <ArrowUpRightIcon size={24} />
@@ -27,13 +27,13 @@ export default function SupportFeatures() {
           <h3 className="text-2xl font-semibold">Account and login</h3>
           <Link
             className="block text-sm font-semibold text-secondary"
-            href="#"
+            href="/docs/account"
           >
             What you need to get started
           </Link>
           <Link
             className="flex items-center py-2 gap-2.5 group"
-            href="#"
+            href="/docs/account"
           >
             <span className="font-semibold leading-normal underline group-hover:no-underline">View all</span>
             <ArrowUpRightIcon size={24} />
@@ -44,13 +44,13 @@ export default function SupportFeatures() {
           <h3 className="text-2xl font-semibold">Donation</h3>
           <Link
             className="block text-sm font-semibold text-secondary"
-            href="#"
+            href="/docs/donation"
           >
             What you need to get started
           </Link>
           <Link
             className="flex items-center py-2 gap-2.5 group"
-            href="#"
+            href="/docs/donation"
           >
             <span className="font-semibold leading-normal underline group-hover:no-underline">View all</span>
             <ArrowUpRightIcon size={24} />

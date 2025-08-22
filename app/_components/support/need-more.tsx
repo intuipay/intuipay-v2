@@ -28,7 +28,7 @@ export default function SupportNeedMore() {
       </Link>
       <Link
         className="px-8 min-h-60 bg-brand-blue-500 text-white flex flex-col justify-center gap-4 rounded-lg hover:shadow hover:bg-brand-blue-500/90"
-        href="https://forums.intuipay.xyz"
+        href="mailto:support@intuipay.xyz"
         target="_blank"
       >
         <ChatIcon size={32} />

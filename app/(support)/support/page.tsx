@@ -14,6 +14,6 @@ export default function SupportHome() {
       <SupportKnowledgeSpace />
       <SupportNeedMore />
     </main>
-    <SiteFooter />
+    <SiteFooter hasDivider />
   </>;
 }

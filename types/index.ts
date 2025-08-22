@@ -251,3 +251,10 @@ export type UserRefund = {
   count: number;
   dollar: number;
 }
+
+export type OfficialArticles = {
+  digest: string;
+  published_at: string;
+  slug: string;
+  title: string;
+}
