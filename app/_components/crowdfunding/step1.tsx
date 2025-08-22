@@ -107,7 +107,7 @@ export default function DonationStep1({
   // 处理奖励选择
   const handleRewardSelect = (reward: Reward) => {
     setSelectedReward(reward);
-    setDollar(reward.amount);
+    setAmount(reward.amount);
     setPledgeWithoutReward(false); // 选择奖励时取消 checkbox
   };
 
@@ -681,7 +681,7 @@ export default function DonationStep1({
               <Input
                 className="text-sm h-12 flex-1 px-4 focus:outline-none"
                 hasRing={false}
-                min={selectedReward ? selectedReward.amount.toString() : '0'}
+                min={selectedReward ? selectedReward.amount.toString() : ''}
                 onChange={onAmountChange}
                 placeholder={!(isConnected || isPhantomConnected) ? 'Connect wallet first' : selectedReward ? selectedReward.amount.toString() : '1.0'}
                 type="number"
