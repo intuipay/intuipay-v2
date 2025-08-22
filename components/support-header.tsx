@@ -42,11 +42,9 @@ export function SupportHeader({ user }: SiteHeaderProps) {
   return (
     <header className="sticky top-0 z-50 w-full bg-white">
       <div className="flex items-center py-3 px-8 md:px-12 lg:px-28">
-        {/* Logo Section */}
-        <div className="flex items-center gap-2">
-          <IntuipayLogo link="/support" label="Intuipay Support home" />
+        <IntuipayLogo link="/support" label="Intuipay Support home">
           <span className="text-xl font-semibold">Support</span>
-        </div>
+        </IntuipayLogo>
 
         {/* Desktop Navigation */}
         <nav className="hidden lg:flex items-center gap-4 flex-none ms-11">
