@@ -2,7 +2,6 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
-import { marked } from 'marked'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import {
   EnvelopeIcon,
@@ -36,7 +35,7 @@ export function AboutTab({ project }: AboutTabProps) {
         <h3 className="text-xl font-semibold">{org_name}</h3>
       </div>
       <article className="text-neutral-darkgray leading-relaxed mb-10 prose"
-        dangerouslySetInnerHTML={{ __html: marked.parse(org_description) as string }}
+        dangerouslySetInnerHTML={{ __html: org_description }}
       />
 
       <div className="space-y-2 mb-10 text-sm">
