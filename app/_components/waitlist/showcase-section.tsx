@@ -9,7 +9,7 @@ export default function ShowcaseSection() {
   const { itemVariants } = sectionMotionVariants;
 
   return (
-    <section className="py-12 md:py-16 px-8 xl:max-w-6xl 2xl:max-w-8xl 2xl:px-22 mx-auto">
+    <section className="py-12 md:py-20 lg:py-30 px-8 xl:max-w-6xl 2xl:max-w-8xl 2xl:px-22 mx-auto">
       <motion.div
         className="flex flex-col gap-8 md:gap-16"
         {...sectionMotionProps}
@@ -110,7 +110,7 @@ export default function ShowcaseSection() {
             variants={itemVariants}
           >
             <GraduationCapIcon size={32} className="text-black/70" />
-            <div className="text-black/70 text-sm md:text-base font-normal leading-6">
+            <div className="text-black/70 text-sm text-base font-normal leading-6">
               Verified projects from universities and researchers in 20+ countries
             </div>
           </motion.div>
@@ -120,7 +120,7 @@ export default function ShowcaseSection() {
             variants={itemVariants}
           >
             <ArrowsDownUpIcon size={32} className="text-black/70" />
-            <div className="text-black/70 text-sm md:text-base font-normal leading-6">
+            <div className="text-black/70 text-sm text-base font-normal leading-6">
               Transparent funding tracking
             </div>
           </motion.div>
@@ -130,7 +130,7 @@ export default function ShowcaseSection() {
             variants={itemVariants}
           >
             <MagnifyingGlassIcon size={32} className="text-black/70" />
-            <div className="text-black/70 text-sm md:text-base font-normal leading-6">
+            <div className="text-black/70 text-sm text-base font-normal leading-6">
               Direct support to institutions or specific researchers
             </div>
           </motion.div>
