@@ -499,3 +499,5 @@ export const REWARD_SHIP_METHOD_LABELS: Record<keyof typeof RewardShipMethod, st
   LocalPickup: "Local pickup, event, or service",
   Digital: "Digital method",
 };
+
+export const CAMPAIGN_SEPARATOR = "<--! separator -->";
