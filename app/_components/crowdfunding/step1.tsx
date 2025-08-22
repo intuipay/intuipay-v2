@@ -107,7 +107,7 @@ export default function DonationStep1({
   // 处理奖励选择
   const handleRewardSelect = (reward: Reward) => {
     setSelectedReward(reward);
-    setDollar(reward.amount);
+    setAmount(reward.amount);
     setPledgeWithoutReward(false); // 选择奖励时取消 checkbox
   };
 
@@ -299,16 +299,7 @@ export default function DonationStep1({
     const network = BLOCKCHAIN_CONFIG.networks[ networkId as keyof typeof BLOCKCHAIN_CONFIG.networks ];
     return network?.chainId || null;
   };
-  // 切换到指定网络的函数
-  const switchToTargetNetwork = (networkId: string) => {
-    const targetChainId = getChainIdForNetwork(networkId);
-    if (!targetChainId) {
-      throw new Error(`Unsupported network: ${networkId}`);
-    }
-
-    // switchChain 返回 void，错误处理在 useEffect 中监听 switchChainError
-    switchChain({ chainId: targetChainId });
-  };
+  const paymentMethodSymbol = paymentMethod ? BLOCKCHAIN_CONFIG.currencies[ paymentMethod as keyof typeof BLOCKCHAIN_CONFIG.currencies ]?.symbol : 'USDC';
 
   const handleConnect = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -374,7 +365,28 @@ export default function DonationStep1({
   // update Dollar value based on amount and payment method
   function onAmountChange(event: ChangeEvent<HTMLInputElement>) {
     const input = event.target as HTMLInputElement;
-    let value = input.value ? Number(input.value) : 0;
+    const inputValue = input.value;
+
+    // 如果输入为空，允许清空（除非选择了奖励）
+    if (inputValue === '') {
+      if (selectedReward) {
+        // 如果选择了奖励，设置为奖励的最小金额
+        setAmount(selectedReward.amount);
+        if (paymentMethod && hasRates(paymentMethod)) {
+          const usdValue = toUSD(selectedReward.amount, paymentMethod);
+          setDollar(Math.round(usdValue * 100) / 100);
+        } else {
+          setDollar(selectedReward.amount);
+        }
+      } else {
+        // 如果没有选择奖励，允许完全清空
+        setAmount('');
+        setDollar(null);
+      }
+      return;
+    }
+
+    let value = Number(inputValue);
 
     // 如果选择了奖励，确保金额不低于奖励的最小金额
     if (selectedReward && value < selectedReward.amount) {
@@ -395,7 +407,28 @@ export default function DonationStep1({
   // update crypto amount based on dollar and payment method
   function onDollarChange(event: ChangeEvent<HTMLInputElement>) {
     const input = event.target as HTMLInputElement;
-    let value = input.value ? Number(input.value) : 0;
+    const inputValue = input.value;
+
+    // 如果输入为空，允许清空（除非选择了奖励）
+    if (inputValue === '') {
+      if (selectedReward) {
+        // 如果选择了奖励，设置为奖励的最小金额
+        setDollar(selectedReward.amount);
+        if (paymentMethod && hasRates(paymentMethod)) {
+          const cryptoValue = fromUSD(selectedReward.amount, paymentMethod);
+          setAmount(Math.round(cryptoValue * 1000000) / 1000000);
+        } else {
+          setAmount(selectedReward.amount);
+        }
+      } else {
+        // 如果没有选择奖励，允许完全清空
+        setDollar(null);
+        setAmount('');
+      }
+      return;
+    }
+
+    let value = Number(inputValue);
 
     // 如果选择了奖励，确保美元金额不低于奖励的最小金额
     if (selectedReward && value < selectedReward.amount) {
@@ -452,7 +485,7 @@ export default function DonationStep1({
 
               <div className="flex justify-between items-start mb-2">
                 <h3 className="font-semibold text-lg">{reward.name}</h3>
-                <span className="font-bold text-lg">${reward.amount}</span>
+                <span className="font-bold text-lg">{reward.amount} {paymentMethodSymbol}</span>
               </div>
 
               <p className="text-gray-600 text-sm mb-4">{reward.description}</p>
@@ -686,16 +719,11 @@ export default function DonationStep1({
           {/* Amount Input */}
           <div className="space-y-2">
             <Label className="text-sm font-semibold text-black/50">Amount</Label>
-            {selectedReward && (
-              <div className="text-sm text-gray-600 mb-2">
-                Minimum amount for "{selectedReward.name}": ${selectedReward.amount}
-              </div>
-            )}
             <div className={`flex items-center border border-black/10 rounded-lg focus-within:outline focus-within:outline-1 focus-within:outline-blue-400 ${!(isConnected || isPhantomConnected) ? 'bg-gray-50' : ''}`}>
               <Input
                 className="text-sm h-12 flex-1 px-4 focus:outline-none"
                 hasRing={false}
-                min={selectedReward ? selectedReward.amount.toString() : '0'}
+                min={selectedReward ? selectedReward.amount.toString() : ''}
                 onChange={onAmountChange}
                 placeholder={!(isConnected || isPhantomConnected) ? 'Connect wallet first' : selectedReward ? selectedReward.amount.toString() : '1.0'}
                 type="number"
@@ -703,7 +731,7 @@ export default function DonationStep1({
                 disabled={!(isConnected || isPhantomConnected)}
               />
               <div className="text-sm w-fit flex-none px-4 flex items-center gap-1">
-                {paymentMethod} ≈ $
+                {paymentMethodSymbol} ≈ $
                 {ratesLoading && (
                   <span className="inline-block w-3 h-3 border-2 border-gray-300 border-t-blue-500 rounded-full animate-spin"></span>
                 )}
