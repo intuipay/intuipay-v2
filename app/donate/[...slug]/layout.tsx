@@ -1,4 +1,4 @@
-import type React from 'react'
+import type React from 'react';
 import { Button } from '@/components/ui/button';
 import BackButton from '@/components/back-button';
 import { Web3Provider } from '@/components/providers/web3-provider';
@@ -16,5 +16,5 @@ export default async function DonateLayout({
         {children}
       </div>
     </Web3Provider>
-  )
+  );
 }

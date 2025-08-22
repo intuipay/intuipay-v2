@@ -607,5 +607,5 @@ export default function DonationStep4({
         onSubmit={doSubmit}
       />
     </>
-  )
+  );
 }

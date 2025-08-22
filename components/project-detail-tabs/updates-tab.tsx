@@ -1,9 +1,9 @@
-'use client'
+'use client';
 
-import Image from 'next/image'
-import { Separator } from '@/components/ui/separator'
-import { Update } from '@/types'
-import { useEffect, useState } from 'react'
+import Image from 'next/image';
+import { Separator } from '@/components/ui/separator';
+import { Update } from '@/types';
+import { useEffect, useState } from 'react';
 
 type UpdatesTabProps = {
   projectId: number;
@@ -11,12 +11,12 @@ type UpdatesTabProps = {
 }
 
 const formatDateForUpdate = (dateString: string) => {
-  const date = new Date(dateString)
-  const day = date.toLocaleDateString('en-US', { day: '2-digit' })
-  const month = date.toLocaleDateString('en-US', { month: 'short' })
-  const year = date.toLocaleDateString('en-US', { year: 'numeric' })
-  return { day, month, year }
-}
+  const date = new Date(dateString);
+  const day = date.toLocaleDateString('en-US', { day: '2-digit' });
+  const month = date.toLocaleDateString('en-US', { month: 'short' });
+  const year = date.toLocaleDateString('en-US', { year: 'numeric' });
+  return { day, month, year };
+};
 
 export function UpdatesTab({ projectId, onUpdate }: UpdatesTabProps) {
   const [updates, setUpdates] = useState<Update[]>([]);
@@ -53,17 +53,17 @@ export function UpdatesTab({ projectId, onUpdate }: UpdatesTabProps) {
   }, []);
 
   if (isLoaded && updates.length === 0) {
-    return <p className="text-center text-gray-500 py-4">No updates yet for this project.</p>
+    return <p className="text-center text-gray-500 py-4">No updates yet for this project.</p>;
   }
 
   if (isLoading) {
-    return <p className="text-center text-gray-500 py-4">Loading...</p>
+    return <p className="text-center text-gray-500 py-4">Loading...</p>;
   }
 
   return (
     <div className="space-y-8">
       {updates.map((update, index) => {
-        const { day, month, year } = formatDateForUpdate(update.created_at)
+        const { day, month, year } = formatDateForUpdate(update.created_at);
         return (
           <div key={update.id} className="relative pl-10 sm:pl-12 md:pl-16">
             <div className="absolute left-0 top-1 text-center w-10 md:w-12">
@@ -96,8 +96,8 @@ export function UpdatesTab({ projectId, onUpdate }: UpdatesTabProps) {
             </div>
             {index < updates.length - 1 && <Separator className="mt-8" />}
           </div>
-        )
+        );
       })}
     </div>
-  )
+  );
 }

@@ -46,7 +46,10 @@ const config: Config = {
           50: "#fff0f7",
         },
         brand: {
-          blue: "#E7EEFE",
+          blue: {
+            100: "#E7EEFE",
+            500: "#2461F2",
+          },
         },
         background: {
           DEFAULT: "hsl(var(--background))",
@@ -145,6 +148,7 @@ const config: Config = {
         13: '3.25rem',
         15: '3.75rem',
         17: '4.25rem',
+        19: '4.75rem',
         22: '5.5rem',
         25: '6.25rem',
         30: '7.5rem',

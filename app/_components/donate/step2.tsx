@@ -262,5 +262,5 @@ export default function DonationStep2({
         </div>
       </CtaFooter>
     </form>
-  )
+  );
 }

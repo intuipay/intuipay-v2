@@ -110,5 +110,5 @@ export function getRefundProps(project: ProjectInfo, refundInfo: {
     projectName: project.project_name,
     to: refundInfo.to,
     wallet: refundInfo.wallet_address,
-  }
+  };
 }

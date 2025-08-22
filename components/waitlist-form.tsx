@@ -1,12 +1,12 @@
-'use client'
+'use client';
 
-import React, { useRef } from 'react'
+import React, { useRef } from 'react';
 
-import { useState, useEffect } from 'react'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
+import { useState, useEffect } from 'react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { Warning } from '@phosphor-icons/react';
-import ConfirmationDialog from './confirmation-dialog'
+import ConfirmationDialog from './confirmation-dialog';
 import { APIResponse } from '@/types';
 import { clsx } from 'clsx';
 
@@ -19,41 +19,41 @@ export default function WaitlistForm({
   className,
 }: Props) {
   const referEmail = useRef<string>('');
-  const [name, setName] = useState('')
-  const [email, setEmail] = useState('')
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
   const [myEmail, setMyEmail] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [message, setMessage] = useState('')
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [message, setMessage] = useState('');
   const [errors, setErrors] = useState<{
     name?: string
     email?: string
-  }>({})
+  }>({});
   const [touched, setTouched] = useState<{
     name: boolean
     email: boolean
   }>({
     name: false,
     email: false,
-  })
+  });
   const [showConfirmation, setShowConfirmation] = useState(false);
 
   // Validate form fields
   useEffect(() => {
-    const newErrors: { name?: string; email?: string } = {}
+    const newErrors: { name?: string; email?: string } = {};
 
     if (touched.name && !name) {
-      newErrors.name = 'Name is required'
+      newErrors.name = 'Name is required';
     }
 
     if (touched.email) {
       if (!email) {
-        newErrors.email = 'Email is required'
+        newErrors.email = 'Email is required';
       } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-        newErrors.email = 'This is not a valid email format'
+        newErrors.email = 'This is not a valid email format';
       }
     }
 
-    setErrors(newErrors)
+    setErrors(newErrors);
   }, [name, email, touched]);
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -68,17 +68,17 @@ export default function WaitlistForm({
   }, []);
 
   async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault()
+    e.preventDefault();
 
     // Mark all fields as touched to show validation errors
-    setTouched({ name: true, email: true })
+    setTouched({ name: true, email: true });
 
     // Check if there are any validation errors
     if (!name || !email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      return
+      return;
     }
 
-    setIsSubmitting(true)
+    setIsSubmitting(true);
 
     try {
       // This would be replaced with an actual API call
@@ -93,18 +93,18 @@ export default function WaitlistForm({
       const data = await response.json() as APIResponse<number>;
 
       // Show confirmation dialog instead of message
-      setShowConfirmation(true)
+      setShowConfirmation(true);
 
       // Reset form
       setMyEmail(email);
-      setName('')
-      setEmail('')
-      setTouched({ name: false, email: false })
-      setMessage('')
+      setName('');
+      setEmail('');
+      setTouched({ name: false, email: false });
+      setMessage('');
     } catch (error) {
-      setMessage('Something went wrong. Please try again.')
+      setMessage('Something went wrong. Please try again.');
     } finally {
-      setIsSubmitting(false)
+      setIsSubmitting(false);
     }
   }
 
@@ -184,5 +184,5 @@ export default function WaitlistForm({
         email={myEmail}
       />
     </>
-  )
+  );
 }

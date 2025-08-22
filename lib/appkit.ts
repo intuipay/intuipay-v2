@@ -1,7 +1,7 @@
-import { http, createConfig } from 'wagmi'
-import { mainnet, sepolia } from 'wagmi/chains'
-import { injected, walletConnect, metaMask, coinbaseWallet } from 'wagmi/connectors'
-import { defineChain } from 'viem'
+import { http, createConfig } from 'wagmi';
+import { mainnet, sepolia } from 'wagmi/chains';
+import { injected, walletConnect, metaMask, coinbaseWallet } from 'wagmi/connectors';
+import { defineChain } from 'viem';
 
 // 定义 Pharos Testnet 链
 const pharosTestnet = defineChain({
@@ -48,13 +48,13 @@ const eduTestnet = defineChain({
     },
   },
   testnet: true,
-})
+});
 
 // 1. Get projectId from https://cloud.reown.com
-const projectId = process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID
+const projectId = process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID;
 
 if (!projectId) {
-  throw new Error('NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID is not set')
+  throw new Error('NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID is not set');
 }
 
 // 3. Configure the metadata
@@ -63,7 +63,7 @@ const metadata = {
   description: 'IntuiPay - A simple and secure way to donate to your favorite projects.',
   url: 'https://intuipay.xyz',
   icons: ['https://intuipay.xyz/images/logo.svg']
-}
+};
 
 export const config = createConfig({
   chains: [mainnet, sepolia, pharosTestnet, eduTestnet],
@@ -82,4 +82,4 @@ export const config = createConfig({
     [ pharosTestnet.id ]: http(),
     [ eduTestnet.id ]: http(),
   },
-})
+});

@@ -1,4 +1,4 @@
-import type React from 'react'
+import type React from 'react';
 import { Button } from '@/components/ui/button';
 import BackButton from '@/components/back-button';
 
@@ -23,5 +23,5 @@ export default function DonateLayout({
 
       {children}
     </div>
-  )
+  );
 }

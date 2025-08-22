@@ -34,4 +34,4 @@ export const auth = betterAuth({
     'https://crowdfunding.dev.intuipay.xyz',
     'http://localhost:3000',
   ],
-})
+});

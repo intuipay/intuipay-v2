@@ -39,5 +39,5 @@ export default function DonationStep5({
         </Button>
       </div>
     </div>
-  )
+  );
 }

@@ -1,26 +1,26 @@
-'use client'
+'use client';
 
-import Image from 'next/image'
-import Link from 'next/link'
-import { ProjectCard } from '@/components/project-card'
-import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
-import { Progress } from '@/components/ui/progress'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import Image from 'next/image';
+import Link from 'next/link';
+import { ProjectCard } from '@/components/project-card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Progress } from '@/components/ui/progress';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { EnvelopeIcon, LinkIcon, GithubLogoIcon, PlayCircleIcon } from '@phosphor-icons/react';
 
-import { CampaignTab } from '@/components/project-detail-tabs/campaign-tab'
-import { AboutTab } from '@/components/project-detail-tabs/about-tab'
-import { UpdatesTab } from '@/components/project-detail-tabs/updates-tab'
-import { DonationsTab } from '@/components/project-detail-tabs/donations-tab'
-import { RewardsTab } from '@/components/project-detail-tabs/rewards-tab'
+import { CampaignTab } from '@/components/project-detail-tabs/campaign-tab';
+import { AboutTab } from '@/components/project-detail-tabs/about-tab';
+import { UpdatesTab } from '@/components/project-detail-tabs/updates-tab';
+import { DonationsTab } from '@/components/project-detail-tabs/donations-tab';
+import { RewardsTab } from '@/components/project-detail-tabs/rewards-tab';
 
-import { ProjectInfo, RewardDraft } from '@/types'
-import { useMemo, useState } from 'react'
-import { enumToKeyLabel } from '@/lib/utils'
-import { ProjectCategories, ProjectTypes } from '@/data'
-import { ProjectDonationMethods } from '@/data'
+import { ProjectInfo, RewardDraft } from '@/types';
+import { useMemo, useState } from 'react';
+import { enumToKeyLabel } from '@/lib/utils';
+import { ProjectCategories, ProjectTypes } from '@/data';
+import { ProjectDonationMethods } from '@/data';
 
 
 type ProjectDetailClientLayoutProps = {
@@ -94,9 +94,9 @@ export default function ProjectDetailClientLayout({
 
     return headings;
   }
-  const titles = extractSecondLevelHeadings(project.campaign)
+  const titles = extractSecondLevelHeadings(project.campaign);
 
-  const daysLeft = useMemo(() => Math.floor((new Date(project.end_at).getTime() - Date.now()) / (1000 * 60 * 60 * 24)), [project])
+  const daysLeft = useMemo(() => Math.floor((new Date(project.end_at).getTime() - Date.now()) / (1000 * 60 * 60 * 24)), [project]);
 
   const rewards = useMemo(() => {
     return project.rewards ? JSON.parse(project.rewards) : [];
@@ -247,7 +247,7 @@ export default function ProjectDetailClientLayout({
       </div>
 
       <div className="flex gap-12">
-        <Tabs defaultValue={tab} className="mb-8 lg:w-2/3" onValueChange={(val) => { setTab(val) }}>
+        <Tabs defaultValue={tab} className="mb-8 lg:w-2/3" onValueChange={(val) => { setTab(val); }}>
           <TabsList className="grid w-full grid-cols-2 sm:grid-cols-5">
             <TabsTrigger value="campaign" className="py-2.5">
               Campaign
@@ -353,5 +353,5 @@ export default function ProjectDetailClientLayout({
         </div>
       </section>}
     </div>
-  )
+  );
 }

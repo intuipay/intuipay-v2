@@ -1,14 +1,14 @@
-'use client'
+'use client';
 
-import type React from 'react'
-import { useState, useRef, useCallback, useEffect } from 'react'
-import { Card, CardContent } from '@/components/ui/card'
-import { Tabs, TabsContent } from '@/components/ui/tabs'
-import { Textarea } from '@/components/ui/textarea'
-import { EditorToolbar } from '@/components/editor-toolbar'
-import { MarkdownPreview } from '@/components/markdown-preview'
-import { cn } from '@/lib/utils'
-import type { EditorAction } from '@/types/editor'
+import type React from 'react';
+import { useState, useRef, useCallback, useEffect } from 'react';
+import { Card, CardContent } from '@/components/ui/card';
+import { Tabs, TabsContent } from '@/components/ui/tabs';
+import { Textarea } from '@/components/ui/textarea';
+import { EditorToolbar } from '@/components/editor-toolbar';
+import { MarkdownPreview } from '@/components/markdown-preview';
+import { cn } from '@/lib/utils';
+import type { EditorAction } from '@/types/editor';
 
 interface RichTextEditorProps {
   initialValue?: string
@@ -27,95 +27,95 @@ export default function RichTextEditor({
   height = '200px',
   disabled = false,
 }: RichTextEditorProps) {
-  const [value, setValue] = useState(initialValue)
-  const [activeTab, setActiveTab] = useState<'write' | 'preview' | 'split'>('write')
-  const textareaRef = useRef<HTMLTextAreaElement>(null)
+  const [value, setValue] = useState(initialValue);
+  const [activeTab, setActiveTab] = useState<'write' | 'preview' | 'split'>('write');
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   // Keep latest onChange in ref to avoid effect loops when parent passes new function each render
-  const onChangeRef = useRef<typeof onChange>(onChange)
+  const onChangeRef = useRef<typeof onChange>(onChange);
   useEffect(() => {
-    onChangeRef.current = onChange
-  }, [onChange])
+    onChangeRef.current = onChange;
+  }, [onChange]);
   useEffect(() => {
-    onChangeRef.current?.(value)
-  }, [value])
+    onChangeRef.current?.(value);
+  }, [value]);
   // Sync when external initialValue prop changes (e.g., switching profile)
   useEffect(() => {
     if (initialValue !== value) {
-      setValue(initialValue)
+      setValue(initialValue);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [initialValue])
+  }, [initialValue]);
 
   const handleAction = useCallback(
     (action: EditorAction) => {
-      const textarea = textareaRef.current
-      if (!textarea) return
+      const textarea = textareaRef.current;
+      if (!textarea) return;
 
-      const start = textarea.selectionStart
-      const end = textarea.selectionEnd
-      const selectedText = value.substring(start, end)
+      const start = textarea.selectionStart;
+      const end = textarea.selectionEnd;
+      const selectedText = value.substring(start, end);
 
-      let newValue = value
-      let newCursorPos = start
+      let newValue = value;
+      let newCursorPos = start;
 
       switch (action.type) {
         case 'bold':
-          newValue = value.substring(0, start) + `**${selectedText || 'bold text'}**` + value.substring(end)
-          newCursorPos = start + 2
-          break
+          newValue = value.substring(0, start) + `**${selectedText || 'bold text'}**` + value.substring(end);
+          newCursorPos = start + 2;
+          break;
         case 'italic':
-          newValue = value.substring(0, start) + `*${selectedText || 'italic text'}*` + value.substring(end)
-          newCursorPos = start + 1
-          break
+          newValue = value.substring(0, start) + `*${selectedText || 'italic text'}*` + value.substring(end);
+          newCursorPos = start + 1;
+          break;
         case 'heading':
-          const level = action.level || 1
-          const prefix = '#'.repeat(level) + ' '
-          const headingText = selectedText || `Heading ${level}`
-          newValue = value.substring(0, start) + prefix + headingText + value.substring(end)
-          newCursorPos = start + prefix.length
-          break
+          const level = action.level || 1;
+          const prefix = '#'.repeat(level) + ' ';
+          const headingText = selectedText || `Heading ${level}`;
+          newValue = value.substring(0, start) + prefix + headingText + value.substring(end);
+          newCursorPos = start + prefix.length;
+          break;
         case 'link':
-          const linkText = selectedText || 'link text'
-          const linkUrl = action.url || 'https://example.com'
-          newValue = value.substring(0, start) + `[${linkText}](${linkUrl})` + value.substring(end)
-          newCursorPos = start + 1
-          break
+          const linkText = selectedText || 'link text';
+          const linkUrl = action.url || 'https://example.com';
+          newValue = value.substring(0, start) + `[${linkText}](${linkUrl})` + value.substring(end);
+          newCursorPos = start + 1;
+          break;
         case 'image':
-          const altText = selectedText || 'alt text'
-          const imageUrl = action.url || 'https://example.com/image.jpg'
-          newValue = value.substring(0, start) + `![${altText}](${imageUrl})` + value.substring(end)
-          newCursorPos = start + 2
-          break
+          const altText = selectedText || 'alt text';
+          const imageUrl = action.url || 'https://example.com/image.jpg';
+          newValue = value.substring(0, start) + `![${altText}](${imageUrl})` + value.substring(end);
+          newCursorPos = start + 2;
+          break;
         case 'unordered-list':
-          newValue = value.substring(0, start) + `- ${selectedText || 'list item'}` + value.substring(end)
-          newCursorPos = start + 2
-          break
+          newValue = value.substring(0, start) + `- ${selectedText || 'list item'}` + value.substring(end);
+          newCursorPos = start + 2;
+          break;
         case 'ordered-list':
-          newValue = value.substring(0, start) + `1. ${selectedText || 'list item'}` + value.substring(end)
-          newCursorPos = start + 3
-          break
+          newValue = value.substring(0, start) + `1. ${selectedText || 'list item'}` + value.substring(end);
+          newCursorPos = start + 3;
+          break;
         case 'paragraph':
-          newValue = value.substring(0, start) + `\n\n${selectedText || 'paragraph'}\n\n` + value.substring(end)
-          newCursorPos = start + 2
-          break
+          newValue = value.substring(0, start) + `\n\n${selectedText || 'paragraph'}\n\n` + value.substring(end);
+          newCursorPos = start + 2;
+          break;
         case 'underline':
-          const underlineText = selectedText || 'underlined text'
-          newValue = value.substring(0, start) + `<u>${underlineText}</u>` + value.substring(end)
-          newCursorPos = selectedText ? start + underlineText.length + 7 : start + 3
-          break
+          const underlineText = selectedText || 'underlined text';
+          newValue = value.substring(0, start) + `<u>${underlineText}</u>` + value.substring(end);
+          newCursorPos = selectedText ? start + underlineText.length + 7 : start + 3;
+          break;
       }
 
-      setValue(newValue)
+      setValue(newValue);
       setTimeout(() => {
         if (textarea) {
-          textarea.focus()
-          textarea.setSelectionRange(newCursorPos, newCursorPos)
+          textarea.focus();
+          textarea.setSelectionRange(newCursorPos, newCursorPos);
         }
-      }, 0)
+      }, 0);
     },
     [value],
-  )
+  );
 
   return (
     <div className={cn('w-full', className)}>
@@ -170,5 +170,5 @@ export default function RichTextEditor({
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }

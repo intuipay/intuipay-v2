@@ -1,9 +1,9 @@
-'use client'
+'use client';
 
-import { useState, useEffect } from 'react'
-import Image from 'next/image'
+import { useState, useEffect } from 'react';
+import Image from 'next/image';
 import { X, Copy, Check } from '@phosphor-icons/react';
-import { Dialog, DialogContent } from '@/components/ui/dialog'
+import { Dialog, DialogContent } from '@/components/ui/dialog';
 
 interface ConfirmationDialogProps {
   open: boolean
@@ -12,34 +12,34 @@ interface ConfirmationDialogProps {
 }
 
 export default function ConfirmationDialog({ open, onOpenChange, email }: ConfirmationDialogProps) {
-  const [copied, setCopied] = useState(false)
-  const [isMobile, setIsMobile] = useState(false)
+  const [copied, setCopied] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
-  const referralLink = `https://intuipay.xyz/?ref_id=${email}`
+  const referralLink = `https://intuipay.xyz/?ref_id=${email}`;
 
   // Check if the device is mobile
   useEffect(() => {
     const checkIfMobile = () => {
-      setIsMobile(window.innerWidth < 768)
-    }
+      setIsMobile(window.innerWidth < 768);
+    };
 
-    checkIfMobile()
-    window.addEventListener('resize', checkIfMobile)
+    checkIfMobile();
+    window.addEventListener('resize', checkIfMobile);
 
     return () => {
-      window.removeEventListener('resize', checkIfMobile)
-    }
-  }, [])
+      window.removeEventListener('resize', checkIfMobile);
+    };
+  }, []);
 
   const handleCopy = async () => {
     try {
-      await navigator.clipboard.writeText(referralLink)
-      setCopied(true)
-      setTimeout(() => setCopied(false), 2000)
+      await navigator.clipboard.writeText(referralLink);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
     } catch (err) {
-      console.error('Failed to copy text: ', err)
+      console.error('Failed to copy text: ', err);
     }
-  }
+  };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -119,5 +119,5 @@ export default function ConfirmationDialog({ open, onOpenChange, email }: Confir
         </div>
       </DialogContent>
     </Dialog>
-  )
+  );
 }

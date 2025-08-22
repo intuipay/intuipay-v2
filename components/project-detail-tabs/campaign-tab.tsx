@@ -1,8 +1,8 @@
-'use client'
+'use client';
 
-import { Badge } from '@/components/ui/badge'
-import type { ProjectInfo } from '@/types'
-import { CAMPAIGN_SEPARATOR } from '@/data'
+import { Badge } from '@/components/ui/badge';
+import type { ProjectInfo } from '@/types';
+import { CAMPAIGN_SEPARATOR } from '@/data';
 
 type CampaignTabProps = {
   project: ProjectInfo
@@ -37,5 +37,5 @@ export function CampaignTab({ project }: CampaignTabProps) {
         ))}
       </div>
     </>
-  )
+  );
 }

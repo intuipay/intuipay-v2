@@ -1,13 +1,13 @@
 'use client';
 
-import { SiteHeader } from '@/components/site-header'
+import { SiteHeader } from '@/components/site-header';
 import { PencilSimpleIcon } from '@phosphor-icons/react/ssr';
 import ProfileTabs from '@/app/_components/profile/profile-tabs';
 import { EditProfileDialog } from '@/app/_components/profile/edit-profile-dialog';
 import { useState } from 'react';
 import { Profile, ProjectInfo, BackedProject } from '@/types';
 import { User } from 'better-auth';
-import { useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation';
 
 interface ProfilePageProps {
   profile: Profile;
@@ -89,5 +89,5 @@ export default function ProfilePage({ profile, myBacked, myProjects, user }: Pro
         />
       </main>
     </>
-  )
+  );
 }

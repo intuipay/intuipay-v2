@@ -1,6 +1,6 @@
 'use client';
 
-import Link from 'next/link'
+import Link from 'next/link';
 import { GraduationCapIcon, ArrowsDownUpIcon, MagnifyingGlassIcon, ArrowUpRightIcon } from '@phosphor-icons/react/ssr';
 import { motion } from 'framer-motion';
 import { sectionMotionVariants, sectionMotionProps } from './motion';

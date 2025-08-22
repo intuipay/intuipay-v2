@@ -1,8 +1,8 @@
-'use client'
+'use client';
 
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react';
 import uniq from 'lodash-es/uniq';
-import CompareRateDrawer from './compare-rate-drawer'
+import CompareRateDrawer from './compare-rate-drawer';
 import MyCombobox from '@/components/my-combobox';
 import { CurrencyList, UniversityList } from '@/data';
 import useStore from '@/store';
@@ -11,9 +11,9 @@ export default function PaymentCalculator() {
   const isLoading = useStore(state => state.isLoading);
   const paymentMethodList = useStore(state => state.paymentMethodList);
   const updateAllMethods = useStore(state => state.updateAllMethods);
-  const [fromCountry, setFromCountry] = useState('China')
-  const [toCountry, setToCountry] = useState('United States')
-  const [university, setUniversity] = useState('')
+  const [fromCountry, setFromCountry] = useState('China');
+  const [toCountry, setToCountry] = useState('United States');
+  const [university, setUniversity] = useState('');
   const [amount, setAmount] = useState<number | ''>(24000);
   const [currency, setCurrency] = useState<string>('USD');
   const toCountries = useMemo(() => {
@@ -103,5 +103,5 @@ export default function PaymentCalculator() {
 
       <CompareRateDrawer />
     </div>
-  )
+  );
 }
