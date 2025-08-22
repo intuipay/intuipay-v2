@@ -10,7 +10,7 @@ export default function CtaSection() {
             Powered by stables, Intuipay's product suite transforms how education gets funded
           </div>
         </div>
-        <Link className="bg-black text-white px-6 md:px-8 py-3 md:py-4 rounded-[40px] text-xl font-semibold leading-normal" href="mailto:support@intuipay.xyz">Book a demo</Link>
+        <Link className="bg-black text-white px-6 md:px-8 py-3 md:py-4 rounded-[40px] text-xl font-semibold leading-normal" href="https://calendly.com/harry-intuipay/30min">Book a demo</Link>
       </div>
     </section>
   );
