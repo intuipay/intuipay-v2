@@ -12,7 +12,7 @@ export default function FooterLinksSection() {
             </div>
             <div className="flex flex-col gap-2">
               <Link className="text-black/70 text-sm font-normal leading-tight" href="/projects">
-                Donation
+                Crowdfunding
               </Link>
               <div className="text-black/70 text-sm font-normal leading-tight">
                 Payment
@@ -26,7 +26,7 @@ export default function FooterLinksSection() {
               For organizations
             </div>
             <div className="flex flex-col gap-2">
-              <Link className="text-black/70 text-sm font-normal leading-tight" href="mailto:support@intuipay.xyz">
+              <Link className="text-black/70 text-sm font-normal leading-tight" href="https://calendly.com/harry-intuipay/30min">
                 Book a demo
               </Link>
               <Link className="text-black/70 text-sm font-normal leading-tight" href={`${process.env.NEXT_PUBLIC_DASHBOARD_URL}/login`}>
