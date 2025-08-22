@@ -1,5 +1,5 @@
-import { ChevronLeft } from 'lucide-react'
-import { Button } from '@/components/ui/button'
+import { ChevronLeft } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 export function Header() {
   return (
@@ -15,5 +15,5 @@ export function Header() {
       </div>
       <Button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-full">Sign In</Button>
     </header>
-  )
+  );
 }

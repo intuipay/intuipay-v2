@@ -1,6 +1,6 @@
-'use client'
+'use client';
 
-import { useState, ChangeEvent } from 'react'
+import { useState, ChangeEvent } from 'react';
 import MyCombobox from '@/components/my-combobox';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
@@ -151,7 +151,7 @@ export default function PaymentDemo() {
         />
       )}
     </div>
-  )
+  );
 }
 
 // 加密货币支付内容组件

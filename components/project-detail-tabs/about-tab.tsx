@@ -1,16 +1,16 @@
-'use client'
+'use client';
 
-import Image from 'next/image'
-import Link from 'next/link'
-import { marked } from 'marked'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import Image from 'next/image';
+import Link from 'next/link';
+import { marked } from 'marked';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
   EnvelopeIcon,
   MapPinIcon,
   LinkIcon,
   ArrowSquareOutIcon,
 } from '@phosphor-icons/react';
-import type { ProjectInfo } from '@/types'
+import type { ProjectInfo } from '@/types';
 
 type AboutTabProps = {
   project: ProjectInfo
@@ -84,9 +84,9 @@ export function AboutTab({ project }: AboutTabProps) {
                 className="object-cover"
               />
             </div>
-          )
+          );
         })
       )}
     </section>
-  )
+  );
 }

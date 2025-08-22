@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+import type { Metadata } from 'next';
 
 export const defaultMetadata: Metadata = {
   title: {
@@ -44,4 +44,4 @@ export const defaultMetadata: Metadata = {
   alternates: {
     canonical: 'https://intuipay.xyz',
   },
-}
+};

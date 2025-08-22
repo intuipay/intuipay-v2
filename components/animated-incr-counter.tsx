@@ -1,7 +1,7 @@
-'use client'
+'use client';
 
-import { useEffect, useState, useRef } from 'react'
-import { motion, useInView } from 'framer-motion'
+import { useEffect, useState, useRef } from 'react';
+import { motion, useInView } from 'framer-motion';
 
 interface AnimatedIncrCounterProps {
   end: number
@@ -18,46 +18,46 @@ export function AnimatedIncrCounter({
   prefix = '',
   className = ''
 }: AnimatedIncrCounterProps) {
-  const [count, setCount] = useState(0)
-  const ref = useRef(null)
-  const isInView = useInView(ref, { once: true, margin: '-100px' })
+  const [count, setCount] = useState(0);
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: '-100px' });
 
   useEffect(() => {
-    if (!isInView) return
+    if (!isInView) return;
 
-    let startTime: number
-    let animationFrame: number
+    let startTime: number;
+    let animationFrame: number;
 
     const animate = (currentTime: number) => {
-      if (!startTime) startTime = currentTime
-      const progress = Math.min((currentTime - startTime) / duration, 1)
+      if (!startTime) startTime = currentTime;
+      const progress = Math.min((currentTime - startTime) / duration, 1);
       
       // Use easing function to make the animation more natural
-      const easeOutCubic = 1 - Math.pow(1 - progress, 3)
-      const currentCount = Math.floor(easeOutCubic * end)
+      const easeOutCubic = 1 - Math.pow(1 - progress, 3);
+      const currentCount = Math.floor(easeOutCubic * end);
       
-      setCount(currentCount)
+      setCount(currentCount);
 
       if (progress < 1) {
-        animationFrame = requestAnimationFrame(animate)
+        animationFrame = requestAnimationFrame(animate);
       }
-    }
+    };
 
-    animationFrame = requestAnimationFrame(animate)
+    animationFrame = requestAnimationFrame(animate);
 
     return () => {
       if (animationFrame) {
-        cancelAnimationFrame(animationFrame)
+        cancelAnimationFrame(animationFrame);
       }
-    }
-  }, [end, duration, isInView])
+    };
+  }, [end, duration, isInView]);
 
   const formatNumber = (num: number) => {
     if (end >= 1000) {
-      return num.toLocaleString()
+      return num.toLocaleString();
     }
-    return num.toString()
-  }
+    return num.toString();
+  };
 
   return (
     <motion.span 
@@ -69,5 +69,5 @@ export function AnimatedIncrCounter({
     >
       {prefix}{formatNumber(count)}{suffix}
     </motion.span>
-  )
+  );
 }

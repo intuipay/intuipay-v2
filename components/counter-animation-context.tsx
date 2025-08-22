@@ -1,6 +1,6 @@
-'use client'
+'use client';
 
-import { createContext, useContext, useState, ReactNode } from 'react'
+import { createContext, useContext, useState, ReactNode } from 'react';
 
 interface CounterAnimationContextType {
   isGloballyPaused: boolean
@@ -8,18 +8,18 @@ interface CounterAnimationContextType {
   resumeAllAnimations: () => void
 }
 
-const CounterAnimationContext = createContext<CounterAnimationContextType | undefined>(undefined)
+const CounterAnimationContext = createContext<CounterAnimationContextType | undefined>(undefined);
 
 export function CounterAnimationProvider({ children }: { children: ReactNode }) {
-  const [isGloballyPaused, setIsGloballyPaused] = useState(false)
+  const [isGloballyPaused, setIsGloballyPaused] = useState(false);
 
   const pauseAllAnimations = () => {
-    setIsGloballyPaused(true)
-  }
+    setIsGloballyPaused(true);
+  };
 
   const resumeAllAnimations = () => {
-    setIsGloballyPaused(false)
-  }
+    setIsGloballyPaused(false);
+  };
 
   return (
     <CounterAnimationContext.Provider
@@ -31,13 +31,13 @@ export function CounterAnimationProvider({ children }: { children: ReactNode }) 
     >
       {children}
     </CounterAnimationContext.Provider>
-  )
+  );
 }
 
 export function useCounterAnimation() {
-  const context = useContext(CounterAnimationContext)
+  const context = useContext(CounterAnimationContext);
   if (context === undefined) {
-    throw new Error('useCounterAnimation must be used within a CounterAnimationProvider')
+    throw new Error('useCounterAnimation must be used within a CounterAnimationProvider');
   }
-  return context
+  return context;
 }

@@ -1,11 +1,11 @@
-'use client'
+'use client';
 
-import { Button } from '@/components/ui/button'
-import { Separator } from '@/components/ui/separator'
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { useState } from 'react'
+import { Button } from '@/components/ui/button';
+import { Separator } from '@/components/ui/separator';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { useState } from 'react';
 import {
   TextB as TextBIcon,
   TextItalic as TextItalicIcon,
@@ -18,7 +18,7 @@ import {
   Link as LinkIcon,
   Image as ImageIcon,
 } from '@phosphor-icons/react';
-import type { EditorAction } from '@/types/editor'
+import type { EditorAction } from '@/types/editor';
 
 interface EditorToolbarProps {
   onAction: (action: EditorAction) => void
@@ -26,22 +26,22 @@ interface EditorToolbarProps {
 }
 
 export function EditorToolbar({ onAction, disabled = false }: EditorToolbarProps) {
-  const [linkUrl, setLinkUrl] = useState('')
-  const [imageUrl, setImageUrl] = useState('')
-  const [isLinkDialogOpen, setIsLinkDialogOpen] = useState(false)
-  const [isImageDialogOpen, setIsImageDialogOpen] = useState(false)
+  const [linkUrl, setLinkUrl] = useState('');
+  const [imageUrl, setImageUrl] = useState('');
+  const [isLinkDialogOpen, setIsLinkDialogOpen] = useState(false);
+  const [isImageDialogOpen, setIsImageDialogOpen] = useState(false);
 
   const handleLinkSubmit = () => {
-    onAction({ type: 'link', url: linkUrl })
-    setLinkUrl('')
-    setIsLinkDialogOpen(false)
-  }
+    onAction({ type: 'link', url: linkUrl });
+    setLinkUrl('');
+    setIsLinkDialogOpen(false);
+  };
 
   const handleImageSubmit = () => {
-    onAction({ type: 'image', url: imageUrl })
-    setImageUrl('')
-    setIsImageDialogOpen(false)
-  }
+    onAction({ type: 'image', url: imageUrl });
+    setImageUrl('');
+    setIsImageDialogOpen(false);
+  };
 
   return (
     <div className="flex items-center gap-1 flex-wrap">
@@ -197,5 +197,5 @@ export function EditorToolbar({ onAction, disabled = false }: EditorToolbarProps
         </Dialog>
       </div>
     </div>
-  )
+  );
 }

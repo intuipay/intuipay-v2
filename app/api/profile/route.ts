@@ -12,7 +12,7 @@ export async function GET(req: Request) {
     return NextResponse.json({
       code: 1,
       message: 'Failed to get profile'
-    })
+    });
   }
 }
 
@@ -42,6 +42,6 @@ export async function POST(req: Request) {
     return NextResponse.json({
       code: 1,
       message: 'Failed to submit profile',
-    })
+    });
   }
 }

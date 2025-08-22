@@ -1,10 +1,10 @@
-'use client'
+'use client';
 
-import { PropsWithChildren, useEffect, useRef, useState } from 'react'
-import Image from 'next/image'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
+import { PropsWithChildren, useEffect, useRef, useState } from 'react';
+import Image from 'next/image';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import {
   ArrowUpIcon,
   CaretDownIcon,
@@ -12,12 +12,12 @@ import {
   FadersIcon,
   MagnifyingGlassIcon,
 } from '@phosphor-icons/react';
-import { FilterDrawer } from '@/components/filter-drawer'
-import { ProjectFilter } from '@/types'
-import { DropdownMenuRadioGroup, DropdownMenuRadioItem } from '@radix-ui/react-dropdown-menu'
-import { useRouter, useSearchParams } from 'next/navigation'
-import { ProjectCategories, ProjectDonationMethods, ProjectTypes } from '@/data'
-import Link from 'next/link'
+import { FilterDrawer } from '@/components/filter-drawer';
+import { ProjectFilter } from '@/types';
+import { DropdownMenuRadioGroup, DropdownMenuRadioItem } from '@radix-ui/react-dropdown-menu';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { ProjectCategories, ProjectDonationMethods, ProjectTypes } from '@/data';
+import Link from 'next/link';
 
 type ProjectHomepageProps = PropsWithChildren & {
   initialSearch?: string;
@@ -36,7 +36,7 @@ const SortOptions = [
   { value: 'oldest', label: 'Oldest' },
   { value: 'most-raised', label: 'Most Raised' },
   { value: 'ending-soon', label: 'Ending Soon' },
-]
+];
 
 export default function ProjectHomepage({
   children,
@@ -258,5 +258,5 @@ export default function ProjectHomepage({
       filter={activeFilters}
       setFilter={setActiveFilters}
     />
-  </>
+  </>;
 }

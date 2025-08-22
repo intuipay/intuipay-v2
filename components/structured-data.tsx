@@ -13,7 +13,7 @@ export default function StructuredData() {
       name: 'Global Education Payments',
       description: 'Fast and secure international payments for education',
     },
-  }
+  };
 
-  return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
+  return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />;
 }

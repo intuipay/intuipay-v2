@@ -1,6 +1,6 @@
 'use client';
 
-import Link from 'next/link'
+import Link from 'next/link';
 import { MoneyIcon, ReceiptIcon, FilesIcon, ArrowUpRightIcon } from '@phosphor-icons/react/ssr';
 import { AnimatedCounter } from '@/components/animated-counter';
 import { motion } from 'framer-motion';

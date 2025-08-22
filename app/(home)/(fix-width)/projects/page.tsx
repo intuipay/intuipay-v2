@@ -5,7 +5,7 @@ import { Suspense } from 'react';
 export const metadata = {
   title: 'Projects',
   description: 'Projects',
-}
+};
 
 // Corrected type for searchParams in Next.js App Router
 type ProjectsPageProps = {
@@ -70,5 +70,5 @@ export default async function ProjectsPage({ searchParams }: ProjectsPageProps) 
         />
       </Suspense>
     </ProjectHomepage>
-  )
+  );
 }

@@ -535,5 +535,5 @@ export default function DonationStep2({
         isSubmittable={isSubmittable}
       />
     </form>
-  )
+  );
 }

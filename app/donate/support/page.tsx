@@ -1,7 +1,7 @@
 'use client';
 
-import { ChevronLeft, ArrowLeft, Mail, MailboxIcon, HeadsetIcon, XIcon } from 'lucide-react'
-import Link from 'next/link'
+import { ChevronLeft, ArrowLeft, Mail, MailboxIcon, HeadsetIcon, XIcon } from 'lucide-react';
+import Link from 'next/link';
 import Image from 'next/image';
 import { MouseEvent } from 'react';
 
@@ -86,5 +86,5 @@ export default function SupportPage() {
         </footer>
       </div>
     </main>
-  )
+  );
 }

@@ -1,6 +1,6 @@
 export default function FooterLinksSection() {
   return (
-    <section className="bg-brand-blue w-screen ms-rest">
+    <section className="bg-brand-blue-100 w-screen ms-rest">
       <div className="px-8 xl:max-w-6xl 2xl:max-w-8xl mx-auto">
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 sm:gap-8">
           {/* Left Column on Mobile - Product */}

@@ -1,16 +1,16 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
+import { useState } from 'react';
 
 const partners = [
   { name: 'Metamask', logo: '/images/information/metamask.svg' },
   { name: 'PayPal', logo: '/images/information/paypal.svg' },
   { name: 'MoonPay', logo: '/images/information/moonpay.svg' },
   { name: 'Transak', logo: '/images/information/transak.svg' },
-]
+];
 
 export default function TrustSection() {
-  const [isPaused, setIsPaused] = useState(false)
+  const [isPaused, setIsPaused] = useState(false);
 
   // 创建足够多的重复内容确保在所有屏幕尺寸上都能无缝滚动
   const duplicatedPartners = [
@@ -20,7 +20,7 @@ export default function TrustSection() {
     ...partners,
     ...partners,
     ...partners
-  ]
+  ];
 
   return (
     <section className="py-12 md:py-20 lg:py-30 xl:max-w-6xl 2xl:max-w-8xl mx-auto">
@@ -53,5 +53,5 @@ export default function TrustSection() {
         </div>
       </div>
     </section>
-  )
+  );
 }

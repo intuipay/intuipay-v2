@@ -1,17 +1,19 @@
 import { initOpenNextCloudflareForDev } from "@opennextjs/cloudflare";
 import pkg from './package.json' with { type: 'json' };
 import { WebpackConfigContext } from "next/dist/server/config-shared";
+import createMDX from '@next/mdx';
+import { NextConfig } from 'next';
 
-/** @type {import('next').NextConfig} */
-const nextConfig = {
+const nextConfig: NextConfig = {
+  compress: true,
   env: {
     NEXT_PUBLIC_APP_VERSION: pkg.version,
   },
   eslint: {
     ignoreDuringBuilds: true,
   },
-  typescript: {
-    ignoreBuildErrors: true,
+  experimental: {
+    optimizePackageImports: ["@phosphor-icons/react"],
   },
   images: {
     formats: ['image/avif', 'image/webp'],
@@ -24,22 +26,27 @@ const nextConfig = {
     ],
     unoptimized: true,
   },
+  pageExtensions: ['js', 'jsx', 'md', 'mdx', 'ts', 'tsx'],
   poweredByHeader: false,
-  compress: true,
   reactStrictMode: true,
-  experimental: {
-    optimizePackageImports: ["@phosphor-icons/react"],
-  },
-  webpack: (config: WebpackConfigContext) => {
-    config.module.rules.push({
-      test: /\.md$/i,
-      type: 'asset/source',
-    })
-    return config
-  },
   transpilePackages: ["@intuipay/shared"],
+  typescript: {
+    ignoreBuildErrors: true,
+  },
 };
 
-export default nextConfig;
+const withMDX = createMDX({
+  extension: /\.(md|mdx)$/,
+  options: {
+    remarkPlugins: [
+      ['remark-toc', { heading: 'toc' }],
+    ],
+    rehypePlugins: [
+      'rehype-slug',
+    ],
+  },
+});
+
+export default withMDX(nextConfig);
 
 initOpenNextCloudflareForDev();

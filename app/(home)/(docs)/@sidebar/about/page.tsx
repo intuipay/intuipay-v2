@@ -1,12 +1,12 @@
-import Link from "next/link";
-import {ArrowUpRightIcon} from "@phosphor-icons/react/ssr";
+import Link from 'next/link';
+import { ArrowUpRightIcon } from '@phosphor-icons/react/ssr';
 
 export default function AboutSidebar() {
   return <>
     <div className="uppercase text-xs font-bold text-black/50 mb-4">What is Intuipay</div>
     <div>
       <Link
-        className="px-3 h-9 bg-brand-blue/50 text-sm font-semibold flex items-center"
+        className="px-3 h-9 bg-brand-blue-100/50 text-sm font-semibold flex items-center"
         href="/about"
       >
         About
@@ -28,5 +28,5 @@ export default function AboutSidebar() {
         <ArrowUpRightIcon className="size-4" />
       </Link>
     </div>
-  </>
+  </>;
 }

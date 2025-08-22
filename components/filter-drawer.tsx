@@ -1,21 +1,21 @@
-'use client'
+'use client';
 
-import type React from 'react'
+import type React from 'react';
 
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetClose } from '@/components/ui/sheet'
-import { Button } from '@/components/ui/button'
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
-import { Label } from '@/components/ui/label'
-import { Slider } from '@/components/ui/slider'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { ScrollArea } from '@/components/ui/scroll-area'
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetClose } from '@/components/ui/sheet';
+import { Button } from '@/components/ui/button';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Label } from '@/components/ui/label';
+import { Slider } from '@/components/ui/slider';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import { CircleNotchIcon, XIcon, FlaskIcon, MapPinIcon, CoinIcon, BankIcon } from '@phosphor-icons/react';
-import { ProjectCategories, ProjectDonationMethods, ProjectTypes } from '@/data'
+import { ProjectCategories, ProjectDonationMethods, ProjectTypes } from '@/data';
 import { Country, ICountry, State, IState } from 'country-state-city';
-import { useEffect, useState, useCallback } from 'react'
-import { ProjectFilter } from '@/types'
-import { debounce } from 'lodash-es'
-import { Input } from '@/components/ui/input'
+import { useEffect, useState, useCallback } from 'react';
+import { ProjectFilter } from '@/types';
+import { debounce } from 'lodash-es';
+import { Input } from '@/components/ui/input';
 
 type FilterDrawerProps = {
   isOpen: boolean
@@ -85,7 +85,7 @@ export function FilterDrawer({ isOpen, onOpenChange, filter, setFilter }: Filter
     newState?: string;
     newCity?: string;
   }) {
-    return `${newCountry}${newState ? '__' + newState : ''}${newCity ? '__' + newCity : ''}%`
+    return `${newCountry}${newState ? '__' + newState : ''}${newCity ? '__' + newCity : ''}%`;
   }
   const updateFilter = useCallback(
     debounce((newFilter: Partial<ProjectFilter>) => {
@@ -276,7 +276,7 @@ export function FilterDrawer({ isOpen, onOpenChange, filter, setFilter }: Filter
         </ScrollArea>
       </SheetContent>
     </Sheet>
-  )
+  );
 }
 
 // Helper component for filter sections
@@ -296,5 +296,5 @@ function FilterSection({ icon: Icon, title, children, className }: FilterSection
       </div>
       {children}
     </div>
-  )
+  );
 }

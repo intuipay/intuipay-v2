@@ -1,27 +1,28 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import Link from 'next/link'
-import { IntuipayLogo } from '@/components/intuipay-logo'
-import { Button } from '@/components/ui/button'
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { useState } from 'react';
+import Link from 'next/link';
+import { IntuipayLogo } from '@/components/intuipay-logo';
+import { Button } from '@/components/ui/button';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { authClient } from '@/lib/auth-client';
 import { GlobeIcon, CaretDownIcon, ListIcon, XLogoIcon, SignOutIcon } from '@phosphor-icons/react';
 import { User } from 'better-auth';
 import { Href } from '@react-types/shared';
 import { useRouter } from 'next/navigation';
+import { ActiveLink } from '@/components/view/active-link';
 
 const navLinks = [
   { href: '/projects', label: 'Crowdfunding' },
   { href: '/about', label: 'About' },
-  { href: 'https://support.intuipay.xyz', label: 'Support' },
-]
+  { href: '/support', label: 'Support' },
+];
 
 const userMenuItems = [
   { href: '/profile', label: 'Profile' },
   { href: process.env.NEXT_PUBLIC_DASHBOARD_URL, label: 'Dashboard' },
-]
+];
 
 interface SiteHeaderProps {
   user?: User | null;
@@ -35,7 +36,7 @@ export function SiteHeader({ user }: SiteHeaderProps) {
     setMobileMenuOpen(false);
     await authClient.signOut();
     router.replace('/');
-  }
+  };
 
   return (
     <header className="sticky top-0 z-50 w-full bg-white">
@@ -48,17 +49,15 @@ export function SiteHeader({ user }: SiteHeaderProps) {
         {/* Desktop Navigation */}
         <nav className="hidden lg:flex items-center gap-4 flex-none">
           {navLinks.map((link) => (
-            <Link
+            <ActiveLink
               key={link.label}
               href={link.href}
-              className={`px-2 py-1 text-base font-medium transition-colors rounded-lg ${
-                link.label === 'Donate' 
-                  ? 'text-blue-600' 
-                  : 'text-black hover:text-gray-600'
-              }`}
+              activeClassName="text-blue-600 hover:text-blue-500"
+              className="px-2 py-1 text-base font-medium transition-colors rounded-lg"
+              inactiveClassName="text-black hover:text-gray-600"
             >
               {link.label}
-            </Link>
+            </ActiveLink>
           ))}
         </nav>
 
@@ -292,5 +291,5 @@ export function SiteHeader({ user }: SiteHeaderProps) {
       {/* Border */}
       <div className="absolute bottom-0 left-0 right-0 h-px bg-black/10" />
     </header>
-  )
+  );
 }
