@@ -50,7 +50,6 @@ export function DonationsTab({ projectId }: DonationsTabProps) {
     searchParams.set('pagesize', '20');
     const response = await fetch(`/api/project/${projectId}/donations?${searchParams.toString()}`);
     const data = await response.json();
-    console.log('data', data)
     setDonations(data.data);
     setIsLoaded(true);
     setIsLoading(false);
