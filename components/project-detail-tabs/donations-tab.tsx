@@ -8,6 +8,27 @@ import { Donation } from '@/types'
 import { AcceptMethod } from '@intuipay/shared/constants';
 import { getEnumKey } from '@/lib/utils';
 
+function formatTimeAgo(doneAt: string | null): string {
+  if (!doneAt) return '';
+  
+  const now = new Date();
+  const doneDate = new Date(doneAt);
+  const diffInMs = now.getTime() - doneDate.getTime();
+  const diffInMins = Math.floor(diffInMs / (1000 * 60));
+  const diffInHours = Math.floor(diffInMs / (1000 * 60 * 60));
+  
+  if (diffInMins < 60) {
+    return `${diffInMins} mins ago`;
+  } else if (diffInHours < 24) {
+    return `${diffInHours} hr ago`;
+  } else {
+    const month = (doneDate.getMonth() + 1).toString().padStart(2, '0');
+    const day = doneDate.getDate().toString().padStart(2, '0');
+    const year = doneDate.getFullYear().toString().slice(-2);
+    return `${month}/${day}/${year}`;
+  }
+}
+
 type DonationsTabProps = {
   projectId: number;
 }
@@ -29,6 +50,7 @@ export function DonationsTab({ projectId }: DonationsTabProps) {
     searchParams.set('pagesize', '20');
     const response = await fetch(`/api/project/${projectId}/donations?${searchParams.toString()}`);
     const data = await response.json();
+    console.log('data', data)
     setDonations(data.data);
     setIsLoaded(true);
     setIsLoading(false);
@@ -76,7 +98,7 @@ export function DonationsTab({ projectId }: DonationsTabProps) {
                   </AvatarFallback>
                 </Avatar>
                 <div className="flex flex-col">
-                  <p className="text-xs text-neutral-darkgray">{donation.timeAgo ?? ''}</p>
+                  <p className="text-xs text-neutral-darkgray">{formatTimeAgo(donation.done_at)}</p>
                   <p className="font-medium text-neutral-text">{donation.first_name || donation.last_name ? `${donation.first_name} ${donation.last_name}` : 'Anonymous'}</p>
                 </div>
               </div>
@@ -86,13 +108,13 @@ export function DonationsTab({ projectId }: DonationsTabProps) {
                     {donation.amount / 100} {donation.currency.toUpperCase()}
                   </span>
                 </div>
-                <p className="text-xs text-neutral-darkgray">$ {donation.amountUSD || '--'}</p>
+                <p className="text-xs text-neutral-darkgray">$ {donation.amount / 100}</p>
               </div>
               <div className="sm:col-span-3 text-left sm:text-left">
                 <p className="text-xs text-neutral-darkgray mb-0.5">Pledge from</p>
                 <div className="flex items-center">
                   {/* <span className="mr-1.5 text-base">{donation.countryFlag}</span> */}
-                  <span className="text-neutral-text">{donation.country}</span>
+                  <span className="text-neutral-text">{donation.country || "-"}</span>
                 </div>
               </div>
               <div className="sm:col-span-3 text-left sm:text-left">
