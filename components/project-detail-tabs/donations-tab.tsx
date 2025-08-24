@@ -1,23 +1,27 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { HandHeartIcon, CardholderIcon } from '@phosphor-icons/react';
 import { Donation } from '@/types'
-import { AcceptMethod } from '@intuipay/shared/constants';
+import { AcceptMethod, ProjectTypes } from '@intuipay/shared/constants';
 import { getEnumKey } from '@/lib/utils';
+import { formatTimeAgo } from '@/lib/utils';
 
 type DonationsTabProps = {
   projectId: number;
+  projectType: string;
 }
 
-export function DonationsTab({ projectId }: DonationsTabProps) {
+export function DonationsTab({ projectId, projectType }: DonationsTabProps) {
   const [donationSort, setDonationSort] = useState<'newest' | 'top'>('newest')
   const [donations, setDonations] = useState<Donation[]>([]);
   const [isLoaded, setIsLoaded] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [page, setPage] = useState(1);
+
+  const isCrowdfunding = useMemo(() => projectType === ProjectTypes.Crowdfunding.toString(), [projectType]);
 
   async function fetchDonations() {
     if (isLoading) return;
@@ -76,23 +80,25 @@ export function DonationsTab({ projectId }: DonationsTabProps) {
                   </AvatarFallback>
                 </Avatar>
                 <div className="flex flex-col">
-                  <p className="text-xs text-neutral-darkgray">{donation.timeAgo ?? ''}</p>
+                  <p className="text-xs text-neutral-darkgray">{formatTimeAgo(donation.done_at)}</p>
                   <p className="font-medium text-neutral-text">{donation.first_name || donation.last_name ? `${donation.first_name} ${donation.last_name}` : 'Anonymous'}</p>
                 </div>
               </div>
               <div className="sm:col-span-3 text-left sm:text-left">
-                <div className="flex items-center">
-                  <span className="text-xs text-neutral-darkgray mb-0.5">
-                    {donation.amount / 100} {donation.currency.toUpperCase()}
-                  </span>
-                </div>
-                <p className="text-xs text-neutral-darkgray">$ {donation.amountUSD || '--'}</p>
+                  {
+                    isCrowdfunding && <span className="text-xs text-neutral-darkgray mb-0.5">
+                      {donation.amount} {donation.currency.toUpperCase()}
+                    </span>
+                  }
+                  {
+                    !isCrowdfunding && <p className="text-xs text-neutral-darkgray">$ {parseFloat(donation.dollar) / 100}</p>
+                  }
               </div>
               <div className="sm:col-span-3 text-left sm:text-left">
                 <p className="text-xs text-neutral-darkgray mb-0.5">Pledge from</p>
                 <div className="flex items-center">
                   {/* <span className="mr-1.5 text-base">{donation.countryFlag}</span> */}
-                  <span className="text-neutral-text">{donation.country}</span>
+                  <span className="text-neutral-text">{donation.country || "-"}</span>
                 </div>
               </div>
               <div className="sm:col-span-3 text-left sm:text-left">

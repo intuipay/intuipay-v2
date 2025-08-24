@@ -28,7 +28,7 @@ export function AboutTab({ project }: AboutTabProps) {
     <section>
       <h2 className="text-3xl mb-14">About this organization</h2>
       <div className="flex items-center mb-10">
-        <Avatar className="h-12 w-12 mr-4">
+        <Avatar className="h-12 w-12 me-4">
           <AvatarImage src={org_logo} alt={org_name} />
           <AvatarFallback>{org_name.substring(0, 2)}</AvatarFallback>
         </Avatar>
@@ -44,14 +44,14 @@ export function AboutTab({ project }: AboutTabProps) {
             href={`mailto:${email}`}
             className="flex items-center text-neutral-darkgray hover:text-action-blue"
           >
-            <EnvelopeIcon className="size-4 mr-2" />
+            <EnvelopeIcon className="size-4 me-2" />
             <span className="text-primary font-medium">Contact Us</span>
           </Link>
         }
         {
           org_location &&
           <div className="flex items-center text-neutral-darkgray">
-            <MapPinIcon className="size-4 mr-2" />
+            <MapPinIcon className="size-4 me-2" />
             <span>{org_location}</span>
           </div>
         }
@@ -62,9 +62,9 @@ export function AboutTab({ project }: AboutTabProps) {
             rel="noopener noreferrer"
             className="flex items-center text-neutral-darkgray hover:text-action-blue"
           >
-            <LinkIcon className="size-4 mr-2" />
+            <LinkIcon className="size-4 me-2" />
             <span>{org_website}</span>
-            <ArrowSquareOutIcon className="size-4 ml-1" />
+            <ArrowSquareOutIcon className="size-4 ms-1" />
           </Link>
         }
       </div>

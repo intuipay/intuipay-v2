@@ -265,12 +265,11 @@ export default function ProjectDetailClientLayout({
             >
               Updates
               {(
-                <Badge
-                  variant="default"
-                  className="absolute -top-1 -right-1 text-xs px-1.5 py-0.5 bg-secondary text-primary rounded-1"
+                <div
+                  className="w-5 h-4 leading-4 rounded-sm absolute -top-1 -right-1 text-xs text-primary bg-blue-50 hover:bg-inherit"
                 >
                   {updatesCount}
-                </Badge>
+                </div>
               )}
             </TabsTrigger>
             <TabsTrigger
@@ -295,7 +294,7 @@ export default function ProjectDetailClientLayout({
             <UpdatesTab projectId={project.id} onUpdate={setUpdatesCount} />
           </TabsContent>
           <TabsContent value="history" className="mt-14">
-            <DonationsTab projectId={project.id} />
+            <DonationsTab projectId={project.id} projectType={project.type.toString()} />
           </TabsContent>
         </Tabs>
 
