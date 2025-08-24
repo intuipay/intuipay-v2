@@ -1,44 +1,27 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { HandHeartIcon, CardholderIcon } from '@phosphor-icons/react';
 import { Donation } from '@/types'
-import { AcceptMethod } from '@intuipay/shared/constants';
+import { AcceptMethod, ProjectTypes } from '@intuipay/shared/constants';
 import { getEnumKey } from '@/lib/utils';
-
-function formatTimeAgo(doneAt: string | null): string {
-  if (!doneAt) return '';
-  
-  const now = new Date();
-  const doneDate = new Date(doneAt);
-  const diffInMs = now.getTime() - doneDate.getTime();
-  const diffInMins = Math.floor(diffInMs / (1000 * 60));
-  const diffInHours = Math.floor(diffInMs / (1000 * 60 * 60));
-  
-  if (diffInMins < 60) {
-    return `${diffInMins} mins ago`;
-  } else if (diffInHours < 24) {
-    return `${diffInHours} hr ago`;
-  } else {
-    const month = (doneDate.getMonth() + 1).toString().padStart(2, '0');
-    const day = doneDate.getDate().toString().padStart(2, '0');
-    const year = doneDate.getFullYear().toString().slice(-2);
-    return `${month}/${day}/${year}`;
-  }
-}
+import { formatTimeAgo } from '@/lib/utils';
 
 type DonationsTabProps = {
   projectId: number;
+  projectType: string;
 }
 
-export function DonationsTab({ projectId }: DonationsTabProps) {
+export function DonationsTab({ projectId, projectType }: DonationsTabProps) {
   const [donationSort, setDonationSort] = useState<'newest' | 'top'>('newest')
   const [donations, setDonations] = useState<Donation[]>([]);
   const [isLoaded, setIsLoaded] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [page, setPage] = useState(1);
+
+  const isCrowdfunding = useMemo(() => projectType === ProjectTypes.Crowdfunding.toString(), [projectType]);
 
   async function fetchDonations() {
     if (isLoading) return;
@@ -102,12 +85,14 @@ export function DonationsTab({ projectId }: DonationsTabProps) {
                 </div>
               </div>
               <div className="sm:col-span-3 text-left sm:text-left">
-                <div className="flex items-center">
-                  <span className="text-xs text-neutral-darkgray mb-0.5">
-                    {donation.amount / 100} {donation.currency.toUpperCase()}
-                  </span>
-                </div>
-                <p className="text-xs text-neutral-darkgray">$ {donation.amount / 100}</p>
+                  {
+                    isCrowdfunding && <span className="text-xs text-neutral-darkgray mb-0.5">
+                      {donation.amount} {donation.currency.toUpperCase()}
+                    </span>
+                  }
+                  {
+                    !isCrowdfunding && <p className="text-xs text-neutral-darkgray">$ {parseFloat(donation.dollar) / 100}</p>
+                  }
               </div>
               <div className="sm:col-span-3 text-left sm:text-left">
                 <p className="text-xs text-neutral-darkgray mb-0.5">Pledge from</p>

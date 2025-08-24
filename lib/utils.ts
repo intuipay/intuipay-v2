@@ -2,6 +2,10 @@ import { type ClassValue, clsx } from 'clsx'
 import { twMerge } from 'tailwind-merge'
 import { RewardShipMethod } from '@intuipay/shared/constants';
 import { REWARD_SHIP_METHOD_LABELS } from '@/data';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+
+dayjs.extend(relativeTime);
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -45,3 +49,16 @@ export const getRewardShipMethodLabel = (value: string): string => {
   return value;
 };
 
+export function formatTimeAgo(doneAt: string | null): string {
+  if (!doneAt) return '';
+  
+  const doneDate = dayjs(doneAt);
+  const now = dayjs();
+  const diffInDays = now.diff(doneDate, 'day');
+  
+  if (diffInDays < 30) {
+    return doneDate.fromNow();
+  } else {
+    return doneDate.format('MM/DD/YY');
+  }
+}

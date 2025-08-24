@@ -149,6 +149,7 @@ export type Donation = {
   last_name: string;
   method: string;
   done_at: string;
+  dollar: string;
 }
 
 export type Donations = Donation[]
