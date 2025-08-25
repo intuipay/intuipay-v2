@@ -9,6 +9,8 @@ import { ProjectStatus } from '@/data/project';
 import { Button } from '@/components/ui/button';
 import { RefundDialog } from '@/components/refund-dialog';
 import { useState } from 'react';
+import { BLOCKCHAIN_CONFIG } from "@/config/blockchain";
+import { formatUnits } from 'viem';
 
 type ProjectCardProps = {
   project: ProjectInfo;
@@ -24,7 +26,24 @@ export function ProjectCard({ project, isRefunded }: ProjectCardProps) {
   const daysLeft = Math.ceil((new Date(project.end_at).getTime() - Date.now()) / 1000 / 60 / 60 / 24);
 
   // 判断项目是否失败
-  const isProjectFailed = project.status === ProjectStatus.Failed;
+  const isProjectFailed = Number(project.status) === Number(ProjectStatus.Failed);
+
+  const parseTokenId = () => {
+    const tokens = project.tokens ? JSON.parse(project.tokens) : {};
+    const networks = project.networks ? JSON.parse(project.networks) : [];
+    const tokenId = tokens[networks[0]] ?? 'usdc';
+    return tokenId;
+  }
+  const projectTokenId = parseTokenId();
+  const selectedCurrency = projectTokenId
+    ? BLOCKCHAIN_CONFIG.currencies[
+    projectTokenId as keyof typeof BLOCKCHAIN_CONFIG.currencies
+    ]
+    : undefined;
+
+  // 货币符号
+  const currencySymbol = selectedCurrency?.symbol ?? "USDC";
+  const projectAmountInCrypto = formatUnits(BigInt(project.amount), selectedCurrency?.decimals ?? 6);
 
   // 判断是否为backed状态（传入了isRefunded参数）
   const isBackedView = isRefunded !== undefined;
@@ -92,7 +111,7 @@ export function ProjectCard({ project, isRefunded }: ProjectCardProps) {
                         onOpenChange={setIsWalletDialogOpen}
                         projectId={project.id}
                         campaignId={project.campaign_id}
-                        contractAddress={'0xbDE5c24B7c8551f93B95a8f27C6d926B3bCcF5aD'}
+                        contractAddress={'0xce714E8190a22E1475aaF01D904eb34502FC3904'}
                       />
                     </>
                   )
@@ -106,7 +125,7 @@ export function ProjectCard({ project, isRefunded }: ProjectCardProps) {
               <div className="flex justify-between items-center bg-white">
                 <span className="text-xs text-neutral-darkgray">Total Raised</span>
                 <span className="text-base font-bold text-neutral-text text-ellipsis">
-                  $ {(project.goal_amount / 100).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                  {projectAmountInCrypto} {currencySymbol}
                 </span>
               </div>
               <p className="group-hover:block absolute bottom-4 text-sm text-black mt-4 hidden opacity-0 group-hover:opacity-60 transition-opacity">{daysLeft} days left • {progress}% founded</p>

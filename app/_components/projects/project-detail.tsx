@@ -21,6 +21,8 @@ import { useMemo, useState } from 'react';
 import { enumToKeyLabel } from '@/lib/utils';
 import { ProjectCategories, ProjectTypes } from '@/data';
 import { ProjectDonationMethods } from '@/data';
+import { BLOCKCHAIN_CONFIG } from "@/config/blockchain";
+import { formatUnits } from 'viem';
 
 
 type ProjectDetailClientLayoutProps = {
@@ -102,6 +104,24 @@ export default function ProjectDetailClientLayout({
     return project.rewards ? JSON.parse(project.rewards) : [];
   }, [project]);
 
+  const parseTokenId = () => {
+      // const tokens = project.tokens ? JSON.parse(project.tokens) : {};
+      // const networks = project.networks ? JSON.parse(project.networks) : [];
+      const tokenId = project.tokens[project.networks[0]] ?? 'usdc';
+      return tokenId;
+    }
+    const projectTokenId = parseTokenId();
+    const selectedCurrency = projectTokenId
+      ? BLOCKCHAIN_CONFIG.currencies[
+      projectTokenId as keyof typeof BLOCKCHAIN_CONFIG.currencies
+      ]
+      : undefined;
+  
+    // 货币符号
+    const currencySymbol = selectedCurrency?.symbol ?? "USDC";
+    const projectAmountInCrypto = formatUnits(BigInt(project.amount), selectedCurrency?.decimals ?? 6);
+    const projectGoalAmountInCrypto = formatUnits(BigInt(project.goal_amount), selectedCurrency?.decimals ?? 6);
+
   return (
     <div className="container">
       <div className="text-center mb-10">
@@ -159,9 +179,9 @@ export default function ProjectDetailClientLayout({
               <span className="font-semibold text-lg truncate">{project.org_name}</span>
             </div>
             <div>
-              <p className="text-2xl sm:text-3xl font-bold mb-2">${project.amount.toLocaleString() || 0}</p>
+              <p className="text-2xl sm:text-3xl font-bold mb-2">{projectAmountInCrypto} {currencySymbol}</p>
               <p className="text-sm text-neutral-darkgray mb-2">
-                pledged of ${(project.goal_amount / 100).toLocaleString()}
+                pledged of {projectGoalAmountInCrypto} {currencySymbol} goal
               </p>
               <Progress
                 value={project.amount}
