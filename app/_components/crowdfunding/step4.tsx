@@ -212,6 +212,7 @@ export default function DonationStep4({
           ...omit(info, ['id', 'amount', 'email', 'created_at', 'updated_at', 'selected_reward', 'has_selected_reward', 'pledge_without_reward', 'same_as_contact', 'dollar']),
           email: info.email ? info.email : (info.ship_info?.email || ''),
           amount: convertAmountBasedOnCurrency(info.amount as number, info.currency),
+          dollar: 0, // 众筹传0，这样就只用 amount 计算总金额
           has_tax_invoice: Number(info.has_tax_invoice),
           is_anonymous: Number(info.is_anonymous),
           account: '',
