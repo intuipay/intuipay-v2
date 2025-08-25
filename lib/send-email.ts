@@ -59,7 +59,7 @@ export function getDonationProps(project: ProjectInfo, donation: DonationInfo): 
     deliveryMethod: reward && reward.shipping_method ? reward.shipping_method : 'Digital delivery',
     deliveryTime: reward && reward.estimated_delivery ? reward.estimated_delivery : 'To be determined',
     reward: reward && reward.name ? reward.name : 'No reward selected',
-    dollar: donation.dollar || 0,
+    dollar: donation.dollar ?? 0,
     endAt: project.end_at,
     from: project.org_name,
     id: donation.id,
