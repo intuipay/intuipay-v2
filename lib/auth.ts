@@ -32,6 +32,8 @@ export const auth = betterAuth({
     'https://dev.intuipay.xyz',
     'https://dash.dev.intuipay.xyz',
     'https://crowdfunding.dev.intuipay.xyz',
+    'https://staging.intuipay.xyz',
+    'https://dash.staging.intuipay.xyz',
     'http://localhost:3000',
   ],
 });

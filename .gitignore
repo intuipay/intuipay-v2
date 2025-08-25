@@ -31,4 +31,5 @@ next-env.d.ts
 bun.lock
 .DS_Store
 .dev.vars
+.dev.vars.*
 .open-next
