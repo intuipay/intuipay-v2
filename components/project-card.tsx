@@ -34,6 +34,13 @@ export function ProjectCard({ project, isRefunded }: ProjectCardProps) {
     const tokenId = tokens[networks[0]] ?? 'usdc';
     return tokenId;
   }
+
+  const parseContractAddress = () => {
+    const wallets = project.wallets ? JSON.parse(project.wallets) : {};
+    const networks = project.networks ? JSON.parse(project.networks) : [];
+    const contractAddress = wallets[networks[0]] ?? '';
+    return contractAddress;
+  }
   const projectTokenId = parseTokenId();
   const selectedCurrency = projectTokenId
     ? BLOCKCHAIN_CONFIG.currencies[
@@ -44,6 +51,7 @@ export function ProjectCard({ project, isRefunded }: ProjectCardProps) {
   // 货币符号
   const currencySymbol = selectedCurrency?.symbol ?? "USDC";
   const projectAmountInCrypto = formatUnits(BigInt(project.amount), selectedCurrency?.decimals ?? 6);
+  const currentContractAddress = parseContractAddress();
 
   // 判断是否为backed状态（传入了isRefunded参数）
   const isBackedView = isRefunded !== undefined;
@@ -111,7 +119,7 @@ export function ProjectCard({ project, isRefunded }: ProjectCardProps) {
                         onOpenChange={setIsWalletDialogOpen}
                         projectId={project.id}
                         campaignId={project.campaign_id}
-                        contractAddress={'0xce714E8190a22E1475aaF01D904eb34502FC3904'}
+                        contractAddress={currentContractAddress}
                       />
                     </>
                   )
